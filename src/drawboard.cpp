@@ -3,13 +3,13 @@
 
 void drawBoard(char ** board, int rows, int cols)
 {
-    std::cout << "  ";
-    for (int colnum = 0; colnum < cols; colnum++)
+    std::cout << "   ";
+    for (int colNum = 0; colNum < cols; colNum++)
     {
-        if (colnum <= 9)
-            std::cout << "  " << colnum + 1 << " ";
+        if (colNum <= 9)
+            std::cout << "  " << colNum + 1 << " ";
         else
-            std::cout << " " << colnum + 1 << " ";
+            std::cout << " " << colNum + 1 << " ";
     }
     std::cout << nl;
     std::cout << "   ";
@@ -19,18 +19,18 @@ void drawBoard(char ** board, int rows, int cols)
     }
     std::cout << nl;
 
-    for (int rownum = 0; rownum < rows; rownum++)
+    for (int rowNum = 0; rowNum < rows; rowNum++)
     {
         for (int colnum = 0; colnum < cols; colnum++)
         {
             if (colnum == 0)
             {
-                if (rownum < 9)
-                    std::cout << rownum+1 << "  ";
+                if (rowNum < 9)
+                    std::cout << rowNum+1 << "  ";
                 else
-                    std::cout << rownum+1 << " ";
+                    std::cout << rowNum+1 << " ";
             }
-            std::cout << "|" << " " << board[rownum][colnum] << " ";
+            std::cout << "|" << " " << board[rowNum][colnum] << " ";
             if (colnum == cols-1)
             {
                 std::cout << "|" << nl;
