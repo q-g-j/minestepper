@@ -14,17 +14,21 @@ int main()
     {
         int difficulty = 0;
         string difficultyString;
-        dimensionsStruct dimensions;
         int bombsCount = 0;
+        Input::dimensionsStruct dimensions;
+        Common common;
+        Input input;
+        Draw draw;
+        
         while (true)
         {
-            clearScreen();
+            common.clearScreen();
             cout << "Minesweeper" << nl;
             cout << nl;
-            if ( !(difficulty = getDifficulty()))
+            if ( !(difficulty = input.getDifficulty()))
             {
                 cout << "Wrong input, Press ENTER... ";
-                getAnyKey();
+                input.getAnyKey();
             }
             else break;
         }
@@ -33,26 +37,26 @@ int main()
         {
             while (true)
             {
-                clearScreen();
+                common.clearScreen();
                 cout << "Minesweeper" << nl;
                 cout << nl;
-                dimensions = getDimensions();
+                dimensions = input.getDimensions();
                 if ( !(dimensions.cols) && !(dimensions.rows) )
                 {
                     cout << "Wrong input, Press ENTER... ";
-                    getAnyKey();
+                    input.getAnyKey();
                 }
                 else break;
             }
             while (true)
             {
-                clearScreen();
+                common.clearScreen();
                 cout << "Minesweeper" << nl;
                 cout << nl;
-                if ( !(bombsCount = getBombsCount(sizeof dimensions.cols*dimensions.rows)) )
+                if ( !(bombsCount = input.getBombsCount(sizeof dimensions.cols*dimensions.rows)) )
                 {
                     cout << "Wrong input, Press ENTER... ";
-                    getAnyKey();
+                    input.getAnyKey();
                 }
                 else break;
             }
@@ -60,47 +64,47 @@ int main()
         
         if (difficulty == 1) 
         {
-            difficultyString = " - Small (9x9)";
+            difficultyString = " - Small (9x9) - 10 Bombs";
             rows = 9;
             cols = 9;
         }        
         else if (difficulty == 2) 
         {
-            difficultyString = " - Medium (15x15)";
-            rows = 15;
-            cols = 15;
+            difficultyString = " - Medium (16x16) - 40 Bombs";
+            rows = 16;
+            cols = 16;
         }
         else if (difficulty == 3) 
         {
-            difficultyString = " - Large (21x21)";
-            rows = 21;
-            cols = 21;
+            difficultyString = " - Large (22x22) - 99 Bombs";
+            rows = 22;
+            cols = 22;
         }
-        else if (difficulty == 4) 
+        else
         {
             difficultyString = " - Custom (" + to_string(dimensions.cols) + "x" + to_string(dimensions.rows) + ") - " + to_string(bombsCount) + " Bombs";
             rows = dimensions.rows;
             cols = dimensions.cols;
-        }
-        
-
-        
+        }        
         
         board = new char* [rows];
         for (int i=0; i < rows; i++)
             board[i] = new char[cols];
 
-        clearScreen();
+        common.clearScreen();
         cout << "Minesweeper" << difficultyString << nl << nl << nl;
-        clearBoard(board, rows, cols);
-        drawBoard(board, rows, cols);
+        common.clearBoard(board, rows, cols);
+        draw.drawBoard(board, rows, cols);
+        cout << nl;
+        draw.printExplanation();
         
-        getAnyKey();
+        input.getAnyKey();
+        break;
         
     }
     
-    
-    
+    delete board;
+    board = NULL;    
     
     return 0;
 }

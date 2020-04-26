@@ -1,5 +1,7 @@
 #include <iostream>
 
+#include "common.hpp"
+
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
     #include <windows.h>
     #include <winreg.h>
@@ -7,18 +9,18 @@
 
 using namespace std;
 
-void clearBoard(char ** board, int rows, int cols)
+void Common::clearBoard(char ** board, int rows, int cols)
 {
     for (int i=0; i < rows; i++)
     {
         for (int j=0; j < cols; j++)
         {
-            board[i][j] = ' ';
+            board[i][j] = '#';
         }
     }
 }
 
-void clearScreen()
+void Common::clearScreen()
 {
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
 

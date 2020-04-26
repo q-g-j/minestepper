@@ -1,3 +1,10 @@
 #pragma once
 
-void drawBoard(char**, int, int);
+class Draw
+{
+private:
+    
+public:
+    void drawBoard(char**, int, int);
+    void printExplanation();
+};

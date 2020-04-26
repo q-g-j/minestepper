@@ -1,14 +1,19 @@
 #pragma once
 
-struct dimensionsStruct
+class Input
 {
-    int cols;
-    int rows;
-};
+private:
 
-int getDifficulty();
-bool getAnyKey();
-dimensionsStruct getDimensions();
-int getBombsCount(int);
+public:
+    struct dimensionsStruct
+    {
+        int cols;
+        int rows;
+    };
+    int getDifficulty();
+    bool getAnyKey();
+    int getBombsCount(int);
+    dimensionsStruct getDimensions();
+};
 
 

@@ -3,7 +3,7 @@
 #include "common.hpp"
 #include "input.hpp"
 
-int getDifficulty()
+int Input::getDifficulty()
 {   
     std::string line;
     int difficulty;
@@ -29,7 +29,7 @@ int getDifficulty()
     }
 }
 
-dimensionsStruct getDimensions()
+Input::dimensionsStruct Input::getDimensions()
 {
     dimensionsStruct dimensions;
     std::string line;
@@ -99,7 +99,7 @@ dimensionsStruct getDimensions()
     }
 }
 
-int getBombsCount(int boardSize)
+int Input::getBombsCount(int boardSize)
 {
     std::string line;
     int bombsCount;
@@ -124,7 +124,7 @@ int getBombsCount(int boardSize)
     }
 }
 
-bool getAnyKey()
+bool Input::getAnyKey()
 {
     std::string line;
     while (true)

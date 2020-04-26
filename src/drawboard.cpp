@@ -1,12 +1,13 @@
 #include <iostream>
 #include "common.hpp"
+#include "drawboard.hpp"
 
-void drawBoard(char ** board, int rows, int cols)
+void Draw::drawBoard(char ** board, int rows, int cols)
 {
-    std::cout << "   ";
+    std::cout << "    ";
     for (int colNum = 0; colNum < cols; colNum++)
     {
-        if (colNum <= 9)
+        if (colNum < 9)
             std::cout << "  " << colNum + 1 << " ";
         else
             std::cout << " " << colNum + 1 << " ";
@@ -26,7 +27,7 @@ void drawBoard(char ** board, int rows, int cols)
             if (colnum == 0)
             {
                 if (rowNum < 9)
-                    std::cout << rowNum+1 << "  ";
+                    std::cout << " " << rowNum+1 << " ";
                 else
                     std::cout << rowNum+1 << " ";
             }
@@ -43,4 +44,12 @@ void drawBoard(char ** board, int rows, int cols)
         }
         std::cout << nl;
     }
+}
+
+void Draw::printExplanation()
+{
+    std::cout << "'#'   = not uncovered yet" << nl;
+    std::cout << "' '   = uncovered and no bomb" << nl;
+    std::cout << "'1-9' = number of neighbour bombs" << nl;
+    std::cout << "'X'   = bomb :-(" << nl;
 }

@@ -1,6 +1,13 @@
 #pragma once
 
-const char nl = '\n';
+#define nl '\n'
 
-void clearScreen();
-void clearBoard(char**, int, int);
+class Common
+{
+private:
+    
+public:
+    void clearScreen();
+    void clearBoard(char**, int, int);
+};
+
