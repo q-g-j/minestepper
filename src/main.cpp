@@ -1,4 +1,5 @@
 #include <iostream>
+
 #include "board.hpp"
 #include "common.hpp"
 #include "input.hpp"
@@ -9,17 +10,18 @@ int main()
 {
     int rows = 0, cols = 0;
     Common common;
+    Input input;
+    srand( time(NULL) ); // initialize random seed
     
     while (true)
     {
         int difficulty = 0;
         string difficultyString = "";
         int bombsCount = 0;
-        Input::dimensionsStruct dimensions;
+        Common::coordsStruct dimensions;
+        Common::coordsStruct userInputCoords;
         
-        Input input;
-        
-        difficulty = input.getDifficulty();
+        difficulty = input.getDifficulty(common);
         
         if (difficulty == 1) 
         {
@@ -45,24 +47,33 @@ int main()
         else
         {
             difficultyString = "Custom";
-            dimensions = input.getDimensions();
-            rows = dimensions.rows;
-            cols = dimensions.cols;
-            bombsCount = input.getBombsCount(cols*rows);
+            dimensions = input.getDimensions(common);
+            rows = dimensions.row;
+            cols = dimensions.col;
+            bombsCount = input.getBombsCount(common, cols*rows);
         }        
         
-        Board board(cols, rows, bombsCount);
+        Board board(cols, rows, bombsCount, difficultyString);
 
-        common.clearScreen();
-        cout << "Minestepper" << " - " << difficultyString << " (" << cols << "x" << rows << ") - " << bombsCount << " bombs" << nl << nl;
-        board.clearBoard();
-        board.drawBoard();
-        cout << nl;
-        //board.printBombsLeft();
-        cout << nl;
-        board.printExplanation();
-        
-        input.getAnyKey();        
+        while (true)
+        {
+            int position = 0;
+            board.printAll(common);
+            
+            // test conversion coords -> int and vice versa            
+            /*Common::coordsStruct testStruct;
+            Common::coordsStruct testStruct2;
+            testStruct.col = 6;
+            testStruct.row = 1;
+            cout << board.structToInt(testStruct) << endl;
+            testStruct2 = board.intToStruct(22);
+            cout << testStruct2.col << "," << testStruct2.row << endl;*/
+            
+            input.getAnyKey();
+            
+            userInputCoords = input.getUserInput(common, board);
+            
+        }   
     }    
     
     return 0;

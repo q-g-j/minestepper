@@ -1,19 +1,17 @@
 #pragma once
 
+#include "common.hpp"
+
 class Input
 {
 private:
 
 public:
-    struct dimensionsStruct
-    {
-        int cols;
-        int rows;
-    };
-    int getDifficulty();
+    int getDifficulty(Common &common);
+    Common::coordsStruct getDimensions(Common &common);
+    int getBombsCount(Common &common, int);
     bool getAnyKey();
-    int getBombsCount(int);
-    dimensionsStruct getDimensions();
+    Common::coordsStruct getUserInput(Common &common, Board &board);
 };
 
 

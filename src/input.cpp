@@ -1,11 +1,10 @@
 #include <iostream>
 
+#include "board.hpp"
 #include "common.hpp"
 #include "input.hpp"
 
-Common common;
-
-int Input::getDifficulty()
+int Input::getDifficulty(Common &common)
 {   
     std::string line = "";
     int difficulty = 0;
@@ -44,9 +43,9 @@ int Input::getDifficulty()
     }
 }
 
-Input::dimensionsStruct Input::getDimensions()
+Common::coordsStruct Input::getDimensions(Common &common)
 {
-    dimensionsStruct dimensions;
+    Common::coordsStruct dimensions;
     std::string line = "";
     int beforeX = 0;
     int afterX = 0;
@@ -60,8 +59,6 @@ Input::dimensionsStruct Input::getDimensions()
         getline(std::cin, line);
         if (line == "")
         {
-            dimensions.rows = 0;
-            dimensions.cols = 0;
             isValidInput = false;
         }
         else
@@ -74,8 +71,6 @@ Input::dimensionsStruct Input::getDimensions()
                 }
                 catch (std::exception &err)
                 {
-                    dimensions.rows = 0;
-                    dimensions.cols = 0;
                     isValidInput = false;
                 }
                 try
@@ -90,35 +85,27 @@ Input::dimensionsStruct Input::getDimensions()
                     }
                     catch (std::exception &err)
                     {
-                        dimensions.rows = 0;
-                        dimensions.cols = 0;
                         isValidInput = false;
                     }
-                    dimensions.rows = 0;
-                    dimensions.cols = 0;
                     isValidInput = false;
                 }
+                isValidInput = true;
             }
             else
             {
-                dimensions.rows = 0;
-                dimensions.cols = 0;
                 isValidInput = false;
             }
-            
             if (beforeX < 5 || afterX < 5 || beforeX > 25 || afterX > 25)
             {
-                dimensions.rows = 0;
-                dimensions.cols = 0;
                 isValidInput = false;
             }
-            
-            dimensions.cols = beforeX;
-            dimensions.rows = afterX;
-            isValidInput = true;
         }
         if (isValidInput == true)
+        {
+            dimensions.col = beforeX;
+            dimensions.row = afterX;
             return dimensions;
+        }
         else
         {
             std::cout << "Wrong input, Press ENTER... ";
@@ -127,7 +114,7 @@ Input::dimensionsStruct Input::getDimensions()
     }
 }
 
-int Input::getBombsCount(int boardSize)
+int Input::getBombsCount(Common &common, int boardSize)
 {
     std::string line = "";
     int bombsCount = 0;
@@ -175,5 +162,65 @@ bool Input::getAnyKey()
             return true;
         else
             return true;
+    }
+}
+
+Common::coordsStruct Input::getUserInput(Common &common, Board &board)
+{
+    std::string line = "";
+    int beforeComma = 0;
+    int afterComma = 0;
+    bool isValidInput = false;
+    Common::coordsStruct coords;
+    
+    while (true)
+    {
+        std::cout << "Choose a position (column,row - e.g. 5,4): ";
+        getline(std::cin, line);
+        if (line == "")
+            isValidInput = false;
+        else
+        {
+            if(line.find(",") != std::string::npos)
+            {
+                try
+                {
+                    beforeComma = stoi(line.substr(0, line.find(",")));
+                }
+                catch (std::exception &err)
+                {
+                    isValidInput = false;
+                }
+                try
+                {
+                    afterComma = stoi(line.substr(line.find(",") + 1));
+                }
+                catch (std::exception &err)
+                {
+                    try
+                    {
+                        afterComma = stoi(line.substr(line.find(",")));
+                    }
+                    catch (std::exception &err)
+                    {
+                        isValidInput = false;
+                    }
+                    isValidInput = false;
+                }
+            }
+            isValidInput = true;
+        }
+        if (isValidInput == true)
+        {
+            coords.col = beforeComma;
+            coords.row = afterComma;
+            return coords;
+        }
+        else
+        {
+            std::cout << "Wrong input, Press ENTER... ";
+            getAnyKey();
+            board.printAll(common);
+        }
     }
 }
