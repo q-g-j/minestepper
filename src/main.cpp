@@ -92,7 +92,7 @@ int main()
             board[i] = new char[cols];
 
         common.clearScreen();
-        cout << "Minesweeper" << difficultyString << nl << nl << nl;
+        cout << "Minestepper" << difficultyString << nl << nl;
         common.clearBoard(board, rows, cols);
         draw.drawBoard(board, rows, cols);
         cout << nl;

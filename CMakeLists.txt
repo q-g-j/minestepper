@@ -1,7 +1,12 @@
 cmake_minimum_required(VERSION 3.0)
 
-project(minesweeper)
+project(minestepper)
 
-add_executable(minesweeper src/main.cpp src/common.cpp src/drawboard.cpp src/input.cpp)
+SET(BUILD_SHARED_LIBS OFF)
+SET(CMAKE_EXE_LINKER_FLAGS "-static")
+set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -s")
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -s")
 
-install(TARGETS minesweeper RUNTIME DESTINATION bin)
+add_executable(minestepper src/main.cpp src/common.cpp src/drawboard.cpp src/input.cpp)
+
+install(TARGETS minestepper RUNTIME DESTINATION bin)
