@@ -1,7 +1,6 @@
 #include <iostream>
 #include "board.hpp"
 #include "common.hpp"
-#include "drawboard.hpp"
 #include "input.hpp"
 
 using namespace std;
