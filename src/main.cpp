@@ -1,4 +1,5 @@
 #include <iostream>
+#include "board.hpp"
 #include "common.hpp"
 #include "drawboard.hpp"
 #include "input.hpp"
@@ -7,104 +8,63 @@ using namespace std;
 
 int main()
 {
-    char ** board;
-    int rows, cols;
+    unsigned int rows, cols;
+    Common common;
     
     while (true)
     {
-        int difficulty = 0;
-        string difficultyString;
-        int bombsCount = 0;
+        unsigned int difficulty = 0;
+        string difficultyString = "";
+        unsigned int bombsCount = 0;
         Input::dimensionsStruct dimensions;
-        Common common;
+        
+
         Input input;
-        Draw draw;
         
-        while (true)
-        {
-            common.clearScreen();
-            cout << "Minesweeper" << nl;
-            cout << nl;
-            if ( !(difficulty = input.getDifficulty()))
-            {
-                cout << "Wrong input, Press ENTER... ";
-                input.getAnyKey();
-            }
-            else break;
-        }
-        
-        if (difficulty == 4)
-        {
-            while (true)
-            {
-                common.clearScreen();
-                cout << "Minesweeper" << nl;
-                cout << nl;
-                dimensions = input.getDimensions();
-                if ( !(dimensions.cols) && !(dimensions.rows) )
-                {
-                    cout << "Wrong input, Press ENTER... ";
-                    input.getAnyKey();
-                }
-                else break;
-            }
-            while (true)
-            {
-                common.clearScreen();
-                cout << "Minesweeper" << nl;
-                cout << nl;
-                if ( !(bombsCount = input.getBombsCount(sizeof dimensions.cols*dimensions.rows)) )
-                {
-                    cout << "Wrong input, Press ENTER... ";
-                    input.getAnyKey();
-                }
-                else break;
-            }
-        }
+        difficulty = input.getDifficulty();
         
         if (difficulty == 1) 
         {
-            difficultyString = " - Small (9x9) - 10 Bombs";
-            rows = 9;
+            difficultyString = "Small";
             cols = 9;
+            rows = 9;
+            bombsCount = 10;
         }        
         else if (difficulty == 2) 
         {
-            difficultyString = " - Medium (16x16) - 40 Bombs";
-            rows = 16;
+            difficultyString = "Medium";
             cols = 16;
+            rows = 16;
+            bombsCount = 10;
         }
         else if (difficulty == 3) 
         {
-            difficultyString = " - Large (22x22) - 99 Bombs";
-            rows = 22;
+            difficultyString = "Large";
             cols = 22;
+            rows = 22;
+            bombsCount = 10;
         }
         else
         {
-            difficultyString = " - Custom (" + to_string(dimensions.cols) + "x" + to_string(dimensions.rows) + ") - " + to_string(bombsCount) + " Bombs";
+            difficultyString = "Custom";
+            dimensions = input.getDimensions();
             rows = dimensions.rows;
             cols = dimensions.cols;
+            bombsCount = input.getBombsCount(sizeof dimensions.cols*dimensions.rows);
         }        
         
-        board = new char* [rows];
-        for (int i=0; i < rows; i++)
-            board[i] = new char[cols];
+        Board board(cols, rows, bombsCount);
 
         common.clearScreen();
-        cout << "Minestepper" << difficultyString << nl << nl;
-        common.clearBoard(board, rows, cols);
-        draw.drawBoard(board, rows, cols);
+        cout << "Minestepper" << " - " << difficultyString << " (" << cols << "x" << rows << ") - " << bombsCount << " bombs" << nl << nl;
+        board.clearBoard();
+        board.drawBoard();
         cout << nl;
-        draw.printExplanation();
+        board.printExplanation();
         
         input.getAnyKey();
-        break;
         
-    }
-    
-    delete board;
-    board = NULL;    
+    }    
     
     return 0;
 }

@@ -7,8 +7,8 @@ private:
 public:
     struct dimensionsStruct
     {
-        int cols;
-        int rows;
+        unsigned int cols;
+        unsigned int rows;
     };
     int getDifficulty();
     bool getAnyKey();

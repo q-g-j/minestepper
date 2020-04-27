@@ -8,6 +8,5 @@ private:
     
 public:
     void clearScreen();
-    void clearBoard(char**, int, int);
 };
 
