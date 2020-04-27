@@ -2,11 +2,12 @@
 #include "board.hpp"
 #include "common.hpp"
 
-Board::Board(unsigned int cols, unsigned int rows, unsigned int bombsCount)
+Board::Board(int cols, int rows, int bombsCount)
 {
     this->cols = cols;
     this->rows = rows;
     this->bombsCount = bombsCount;
+    this->bombsLeft = bombsCount;
     this->boardArray = createBoardArray();    
 }
 

@@ -8,7 +8,7 @@ Common common;
 int Input::getDifficulty()
 {   
     std::string line = "";
-    unsigned int difficulty = 0;
+    int difficulty = 0;
     bool isValidInput = false;
    
     while (true)
@@ -48,8 +48,8 @@ Input::dimensionsStruct Input::getDimensions()
 {
     dimensionsStruct dimensions;
     std::string line = "";
-    unsigned int beforeX = 0;
-    unsigned int afterX = 0;
+    int beforeX = 0;
+    int afterX = 0;
     bool isValidInput = false;
     
     while (true)
@@ -130,7 +130,7 @@ Input::dimensionsStruct Input::getDimensions()
 int Input::getBombsCount(int boardSize)
 {
     std::string line = "";
-    unsigned int bombsCount = 0;
+    int bombsCount = 0;
     bool isValidInput = false;
     
     while (true)
@@ -148,7 +148,7 @@ int Input::getBombsCount(int boardSize)
             }
             catch (std::exception &err)
             {
-                return 0;
+                isValidInput = false;
             }
             if (bombsCount > 1 && bombsCount < boardSize)
                 isValidInput = true;

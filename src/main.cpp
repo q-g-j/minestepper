@@ -7,17 +7,16 @@ using namespace std;
 
 int main()
 {
-    unsigned int rows, cols;
+    int rows = 0, cols = 0;
     Common common;
     
     while (true)
     {
-        unsigned int difficulty = 0;
+        int difficulty = 0;
         string difficultyString = "";
-        unsigned int bombsCount = 0;
+        int bombsCount = 0;
         Input::dimensionsStruct dimensions;
         
-
         Input input;
         
         difficulty = input.getDifficulty();
@@ -49,7 +48,7 @@ int main()
             dimensions = input.getDimensions();
             rows = dimensions.rows;
             cols = dimensions.cols;
-            bombsCount = input.getBombsCount(sizeof dimensions.cols*dimensions.rows);
+            bombsCount = input.getBombsCount(cols*rows);
         }        
         
         Board board(cols, rows, bombsCount);
@@ -59,10 +58,11 @@ int main()
         board.clearBoard();
         board.drawBoard();
         cout << nl;
+        //board.printBombsLeft();
+        cout << nl;
         board.printExplanation();
         
-        input.getAnyKey();
-        
+        input.getAnyKey();        
     }    
     
     return 0;
