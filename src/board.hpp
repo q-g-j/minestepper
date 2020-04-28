@@ -21,7 +21,7 @@ public:
     void drawBoard(char**);
     void printBombsLeft();
     void printExplanation();
-    void printAll(Common &common);
+    void printAll();
     Common::coordsStruct intToStruct(int);
     int structToInt(Common::coordsStruct);
     bool hasLost();

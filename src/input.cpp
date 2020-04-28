@@ -4,8 +4,9 @@
 #include "common.hpp"
 #include "input.hpp"
 
-int Input::getDifficulty(Common &common)
-{   
+int Input::getDifficulty()
+{
+    Common common;   
     std::string line = "";
     int difficulty = 0;
     bool isValidInput = false;
@@ -43,8 +44,9 @@ int Input::getDifficulty(Common &common)
     }
 }
 
-Common::coordsStruct Input::getDimensions(Common &common)
+Common::coordsStruct Input::getDimensions()
 {
+    Common common;
     Common::coordsStruct dimensions;
     std::string line = "";
     int beforeX = 0;
@@ -114,8 +116,9 @@ Common::coordsStruct Input::getDimensions(Common &common)
     }
 }
 
-int Input::getBombsCount(Common &common, int boardSize)
+int Input::getBombsCount(int boardSize)
 {
+    Common common;
     std::string line = "";
     int bombsCount = 0;
     bool isValidInput = false;
@@ -165,8 +168,9 @@ bool Input::getAnyKey()
     }
 }
 
-Common::coordsStruct Input::getUserInput(Common &common, Board &board)
+Common::coordsStruct Input::getUserInput(Board &board)
 {
+    Common common;
     std::string line = "";
     int beforeComma = 0;
     int afterComma = 0;
@@ -220,7 +224,7 @@ Common::coordsStruct Input::getUserInput(Common &common, Board &board)
         {
             std::cout << "Wrong input, Press ENTER... ";
             getAnyKey();
-            board.printAll(common);
+            board.printAll();
         }
     }
 }

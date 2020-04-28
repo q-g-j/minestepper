@@ -9,7 +9,6 @@ using namespace std;
 int main()
 {
     int rows = 0, cols = 0;
-    Common common;
     Input input;
     srand( time(NULL) ); // initialize random seed
     
@@ -21,7 +20,7 @@ int main()
         Common::coordsStruct dimensions;
         Common::coordsStruct userInputCoords;
         
-        difficulty = input.getDifficulty(common);
+        difficulty = input.getDifficulty();
         
         if (difficulty == 1) 
         {
@@ -47,10 +46,10 @@ int main()
         else
         {
             difficultyString = "Custom";
-            dimensions = input.getDimensions(common);
+            dimensions = input.getDimensions();
             rows = dimensions.row;
             cols = dimensions.col;
-            bombsCount = input.getBombsCount(common, cols*rows);
+            bombsCount = input.getBombsCount(cols*rows);
         }        
         
         Board board(cols, rows, bombsCount, difficultyString);
@@ -58,7 +57,7 @@ int main()
         while (true)
         {
             int position = 0;
-            board.printAll(common);
+            board.printAll();
             
             // test conversion coords -> int and vice versa            
             /*Common::coordsStruct testStruct;
@@ -69,8 +68,8 @@ int main()
             testStruct2 = board.intToStruct(22);
             cout << testStruct2.col << "," << testStruct2.row << endl;*/
             
-            userInputCoords = input.getUserInput(common, board);            
-            input.getAnyKey();
+            userInputCoords = input.getUserInput(board);            
+            //input.getAnyKey();
             
         }   
     }    

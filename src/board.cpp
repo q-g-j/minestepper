@@ -23,37 +23,38 @@ Board::Board(int cols, int rows, int bombsCount, std::string difficultyString)
 
 Board::~Board()
 {    
-    for (int i=0; i <= rows; i++)
+    for (int i=0; i <= cols; i++)
         delete this->boardArray[i];
     delete[] this->boardArray;
 }
 
 char** Board::createArray()
 {
-    char** array = new char*[this->rows+1];
-    for (int i=0; i <= this->rows; i++)
-        array[i] = new char[this->cols];
+    char** array = new char*[this->cols+1];
+    for (int i=0; i <= this->cols; i++)
+        array[i] = new char[this->rows+1];
     return array;
 }
 
 void Board::clearBoard(char** array)
 {
-    for (int i=0; i <= this->rows; i++)
+    for (int i=0; i <= this->cols; i++)
     {
-        for (int j=0; j <= this->cols; j++)
+        for (int j=0; j <= this->rows; j++)
         {
             array[i][j] = ' ';
         }
     }
 }
 void Board::fillBombsArray()
-{
+{    
     Common::coordsStruct coords;
-    int sizeOfBombsArray = this->cols * this->rows;
-    int tempArray[sizeOfBombsArray+1];
-    for (int i = 0; i <= sizeOfBombsArray; i++)
+    int sizeOfboardArray = this->cols * this->rows;
+    int tempArray[sizeOfboardArray+1];
+    tempArray[0] = 0;
+    for (int i = 1; i <= sizeOfboardArray; i++)
         tempArray[i] = i;
-    std::random_shuffle(tempArray+1, tempArray+sizeOfBombsArray);
+    std::random_shuffle(&tempArray[1], &tempArray[sizeOfboardArray+1]);
     for (int i = 1; i <= this->bombsCount; i++)
     {
         coords = intToStruct(tempArray[i]);
@@ -117,8 +118,9 @@ void Board::printExplanation()
     std::cout << "'X'   = bomb :-(" << nl;
 }
 
-void Board::printAll(Common &common)
+void Board::printAll()
 {
+    Common common;
     common.clearScreen();
     std::cout << "Minestepper" << " - " << this->difficultyString << " (" << this->cols << "x" << this->rows << ") - " << this->bombsCount << " bombs" << nl << nl;
     drawBoard(bombsArray);

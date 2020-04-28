@@ -7,11 +7,11 @@ class Input
 private:
 
 public:
-    int getDifficulty(Common &common);
-    Common::coordsStruct getDimensions(Common &common);
-    int getBombsCount(Common &common, int);
+    int getDifficulty();
+    Common::coordsStruct getDimensions();
+    int getBombsCount(int);
     bool getAnyKey();
-    Common::coordsStruct getUserInput(Common &common, Board &board);
+    Common::coordsStruct getUserInput(Board &board);
 };
 
 
