@@ -9,19 +9,20 @@ private:
     int bombsCount;
     int bombsLeft = 0;
     std::string difficultyString;
-    char** boardArray;    
+    char** boardArray;
+    char** bombsArray;
 public:
     Board(int cols = 0, int rows = 0, int bombsCount = 0, std::string difficultyString = "");
     ~Board();
     
-    char** createBoardArray();
-    void clearBoard();
-    void drawBoard();
+    char** createArray();
+    void clearBoard(char**);
+    void fillBombsArray();
+    void drawBoard(char**);
     void printBombsLeft();
     void printExplanation();
     void printAll(Common &common);
     Common::coordsStruct intToStruct(int);
     int structToInt(Common::coordsStruct);
-    void fillBoardWithBombs();
     bool hasLost();
 };

@@ -35,14 +35,14 @@ int main()
             difficultyString = "Medium";
             cols = 16;
             rows = 16;
-            bombsCount = 10;
+            bombsCount = 40;
         }
         else if (difficulty == 3) 
         {
             difficultyString = "Large";
             cols = 22;
             rows = 22;
-            bombsCount = 10;
+            bombsCount = 99;
         }
         else
         {
@@ -69,9 +69,8 @@ int main()
             testStruct2 = board.intToStruct(22);
             cout << testStruct2.col << "," << testStruct2.row << endl;*/
             
+            userInputCoords = input.getUserInput(common, board);            
             input.getAnyKey();
-            
-            userInputCoords = input.getUserInput(common, board);
             
         }   
     }    

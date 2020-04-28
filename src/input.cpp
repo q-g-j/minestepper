@@ -137,7 +137,7 @@ int Input::getBombsCount(Common &common, int boardSize)
             {
                 isValidInput = false;
             }
-            if (bombsCount > 1 && bombsCount < boardSize)
+            if (bombsCount > 0 && bombsCount < boardSize)
                 isValidInput = true;
             else
                 isValidInput = false;
@@ -183,6 +183,7 @@ Common::coordsStruct Input::getUserInput(Common &common, Board &board)
         {
             if(line.find(",") != std::string::npos)
             {
+                isValidInput = true;
                 try
                 {
                     beforeComma = stoi(line.substr(0, line.find(",")));
@@ -208,7 +209,6 @@ Common::coordsStruct Input::getUserInput(Common &common, Board &board)
                     isValidInput = false;
                 }
             }
-            isValidInput = true;
         }
         if (isValidInput == true)
         {

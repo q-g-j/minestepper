@@ -1,9 +1,11 @@
+#include <algorithm>
 #include <iostream>
 #include <random>
 #include <time.h>
 
 #include "board.hpp"
 #include "common.hpp"
+#include "input.hpp"
 
 Board::Board(int cols, int rows, int bombsCount, std::string difficultyString)
 {
@@ -11,73 +13,91 @@ Board::Board(int cols, int rows, int bombsCount, std::string difficultyString)
     this->rows = rows;
     this->bombsCount = bombsCount;
     this->bombsLeft = bombsCount;
-    this->boardArray = createBoardArray();
     this->difficultyString = difficultyString;
+    this->boardArray = createArray();
+    this->bombsArray = createArray();
+    clearBoard(this->boardArray);
+    clearBoard(this->bombsArray);
+    fillBombsArray();
 }
 
 Board::~Board()
 {    
-    for (int i=0; i < rows; i++)
+    for (int i=0; i <= rows; i++)
         delete this->boardArray[i];
     delete[] this->boardArray;
 }
 
-char** Board::createBoardArray()
+char** Board::createArray()
 {
-    char** boardArray = new char* [rows];
-    for (int i=0; i < rows; i++)
-        boardArray[i] = new char[cols];
-    return boardArray;
+    char** array = new char*[this->rows+1];
+    for (int i=0; i <= this->rows; i++)
+        array[i] = new char[this->cols];
+    return array;
 }
 
-void Board::clearBoard()
+void Board::clearBoard(char** array)
 {
-    for (int i=0; i < this->rows; i++)
+    for (int i=0; i <= this->rows; i++)
     {
-        for (int j=0; j < this->cols; j++)
+        for (int j=0; j <= this->cols; j++)
         {
-            this->boardArray[i][j] = '#';
+            array[i][j] = ' ';
         }
     }
 }
+void Board::fillBombsArray()
+{
+    Common::coordsStruct coords;
+    int sizeOfBombsArray = this->cols * this->rows;
+    int tempArray[sizeOfBombsArray+1];
+    for (int i = 0; i <= sizeOfBombsArray; i++)
+        tempArray[i] = i;
+    std::random_shuffle(tempArray+1, tempArray+sizeOfBombsArray);
+    for (int i = 1; i <= this->bombsCount; i++)
+    {
+        coords = intToStruct(tempArray[i]);
+        this->bombsArray[coords.col][coords.row] = 'X';
+    }
+}
 
-void Board::drawBoard()
+void Board::drawBoard(char** array)
 {
     std::cout << "    ";
-    for (int colNum = 0; colNum < this->cols; colNum++)
+    for (int colNum = 1; colNum <= this->cols; colNum++)
     {
-        if (colNum < 9)
-            std::cout << "  " << colNum + 1 << " ";
+        if (colNum < 10)
+            std::cout << "  " << colNum << " ";
         else
-            std::cout << " " << colNum + 1 << " ";
+            std::cout << " " << colNum << " ";
     }
     std::cout << nl;
     std::cout << "   ";
-    for (int bar = 0; bar < this->cols; bar++)
+    for (int bar = 1; bar <= this->cols; bar++)
     {
         std::cout << " " << "---";
     }
     std::cout << nl;
 
-    for (int rowNum = 0; rowNum < this->rows; rowNum++)
+    for (int rowNum = 1; rowNum <= this->rows; rowNum++)
     {
-        for (int colnum = 0; colnum < this->cols; colnum++)
+        for (int colNum = 1; colNum <= this->cols; colNum++)
         {
-            if (colnum == 0)
+            if (colNum == 1)
             {
-                if (rowNum < 9)
-                    std::cout << " " << rowNum+1 << " ";
+                if (rowNum < 10)
+                    std::cout << " " << rowNum << " ";
                 else
-                    std::cout << rowNum+1 << " ";
+                    std::cout << rowNum << " ";
             }
-            std::cout << "|" << " " << this->boardArray[rowNum][colnum] << " ";
-            if (colnum == this->cols-1)
+            std::cout << "|" << " " << array[colNum][rowNum] << " ";
+            if (colNum == this->cols)
             {
                 std::cout << "|" << nl;
                 std::cout << "   ";
             }
         }
-        for (int bar = 0; bar < this->cols; bar++)
+        for (int bar = 1; bar <= this->cols; bar++)
         {
             std::cout << " " << "---";
         }
@@ -92,9 +112,8 @@ void Board::printBombsLeft()
 
 void Board::printExplanation()
 {
-    std::cout << "'#'   = not uncovered yet" << nl;
-    std::cout << "' '   = uncovered and no bomb" << nl;
-    std::cout << "'1-9' = number of neighbour bombs" << nl;
+    std::cout << "' '   = not uncovered yet" << nl;
+    std::cout << "'0-9' = number of neighbour bombs" << nl;
     std::cout << "'X'   = bomb :-(" << nl;
 }
 
@@ -102,8 +121,9 @@ void Board::printAll(Common &common)
 {
     common.clearScreen();
     std::cout << "Minestepper" << " - " << this->difficultyString << " (" << this->cols << "x" << this->rows << ") - " << this->bombsCount << " bombs" << nl << nl;
-    clearBoard();
-    drawBoard();
+    drawBoard(bombsArray);
+    std::cout << nl;
+    drawBoard(this->boardArray);
     std::cout << nl;
     printBombsLeft();
     std::cout << nl;
@@ -115,12 +135,7 @@ Common::coordsStruct Board::intToStruct(int position)
 {
     Common::coordsStruct coords;
     
-    if (position < 1 || position > this->cols * this-> rows)
-    {
-        std::cout << "Exiting with error!" << nl;
-        exit(1);
-    }
-    else if (position < this->cols)
+    if (position <= this->cols)
     {
         coords.col = position;
         coords.row = 1;
@@ -129,11 +144,6 @@ Common::coordsStruct Board::intToStruct(int position)
     {
         coords.col = this->cols;
         coords.row = position / this->cols;
-    }
-    else if (position % this->cols == position)
-    {
-        coords.col = position;
-        coords.row = 1;
     }
     else
     {
@@ -145,21 +155,11 @@ Common::coordsStruct Board::intToStruct(int position)
 
 int Board::structToInt(Common::coordsStruct coords)
 {
-    if (coords.col < 1 || coords.col > this->cols || coords.row < 1 || coords.row > this->rows)
-    {
-        std::cout << "Exiting with error!" << nl;
-        exit(1);
-    }
     int position = 0;
-    position = (this->cols) * (coords.row - 1) + coords.col;
+    position = (this->cols) * (coords.row) + coords.col;
     return position;
 }
 
-void Board::fillBoardWithBombs()
-{
-    
-}
-    
 bool Board::hasLost()
 {
     return false;
