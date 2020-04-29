@@ -16,11 +16,20 @@ int Input::getDifficulty()
     while (true)
     {
         common.clearScreen();
-        std::cout << "Choose the size of the field!" << nl;
-        std::cout << "('1' for small, '2' for medium, '3' for large or '4' for custom): ";
+        std::cout << "Welcome to Minestepper - a Minesweeper clone!" << nl << nl << nl;
+        std::cout << "Choose the size of the field!" << nl << nl;
+        std::cout << "1: small" << nl;
+        std::cout << "2: medium" << nl;
+        std::cout << "3: large" << nl;
+        std::cout << "4: custom" << nl << nl;
+        std::cout << "q: quit at any time" << nl << nl;
+        std::cout << "Make your choice: ";
+        
         getline(std::cin, line);
         if (line == "")
             isValidInput = false;
+        if (line == "q" || line == "Q")
+            exit (0);
         else
         {
             try
@@ -58,12 +67,14 @@ Common::coordsStruct Input::getDimensions()
     while (true)
     {
         common.clearScreen();
-        std::cout << "How large do you want the field to be?" << nl;
+        std::cout << "How large do you want the field to be?" << nl << nl;
         std::cout << "(e.g. 15x10): ";
         getline(std::cin, line);
         if (line == "")
         {
             isValidInput = false;
+        if (line == "q" || line == "Q")
+            exit (0);
         }
         else
         {
@@ -132,6 +143,8 @@ int Input::getBombsCount(int fieldSize)
         getline(std::cin, line);
         if (line == "")
             isValidInput = false;
+        if (line == "q" || line == "Q")
+            exit (0);
         else
         {
             try
@@ -172,6 +185,7 @@ bool Input::getAnyKey()
 
 Common::userInputStruct Input::getUserInput(Field &field)
 {
+    Common common;
     std::string line = "";
     int beforeComma = 0;
     int afterComma = 0;
@@ -183,10 +197,22 @@ Common::userInputStruct Input::getUserInput(Field &field)
     while (true)
     {
         std::cout << "Choose a position in this format: 'column,row' - e.g. 5,4" << nl;
-        std::cout << "(To place or remove a flag: f5,4): ";
+        std::cout << "To place or remove a flag: f5,4" << nl;
+        std::cout << "'h' or 'H': Help" << nl << nl;
+        std::cout << "Input: ";
         getline(std::cin, line);
         if (line == "")
             isValidInput = false;
+        if (line == "q" || line == "Q")
+            exit (0);
+        if (line == "h" || line == "H")
+        {
+            common.clearScreen();
+            field.printExplanation();
+            getAnyKey();
+            field.printAll();
+            continue;
+        }
         else
         {
             if(line.find(",") != std::string::npos && line.find("f") == std::string::npos)

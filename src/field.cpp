@@ -130,18 +130,14 @@ void Field::printAll()
 {
     Common common;
     common.clearScreen();
-    std::cout << "Minestepper" << " - " << this->difficultyString << " (" << this->cols << "x" << this->rows << ") - " << this->bombsCount << " bombs" << nl << nl;
+    std::cout << "Minestepper" << " - " << this->difficultyString << " (" << this->cols << "x" << this->rows << ") - " << this->bombsCount << " bombs; " << this->bombsLeft << " bombs left..." << nl << nl;
     
     #if DEBUG == 1
         drawField(bombsArray);
         std::cout << nl;
     #endif
-        
+
     drawField(this->fieldArray);
-    std::cout << nl;
-    printBombsLeft();
-    std::cout << nl;
-    printExplanation();
     std::cout << nl;
 }
 

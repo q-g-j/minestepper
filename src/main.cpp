@@ -20,7 +20,6 @@ int main()
         string difficultyString = "";
         int bombsCount = 0;
         Common::coordsStruct dimensions;
-        Common::userInputStruct userInput;
         Common::placeUserInput placeUserInput;
         
         difficulty = input.getDifficulty();
