@@ -66,8 +66,7 @@ int main()
                 std::cout << "Turn: " << turn << nl << nl;
             #endif
            
-            userInput = input.getUserInput(field);
-            placeUserInput = field.placeUserInput(userInput, turn);
+            placeUserInput = field.placeUserInput(input.getUserInput(field), turn);
             if (placeUserInput.hasLost)
                 break;
             else if (placeUserInput.hasWon)
