@@ -68,7 +68,10 @@ int main()
            
             userInput = input.getUserInput(field);
             placeUserInput = field.placeUserInput(userInput, turn);
-            if (placeUserInput.hasLost) break;
+            if (placeUserInput.hasLost)
+                break;
+            else if (placeUserInput.hasWon)
+                break;
             else
                 if (placeUserInput.isFlag == false)
                     turn++;

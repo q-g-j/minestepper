@@ -20,6 +20,7 @@ public:
     struct placeUserInput
     {
         bool hasLost = false;
+        bool hasWon = false;
         bool isFlag = false;
     };
     void clearScreen();

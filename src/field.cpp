@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <iostream>
 #include <random>
+#include <vector>
 
 #include "common.hpp"
 #include "debug.hpp"
@@ -13,6 +14,7 @@ Field::Field(int cols, int rows, int bombsCount, std::string difficultyString)
     this->rows = rows;
     this->bombsCount = bombsCount;
     this->bombsLeft = bombsCount;
+    this->countEmpty = cols*rows;
     this->difficultyString = difficultyString;
     this->fieldArray = createArray();
     this->bombsArray = createArray();
@@ -45,6 +47,7 @@ void Field::clearArray(char** array)
         }
     }
 }
+
 void Field::fillBombsArray()
 {    
     Common common;
@@ -159,19 +162,20 @@ bool Field::isFree(Common::coordsStruct coords)
 Common::placeUserInput Field::placeUserInput(Common::userInputStruct userInput, int turn)
 {
     Common::placeUserInput returnStruct;
+    int neighboursCount = 0;
     if (userInput.isFlag == true)
     {            
         if (isFlagOn(userInput.coords) == true)
         {
             this->fieldArray[userInput.coords.col][userInput.coords.row] = ' ';
-            returnStruct.hasLost = false;
+            this->bombsLeft++;
             returnStruct.isFlag = true;
             return returnStruct;
         }
         else
         {
             this->fieldArray[userInput.coords.col][userInput.coords.row] = 'F';
-            returnStruct.hasLost = false;
+            this->bombsLeft--;
             returnStruct.isFlag = true;
             return returnStruct;
         }
@@ -191,17 +195,47 @@ Common::placeUserInput Field::placeUserInput(Common::userInputStruct userInput, 
         {
             hasLost();
             returnStruct.hasLost = true;
-            returnStruct.isFlag = false;
             return returnStruct;
         }
         else
         {
-            this->fieldArray[userInput.coords.col][userInput.coords.row] = '0';
-            returnStruct.hasLost = false;
-            returnStruct.isFlag = false;
+            std::vector<Common::coordsStruct> neighboursVector;
+            neighboursVector = findNeighbours(userInput.coords);
+
+            neighboursCount = neighboursVector.size();
+            
+            // place neighboursCount in fieldArray (convert int to char by adding 48):
+            this->fieldArray[userInput.coords.col][userInput.coords.row] = neighboursCount+48;
+            this->countEmpty--;
+        }
+        if (this->countEmpty == bombsCount)
+        {
+            hasWon();
+            returnStruct.hasWon = true;
             return returnStruct;
         }
+        
+        return returnStruct;
     }
+}
+
+void Field::hasWon()
+{
+    Common common;
+    Input input;
+    common.clearScreen();
+    std::cout << "Minestepper" << " - " << this->difficultyString << " (" << this->cols << "x" << this->rows << ") - " << this->bombsCount << " bombs" << nl << nl;
+    for (int i = 1; i <= this->cols; i++)
+        for (int j = 1; j <= this->rows; j++)
+            if (bombsArray[i][j] == 'X')
+                fieldArray[i][j] = 'X';
+        
+    drawField(this->fieldArray);
+    std::cout << nl;
+    std::cout << "Congratulation, you have won!" << nl;
+    std::cout << "Press ENTER to go back...";
+    input.getAnyKey();
+    
 }
 
 void Field::hasLost()
@@ -217,3 +251,105 @@ void Field::hasLost()
     input.getAnyKey();
 }
 
+std::vector<Common::coordsStruct> Field::findNeighbours(Common::coordsStruct coords)
+{
+    std::vector<Common::coordsStruct> neighboursVector;
+    
+    // up left:
+    if (coords.col-1 > 0 && coords.row-1 > 0)
+    {
+        if (bombsArray[coords.col-1][coords.row-1] == 'X')
+        {
+            Common::coordsStruct tempCoords;
+            tempCoords.col = coords.col-1;
+            tempCoords.row = coords.row-1;
+            neighboursVector.push_back(tempCoords);
+        }
+    }
+
+    // up middle:
+    if (coords.row-1 > 0)
+    {
+        if (bombsArray[coords.col][coords.row-1] == 'X')
+        {
+            Common::coordsStruct tempCoords;
+            tempCoords.col = coords.col;
+            tempCoords.row = coords.row-1;
+            neighboursVector.push_back(tempCoords);
+        }
+    }
+
+    // up right:
+    if (coords.col+1 < this->cols && coords.row-1 > 0)
+    {
+        if (bombsArray[coords.col+1][coords.row-1] == 'X')
+        {
+            Common::coordsStruct tempCoords;
+            tempCoords.col = coords.col+1;
+            tempCoords.row = coords.row-1;
+            neighboursVector.push_back(tempCoords);
+        }
+    }
+
+    // middle left:
+    if (coords.col-1 > 0)
+    {
+        if (bombsArray[coords.col-1][coords.row] == 'X')
+        {
+            Common::coordsStruct tempCoords;
+            tempCoords.col = coords.col-1;
+            tempCoords.row = coords.row;
+            neighboursVector.push_back(tempCoords);
+        }
+    }
+    
+    // middle right:
+    if (coords.col+1 < this->cols)
+    {
+        if (bombsArray[coords.col+1][coords.row] == 'X')
+        {
+            Common::coordsStruct tempCoords;
+            tempCoords.col = coords.col+1;
+            tempCoords.row = coords.row;
+            neighboursVector.push_back(tempCoords);
+        }
+    }
+
+    // down left:
+    if (coords.col-1 > 0 && coords.row+1 < this->rows)
+    {
+        if (bombsArray[coords.col-1][coords.row+1] == 'X')
+        {
+            Common::coordsStruct tempCoords;
+            tempCoords.col = coords.col-1;
+            tempCoords.row = coords.row+1;
+            neighboursVector.push_back(tempCoords);
+        }
+    }
+
+    // down middle:
+    if (coords.row+1 < this->rows)
+    {
+        if (bombsArray[coords.col][coords.row+1] == 'X')
+        {
+            Common::coordsStruct tempCoords;
+            tempCoords.col = coords.col;
+            tempCoords.row = coords.row+1;
+            neighboursVector.push_back(tempCoords);
+        }
+    }
+
+    // down right:
+    if (coords.col+1 < this->cols && coords.row+1 < this->rows)
+    {
+        if (bombsArray[coords.col+1][coords.row+1] == 'X')
+        {
+            Common::coordsStruct tempCoords;
+            tempCoords.col = coords.col+1;
+            tempCoords.row = coords.row+1;
+            neighboursVector.push_back(tempCoords);
+        }
+    }
+    
+    return neighboursVector;
+}

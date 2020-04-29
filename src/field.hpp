@@ -1,5 +1,6 @@
 #pragma once
 #include "common.hpp"
+#include <vector>
 
 class Field
 {
@@ -8,6 +9,7 @@ private:
     int rows;
     int bombsCount;
     int bombsLeft = 0;
+    int countEmpty = 0;
     std::string difficultyString;
     char** fieldArray;
     char** bombsArray;
@@ -25,5 +27,7 @@ public:
     bool isFlagOn(Common::coordsStruct);
     bool isFree(Common::coordsStruct);
     Common::placeUserInput placeUserInput(Common::userInputStruct, int);
+    void hasWon();
     void hasLost();
+    std::vector<Common::coordsStruct> findNeighbours(Common::coordsStruct);
 };

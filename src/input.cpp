@@ -183,7 +183,7 @@ Common::userInputStruct Input::getUserInput(Field &field)
     while (true)
     {
         std::cout << "Choose a position in this format: 'column,row' - e.g. 5,4" << nl;
-        std::cout << "(To place or remove a flag: f5,5): ";
+        std::cout << "(To place or remove a flag: f5,4): ";
         getline(std::cin, line);
         if (line == "")
             isValidInput = false;
