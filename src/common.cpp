@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "common.hpp"
+#include "debug.hpp"
 
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
     #include <windows.h>
@@ -62,5 +63,34 @@ void Common::clearScreen()
         // cout << "\x1B[2J\x1B[H";
         if (system("clear") != 0) exit(0);
     #endif
+}
+
+Common::coordsStruct Common::intToStruct(int position, int cols)
+{
+    Common::coordsStruct coords;
+    
+    if (position <= cols)
+    {
+        coords.col = position;
+        coords.row = 1;
+    }
+    else if (position % cols == 0)
+    {
+        coords.col = cols;
+        coords.row = position / cols;
+    }
+    else
+    {
+        coords.col = position % cols;
+        coords.row = position / cols + 1;
+    }
+    return coords;
+}
+
+int Common::structToInt(Common::coordsStruct coords, int cols)
+{
+    int position = 0;
+    position = (cols) * (coords.row) + coords.col;
+    return position;
 }
 

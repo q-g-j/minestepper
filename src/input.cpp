@@ -1,6 +1,8 @@
 #include <iostream>
 
-#include "board.hpp"
+#include "common.hpp"
+#include "debug.hpp"
+#include "field.hpp"
 #include "common.hpp"
 #include "input.hpp"
 
@@ -14,7 +16,7 @@ int Input::getDifficulty()
     while (true)
     {
         common.clearScreen();
-        std::cout << "Choose the size of the board!" << nl;
+        std::cout << "Choose the size of the field!" << nl;
         std::cout << "('1' for small, '2' for medium, '3' for large or '4' for custom): ";
         getline(std::cin, line);
         if (line == "")
@@ -56,7 +58,7 @@ Common::coordsStruct Input::getDimensions()
     while (true)
     {
         common.clearScreen();
-        std::cout << "How large do you want the board to be?" << nl;
+        std::cout << "How large do you want the field to be?" << nl;
         std::cout << "(e.g. 15x10): ";
         getline(std::cin, line);
         if (line == "")
@@ -116,7 +118,7 @@ Common::coordsStruct Input::getDimensions()
     }
 }
 
-int Input::getBombsCount(int boardSize)
+int Input::getBombsCount(int fieldSize)
 {
     Common common;
     std::string line = "";
@@ -126,7 +128,7 @@ int Input::getBombsCount(int boardSize)
     while (true)
     {
         common.clearScreen();
-        std::cout << "How many bombs to place on the board? ";
+        std::cout << "How many bombs to place on the field? ";
         getline(std::cin, line);
         if (line == "")
             isValidInput = false;
@@ -140,7 +142,7 @@ int Input::getBombsCount(int boardSize)
             {
                 isValidInput = false;
             }
-            if (bombsCount > 0 && bombsCount < boardSize)
+            if (bombsCount > 0 && bombsCount < fieldSize)
                 isValidInput = true;
             else
                 isValidInput = false;
@@ -168,24 +170,26 @@ bool Input::getAnyKey()
     }
 }
 
-Common::coordsStruct Input::getUserInput(Board &board)
+Common::userInputStruct Input::getUserInput(Field &field)
 {
-    Common common;
     std::string line = "";
     int beforeComma = 0;
     int afterComma = 0;
     bool isValidInput = false;
+    bool isFlag = false;
     Common::coordsStruct coords;
+    Common::userInputStruct userInput;
     
     while (true)
     {
-        std::cout << "Choose a position (column,row - e.g. 5,4): ";
+        std::cout << "Choose a position in this format: 'column,row' - e.g. 5,4" << nl;
+        std::cout << "(To place or remove a flag: f5,5): ";
         getline(std::cin, line);
         if (line == "")
             isValidInput = false;
         else
         {
-            if(line.find(",") != std::string::npos)
+            if(line.find(",") != std::string::npos && line.find("f") == std::string::npos)
             {
                 isValidInput = true;
                 try
@@ -212,19 +216,59 @@ Common::coordsStruct Input::getUserInput(Board &board)
                     }
                     isValidInput = false;
                 }
+                coords.col = beforeComma;
+                coords.row = afterComma;
+            }
+            else if (line.find(",") != std::string::npos && line.find("f") != std::string::npos)
+            {
+                isFlag = true;
+                isValidInput = true;
+                try
+                {
+                    beforeComma = stoi(line.substr(1, line.find(",")));
+                }
+                catch (std::exception &err)
+                {
+                    isValidInput = false;
+                }
+                try
+                {
+                    afterComma = stoi(line.substr(line.find(",") + 1));
+                }
+                catch (std::exception &err)
+                {
+                    try
+                    {
+                        afterComma = stoi(line.substr(line.find(",")));
+                    }
+                    catch (std::exception &err)
+                    {
+                        isValidInput = false;
+                    }
+                    isValidInput = false;
+                }
+                coords.col = beforeComma;
+                coords.row = afterComma;              
             }
         }
-        if (isValidInput == true)
+        if (field.isFree(coords) == false)
         {
-            coords.col = beforeComma;
-            coords.row = afterComma;
-            return coords;
+            std::cout << "Position not free, Press ENTER... ";
+            getAnyKey();
+            field.printAll();
+        }
+        else if (isValidInput == true)
+        {
+            userInput.coords = coords;
+            userInput.isFlag = isFlag;
+            return userInput;
         }
         else
         {
+            isFlag = false;
             std::cout << "Wrong input, Press ENTER... ";
             getAnyKey();
-            board.printAll();
+            field.printAll();
         }
     }
 }

@@ -11,7 +11,7 @@ public:
     Common::coordsStruct getDimensions();
     int getBombsCount(int);
     bool getAnyKey();
-    Common::coordsStruct getUserInput(Board &board);
+    Common::userInputStruct getUserInput(Field &field);
 };
 
 
