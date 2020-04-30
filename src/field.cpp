@@ -15,7 +15,7 @@ Field::Field(int cols, int rows, int minesCount, std::string difficultyString)
     this->rows = rows;
     this->minesCount = minesCount;
     this->minesLeft = minesCount;
-    this->countEmpty = cols*rows;
+    this->countEmpty = cols * rows;
     this->difficultyString = difficultyString;
     this->fieldArray = createArray();
     this->minesArray = createArray();
@@ -38,10 +38,14 @@ Field::~Field()
 // user pointers to pointers to be able to create dynamic 2D-arrays
 char** Field::createArray()
 {
-    char** array = new char*[this->cols+1];
+    std::vector<std::vector<char>> tempVector(this->rows, std::vector<char>(this->cols));
+    const int colsNum = this->cols + 1;
+    const int rowsNum = this->rows + 1;
+    char** tempArray = new char*[colsNum];
     for (int i=0; i <= this->cols; i++)
-        array[i] = new char[this->rows+1];
-    return array;
+        tempArray[i] = new char[rowsNum];
+
+    return tempArray;
 }
 
 // fill an array with empty space (' ') - for this->fieldArray[][] and this->minesArray[][]:
@@ -62,14 +66,13 @@ void Field::fillMinesArray()
     Common common;
     Common::coordsStruct coords;
     int sizeOfFieldArray = this->cols * this->rows;
-    int tempArray[sizeOfFieldArray+1];
-    tempArray[0] = 0;
-    for (int i = 1; i <= sizeOfFieldArray; i++)
-        tempArray[i] = i;
-    std::random_shuffle(&tempArray[1], &tempArray[sizeOfFieldArray+1]);
+    std::vector<int> tempVector;
+    for (int i = 0; i <= sizeOfFieldArray; i++)
+        tempVector.push_back(i);
+    std::random_shuffle(tempVector.begin()+1, tempVector.end());
     for (int i = 1; i <= this->minesCount; i++)
     {
-        coords = common.intToStruct(tempArray[i], this->cols);
+        coords = common.intToStruct(tempVector.at(i), this->cols);
         this->minesArray[coords.col][coords.row] = 'X';
     }
 }
@@ -238,7 +241,7 @@ Common::placeUserInputStruct Field::placeUserInput(Common::userInputStruct userI
                 if (autoUncoverNeighboursFlagsVector.size() != 0)
                 {
                     // for each covered neighbour square
-                    for (int i = 0; i < autoUncoverNeighboursCoveredVector.size(); i++)
+                    for (int i = 0; i < static_cast<int>(autoUncoverNeighboursCoveredVector.size()); i++)
                     {
                         if (this->fieldArray[autoUncoverNeighboursCoveredVector.at(i).col][autoUncoverNeighboursCoveredVector.at(i).row] != 'F')
                         {
@@ -254,7 +257,7 @@ Common::placeUserInputStruct Field::placeUserInput(Common::userInputStruct userI
                                 std::vector<Common::coordsStruct> autoUncoverNeighboursMinesVector;
                                 autoUncoverNeighboursMinesVector.clear();
                                 autoUncoverNeighboursMinesVector = findNeighbours(this->minesArray, autoUncoverNeighboursCoveredVector.at(i), 'X');
-                                this->fieldArray[autoUncoverNeighboursCoveredVector.at(i).col][autoUncoverNeighboursCoveredVector.at(i).row] = autoUncoverNeighboursMinesVector.size() + 48;
+                                this->fieldArray[autoUncoverNeighboursCoveredVector.at(i).col][autoUncoverNeighboursCoveredVector.at(i).row] = static_cast<char>(autoUncoverNeighboursMinesVector.size() + 48);
                             }
                         }
                     }
@@ -267,7 +270,7 @@ Common::placeUserInputStruct Field::placeUserInput(Common::userInputStruct userI
             neighboursMinesVector = findNeighbours(this->minesArray, userInput.coords, 'X');
             
             // place neighboursMinesVector.size() in fieldArray (convert int to char by adding 48):
-            this->fieldArray[userInput.coords.col][userInput.coords.row] = neighboursMinesVector.size()+48;
+            this->fieldArray[userInput.coords.col][userInput.coords.row] = static_cast<char>(neighboursMinesVector.size() + 48);
             this->countEmpty--;
             
             // automatically uncover all neighbour squares of squares containing a '0' (repeat if new '0's appeared):
@@ -300,7 +303,7 @@ Common::placeUserInputStruct Field::placeUserInput(Common::userInputStruct userI
                                     // place neighboursMinesVectorNew.size() in fieldArray (convert int to char by adding 48):
                                     if (this->fieldArray[i][j] == ' ')
                                     {
-                                        this->fieldArray[i][j] = neighboursMinesVectorNew.size()+48;
+                                        this->fieldArray[i][j] = static_cast<char>(neighboursMinesVectorNew.size() + 48);
                                         this->countEmpty--;
                                     }
                                 }

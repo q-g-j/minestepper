@@ -1,5 +1,5 @@
 #pragma once
 
-#ifndef DEBUG
-#define DEBUG 0
+#ifndef NDEBUG
+#define DEBUG 1
 #endif

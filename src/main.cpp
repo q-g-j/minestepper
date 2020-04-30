@@ -1,6 +1,10 @@
 #include <iostream>
 #include "time.h"
 
+#if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+    #include "Windows.h"
+#endif
+
 #include "common.hpp"
 #include "debug.hpp"
 #include "field.hpp"
@@ -12,7 +16,11 @@ int main()
 {
     int rows = 0, cols = 0;
     Input input;
-    srand( time(NULL) ); // initialize random seed
+    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+        ::srand(GetTickCount());
+    #else
+        srand( time(NULL) ); // initialize random seed
+    #endif
     
     while (true)
     {

@@ -1,7 +1,7 @@
 #include <iostream>
+#include <string>
 
 #include "common.hpp"
-#include "debug.hpp"
 #include "field.hpp"
 #include "common.hpp"
 #include "input.hpp"
@@ -37,7 +37,7 @@ int Input::getDifficulty()
             {
                 difficulty = stoi(line);
             }
-            catch (std::exception &err)
+            catch (...)
             {
                 isValidInput = false;
             }
@@ -86,7 +86,7 @@ Common::coordsStruct Input::getDimensions()
                 {
                     beforeX = stoi(line.substr(0, line.find("x")));
                 }
-                catch (std::exception &err)
+                catch (...)
                 {
                     isValidInput = false;
                 }
@@ -94,13 +94,13 @@ Common::coordsStruct Input::getDimensions()
                 {
                     afterX = stoi(line.substr(line.find("x") + 1));
                 }
-                catch (std::exception &err)
+                catch (...)
                 {
                     try
                     {
                         afterX = stoi(line.substr(line.find("x")));
                     }
-                    catch (std::exception &err)
+                    catch (...)
                     {
                         isValidInput = false;
                     }
@@ -154,7 +154,7 @@ int Input::getMinesCount(int fieldSize)
             {
                 minesCount = stoi(line);
             }
-            catch (std::exception &err)
+            catch (...)
             {
                 isValidInput = false;
             }
@@ -193,7 +193,7 @@ Common::userInputStruct Input::getUserInput(Field &field)
     std::string line = "";
     int beforeComma = 0;
     int afterComma = 0;
-    bool isValidInput = false;
+    bool isValidInput = true;
     Common::coordsStruct coords;
     Common::userInputStruct userInput;
     
@@ -218,12 +218,11 @@ Common::userInputStruct Input::getUserInput(Field &field)
         {
             if(line.find(",") != std::string::npos && line.find("f") == std::string::npos)
             {
-                isValidInput = true;
                 try
                 {
                     beforeComma = stoi(line.substr(0, line.find(",")));
                 }
-                catch (std::exception &err)
+                catch (...)
                 {
                     isValidInput = false;
                 }
@@ -231,13 +230,13 @@ Common::userInputStruct Input::getUserInput(Field &field)
                 {
                     afterComma = stoi(line.substr(line.find(",") + 1));
                 }
-                catch (std::exception &err)
+                catch (...)
                 {
                     try
                     {
                         afterComma = stoi(line.substr(line.find(",")));
                     }
-                    catch (std::exception &err)
+                    catch (...)
                     {
                         isValidInput = false;
                     }
@@ -248,12 +247,11 @@ Common::userInputStruct Input::getUserInput(Field &field)
             }
             else if (line.find(",") != std::string::npos && line.find("f") != std::string::npos)
             {
-                isValidInput = true;
                 try
                 {
                     beforeComma = stoi(line.substr(1, line.find(",")));
                 }
-                catch (std::exception &err)
+                catch (...)
                 {
                     isValidInput = false;
                 }
@@ -261,13 +259,13 @@ Common::userInputStruct Input::getUserInput(Field &field)
                 {
                     afterComma = stoi(line.substr(line.find(",") + 1));
                 }
-                catch (std::exception &err)
+                catch (...)
                 {
                     try
                     {
                         afterComma = stoi(line.substr(line.find(",")));
                     }
-                    catch (std::exception &err)
+                    catch (...)
                     {
                         isValidInput = false;
                     }

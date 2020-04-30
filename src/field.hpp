@@ -30,5 +30,4 @@ public:
     void hasWon();
     void hasLost();
     std::vector<Common::coordsStruct> findNeighbours(char **tempArray, Common::coordsStruct, char);
-    int uncoverRecursive(Common::coordsStruct, int, int);
 };
