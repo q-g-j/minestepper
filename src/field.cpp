@@ -8,18 +8,18 @@
 #include "field.hpp"
 #include "input.hpp"
 
-Field::Field(int cols, int rows, int bombsCount, std::string difficultyString)
+Field::Field(int cols, int rows, int minesCount, std::string difficultyString)
 {
     this->cols = cols;
     this->rows = rows;
-    this->bombsCount = bombsCount;
-    this->bombsLeft = bombsCount;
+    this->minesCount = minesCount;
+    this->minesLeft = minesCount;
     this->countEmpty = cols*rows;
     this->difficultyString = difficultyString;
     this->fieldArray = createArray();
-    this->bombsArray = createArray();
+    this->minesArray = createArray();
     clearArray(this->fieldArray);
-    clearArray(this->bombsArray);
+    clearArray(this->minesArray);
 }
 
 Field::~Field()
@@ -29,8 +29,8 @@ Field::~Field()
     delete[] this->fieldArray;
     
     for (int i=0; i <= cols; i++)
-        delete this->bombsArray[i];
-    delete[] this->bombsArray;
+        delete this->minesArray[i];
+    delete[] this->minesArray;
 }
 
 char** Field::createArray()
@@ -52,7 +52,7 @@ void Field::clearArray(char** array)
     }
 }
 
-void Field::fillBombsArray()
+void Field::fillMinesArray()
 {    
     Common common;
     Common::coordsStruct coords;
@@ -62,10 +62,10 @@ void Field::fillBombsArray()
     for (int i = 1; i <= sizeOfFieldArray; i++)
         tempArray[i] = i;
     std::random_shuffle(&tempArray[1], &tempArray[sizeOfFieldArray+1]);
-    for (int i = 1; i <= this->bombsCount; i++)
+    for (int i = 1; i <= this->minesCount; i++)
     {
         coords = common.intToStruct(tempArray[i], this->cols);
-        this->bombsArray[coords.col][coords.row] = 'X';
+        this->minesArray[coords.col][coords.row] = 'X';
     }
 }
 
@@ -113,27 +113,40 @@ void Field::drawField(char** array)
     }
 }
 
-void Field::printBombsLeft()
+void Field::printMinesLeft()
 {
-    std::cout << "There are " << this->bombsLeft << " bombs left." << nl;
+    std::cout << "There are " << this->minesLeft << " mines left." << nl;
 }
 
 void Field::printExplanation()
-{
+{   std::cout << "In this game your task is to find all hidden mines by uncovering all safe positions." << nl << nl;
+    std::cout << "You can guess and sometimes combine where the next mine is." << nl;
+    std::cout << "On each uncovered square a number appears that tells you the number of direct neighbours containing a mine" << nl << nl;
+    std::cout << "If you're sure that you have found a mine, place a flag on it's position by preceding an 'f' to your input." << nl;
+    std::cout << "To remove the flag, just repeat your input. You may place or remove as many flags in a row as you wish." << nl << nl;
+    std::cout << "Choose a position in this format: 'column,row' - e.g. 5,4" << nl;
+    std::cout << "To place or remove a flag: f5,4" << nl << nl;
+    std::cout << "If you are sure that you have found all mines around a spot and have place all flags accordingly, you can" << nl;
+    std::cout << "type the position of this uncovered (numbered) square to automatically uncover all safe neighbours" << nl;
+    std::cout << "aroung this numbered square. But beware that you may lose, if you placed your flags wrong." << nl << nl;
+    
+    std::cout << "Explanations:" << nl;
     std::cout << "' '   = not uncovered yet" << nl;
-    std::cout << "'0-9' = uncovered (0-9: number of neighbour bombs)" << nl;
+    std::cout << "'0-9' = uncovered (0-9: number of neighbour mines)" << nl;
     std::cout << "'F'   = flag" << nl;
-    std::cout << "'X'   = bomb :-(" << nl;
+    std::cout << "'X'   = mine :-(" << nl;
+    std::cout << nl << nl;
+    std::cout << "Press ENTER to go back...";
 }
 
 void Field::printAll()
 {
     Common common;
     common.clearScreen();
-    std::cout << "Minestepper" << " - " << this->difficultyString << " (" << this->cols << "x" << this->rows << ") - " << this->bombsCount << " bombs; " << this->bombsLeft << " bombs left..." << nl << nl;
+    std::cout << "Minestepper" << " - " << this->difficultyString << " (" << this->cols << "x" << this->rows << ") - " << this->minesCount << " mines; " << this->minesLeft << " mines left..." << nl << nl;
     
     #if DEBUG == 1
-        drawField(bombsArray);
+        drawField(minesArray);
         std::cout << nl;
     #endif
 
@@ -149,49 +162,51 @@ bool Field::isFlagOn(Common::coordsStruct coords)
         return false;
 }
 
-bool Field::isFree(Common::coordsStruct coords)
+bool Field::isNumber(Common::coordsStruct coords)
 {
     for (int i = 48; i < 56; i++)
     {
         if (this->fieldArray[coords.col][coords.row] == i)
-            return false;
+            return true;
     }
-    return true;
+    return false;
 }
 
-Common::placeUserInput Field::placeUserInput(Common::userInputStruct userInput, int turn)
+Common::placeUserInputStruct Field::placeUserInput(Common::userInputStruct userInput, int turn)
 {
-    Common::placeUserInput returnStruct;
-    int neighboursCount = 0;
+    Common::placeUserInputStruct returnStruct;
     if (userInput.isFlag == true)
-    {            
+    {
         if (isFlagOn(userInput.coords) == true)
         {
             this->fieldArray[userInput.coords.col][userInput.coords.row] = ' ';
-            this->bombsLeft++;
-            returnStruct.isFlag = true;
+            this->minesLeft++;
+            returnStruct.isTurn = false;
             return returnStruct;
         }
         else
         {
             this->fieldArray[userInput.coords.col][userInput.coords.row] = 'F';
-            this->bombsLeft--;
-            returnStruct.isFlag = true;
+            this->minesLeft--;
+            returnStruct.isTurn = false;
             return returnStruct;
         }
     }
     else
     {
+        // fill the Field with random mine AFTER the player has placed his first guess:
         if (turn == 1)
         {
-            fillBombsArray();
-            while (this->bombsArray[userInput.coords.col][userInput.coords.row] == 'X')
+            fillMinesArray();
+            while (this->minesArray[userInput.coords.col][userInput.coords.row] == 'X')
             {
-                clearArray(bombsArray);
-                fillBombsArray();
+                clearArray(minesArray);
+                fillMinesArray();
             }
         }
-        if (this->bombsArray[userInput.coords.col][userInput.coords.row] == 'X')
+        
+        // check if the player hit a mine which ends the game:
+        if (this->minesArray[userInput.coords.col][userInput.coords.row] == 'X')
         {
             hasLost();
             returnStruct.hasLost = true;
@@ -199,19 +214,56 @@ Common::placeUserInput Field::placeUserInput(Common::userInputStruct userInput, 
         }
         else
         {
-            std::vector<Common::coordsStruct> neighboursBombsVector;
-            neighboursBombsVector = findNeighbours(this->bombsArray, userInput.coords, 'X');
-
-            neighboursCount = neighboursBombsVector.size();
+            // if the player has typed the coords of an already uncovered position and has placed all flags right,
+            // uncover all sourrounding safe positions:
+            if (isNumber(userInput.coords))
+            {
+                // create a new vector of surrounding covered squares:
+                std::vector<Common::coordsStruct> autoUncoverNeighboursCoveredVector;
+                autoUncoverNeighboursCoveredVector = findNeighbours(this->fieldArray, userInput.coords, ' ');
+                
+                // create a new vector of neighbour flags:
+                std::vector<Common::coordsStruct> autoUncoverNeighboursFlagsVector;
+                autoUncoverNeighboursFlagsVector = findNeighbours(this->fieldArray, userInput.coords, 'F');
+                
+                if (autoUncoverNeighboursFlagsVector.size() != 0)
+                {
+                    // for each covered neighbour square
+                    for (int i = 0; i < autoUncoverNeighboursCoveredVector.size(); i++)
+                    {
+                        if (this->fieldArray[autoUncoverNeighboursCoveredVector.at(i).col][autoUncoverNeighboursCoveredVector.at(i).row] != 'F')
+                        {
+                            if (this->minesArray[autoUncoverNeighboursCoveredVector.at(i).col][autoUncoverNeighboursCoveredVector.at(i).row] == 'X')
+                            {
+                                hasLost();
+                                returnStruct.hasLost = true;
+                                return returnStruct;
+                            }
+                            else
+                            {
+                                // create a new vector of surrounding mines:
+                                std::vector<Common::coordsStruct> autoUncoverNeighboursMinesVector;
+                                autoUncoverNeighboursMinesVector.clear();
+                                autoUncoverNeighboursMinesVector = findNeighbours(this->minesArray, autoUncoverNeighboursCoveredVector.at(i), 'X');
+                                this->fieldArray[autoUncoverNeighboursCoveredVector.at(i).col][autoUncoverNeighboursCoveredVector.at(i).row] = autoUncoverNeighboursMinesVector.size() + 48;
+                            }
+                        }
+                    }
+                    return returnStruct;
+                }
+            }
+        
+            // uncover the players choice and place the number of surrounding mines in it:
+            std::vector<Common::coordsStruct> neighboursMinesVector;
+            neighboursMinesVector = findNeighbours(this->minesArray, userInput.coords, 'X');
             
-            // place neighboursCount in fieldArray (convert int to char by adding 48):
-            this->fieldArray[userInput.coords.col][userInput.coords.row] = neighboursCount+48;
+            // place neighboursMinesVector.size() in fieldArray (convert int to char by adding 48):
+            this->fieldArray[userInput.coords.col][userInput.coords.row] = neighboursMinesVector.size()+48;
             this->countEmpty--;
             
-            int neighboursCountNew = 0;
-            
+            // automatically uncover all neighbour squares of squares containing a '0' (repeat if new '0's appeared):
             bool run = true;
-            if (neighboursCount == 0)
+            if (neighboursMinesVector.size() == 0)
             {
                 while (run == true)
                 {
@@ -227,22 +279,19 @@ Common::placeUserInput Field::placeUserInput(Common::userInputStruct userInput, 
                                 coordsBase.col = i;
                                 coordsBase.row = j;
                                 std::vector<Common::coordsStruct> neighboursZerosVector;
-                                neighboursZerosVector.clear();
                                 neighboursZerosVector = findNeighbours(this->fieldArray, coordsBase, 48);
                                 
 
-                                // if there is a neighbour containing a 0 create a new vector of neighbours containing bombs:
+                                // if there is a neighbour containing a '0' create a new vector of neighbours containing mines:
                                 if (neighboursZerosVector.size() != 0)
                                 {
-                                    std::vector<Common::coordsStruct> neighboursBombsVectorNew;
-                                    neighboursBombsVectorNew.clear();
-                                    neighboursBombsVectorNew = findNeighbours(this->bombsArray, coordsBase, 'X');
-                                    neighboursCountNew = neighboursBombsVectorNew.size();
+                                    std::vector<Common::coordsStruct> neighboursMinesVectorNew;
+                                    neighboursMinesVectorNew = findNeighbours(this->minesArray, coordsBase, 'X');
             
-                                    // place neighboursCountNew in fieldArray (convert int to char by adding 48):
+                                    // place neighboursMinesVectorNew.size() in fieldArray (convert int to char by adding 48):
                                     if (this->fieldArray[i][j] == ' ')
                                     {
-                                        this->fieldArray[i][j] = neighboursCountNew+48;
+                                        this->fieldArray[i][j] = neighboursMinesVectorNew.size()+48;
                                         this->countEmpty--;
                                     }
                                 }
@@ -261,7 +310,6 @@ Common::placeUserInput Field::placeUserInput(Common::userInputStruct userInput, 
                                 coordsBaseNew.col = a;
                                 coordsBaseNew.row = b;
                                 std::vector<Common::coordsStruct> neighboursZerosVectorNew;
-                                neighboursZerosVectorNew.clear();
                                 neighboursZerosVectorNew = findNeighbours(this->fieldArray, coordsBaseNew, 48);
                                 if (neighboursZerosVectorNew.size() != 0)
                                     run = true;
@@ -271,13 +319,12 @@ Common::placeUserInput Field::placeUserInput(Common::userInputStruct userInput, 
                 }
             }
         }
-        if (this->countEmpty == bombsCount)
+        if (this->countEmpty == minesCount)
         {
             hasWon();
             returnStruct.hasWon = true;
             return returnStruct;
-        }
-        
+        }        
         return returnStruct;
     }
 }
@@ -287,10 +334,10 @@ void Field::hasWon()
     Common common;
     Input input;
     common.clearScreen();
-    std::cout << "Minestepper" << " - " << this->difficultyString << " (" << this->cols << "x" << this->rows << ") - " << this->bombsCount << " bombs" << nl << nl;
+    std::cout << "Minestepper" << " - " << this->difficultyString << " (" << this->cols << "x" << this->rows << ") - " << this->minesCount << " mines" << nl << nl;
     for (int i = 1; i <= this->cols; i++)
         for (int j = 1; j <= this->rows; j++)
-            if (bombsArray[i][j] == 'X')
+            if (minesArray[i][j] == 'X')
                 fieldArray[i][j] = 'X';
         
     drawField(this->fieldArray);
@@ -306,8 +353,8 @@ void Field::hasLost()
     Common common;
     Input input;
     common.clearScreen();
-    std::cout << "Minestepper" << " - " << this->difficultyString << " (" << this->cols << "x" << this->rows << ") - " << this->bombsCount << " bombs" << nl << nl;
-    drawField(this->bombsArray);
+    std::cout << "Minestepper" << " - " << this->difficultyString << " (" << this->cols << "x" << this->rows << ") - " << this->minesCount << " mines" << nl << nl;
+    drawField(this->minesArray);
     std::cout << nl;
     std::cout << "Sry, you have lost!" << nl;
     std::cout << "Press ENTER to go back...";

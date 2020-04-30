@@ -7,26 +7,26 @@ class Field
 private:
     int cols;
     int rows;
-    int bombsCount;
-    int bombsLeft = 0;
+    int minesCount;
+    int minesLeft = 0;
     int countEmpty = 0;
     std::string difficultyString;
     char** fieldArray;
-    char** bombsArray;
+    char** minesArray;
 public:
-    Field(int cols = 0, int rows = 0, int bombsCount = 0, std::string difficultyString = "");
+    Field(int cols = 0, int rows = 0, int minesCount = 0, std::string difficultyString = "");
     ~Field();
     
     char** createArray();
     void clearArray(char**);
-    void fillBombsArray();
+    void fillMinesArray();
     void drawField(char**);
-    void printBombsLeft();
+    void printMinesLeft();
     void printExplanation();
     void printAll();
     bool isFlagOn(Common::coordsStruct);
-    bool isFree(Common::coordsStruct);
-    Common::placeUserInput placeUserInput(Common::userInputStruct, int);
+    bool isNumber(Common::coordsStruct);
+    Common::placeUserInputStruct placeUserInput(Common::userInputStruct, int);
     void hasWon();
     void hasLost();
     std::vector<Common::coordsStruct> findNeighbours(char **tempArray, Common::coordsStruct, char);

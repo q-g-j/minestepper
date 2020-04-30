@@ -129,17 +129,17 @@ Common::coordsStruct Input::getDimensions()
     }
 }
 
-int Input::getBombsCount(int fieldSize)
+int Input::getMinesCount(int fieldSize)
 {
     Common common;
     std::string line = "";
-    int bombsCount = 0;
+    int minesCount = 0;
     bool isValidInput = false;
     
     while (true)
     {
         common.clearScreen();
-        std::cout << "How many bombs to place on the field? ";
+        std::cout << "How many mines to place on the field? ";
         getline(std::cin, line);
         if (line == "")
             isValidInput = false;
@@ -149,19 +149,19 @@ int Input::getBombsCount(int fieldSize)
         {
             try
             {
-                bombsCount = stoi(line);
+                minesCount = stoi(line);
             }
             catch (std::exception &err)
             {
                 isValidInput = false;
             }
-            if (bombsCount > 0 && bombsCount < fieldSize)
+            if (minesCount > 0 && minesCount < fieldSize)
                 isValidInput = true;
             else
                 isValidInput = false;
         }
         if (isValidInput == true)
-            return bombsCount;
+            return minesCount;
         else
         {
             std::cout << "Wrong input, Press ENTER... ";
@@ -190,22 +190,19 @@ Common::userInputStruct Input::getUserInput(Field &field)
     int beforeComma = 0;
     int afterComma = 0;
     bool isValidInput = false;
-    bool isFlag = false;
     Common::coordsStruct coords;
     Common::userInputStruct userInput;
     
     while (true)
     {
-        std::cout << "Choose a position in this format: 'column,row' - e.g. 5,4" << nl;
-        std::cout << "To place or remove a flag: f5,4" << nl;
         std::cout << "'h' or 'H': Help" << nl << nl;
         std::cout << "Input: ";
         getline(std::cin, line);
         if (line == "")
             isValidInput = false;
-        if (line == "q" || line == "Q")
+        else if (line == "q" || line == "Q")
             exit (0);
-        if (line == "h" || line == "H")
+        else if (line == "h" || line == "H")
         {
             common.clearScreen();
             field.printExplanation();
@@ -247,7 +244,6 @@ Common::userInputStruct Input::getUserInput(Field &field)
             }
             else if (line.find(",") != std::string::npos && line.find("f") != std::string::npos)
             {
-                isFlag = true;
                 isValidInput = true;
                 try
                 {
@@ -274,24 +270,20 @@ Common::userInputStruct Input::getUserInput(Field &field)
                     isValidInput = false;
                 }
                 coords.col = beforeComma;
-                coords.row = afterComma;              
+                coords.row = afterComma;
+                if (field.isNumber(coords) != true)
+                    userInput.isFlag = true;
+                else
+                    isValidInput = false;
             }
         }
-        if (field.isFree(coords) == false)
-        {
-            std::cout << "Position not free, Press ENTER... ";
-            getAnyKey();
-            field.printAll();
-        }
-        else if (isValidInput == true)
+        if (isValidInput == true)
         {
             userInput.coords = coords;
-            userInput.isFlag = isFlag;
             return userInput;
         }
         else
         {
-            isFlag = false;
             std::cout << "Wrong input, Press ENTER... ";
             getAnyKey();
             field.printAll();

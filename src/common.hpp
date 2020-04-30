@@ -17,11 +17,11 @@ public:
         coordsStruct coords;
         bool isFlag = false;
     };
-    struct placeUserInput
+    struct placeUserInputStruct
     {
         bool hasLost = false;
         bool hasWon = false;
-        bool isFlag = false;
+        bool isTurn = true;
     };
     void clearScreen();
     coordsStruct intToStruct(int, int);

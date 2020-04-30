@@ -9,7 +9,7 @@ private:
 public:
     int getDifficulty();
     Common::coordsStruct getDimensions();
-    int getBombsCount(int);
+    int getMinesCount(int);
     bool getAnyKey();
     Common::userInputStruct getUserInput(Field &field);
 };
