@@ -6,6 +6,7 @@
 #include "common.hpp"
 #include "input.hpp"
 
+// custom mode: ask user for the game mode (difficulty):
 int Input::getDifficulty()
 {
     Common common;   
@@ -55,6 +56,7 @@ int Input::getDifficulty()
     }
 }
 
+// custom mode: ask user for the size of the field:
 Common::coordsStruct Input::getDimensions()
 {
     Common common;
@@ -129,6 +131,7 @@ Common::coordsStruct Input::getDimensions()
     }
 }
 
+// custom mode: ask user for the number of mines:
 int Input::getMinesCount(int fieldSize)
 {
     Common common;
@@ -183,6 +186,7 @@ bool Input::getAnyKey()
     }
 }
 
+// the main function to ask the user for valid coordinates:
 Common::userInputStruct Input::getUserInput(Field &field)
 {
     Common common;

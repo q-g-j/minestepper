@@ -8,6 +8,7 @@
 #include "field.hpp"
 #include "input.hpp"
 
+// the constructor:
 Field::Field(int cols, int rows, int minesCount, std::string difficultyString)
 {
     this->cols = cols;
@@ -22,6 +23,7 @@ Field::Field(int cols, int rows, int minesCount, std::string difficultyString)
     clearArray(this->minesArray);
 }
 
+// the deconstructor:
 Field::~Field()
 {    
     for (int i=0; i <= cols; i++)
@@ -33,6 +35,7 @@ Field::~Field()
     delete[] this->minesArray;
 }
 
+// user pointers to pointers to be able to create dynamic 2D-arrays
 char** Field::createArray()
 {
     char** array = new char*[this->cols+1];
@@ -41,6 +44,7 @@ char** Field::createArray()
     return array;
 }
 
+// fill an array with empty space (' ') - for this->fieldArray[][] and this->minesArray[][]:
 void Field::clearArray(char** array)
 {
     for (int i=0; i <= this->cols; i++)
@@ -52,6 +56,7 @@ void Field::clearArray(char** array)
     }
 }
 
+// place mines at random positions of this->minesArray[][]:
 void Field::fillMinesArray()
 {    
     Common common;
@@ -69,6 +74,7 @@ void Field::fillMinesArray()
     }
 }
 
+// draw this->fieldArray[][] or this->minesArray[][] with current content:
 void Field::drawField(char** array)
 {
     std::cout << "    ";
@@ -154,6 +160,7 @@ void Field::printAll()
     std::cout << nl;
 }
 
+// test coords if they contain a flag:
 bool Field::isFlagOn(Common::coordsStruct coords)
 {
     if (this->fieldArray[coords.col][coords.row] == 'F')
@@ -162,6 +169,7 @@ bool Field::isFlagOn(Common::coordsStruct coords)
         return false;
 }
 
+// test coords if they contain a number:
 bool Field::isNumber(Common::coordsStruct coords)
 {
     for (int i = 48; i < 56; i++)
@@ -172,6 +180,7 @@ bool Field::isNumber(Common::coordsStruct coords)
     return false;
 }
 
+// the main function of class Field which will alter the fieldArray:
 Common::placeUserInputStruct Field::placeUserInput(Common::userInputStruct userInput, int turn)
 {
     Common::placeUserInputStruct returnStruct;
@@ -319,6 +328,8 @@ Common::placeUserInputStruct Field::placeUserInput(Common::userInputStruct userI
                 }
             }
         }
+        
+        // check if player has won:
         if (this->countEmpty == minesCount)
         {
             hasWon();
