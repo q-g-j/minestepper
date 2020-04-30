@@ -130,18 +130,17 @@ void Field::printMinesLeft()
 void Field::printExplanation()
 {   std::cout << "In this game your task is to find all hidden mines by uncovering all safe positions." << nl << nl;
     std::cout << "You can guess and sometimes combine where the next mine is." << nl;
-    std::cout << "On each uncovered square a number appears that tells you the number of direct neighbours containing a mine" << nl << nl;
+    std::cout << "The number on each uncovered square shows how many neighbours contain a mine." << nl << nl;
     std::cout << "If you're sure that you have found a mine, place a flag on it's position by preceding an 'f' to your input." << nl;
     std::cout << "To remove the flag, just repeat your input. You may place or remove as many flags in a row as you wish." << nl << nl;
     std::cout << "Choose a position in this format: 'column,row' - e.g. 5,4" << nl;
     std::cout << "To place or remove a flag: f5,4" << nl << nl;
-    std::cout << "If you are sure that you have found all mines around a spot and have place all flags accordingly, you can" << nl;
-    std::cout << "type the position of this uncovered (numbered) square to automatically uncover all safe neighbours" << nl;
-    std::cout << "aroung this numbered square. But beware that you may lose, if you placed your flags wrong." << nl << nl;
+    std::cout << "You can reselect a numbered square to automatically uncover all remaining neighbours," << nl;
+    std::cout << "as long as you put all flags right." << nl << nl;
     
     std::cout << "Explanations:" << nl;
     std::cout << "' '   = not uncovered yet" << nl;
-    std::cout << "'0-9' = uncovered (0-9: number of neighbour mines)" << nl;
+    std::cout << "'0-8' = uncovered (0-8: number of neighbour mines)" << nl;
     std::cout << "'F'   = flag" << nl;
     std::cout << "'X'   = mine :-(" << nl;
     std::cout << nl << nl;
