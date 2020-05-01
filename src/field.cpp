@@ -110,16 +110,30 @@ void Field::drawField(char** array)
             std::cout << "|" << " " << array[colNum][rowNum] << " ";
             if (colNum == this->cols)
             {
-                std::cout << "|" << nl;
+                std::cout << "|";
+                if (rowNum < 10)
+                    std::cout << " " << rowNum << " ";
+                else
+                    std::cout << rowNum << " ";        
+                std::cout << nl;
                 std::cout << "   ";
             }
         }
         for (int bar = 1; bar <= this->cols; bar++)
         {
             std::cout << " " << "---";
-        }
+        }       
         std::cout << nl;
     }
+    std::cout << "    ";
+    for (int colNum = 1; colNum <= this->cols; colNum++)
+    {
+        if (colNum < 10)
+            std::cout << "  " << colNum << " ";
+        else
+            std::cout << " " << colNum << " ";
+    }
+    std::cout << nl;
 }
 
 void Field::printMinesLeft()
