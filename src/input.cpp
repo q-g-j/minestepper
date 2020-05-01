@@ -218,6 +218,7 @@ Common::userInputStruct Input::getUserInput(Field &field)
         {
             if(line.find(",") != std::string::npos && line.find("f") == std::string::npos)
             {
+                isValidInput = true;
                 try
                 {
                     beforeComma = stoi(line.substr(0, line.find(",")));
@@ -247,6 +248,7 @@ Common::userInputStruct Input::getUserInput(Field &field)
             }
             else if (line.find(",") != std::string::npos && line.find("f") != std::string::npos)
             {
+                isValidInput = true;
                 try
                 {
                     beforeComma = stoi(line.substr(1, line.find(",")));
