@@ -376,7 +376,7 @@ Common::placeUserInputStruct Field::placeUserInput(Common::userInputStruct userI
         }
         
         // check if player has won:
-        if (this->countEmpty == minesCount)
+        if (this->countEmpty == this->minesCount)
         {
             hasWon();
             returnStruct.hasWon = true;
