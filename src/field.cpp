@@ -42,7 +42,7 @@ int Field::getCols()
 
 int Field::getRows()
 {
-    return this->cols;
+    return this->rows;
 }
 // user pointers to pointers to be able to create dynamic 2D-arrays
 char** Field::createArray()

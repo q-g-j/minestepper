@@ -280,7 +280,7 @@ Common::userInputStruct Input::getUserInput(Field &field)
             }     
         }
         if (coords.col > field.getCols() || coords.row > field.getRows())
-            isValidInput = false;       
+            isValidInput = false;
         if (isValidInput == true)
         {
             userInput.coords = coords;
