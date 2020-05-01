@@ -219,6 +219,7 @@ Common::placeUserInputStruct Field::placeUserInput(Common::userInputStruct userI
         // check if the player hit a mine which ends the game:
         if (this->minesArray[userInput.coords.col][userInput.coords.row] == 'X')
         {
+            this->minesArray[userInput.coords.col][userInput.coords.row] = '#';
             hasLost();
             returnStruct.hasLost = true;
             return returnStruct;
@@ -229,39 +230,68 @@ Common::placeUserInputStruct Field::placeUserInput(Common::userInputStruct userI
             // uncover all sourrounding safe positions:
             if (isNumber(userInput.coords))
             {
+                // create a new vector of surrounding mines:
+                std::vector<Common::coordsStruct> autoUncoverNeighboursMinesVector;
+                autoUncoverNeighboursMinesVector = findNeighbours(this->minesArray, userInput.coords, 'X');
+                
+                // create a new vector of surrounding flags:
+                std::vector<Common::coordsStruct> autoUncoverNeighboursFlagsVector;
+                autoUncoverNeighboursFlagsVector = findNeighbours(this->fieldArray, userInput.coords, 'F');
+                
                 // create a new vector of surrounding covered squares:
                 std::vector<Common::coordsStruct> autoUncoverNeighboursCoveredVector;
                 autoUncoverNeighboursCoveredVector = findNeighbours(this->fieldArray, userInput.coords, ' ');
                 
-                // create a new vector of neighbour flags:
-                std::vector<Common::coordsStruct> autoUncoverNeighboursFlagsVector;
-                autoUncoverNeighboursFlagsVector = findNeighbours(this->fieldArray, userInput.coords, 'F');
+                // create a new empty vector for missed mines:
+                std::vector<Common::coordsStruct> autoUncoverMissedMinesVector;
                 
+                // if player has placed some flags around userInput.coords:
                 if (autoUncoverNeighboursFlagsVector.size() != 0)
                 {
-                    // for each covered neighbour square
-                    for (int i = 0; i < static_cast<int>(autoUncoverNeighboursCoveredVector.size()); i++)
+                    // check if the flags number matches the number of actual surrounding mines:
+                    if (autoUncoverNeighboursMinesVector.size() == autoUncoverNeighboursFlagsVector.size())
                     {
-                        if (this->fieldArray[autoUncoverNeighboursCoveredVector.at(i).col][autoUncoverNeighboursCoveredVector.at(i).row] != 'F')
+                        // for each not uncovered neighbour of userInput.coords check if the player has missed a mine
+                        // and add this mines position to autoUncoverMissedMinesVector:
+                        for (int i = 0; i < autoUncoverNeighboursCoveredVector.size(); i++)
                         {
                             if (this->minesArray[autoUncoverNeighboursCoveredVector.at(i).col][autoUncoverNeighboursCoveredVector.at(i).row] == 'X')
-                            {
-                                hasLost();
-                                returnStruct.hasLost = true;
-                                return returnStruct;
-                            }
-                            else
-                            {
-                                // create a new vector of surrounding mines:
-                                std::vector<Common::coordsStruct> autoUncoverNeighboursMinesVector;
-                                autoUncoverNeighboursMinesVector.clear();
-                                autoUncoverNeighboursMinesVector = findNeighbours(this->minesArray, autoUncoverNeighboursCoveredVector.at(i), 'X');
-                                this->fieldArray[autoUncoverNeighboursCoveredVector.at(i).col][autoUncoverNeighboursCoveredVector.at(i).row] = static_cast<char>(autoUncoverNeighboursMinesVector.size() + 48);
-                            }
+                                autoUncoverMissedMinesVector.push_back(autoUncoverNeighboursCoveredVector.at(i));
                         }
                     }
-                    return returnStruct;
+                    // if there are missed mines, reveal the minesArray - player has lost:
+                    if (autoUncoverMissedMinesVector.size() != 0)
+                    {
+                        for (int i = 0; i < autoUncoverMissedMinesVector.size(); i++)
+                        {
+                            this->minesArray[autoUncoverMissedMinesVector.at(i).col][autoUncoverMissedMinesVector.at(i).row] = '#';
+                        }
+                        returnStruct.hasLost = 1;
+                        hasLost();
+                        return returnStruct;
+                    }
+                    // else if all flags are placed correctly:
+                    else
+                    {
+                        if (autoUncoverNeighboursMinesVector.size() == autoUncoverNeighboursFlagsVector.size())
+                        {
+                            // for each not uncovered neighbour of userInput.coords, print the number of surrounding mines:
+                            for (int i = 0; i < autoUncoverNeighboursCoveredVector.size(); i++)
+                            {
+                                Common::coordsStruct coordsTemp;
+                                coordsTemp.col = autoUncoverNeighboursCoveredVector.at(i).col;
+                                coordsTemp.row = autoUncoverNeighboursCoveredVector.at(i).row;
+                                std::vector<Common::coordsStruct> autoUncoverNeighboursCoveredMinesVector;
+                                autoUncoverNeighboursCoveredMinesVector = findNeighbours(this->minesArray, coordsTemp, 'X');
+                                this->fieldArray[coordsTemp.col][coordsTemp.row] = static_cast<char>(autoUncoverNeighboursCoveredMinesVector.size() + 48);
+                            }
+                            returnStruct.isTurn = false;
+                            return returnStruct;
+                        }
+                    }
                 }
+                returnStruct.isTurn = false;
+                return returnStruct;
             }
         
             // uncover the players choice and place the number of surrounding mines in it:
@@ -352,7 +382,7 @@ void Field::hasWon()
         for (int j = 1; j <= this->rows; j++)
             if (minesArray[i][j] == 'X')
                 fieldArray[i][j] = 'X';
-        
+    
     drawField(this->fieldArray);
     std::cout << nl;
     std::cout << "Congratulation, you have won!" << nl;
@@ -367,7 +397,16 @@ void Field::hasLost()
     Input input;
     common.clearScreen();
     std::cout << "Minestepper" << " - " << this->difficultyString << " (" << this->cols << "x" << this->rows << ") - " << this->minesCount << " mines" << nl << nl;
+    for (int i = 1; i <= this->cols; i++)
+    {
+        for (int j = 1; j <= this->rows; j++)
+        {
+            if (this->fieldArray[i][j] == 'F' && this->minesArray[i][j] == ' ')
+                 this->minesArray[i][j] = this->fieldArray[i][j];
+        }
+    }
     drawField(this->minesArray);
+    
     std::cout << nl;
     std::cout << "Sry, you have lost!" << nl;
     std::cout << "Press ENTER to go back...";
