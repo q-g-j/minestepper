@@ -19,8 +19,8 @@ Field::Field(int cols, int rows, int minesCount, std::string difficultyString)
     this->difficultyString = difficultyString;
     this->fieldArray = createArray();
     this->minesArray = createArray();
-    clearArray(this->fieldArray);
-    clearArray(this->minesArray);
+    this->clearFieldArray();
+    this->clearMinesArray();
 }
 
 // the deconstructor:
@@ -48,14 +48,26 @@ char** Field::createArray()
     return tempArray;
 }
 
-// fill an array with empty space (' ') - for this->fieldArray[][] and this->minesArray[][]:
-void Field::clearArray(char** array)
+// fill this->fieldArray[][] with '-'
+void Field::clearFieldArray()
 {
     for (int i=0; i <= this->cols; i++)
     {
         for (int j=0; j <= this->rows; j++)
         {
-            array[i][j] = ' ';
+            this->fieldArray[i][j] = '-';
+        }
+    }
+}
+
+// fill this->minesArray[][] with ' '
+void Field::clearMinesArray()
+{
+    for (int i=0; i <= this->cols; i++)
+    {
+        for (int j=0; j <= this->rows; j++)
+        {
+            this->minesArray[i][j] = ' ';
         }
     }
 }
@@ -153,8 +165,9 @@ void Field::printExplanation()
     std::cout << "as long as you put all flags right." << nl << nl;
     
     std::cout << "Explanations:" << nl;
-    std::cout << "' '   = not uncovered yet" << nl;
-    std::cout << "'0-8' = uncovered (0-8: number of neighbour mines)" << nl;
+    std::cout << "'-'   = not uncovered yet" << nl;
+    std::cout << "' '   = uncovered and zero neighbour mines" << nl;
+    std::cout << "'1-8' = uncovered (1-8: number of neighbour mines)" << nl;
     std::cout << "'F'   = flag" << nl;
     std::cout << "'X'   = mine :-(" << nl;
     std::cout << nl << nl;
@@ -204,7 +217,7 @@ Common::placeUserInputStruct Field::placeUserInput(Common::userInputStruct userI
     {
         if (isFlagOn(userInput.coords) == true)
         {
-            this->fieldArray[userInput.coords.col][userInput.coords.row] = ' ';
+            this->fieldArray[userInput.coords.col][userInput.coords.row] = '-';
             this->minesLeft++;
             returnStruct.isTurn = false;
             return returnStruct;
@@ -225,7 +238,7 @@ Common::placeUserInputStruct Field::placeUserInput(Common::userInputStruct userI
             fillMinesArray();
             while (this->minesArray[userInput.coords.col][userInput.coords.row] == 'X')
             {
-                clearArray(minesArray);
+                clearMinesArray();
                 fillMinesArray();
             }
         }
@@ -254,7 +267,7 @@ Common::placeUserInputStruct Field::placeUserInput(Common::userInputStruct userI
                 
                 // create a new vector of surrounding covered squares:
                 std::vector<Common::coordsStruct> autoUncoverNeighboursCoveredVector;
-                autoUncoverNeighboursCoveredVector = findNeighbours(this->fieldArray, userInput.coords, ' ');
+                autoUncoverNeighboursCoveredVector = findNeighbours(this->fieldArray, userInput.coords, '-');
                 
                 // create a new empty vector for missed mines:
                 std::vector<Common::coordsStruct> autoUncoverMissedMinesVector;
@@ -297,7 +310,10 @@ Common::placeUserInputStruct Field::placeUserInput(Common::userInputStruct userI
                                 coordsTemp.row = autoUncoverNeighboursCoveredVector.at(i).row;
                                 std::vector<Common::coordsStruct> autoUncoverNeighboursCoveredMinesVector;
                                 autoUncoverNeighboursCoveredMinesVector = findNeighbours(this->minesArray, coordsTemp, 'X');
-                                this->fieldArray[coordsTemp.col][coordsTemp.row] = static_cast<char>(autoUncoverNeighboursCoveredMinesVector.size() + 48);
+                                if (autoUncoverNeighboursCoveredMinesVector.size() == 0)
+                                    this->fieldArray[coordsTemp.col][coordsTemp.row] = ' ';
+                                else
+                                    this->fieldArray[coordsTemp.col][coordsTemp.row] = static_cast<char>(autoUncoverNeighboursCoveredMinesVector.size() + 48);
                             }
                             returnStruct.isTurn = false;
                             return returnStruct;
@@ -313,7 +329,10 @@ Common::placeUserInputStruct Field::placeUserInput(Common::userInputStruct userI
             neighboursMinesVector = findNeighbours(this->minesArray, userInput.coords, 'X');
             
             // place neighboursMinesVector.size() in fieldArray (convert int to char by adding 48):
-            this->fieldArray[userInput.coords.col][userInput.coords.row] = static_cast<char>(neighboursMinesVector.size() + 48);
+            if (neighboursMinesVector.size() == 0)
+                this->fieldArray[userInput.coords.col][userInput.coords.row] = ' ';
+            else
+                this->fieldArray[userInput.coords.col][userInput.coords.row] = static_cast<char>(neighboursMinesVector.size() + 48);
             this->countEmpty--;
             
             // automatically uncover all neighbour squares of squares containing a '0' (repeat if new '0's appeared):
@@ -327,14 +346,14 @@ Common::placeUserInputStruct Field::placeUserInput(Common::userInputStruct userI
                     {
                         for (int j = 1; j <= this->rows; j++)
                         {
-                            if (this->fieldArray[i][j] == ' ')
+                            if (this->fieldArray[i][j] == '-')
                             {
                                 // create a new vector of neighbours containing '0':
                                 Common::coordsStruct coordsBase;
                                 coordsBase.col = i;
                                 coordsBase.row = j;
                                 std::vector<Common::coordsStruct> neighboursZerosVector;
-                                neighboursZerosVector = findNeighbours(this->fieldArray, coordsBase, 48);
+                                neighboursZerosVector = findNeighbours(this->fieldArray, coordsBase, ' ');
                                 
 
                                 // if there is a neighbour containing a '0' create a new vector of neighbours containing mines:
@@ -344,9 +363,12 @@ Common::placeUserInputStruct Field::placeUserInput(Common::userInputStruct userI
                                     neighboursMinesVectorNew = findNeighbours(this->minesArray, coordsBase, 'X');
             
                                     // place neighboursMinesVectorNew.size() in fieldArray (convert int to char by adding 48):
-                                    if (this->fieldArray[i][j] == ' ')
+                                    if (this->fieldArray[i][j] == '-')
                                     {
-                                        this->fieldArray[i][j] = static_cast<char>(neighboursMinesVectorNew.size() + 48);
+                                        if (neighboursMinesVectorNew.size() == 0)
+                                             this->fieldArray[i][j] = ' ';
+                                        else
+                                            this->fieldArray[i][j] = static_cast<char>(neighboursMinesVectorNew.size() + 48);
                                         this->countEmpty--;
                                     }
                                 }
@@ -358,14 +380,14 @@ Common::placeUserInputStruct Field::placeUserInput(Common::userInputStruct userI
                     {
                         for (int b = 1; b <= this->rows; b++)
                         {
-                            if (this->fieldArray[a][b] == ' ')
+                            if (this->fieldArray[a][b] == '-')
                             {
                                 // create a new vector of neighbours containing '0':
                                 Common::coordsStruct coordsBaseNew;
                                 coordsBaseNew.col = a;
                                 coordsBaseNew.row = b;
                                 std::vector<Common::coordsStruct> neighboursZerosVectorNew;
-                                neighboursZerosVectorNew = findNeighbours(this->fieldArray, coordsBaseNew, 48);
+                                neighboursZerosVectorNew = findNeighbours(this->fieldArray, coordsBaseNew, ' ');
                                 if (neighboursZerosVectorNew.size() != 0)
                                     run = true;
                             }
@@ -415,7 +437,7 @@ void Field::hasLost()
     {
         for (int j = 1; j <= this->rows; j++)
         {
-            if (this->fieldArray[i][j] == 'F' && this->minesArray[i][j] == ' ')
+            if (this->fieldArray[i][j] == 'F') // && this->minesArray[i][j] == '-')
                  this->minesArray[i][j] = this->fieldArray[i][j];
         }
     }

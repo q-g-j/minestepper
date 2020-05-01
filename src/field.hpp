@@ -18,7 +18,8 @@ public:
     ~Field();
     
     char** createArray();
-    void clearArray(char**);
+    void clearFieldArray();
+    void clearMinesArray();
     void fillMinesArray();
     void drawField(char**);
     void printMinesLeft();

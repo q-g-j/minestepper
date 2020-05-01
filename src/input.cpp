@@ -193,7 +193,7 @@ Common::userInputStruct Input::getUserInput(Field &field)
     std::string line = "";
     int beforeComma = 0;
     int afterComma = 0;
-    bool isValidInput = true;
+    bool isValidInput = false;
     Common::coordsStruct coords;
     Common::userInputStruct userInput;
     
@@ -218,7 +218,6 @@ Common::userInputStruct Input::getUserInput(Field &field)
         {
             if(line.find(",") != std::string::npos && line.find("f") == std::string::npos)
             {
-                isValidInput = true;
                 try
                 {
                     beforeComma = stoi(line.substr(0, line.find(",")));
@@ -243,12 +242,12 @@ Common::userInputStruct Input::getUserInput(Field &field)
                     }
                     isValidInput = false;
                 }
+                isValidInput = true;
                 coords.col = beforeComma;
                 coords.row = afterComma;
             }
             else if (line.find(",") != std::string::npos && line.find("f") != std::string::npos)
             {
-                isValidInput = true;
                 try
                 {
                     beforeComma = stoi(line.substr(1, line.find(",")));
@@ -273,6 +272,7 @@ Common::userInputStruct Input::getUserInput(Field &field)
                     }
                     isValidInput = false;
                 }
+                isValidInput = true;
                 coords.col = beforeComma;
                 coords.row = afterComma;
                 if (field.isNumber(coords) != true)
