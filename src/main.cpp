@@ -29,7 +29,7 @@ int main()
         int minesCount = 0;
         Common::coordsStruct dimensions;
         Common::userInputStruct userInput;
-        Common::placeUserInputStruct placeUserInput;
+        Common::placeUserInputStruct placeUserInputReturn;
         
         difficulty = input.getDifficulty();
         
@@ -75,13 +75,13 @@ int main()
             #endif
            
             userInput = input.getUserInput(field);
-            placeUserInput = field.placeUserInput(userInput, turn);
-            if (placeUserInput.hasLost)
+            placeUserInputReturn = field.placeUserInput(userInput, turn);
+            if (placeUserInputReturn.hasLost)
                 break;
-            else if (placeUserInput.hasWon)
+            else if (placeUserInputReturn.hasWon)
                 break;
             else
-                if (placeUserInput.isTurn == true)
+                if (placeUserInputReturn.isTurn == true)
                     turn++;
         }
     }    

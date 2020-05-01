@@ -199,7 +199,7 @@ void Field::printAll()
 }
 
 // test coords if they contain a flag:
-bool Field::isFlagOn(Common::coordsStruct coords)
+bool Field::isFlagSet(Common::coordsStruct coords)
 {
     if (this->fieldArray[coords.col][coords.row] == 'F')
         return true;
@@ -218,13 +218,13 @@ bool Field::isNumber(Common::coordsStruct coords)
     return false;
 }
 
-// the main function of class Field which will alter the fieldArray:
+// the main method of class Field which will alter the fieldArray:
 Common::placeUserInputStruct Field::placeUserInput(Common::userInputStruct userInput, int turn)
 {
     Common::placeUserInputStruct returnStruct;
     if (userInput.isFlag == true)
     {
-        if (isFlagOn(userInput.coords) == true)
+        if (isFlagSet(userInput.coords) == true)
         {
             this->fieldArray[userInput.coords.col][userInput.coords.row] = '-';
             this->minesLeft++;
@@ -256,7 +256,7 @@ Common::placeUserInputStruct Field::placeUserInput(Common::userInputStruct userI
         if (this->minesArray[userInput.coords.col][userInput.coords.row] == 'X')
         {
             this->minesArray[userInput.coords.col][userInput.coords.row] = '#';
-            hasLost();
+            printHasLost();
             returnStruct.hasLost = true;
             return returnStruct;
         }
@@ -303,7 +303,7 @@ Common::placeUserInputStruct Field::placeUserInput(Common::userInputStruct userI
                             this->minesArray[autoUncoverMissedMinesVector.at(i).col][autoUncoverMissedMinesVector.at(i).row] = '#';
                         }
                         returnStruct.hasLost = 1;
-                        hasLost();
+                        printHasLost();
                         return returnStruct;
                     }
                     // else if all flags are placed correctly:
@@ -409,7 +409,7 @@ Common::placeUserInputStruct Field::placeUserInput(Common::userInputStruct userI
         // check if player has won:
         if (this->countEmpty == this->minesCount)
         {
-            hasWon();
+            printHasWon();
             returnStruct.hasWon = true;
             return returnStruct;
         }        
@@ -417,7 +417,7 @@ Common::placeUserInputStruct Field::placeUserInput(Common::userInputStruct userI
     }
 }
 
-void Field::hasWon()
+void Field::printHasWon()
 {
     Common common;
     Input input;
@@ -436,7 +436,7 @@ void Field::hasWon()
     
 }
 
-void Field::hasLost()
+void Field::printHasLost()
 {
     Common common;
     Input input;

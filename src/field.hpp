@@ -26,11 +26,11 @@ public:
     void drawField(char**);
     void printMinesLeft();
     void printExplanation();
+    void printHasWon();
+    void printHasLost();
     void printAll();
-    bool isFlagOn(Common::coordsStruct);
+    bool isFlagSet(Common::coordsStruct);
     bool isNumber(Common::coordsStruct);
     Common::placeUserInputStruct placeUserInput(Common::userInputStruct, int);
-    void hasWon();
-    void hasLost();
     std::vector<Common::coordsStruct> findNeighbours(char **tempArray, Common::coordsStruct, char);
 };
