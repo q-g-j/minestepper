@@ -35,6 +35,15 @@ Field::~Field()
     delete[] this->minesArray;
 }
 
+int Field::getCols()
+{
+    return this->cols;
+}
+
+int Field::getRows()
+{
+    return this->cols;
+}
 // user pointers to pointers to be able to create dynamic 2D-arrays
 char** Field::createArray()
 {
@@ -335,7 +344,7 @@ Common::placeUserInputStruct Field::placeUserInput(Common::userInputStruct userI
                 this->fieldArray[userInput.coords.col][userInput.coords.row] = static_cast<char>(neighboursMinesVector.size() + 48);
             this->countEmpty--;
             
-            // automatically uncover all neighbour squares of squares containing a '0' (repeat if new '0's appeared):
+            // automatically uncover all neighbour squares of squares containing a ' ' (repeat if new ' 's appeared):
             bool run = true;
             if (neighboursMinesVector.size() == 0)
             {
@@ -348,7 +357,7 @@ Common::placeUserInputStruct Field::placeUserInput(Common::userInputStruct userI
                         {
                             if (this->fieldArray[i][j] == '-')
                             {
-                                // create a new vector of neighbours containing '0':
+                                // create a new vector of neighbours containing ' ':
                                 Common::coordsStruct coordsBase;
                                 coordsBase.col = i;
                                 coordsBase.row = j;
@@ -356,7 +365,7 @@ Common::placeUserInputStruct Field::placeUserInput(Common::userInputStruct userI
                                 neighboursZerosVector = findNeighbours(this->fieldArray, coordsBase, ' ');
                                 
 
-                                // if there is a neighbour containing a '0' create a new vector of neighbours containing mines:
+                                // if there is a neighbour containing a ' ' create a new vector of neighbours containing mines:
                                 if (neighboursZerosVector.size() != 0)
                                 {
                                     std::vector<Common::coordsStruct> neighboursMinesVectorNew;
@@ -382,7 +391,7 @@ Common::placeUserInputStruct Field::placeUserInput(Common::userInputStruct userI
                         {
                             if (this->fieldArray[a][b] == '-')
                             {
-                                // create a new vector of neighbours containing '0':
+                                // create a new vector of neighbours containing ' ':
                                 Common::coordsStruct coordsBaseNew;
                                 coordsBaseNew.col = a;
                                 coordsBaseNew.row = b;

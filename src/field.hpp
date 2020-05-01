@@ -17,6 +17,8 @@ public:
     Field(int cols = 0, int rows = 0, int minesCount = 0, std::string difficultyString = "");
     ~Field();
     
+    int getCols();
+    int getRows();
     char** createArray();
     void clearFieldArray();
     void clearMinesArray();
