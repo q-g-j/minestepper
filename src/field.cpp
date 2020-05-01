@@ -267,7 +267,7 @@ Common::placeUserInputStruct Field::placeUserInput(Common::userInputStruct userI
                     {
                         // for each not uncovered neighbour of userInput.coords check if the player has missed a mine
                         // and add this mines position to autoUncoverMissedMinesVector:
-                        for (int i = 0; i < autoUncoverNeighboursCoveredVector.size(); i++)
+                        for (int i = 0; i < static_cast<int>(autoUncoverNeighboursCoveredVector.size()); i++)
                         {
                             if (this->minesArray[autoUncoverNeighboursCoveredVector.at(i).col][autoUncoverNeighboursCoveredVector.at(i).row] == 'X')
                                 autoUncoverMissedMinesVector.push_back(autoUncoverNeighboursCoveredVector.at(i));
@@ -276,7 +276,7 @@ Common::placeUserInputStruct Field::placeUserInput(Common::userInputStruct userI
                     // if there are missed mines, reveal the minesArray - player has lost:
                     if (autoUncoverMissedMinesVector.size() != 0)
                     {
-                        for (int i = 0; i < autoUncoverMissedMinesVector.size(); i++)
+                        for (int i = 0; i < static_cast<int>(autoUncoverMissedMinesVector.size()); i++)
                         {
                             this->minesArray[autoUncoverMissedMinesVector.at(i).col][autoUncoverMissedMinesVector.at(i).row] = '#';
                         }
@@ -290,7 +290,7 @@ Common::placeUserInputStruct Field::placeUserInput(Common::userInputStruct userI
                         if (autoUncoverNeighboursMinesVector.size() == autoUncoverNeighboursFlagsVector.size())
                         {
                             // for each not uncovered neighbour of userInput.coords, print the number of surrounding mines:
-                            for (int i = 0; i < autoUncoverNeighboursCoveredVector.size(); i++)
+                            for (int i = 0; i < static_cast<int>(autoUncoverNeighboursCoveredVector.size()); i++)
                             {
                                 Common::coordsStruct coordsTemp;
                                 coordsTemp.col = autoUncoverNeighboursCoveredVector.at(i).col;
