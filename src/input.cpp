@@ -273,14 +273,15 @@ Common::userInputStruct Input::getUserInput(Field &field)
                 }
                 coords.col = beforeComma;
                 coords.row = afterComma;
-                if (field.isNumber(coords) != true)
-                    userInput.isFlag = true;
-                else
+                if (coords.col > field.getCols() || coords.row > field.getRows())
                     isValidInput = false;
+                else
+                    if (field.isNumber(coords) != true)
+                        userInput.isFlag = true;
+                    else
+                        isValidInput = false;
             }     
         }
-        if (coords.col > field.getCols() || coords.row > field.getRows())
-            isValidInput = false;
         if (isValidInput == true)
         {
             userInput.coords = coords;
