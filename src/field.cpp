@@ -85,7 +85,7 @@ void Field::clearMinesArray()
 void Field::fillMinesArray()
 {    
     Common common;
-    Common::coordsStruct coords;
+    coordsStruct coords;
     int sizeOfFieldArray = this->cols * this->rows;
     std::vector<int> tempVector;
     for (int i = 0; i <= sizeOfFieldArray; i++)
@@ -199,7 +199,7 @@ void Field::printAll()
 }
 
 // test coords if they contain a flag:
-bool Field::isFlagSet(Common::coordsStruct coords)
+bool Field::isFlagSet(coordsStruct coords)
 {
     if (this->fieldArray[coords.col][coords.row] == 'F')
         return true;
@@ -208,7 +208,7 @@ bool Field::isFlagSet(Common::coordsStruct coords)
 }
 
 // test coords if they contain a number:
-bool Field::isNumber(Common::coordsStruct coords)
+bool Field::isNumber(coordsStruct coords)
 {
     for (int i = 48; i < 56; i++)
     {
@@ -219,9 +219,9 @@ bool Field::isNumber(Common::coordsStruct coords)
 }
 
 // the main method of class Field which will alter the fieldArray:
-Common::placeUserInputStruct Field::placeUserInput(Common::userInputStruct userInput, int turn)
+placeUserInputReturnStruct Field::placeUserInput(userInputReturnStruct userInput, int turn)
 {
-    Common::placeUserInputStruct returnStruct;
+    placeUserInputReturnStruct returnStruct;
     if (userInput.isFlag == true)
     {
         if (isFlagSet(userInput.coords) == true)
@@ -267,19 +267,19 @@ Common::placeUserInputStruct Field::placeUserInput(Common::userInputStruct userI
             if (isNumber(userInput.coords))
             {
                 // create a new vector of surrounding mines:
-                std::vector<Common::coordsStruct> autoUncoverNeighboursMinesVector;
+                std::vector<coordsStruct> autoUncoverNeighboursMinesVector;
                 autoUncoverNeighboursMinesVector = findNeighbours(this->minesArray, userInput.coords, 'X');
                 
                 // create a new vector of surrounding flags:
-                std::vector<Common::coordsStruct> autoUncoverNeighboursFlagsVector;
+                std::vector<coordsStruct> autoUncoverNeighboursFlagsVector;
                 autoUncoverNeighboursFlagsVector = findNeighbours(this->fieldArray, userInput.coords, 'F');
                 
                 // create a new vector of surrounding covered squares:
-                std::vector<Common::coordsStruct> autoUncoverNeighboursCoveredVector;
+                std::vector<coordsStruct> autoUncoverNeighboursCoveredVector;
                 autoUncoverNeighboursCoveredVector = findNeighbours(this->fieldArray, userInput.coords, '-');
                 
                 // create a new empty vector for missed mines:
-                std::vector<Common::coordsStruct> autoUncoverMissedMinesVector;
+                std::vector<coordsStruct> autoUncoverMissedMinesVector;
                 
                 // if player has placed some flags around userInput.coords:
                 if (autoUncoverNeighboursFlagsVector.size() != 0)
@@ -314,10 +314,10 @@ Common::placeUserInputStruct Field::placeUserInput(Common::userInputStruct userI
                             // for each not uncovered neighbour of userInput.coords, print the number of surrounding mines:
                             for (int i = 0; i < static_cast<int>(autoUncoverNeighboursCoveredVector.size()); i++)
                             {
-                                Common::coordsStruct coordsTemp;
+                                coordsStruct coordsTemp;
                                 coordsTemp.col = autoUncoverNeighboursCoveredVector.at(i).col;
                                 coordsTemp.row = autoUncoverNeighboursCoveredVector.at(i).row;
-                                std::vector<Common::coordsStruct> autoUncoverNeighboursCoveredMinesVector;
+                                std::vector<coordsStruct> autoUncoverNeighboursCoveredMinesVector;
                                 autoUncoverNeighboursCoveredMinesVector = findNeighbours(this->minesArray, coordsTemp, 'X');
                                 if (autoUncoverNeighboursCoveredMinesVector.size() == 0)
                                     this->fieldArray[coordsTemp.col][coordsTemp.row] = ' ';
@@ -334,7 +334,7 @@ Common::placeUserInputStruct Field::placeUserInput(Common::userInputStruct userI
             }
         
             // uncover the players choice and place the number of surrounding mines in it:
-            std::vector<Common::coordsStruct> neighboursMinesVector;
+            std::vector<coordsStruct> neighboursMinesVector;
             neighboursMinesVector = findNeighbours(this->minesArray, userInput.coords, 'X');
             
             // place neighboursMinesVector.size() in fieldArray (convert int to char by adding 48):
@@ -358,17 +358,17 @@ Common::placeUserInputStruct Field::placeUserInput(Common::userInputStruct userI
                             if (this->fieldArray[i][j] == '-')
                             {
                                 // create a new vector of neighbours containing ' ':
-                                Common::coordsStruct coordsBase;
+                                coordsStruct coordsBase;
                                 coordsBase.col = i;
                                 coordsBase.row = j;
-                                std::vector<Common::coordsStruct> neighboursZerosVector;
+                                std::vector<coordsStruct> neighboursZerosVector;
                                 neighboursZerosVector = findNeighbours(this->fieldArray, coordsBase, ' ');
                                 
 
                                 // if there is a neighbour containing a ' ' create a new vector of neighbours containing mines:
                                 if (neighboursZerosVector.size() != 0)
                                 {
-                                    std::vector<Common::coordsStruct> neighboursMinesVectorNew;
+                                    std::vector<coordsStruct> neighboursMinesVectorNew;
                                     neighboursMinesVectorNew = findNeighbours(this->minesArray, coordsBase, 'X');
             
                                     // place neighboursMinesVectorNew.size() in fieldArray (convert int to char by adding 48):
@@ -392,10 +392,10 @@ Common::placeUserInputStruct Field::placeUserInput(Common::userInputStruct userI
                             if (this->fieldArray[a][b] == '-')
                             {
                                 // create a new vector of neighbours containing ' ':
-                                Common::coordsStruct coordsBaseNew;
+                                coordsStruct coordsBaseNew;
                                 coordsBaseNew.col = a;
                                 coordsBaseNew.row = b;
-                                std::vector<Common::coordsStruct> neighboursZerosVectorNew;
+                                std::vector<coordsStruct> neighboursZerosVectorNew;
                                 neighboursZerosVectorNew = findNeighbours(this->fieldArray, coordsBaseNew, ' ');
                                 if (neighboursZerosVectorNew.size() != 0)
                                     run = true;
@@ -458,16 +458,16 @@ void Field::printHasLost()
     input.getAnyKey();
 }
 
-std::vector<Common::coordsStruct> Field::findNeighbours(char **tempArray, Common::coordsStruct coords, char mark)
+std::vector<coordsStruct> Field::findNeighbours(char **tempArray, coordsStruct coords, char mark)
 {
-    std::vector<Common::coordsStruct> neighboursVector;
+    std::vector<coordsStruct> neighboursVector;
     
     // up left:
     if (coords.col-1 > 0 && coords.row-1 > 0)
     {
         if (tempArray[coords.col-1][coords.row-1] == mark)
         {
-            Common::coordsStruct tempCoords;
+            coordsStruct tempCoords;
             tempCoords.col = coords.col-1;
             tempCoords.row = coords.row-1;
             neighboursVector.push_back(tempCoords);
@@ -479,7 +479,7 @@ std::vector<Common::coordsStruct> Field::findNeighbours(char **tempArray, Common
     {
         if (tempArray[coords.col][coords.row-1] == mark)
         {
-            Common::coordsStruct tempCoords;
+            coordsStruct tempCoords;
             tempCoords.col = coords.col;
             tempCoords.row = coords.row-1;
             neighboursVector.push_back(tempCoords);
@@ -491,7 +491,7 @@ std::vector<Common::coordsStruct> Field::findNeighbours(char **tempArray, Common
     {
         if (tempArray[coords.col+1][coords.row-1] == mark)
         {
-            Common::coordsStruct tempCoords;
+            coordsStruct tempCoords;
             tempCoords.col = coords.col+1;
             tempCoords.row = coords.row-1;
             neighboursVector.push_back(tempCoords);
@@ -503,7 +503,7 @@ std::vector<Common::coordsStruct> Field::findNeighbours(char **tempArray, Common
     {
         if (tempArray[coords.col-1][coords.row] == mark)
         {
-            Common::coordsStruct tempCoords;
+            coordsStruct tempCoords;
             tempCoords.col = coords.col-1;
             tempCoords.row = coords.row;
             neighboursVector.push_back(tempCoords);
@@ -515,7 +515,7 @@ std::vector<Common::coordsStruct> Field::findNeighbours(char **tempArray, Common
     {
         if (tempArray[coords.col+1][coords.row] == mark)
         {
-            Common::coordsStruct tempCoords;
+            coordsStruct tempCoords;
             tempCoords.col = coords.col+1;
             tempCoords.row = coords.row;
             neighboursVector.push_back(tempCoords);
@@ -527,7 +527,7 @@ std::vector<Common::coordsStruct> Field::findNeighbours(char **tempArray, Common
     {
         if (tempArray[coords.col-1][coords.row+1] == mark)
         {
-            Common::coordsStruct tempCoords;
+            coordsStruct tempCoords;
             tempCoords.col = coords.col-1;
             tempCoords.row = coords.row+1;
             neighboursVector.push_back(tempCoords);
@@ -539,7 +539,7 @@ std::vector<Common::coordsStruct> Field::findNeighbours(char **tempArray, Common
     {
         if (tempArray[coords.col][coords.row+1] == mark)
         {
-            Common::coordsStruct tempCoords;
+            coordsStruct tempCoords;
             tempCoords.col = coords.col;
             tempCoords.row = coords.row+1;
             neighboursVector.push_back(tempCoords);
@@ -551,7 +551,7 @@ std::vector<Common::coordsStruct> Field::findNeighbours(char **tempArray, Common
     {
         if (tempArray[coords.col+1][coords.row+1] == mark)
         {
-            Common::coordsStruct tempCoords;
+            coordsStruct tempCoords;
             tempCoords.col = coords.col+1;
             tempCoords.row = coords.row+1;
             neighboursVector.push_back(tempCoords);

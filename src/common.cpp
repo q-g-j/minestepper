@@ -66,9 +66,9 @@ void Common::clearScreen()
 }
 
 // convert coords in type integer to coords in type struct (e.g. position = 4 will return coords.col = 4, coords.row = 1):
-Common::coordsStruct Common::intToStruct(int position, int cols)
+coordsStruct Common::intToStruct(int position, int cols)
 {
-    Common::coordsStruct coords;
+    coordsStruct coords;
     
     if (position <= cols)
     {
@@ -89,7 +89,7 @@ Common::coordsStruct Common::intToStruct(int position, int cols)
 }
 
 // the above function the other way around
-int Common::structToInt(Common::coordsStruct coords, int cols)
+int Common::structToInt(coordsStruct coords, int cols)
 {
     int position = 0;
     position = (cols) * (coords.row) + coords.col;

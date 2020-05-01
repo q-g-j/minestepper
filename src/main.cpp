@@ -27,9 +27,9 @@ int main()
         int difficulty = 0;
         string difficultyString = "";
         int minesCount = 0;
-        Common::coordsStruct dimensions;
-        Common::userInputStruct userInput;
-        Common::placeUserInputStruct placeUserInputReturn;
+        coordsStruct dimensions;
+        userInputReturnStruct userInput;
+        placeUserInputReturnStruct placeUserInputReturn;
         
         difficulty = input.getDifficulty();
         

@@ -57,10 +57,10 @@ int Input::getDifficulty()
 }
 
 // custom mode: ask user for the size of the field:
-Common::coordsStruct Input::getDimensions()
+coordsStruct Input::getDimensions()
 {
     Common common;
-    Common::coordsStruct dimensions;
+    coordsStruct dimensions;
     std::string line = "";
     int beforeX = 0;
     int afterX = 0;
@@ -187,15 +187,15 @@ bool Input::getAnyKey()
 }
 
 // the main function to ask the user for valid coordinates:
-Common::userInputStruct Input::getUserInput(Field &field)
+userInputReturnStruct Input::getUserInput(Field &field)
 {
     Common common;
     std::string line = "";
     int beforeComma = 0;
     int afterComma = 0;
     bool isValidInput = false;
-    Common::coordsStruct coords;
-    Common::userInputStruct userInput;
+    coordsStruct coords;
+    userInputReturnStruct userInput;
     
     while (true)
     {

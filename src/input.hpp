@@ -8,10 +8,10 @@ private:
 
 public:
     int getDifficulty();
-    Common::coordsStruct getDimensions();
+    coordsStruct getDimensions();
     int getMinesCount(int);
     bool getAnyKey();
-    Common::userInputStruct getUserInput(Field &field);
+    userInputReturnStruct getUserInput(Field &field);
 };
 
 

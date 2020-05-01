@@ -31,6 +31,6 @@ public:
     void printAll();
     bool isFlagSet(Common::coordsStruct);
     bool isNumber(Common::coordsStruct);
-    Common::placeUserInputStruct placeUserInput(Common::userInputStruct, int);
+    Common::placeUserInputReturnStruct placeUserInput(Common::userInputReturnStruct, int);
     std::vector<Common::coordsStruct> findNeighbours(char **tempArray, Common::coordsStruct, char);
 };
