@@ -22,7 +22,7 @@ public:
     char** createArray();
     void clearFieldArray();
     void clearMinesArray();
-    void fillMinesArray();
+    void fillMinesArray(coordsStruct);
     void drawField(char**);
     void printMinesLeft();
     void printExplanation();

@@ -21,7 +21,7 @@ public:
     {
         bool hasLost = false;
         bool hasWon = false;
-        bool isTurn = true;
+        bool isTurn = false;
     };
     void clearScreen();
     coordsStruct intToStruct(int, int);

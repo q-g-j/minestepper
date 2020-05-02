@@ -17,7 +17,7 @@ int main()
     int rows = 0, cols = 0;
     Input input;
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-        ::srand(GetTickCount());
+        srand(GetTickCount());
     #else
         srand( time(NULL) ); // initialize random seed
     #endif
@@ -73,7 +73,7 @@ int main()
             #if DEBUG == 1
                 std::cout << "Turn: " << turn << nl << nl;
             #endif
-           
+
             userInput = input.getUserInput(field);
             placeUserInputReturn = field.placeUserInput(userInput, turn);
             if (placeUserInputReturn.hasLost)

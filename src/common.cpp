@@ -92,7 +92,9 @@ coordsStruct Common::intToStruct(int position, int cols)
 int Common::structToInt(coordsStruct coords, int cols)
 {
     int position = 0;
-    position = (cols) * (coords.row) + coords.col;
-    return position;
+    if (coords.row == 1)
+        return position = coords.col;
+    else
+        return position = (cols) * (coords.row-1) + coords.col;
 }
 
