@@ -86,14 +86,14 @@ void Field::fillMinesArray(coordsStruct userFirstInput)
     coordsStruct coords;
     int sizeOfFieldArray = this->cols * this->rows;
     std::vector<int> tempVector;
-    for (int i = 1; i < sizeOfFieldArray; i++)
+    for (int i = 1; i <= sizeOfFieldArray; i++)
     {
         if (i != common.structToInt(userFirstInput, this->cols))
             tempVector.push_back(i);
     }
 
     std::random_shuffle(tempVector.begin(), tempVector.end());
-    for (int i = 1; i <= this->minesCount; i++)
+    for (int i = 0; i < this->minesCount; i++)
     {
         coords = common.intToStruct(tempVector.at(i), this->cols);
         this->minesArray[coords.col][coords.row] = 'X';
