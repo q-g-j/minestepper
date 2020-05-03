@@ -2,6 +2,11 @@
 #include <iostream>
 #include <random>
 
+#if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+    #include <windows.h>
+    #include <stdio.h>
+#endif
+
 #include "common.hpp"
 #include "debug.hpp"
 #include "field.hpp"
@@ -178,7 +183,26 @@ void Field::drawField(char** array)
 
 void Field::gotoXY(int x, int y)
 {
-    printf("%c[%d;%df",0x1B,y, x);
+#if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+    extern bool IS_WINE;
+    if (IS_WINE)
+    {
+    printf("%c[%d;%df",0x1B,y,x);
+    }
+    else
+    {        
+        CONSOLE_SCREEN_BUFFER_INFO cbsi;
+        HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
+        COORD coordsNew;
+
+        coordsNew.X = x-1;
+        coordsNew.Y = y-1;
+        SetConsoleCursorPosition(console, coordsNew);
+    }
+        
+#else
+    printf("%c[%d;%df",0x1B,y,x);
+#endif
 }
 
 void Field::printCoords(coordsStruct coords)
@@ -186,11 +210,6 @@ void Field::printCoords(coordsStruct coords)
     gotoXY(this->offsetX + coords.col * 4, this->offsetY + coords.row * 2);
     std::cout << this->fieldArray[coords.col][coords.row];
     std::cout << std::flush;
-}
-
-void Field::printMinesLeft()
-{
-    std::cout << "There are " << this->minesLeft << " mines left." << nl;
 }
 
 void Field::printExplanation()
@@ -224,8 +243,8 @@ void Field::printAll()
     /*#if DEBUG == 1
         drawField(this->minesArray);
         std::cout << nl;
-    #endif
-    */
+    #endif*/
+    
     drawField(this->fieldArray);
     std::cout << nl;
 }

@@ -6,11 +6,10 @@ private:
 
 public:
     int getDifficulty();
-    std::string moveUp = setMoveUp();
     coordsStruct getDimensions();
     int getMinesCount(int);
     bool getAnyKey();
-    std::string setMoveUp();
+    void moveCursorUp();
     userInputReturnStruct getUserInput(Field &field);
 };
 

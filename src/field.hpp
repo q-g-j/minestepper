@@ -30,7 +30,6 @@ public:
     void drawField(char**);
     void gotoXY(int, int);
     void printCoords(coordsStruct coords);
-    void printMinesLeft();
     void printExplanation();
     void printHasWon();
     void printHasLost();

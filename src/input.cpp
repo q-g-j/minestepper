@@ -1,18 +1,41 @@
 #include <iostream>
 #include <string>
 
+#if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+    #include <windows.h>
+    #include <stdio.h>
+#endif
+
 #include "common.hpp"
 #include "field.hpp"
 #include "common.hpp"
 #include "input.hpp"
 
-std::string Input::setMoveUp()
+extern bool IS_WINE;
+
+void Input::moveCursorUp()
 {
-    
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-            return "\033[F\r";
+    if (IS_WINE)
+    {
+        std::cout << "\x1b[A\r";
+    }
+    else
+    {        
+        CONSOLE_SCREEN_BUFFER_INFO cbsi;
+        HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
+        COORD cursorPosition;
+        
+        if (GetConsoleScreenBufferInfo(console, &cbsi))
+        {
+            cursorPosition = cbsi.dwCursorPosition;
+        }
+        cursorPosition.Y--;
+
+        SetConsoleCursorPosition(console, cursorPosition);
+    }
 #else
-            return "\x1b[A\r";
+    std::cout << "\x1b[A";
 #endif
 }
 
@@ -63,10 +86,10 @@ int Input::getDifficulty()
         {
             std::cout << "Wrong input, Press ENTER...";
             getAnyKey();
-            std::cout << moveUp;
-            std::cout << "                           \r" << std::flush;
-            std::cout << moveUp;
-            std::cout << "                           \r" << std::flush;
+            moveCursorUp();
+            std::cout << "\r                           \r" << std::flush;
+            moveCursorUp();
+            std::cout << "\r                           \r" << std::flush;
         }
     }
 }
@@ -142,10 +165,10 @@ coordsStruct Input::getDimensions()
         {
             std::cout << "Wrong input, Press ENTER...";
             getAnyKey();
-            std::cout << moveUp;
-            std::cout << "                           \r" << std::flush;
-            std::cout << moveUp;
-            std::cout << "                           \r" << std::flush;
+            moveCursorUp();
+            std::cout << "\r                           \r" << std::flush;
+            moveCursorUp();
+            std::cout << "\r                           \r" << std::flush;
         }
     }
 }
@@ -189,10 +212,10 @@ int Input::getMinesCount(int fieldSize)
         {
             std::cout << "Wrong input, Press ENTER...";
             getAnyKey();
-            std::cout << moveUp;
-            std::cout << "                           \r" << std::flush;
-            std::cout << moveUp;
-            std::cout << "                                                        \r" << std::flush;
+            moveCursorUp();
+            std::cout << "\r                           \r" << std::flush;
+            moveCursorUp();
+            std::cout << "\r                                                        \r" << std::flush;
         }
     }
 }
@@ -320,10 +343,10 @@ userInputReturnStruct Input::getUserInput(Field &field)
         {
             std::cout << "Wrong input, Press ENTER...";
             getAnyKey();
-            std::cout << moveUp;
-            std::cout << "                           \r" << std::flush;
-            std::cout << moveUp;
-            std::cout << "                           \r" << std::flush;
+            moveCursorUp();
+            std::cout << "\r                           \r" << std::flush;
+            moveCursorUp();
+            std::cout << "\r                           \r" << std::flush;
         }
     }
 }
