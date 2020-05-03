@@ -10,14 +10,12 @@
 
 using namespace std;
 
-extern bool IS_WINDOWS;
 extern bool IS_WINE;
 
 void Common::clearScreen()
 {
 
-    if (IS_WINDOWS)
-    {
+#if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         // check if running in wine (wine won't find "cls" or "clear"):
         if (IS_WINE)
         {
@@ -59,9 +57,9 @@ void Common::clearScreen()
 
             bSuccess = SetConsoleCursorPosition(hConsole, coordScreen);
         }
-    }
-    else
+#else
         if (system("clear") != 0) exit(0);
+#endif
 }
 
 // convert coords in type integer to coords in type struct (e.g. position = 4 will return coords.col = 4, coords.row = 1):

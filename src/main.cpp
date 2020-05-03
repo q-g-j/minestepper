@@ -12,7 +12,6 @@
 
 using namespace std;
 
-bool IS_WINDOWS = false;
 bool IS_WINE = false;
 
 int main()
@@ -22,7 +21,6 @@ int main()
     int offsetY = 5;
 
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-    IS_WINDOWS = true;
     HKEY hKey;
     LPCSTR lpRegPath = ("SOFTWARE\\Wine");
     if (RegOpenKeyExA(HKEY_CURRENT_USER, lpRegPath, 0, KEY_ALL_ACCESS, &hKey) == ERROR_SUCCESS)
@@ -33,7 +31,6 @@ int main()
         srand(GetTickCount());
     }
 #else
-    IS_WINDOWS = false;
     srand(time(NULL)); // initialize random seed
 #endif
 
