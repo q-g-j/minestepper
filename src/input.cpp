@@ -6,6 +6,16 @@
 #include "common.hpp"
 #include "input.hpp"
 
+std::string Input::setMoveUp()
+{
+    
+#if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+            return "\033[F\r";
+#else
+            return "\x1b[A\r";
+#endif
+}
+
 // custom mode: ask user for the game mode (difficulty):
 int Input::getDifficulty()
 {
@@ -53,17 +63,9 @@ int Input::getDifficulty()
         {
             std::cout << "Wrong input, Press ENTER...";
             getAnyKey();
-#if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-            std::cout << "\033[F\r";
-#else
-            std::cout << "\x1b[A\r";
-#endif
+            std::cout << moveUp;
             std::cout << "                           \r" << std::flush;
-#if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-            std::cout << "\033[F\r";
-#else
-            std::cout << "\x1b[A\r";
-#endif
+            std::cout << moveUp;
             std::cout << "                           \r" << std::flush;
         }
     }
@@ -140,17 +142,9 @@ coordsStruct Input::getDimensions()
         {
             std::cout << "Wrong input, Press ENTER...";
             getAnyKey();
-#if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-            std::cout << "\033[F\r";
-#else
-            std::cout << "\x1b[A\r";
-#endif
+            std::cout << moveUp;
             std::cout << "                           \r" << std::flush;
-#if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-            std::cout << "\033[F\r";
-#else
-            std::cout << "\x1b[A\r";
-#endif
+            std::cout << moveUp;
             std::cout << "                           \r" << std::flush;
         }
     }
@@ -195,17 +189,9 @@ int Input::getMinesCount(int fieldSize)
         {
             std::cout << "Wrong input, Press ENTER...";
             getAnyKey();
-#if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-            std::cout << "\033[F\r";
-#else
-            std::cout << "\x1b[A\r";
-#endif
+            std::cout << moveUp;
             std::cout << "                           \r" << std::flush;
-#if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-            std::cout << "\033[F\r";
-#else
-            std::cout << "\x1b[A\r";
-#endif
+            std::cout << moveUp;
             std::cout << "                                                        \r" << std::flush;
         }
     }
@@ -334,17 +320,9 @@ userInputReturnStruct Input::getUserInput(Field &field)
         {
             std::cout << "Wrong input, Press ENTER...";
             getAnyKey();
-#if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-            std::cout << "\033[F\r";
-#else
-            std::cout << "\x1b[A\r";
-#endif
+            std::cout << moveUp;
             std::cout << "                           \r" << std::flush;
-#if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-            std::cout << "\033[F\r";
-#else
-            std::cout << "\x1b[A\r";
-#endif
+            std::cout << moveUp;
             std::cout << "                           \r" << std::flush;
         }
     }
