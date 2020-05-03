@@ -10,14 +10,16 @@
 
 using namespace std;
 
+extern bool IS_WINDOWS;
+extern bool IS_WINE;
+
 void Common::clearScreen()
 {
-    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
 
+    if (IS_WINDOWS)
+    {
         // check if running in wine (wine won't find "cls" or "clear"):
-        HKEY hKey;
-        LPCSTR lpRegPath = ("SOFTWARE\\Wine");
-        if (RegOpenKeyExA(HKEY_CURRENT_USER, lpRegPath,0,KEY_ALL_ACCESS,&hKey) == ERROR_SUCCESS)
+        if (IS_WINE)
         {
             // clear screen with cout (won't work in native Windows):
             cout << "\x1B[2J\x1B[H";
@@ -36,33 +38,30 @@ void Common::clearScreen()
             DWORD dwConSize;                 /* number of character cells in
                                                 the current buffer */
 
-            /* get the number of character cells in the current buffer */
+                                                /* get the number of character cells in the current buffer */
 
-            bSuccess = GetConsoleScreenBufferInfo( hConsole, &csbi );
+            bSuccess = GetConsoleScreenBufferInfo(hConsole, &csbi);
             dwConSize = csbi.dwSize.X * csbi.dwSize.Y;
 
             /* fill the entire screen with blanks */
 
-            bSuccess = FillConsoleOutputCharacter( hConsole, (TCHAR) ' ', dwConSize, coordScreen, &cCharsWritten );
+            bSuccess = FillConsoleOutputCharacter(hConsole, (TCHAR)' ', dwConSize, coordScreen, &cCharsWritten);
 
             /* get the current text attribute */
 
-            bSuccess = GetConsoleScreenBufferInfo( hConsole, &csbi );
+            bSuccess = GetConsoleScreenBufferInfo(hConsole, &csbi);
 
             /* now set the buffer's attributes accordingly */
 
-            bSuccess = FillConsoleOutputAttribute( hConsole, csbi.wAttributes, dwConSize, coordScreen, &cCharsWritten );
+            bSuccess = FillConsoleOutputAttribute(hConsole, csbi.wAttributes, dwConSize, coordScreen, &cCharsWritten);
 
             /* put the cursor at (0, 0) */
 
-            bSuccess = SetConsoleCursorPosition( hConsole, coordScreen );
+            bSuccess = SetConsoleCursorPosition(hConsole, coordScreen);
         }
-    #else
-
-        // clear screen with cout if in non-Windows OS:
-        // cout << "\x1B[2J\x1B[H";
+    }
+    else
         if (system("clear") != 0) exit(0);
-    #endif
 }
 
 // convert coords in type integer to coords in type struct (e.g. position = 4 will return coords.col = 4, coords.row = 1):

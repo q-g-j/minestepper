@@ -13,20 +13,20 @@ int Input::getDifficulty()
     std::string line = "";
     int difficulty = 0;
     bool isValidInput = false;
-   
+
+    common.clearScreen();
+    std::cout << "Welcome to Minestepper - a Minesweeper clone!" << nl << nl << nl;
+    std::cout << "Choose the size of the field!" << nl;
+    std::cout << "(make sure, that your terminal window is large enough!)" << nl << nl;
+    std::cout << "1: small" << nl;
+    std::cout << "2: medium" << nl;
+    std::cout << "3: large" << nl;
+    std::cout << "4: custom" << nl << nl;
+    std::cout << "q: quit at any time" << nl << nl;
+
     while (true)
     {
-        common.clearScreen();
-        std::cout << "Welcome to Minestepper - a Minesweeper clone!" << nl << nl << nl;
-        std::cout << "Choose the size of the field!" << nl;
-        std::cout << "(make sure, that your terminal window is large enough!)" << nl << nl;
-        std::cout << "1: small" << nl;
-        std::cout << "2: medium" << nl;
-        std::cout << "3: large" << nl;
-        std::cout << "4: custom" << nl << nl;
-        std::cout << "q: quit at any time" << nl << nl;
         std::cout << "Input: ";
-        
         getline(std::cin, line);
         if (line == "")
             isValidInput = false;
@@ -51,10 +51,12 @@ int Input::getDifficulty()
             return difficulty;
         else
         {
-            std::cout << "Wrong input, Press ENTER... ";
+            std::cout << "Wrong input, Press ENTER...";
             getAnyKey();
-            std::cout << "\e[A\r";
-            std::cout << "                           ";
+            std::cout << "\033[F\r";
+            std::cout << "                           \r" << std::flush;
+            std::cout << "\033[F\r";
+            std::cout << "                           \r" << std::flush;
         }
     }
 }
@@ -68,11 +70,11 @@ coordsStruct Input::getDimensions()
     int beforeX = 0;
     int afterX = 0;
     bool isValidInput = false;
-    
+    common.clearScreen();
+    std::cout << "How large do you want the field to be?" << nl << nl;
+
     while (true)
     {
-        common.clearScreen();
-        std::cout << "How large do you want the field to be?" << nl << nl;
         std::cout << "(e.g. 15x10): ";
         getline(std::cin, line);
         if (line == "")
@@ -130,8 +132,10 @@ coordsStruct Input::getDimensions()
         {
             std::cout << "Wrong input, Press ENTER...";
             getAnyKey();
-            std::cout << "\e[A\r";
-            std::cout << "                           ";
+            std::cout << "\033[F\r";
+            std::cout << "                           \r" << std::flush;
+            std::cout << "\033[F\r";
+            std::cout << "                           \r" << std::flush;
         }
     }
 }
@@ -143,10 +147,11 @@ int Input::getMinesCount(int fieldSize)
     std::string line = "";
     int minesCount = 0;
     bool isValidInput = false;
-    
+
+    common.clearScreen();
+
     while (true)
     {
-        common.clearScreen();
         std::cout << "How many mines to place on the field? ";
         getline(std::cin, line);
         if (line == "")
@@ -174,8 +179,10 @@ int Input::getMinesCount(int fieldSize)
         {
             std::cout << "Wrong input, Press ENTER...";
             getAnyKey();
-            std::cout << "\e[A\r";
-            std::cout << "                           ";
+            std::cout << "\033[F\r";
+            std::cout << "                           \r" << std::flush;
+            std::cout << "\033[F\r";
+            std::cout << "                                                        \r" << std::flush;
         }
     }
 }
@@ -203,12 +210,13 @@ userInputReturnStruct Input::getUserInput(Field &field)
     bool isValidInput = false;
     coordsStruct coords;
     userInputReturnStruct userInput;
-    
+
+    field.gotoXY(1, field.getOffsetY() + field.getRows() * 2 + 4);
+    std::cout << "'h' or 'H': Help" << nl << nl;
+
     while (true)
     {
-        field.gotoXY(1, field.getOffsetY() + field.getRows()*2 + 4);
-        std::cout << "'h' or 'H': Help" << nl << nl;
-        std::cout << "\rInput:                         ";
+        std::cout << "Input:                                       ";
         field.gotoXY(8, field.getOffsetY() + field.getRows()*2 + 6);
         getline(std::cin, line);
         if (line == "")
@@ -302,8 +310,10 @@ userInputReturnStruct Input::getUserInput(Field &field)
         {
             std::cout << "Wrong input, Press ENTER...";
             getAnyKey();
-            std::cout << "\e[A\r";
-            std::cout << "                           ";
+            std::cout << "\033[F\r";
+            std::cout << "                           \r" << std::flush;
+            std::cout << "\033[F\r";
+            std::cout << "                           \r" << std::flush;
         }
     }
 }

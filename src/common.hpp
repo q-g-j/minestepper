@@ -1,6 +1,6 @@
 #pragma once
 
-#define nl '\n'
+const char nl = '\n';
 
 class Common
 {

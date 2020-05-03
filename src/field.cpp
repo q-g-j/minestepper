@@ -1,7 +1,6 @@
 #include <algorithm>
 #include <iostream>
 #include <random>
-#include <vector>
 
 #include "common.hpp"
 #include "debug.hpp"

@@ -12,18 +12,33 @@
 
 using namespace std;
 
+bool IS_WINDOWS = false;
+bool IS_WINE = false;
+
 int main()
-{   int rows = 0, cols = 0;
+{
+    int rows = 0, cols = 0;
     int offsetX = 2;
     int offsetY = 5;
-    Input input;
-    
-    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+
+#if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+    IS_WINDOWS = true;
+    HKEY hKey;
+    LPCSTR lpRegPath = ("SOFTWARE\\Wine");
+    if (RegOpenKeyExA(HKEY_CURRENT_USER, lpRegPath, 0, KEY_ALL_ACCESS, &hKey) == ERROR_SUCCESS)
+        IS_WINE = true;
+    else
+    {
+        IS_WINE = false;
         srand(GetTickCount());
-    #else
-        srand( time(NULL) ); // initialize random seed
-    #endif
-    
+    }
+#else
+    IS_WINDOWS = false;
+    srand(time(NULL)); // initialize random seed
+#endif
+
+    Input input;
+
     while (true)
     {
         int difficulty = 0;
