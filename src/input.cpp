@@ -18,13 +18,14 @@ int Input::getDifficulty()
     {
         common.clearScreen();
         std::cout << "Welcome to Minestepper - a Minesweeper clone!" << nl << nl << nl;
-        std::cout << "Choose the size of the field!" << nl << nl;
+        std::cout << "Choose the size of the field!" << nl;
+        std::cout << "(make sure, that your terminal window is large enough!)" << nl << nl;
         std::cout << "1: small" << nl;
         std::cout << "2: medium" << nl;
         std::cout << "3: large" << nl;
         std::cout << "4: custom" << nl << nl;
         std::cout << "q: quit at any time" << nl << nl;
-        std::cout << "Make your choice: ";
+        std::cout << "Input: ";
         
         getline(std::cin, line);
         if (line == "")
@@ -204,10 +205,8 @@ userInputReturnStruct Input::getUserInput(Field &field)
     {
         field.gotoXY(1, field.getOffsetY() + field.getRows()*2 + 4);
         std::cout << "'h' or 'H': Help" << nl << nl;
-        std::cout << "Input: ";
-        std::cout << "                              ";
+        std::cout << "\rInput: \e[K" << std::flush;
         field.gotoXY(8, field.getOffsetY() + field.getRows()*2 + 6);
-        std::cin.clear();
         getline(std::cin, line);
         if (line == "")
             isValidInput = false;

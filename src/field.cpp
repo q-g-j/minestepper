@@ -186,6 +186,7 @@ void Field::printCoords(coordsStruct coords)
 {
     gotoXY(this->offsetX + coords.col * 4, this->offsetY + coords.row * 2);
     std::cout << this->fieldArray[coords.col][coords.row];
+    std::cout << std::flush;
 }
 
 void Field::printMinesLeft()
@@ -242,7 +243,7 @@ bool Field::isFlagSet(coordsStruct coords)
 // test coords if they contain a number:
 bool Field::isNumber(coordsStruct coords)
 {
-    for (int i = 48; i < 56; i++)
+    for (int i = 49; i < 56; i++)
     {
         if (this->fieldArray[coords.col][coords.row] == i)
             return true;
@@ -408,7 +409,7 @@ placeUserInputReturnStruct Field::placeUserInput(userInputReturnStruct userInput
                                 coordsTemp.col = i;
                                 coordsTemp.row = j;
                                 if (neighboursMinesVectorNew.size() == 0)
-                                        this->fieldArray[i][j] = ' ';
+                                    this->fieldArray[i][j] = ' ';
                                 else
                                     this->fieldArray[i][j] = static_cast<char>(neighboursMinesVectorNew.size() + 48);
                                 printCoords(coordsTemp);
@@ -457,9 +458,13 @@ void Field::printHasWon()
     common.clearScreen();
     std::cout << "Minestepper" << " - " << this->difficultyString << " (" << this->cols << "x" << this->rows << ") - " << this->minesCount << " mines" << nl << nl;
     for (int i = 1; i <= this->cols; i++)
+    {
         for (int j = 1; j <= this->rows; j++)
             if (this->minesArray[i][j] == 'X')
                 this->fieldArray[i][j] = 'X';
+    }
+    
+    std::cout << nl << nl;
     
     drawField(this->fieldArray);
     std::cout << nl;
@@ -483,6 +488,7 @@ void Field::printHasLost()
                  this->minesArray[i][j] = this->fieldArray[i][j];
         }
     }
+    std::cout << nl << nl;
     drawField(this->minesArray);
     
     std::cout << nl;

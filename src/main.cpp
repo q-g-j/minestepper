@@ -52,8 +52,8 @@ int main()
         else if (difficulty == 3) 
         {
             difficultyString = "Large";
-            cols = 22;
-            rows = 22;
+            cols = 28;
+            rows = 16;
             minesCount = 99;
         }
         else
