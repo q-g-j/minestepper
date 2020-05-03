@@ -82,7 +82,7 @@ int main()
         field.printAll();
         int turn = 1;
         while (true)
-        {   
+        {
             field.gotoXY(1,3);
             std::cout << field.getMinesLeft() << " Mines left...";
             #if DEBUG == 1

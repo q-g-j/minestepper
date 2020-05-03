@@ -11,11 +11,10 @@
 #include "common.hpp"
 #include "input.hpp"
 
-extern bool IS_WINE;
-
 void Input::moveCursorUp()
 {
-#if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+    extern bool IS_WINE;
+    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
     if (IS_WINE)
     {
         std::cout << "\x1b[A\r";
@@ -261,7 +260,14 @@ userInputReturnStruct Input::getUserInput(Field &field)
             common.clearScreen();
             field.printExplanation();
             getAnyKey();
-            field.printAll();
+            field.printAll();            
+            field.gotoXY(1,3);
+            std::cout << field.getMinesLeft() << " Mines left...";
+            #if DEBUG == 1
+                std::cout << " DEBUG: Turn: " << turn;
+            #endif
+            field.gotoXY(1, field.getOffsetY() + field.getRows()*2 + 4);
+            std::cout << "'h' or 'H': Help" << nl << nl;
             continue;
         }
         else
