@@ -13,9 +13,11 @@
 using namespace std;
 
 int main()
-{
-    int rows = 0, cols = 0;
+{   int rows = 0, cols = 0;
+    int offsetX = 2;
+    int offsetY = 5;
     Input input;
+    
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         srand(GetTickCount());
     #else
@@ -61,18 +63,20 @@ int main()
             rows = dimensions.row;
             cols = dimensions.col;
             minesCount = input.getMinesCount(cols*rows);
-        }        
+        }
         
-        Field field(cols, rows, minesCount, difficultyString);
-
+        Field field(cols, rows, offsetX, offsetY, minesCount, difficultyString);
+            
+        field.printAll();
         int turn = 1;
         while (true)
-        {
-            field.printAll();
-            
+        {   
+            field.gotoXY(1,3);
+            std::cout << field.getMinesLeft() << " Mines left...";
             #if DEBUG == 1
-                std::cout << "Turn: " << turn << nl << nl;
+                std::cout << " DEBUG: Turn: " << turn;
             #endif
+            field.gotoXY(1, offsetY + field.getRows()*2 + 4);
 
             userInput = input.getUserInput(field);
             placeUserInputReturn = field.placeUserInput(userInput, turn);
@@ -81,8 +85,11 @@ int main()
             else if (placeUserInputReturn.hasWon)
                 break;
             else
+            {
                 if (placeUserInputReturn.isTurn == true)
                     turn++;
+            }
+                
         }
     }    
     

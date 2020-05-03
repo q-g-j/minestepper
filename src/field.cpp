@@ -9,10 +9,12 @@
 #include "input.hpp"
 
 // the constructor:
-Field::Field(int cols, int rows, int minesCount, std::string difficultyString)
+Field::Field(int cols, int rows, int offsetX, int offsetY, int minesCount, std::string difficultyString)
 {
     this->cols = cols;
     this->rows = rows;
+    this->offsetX = offsetX;
+    this->offsetY = offsetY;
     this->minesCount = minesCount;
     this->minesLeft = minesCount;
     this->countEmpty = cols * rows;
@@ -44,6 +46,22 @@ int Field::getRows()
 {
     return this->rows;
 }
+
+int Field::getOffsetX()
+{
+    return this->offsetX;
+}
+
+int Field::getOffsetY()
+{
+    return this->offsetY;
+}
+
+int Field::getMinesLeft()
+{
+    return this->minesLeft;
+}
+
 // use pointers to pointers to be able to create dynamic 2D-arrays
 char** Field::createArray()
 {
@@ -100,7 +118,7 @@ void Field::fillMinesArray(coordsStruct userFirstInput)
     }
 }
 
-// draw this->fieldArray[][] or this->minesArray[][] with current content:
+// draw this->fieldArray[][] or this->minesArray[][]:
 void Field::drawField(char** array)
 {
     std::cout << "    ";
@@ -159,6 +177,17 @@ void Field::drawField(char** array)
     std::cout << nl;
 }
 
+void Field::gotoXY(int x, int y)
+{
+    printf("%c[%d;%df",0x1B,y, x);
+}
+
+void Field::printCoords(coordsStruct coords)
+{
+    gotoXY(this->offsetX + coords.col * 4, this->offsetY + coords.row * 2);
+    std::cout << this->fieldArray[coords.col][coords.row];
+}
+
 void Field::printMinesLeft()
 {
     std::cout << "There are " << this->minesLeft << " mines left." << nl;
@@ -189,19 +218,14 @@ void Field::printAll()
 {
     Common common;
     common.clearScreen();
-    std::cout << "Minestepper" << " - " << this->difficultyString << " (" << this->cols << "x" << this->rows << ") - " << this->minesCount << " mines; " << this->minesLeft << " mines left...";
-    
-    #if DEBUG == 1
-        std::cout << " - CountEmpty = " << this->countEmpty;
-    #endif    
-    
+    std::cout << "Minestepper" << " - " << this->difficultyString << " (" << this->cols << "x" << this->rows << ") - " << this->minesCount << " mines" << nl << nl;
     std::cout << nl << nl;
     
-    #if DEBUG == 1
+    /*#if DEBUG == 1
         drawField(this->minesArray);
         std::cout << nl;
     #endif
-
+    */
     drawField(this->fieldArray);
     std::cout << nl;
 }
@@ -238,6 +262,7 @@ placeUserInputReturnStruct Field::placeUserInput(userInputReturnStruct userInput
         if (isFlagSet(userInput.coords) == true)
         {
             this->fieldArray[userInput.coords.col][userInput.coords.row] = '-';
+            printCoords(userInput.coords);
             this->minesLeft++;
             this->countEmpty++;
             return returnStruct;
@@ -245,6 +270,7 @@ placeUserInputReturnStruct Field::placeUserInput(userInputReturnStruct userInput
         else
         {
             this->fieldArray[userInput.coords.col][userInput.coords.row] = 'F';
+            printCoords(userInput.coords);
             this->minesLeft--;
             this->countEmpty--;
             return returnStruct;
@@ -325,7 +351,8 @@ placeUserInputReturnStruct Field::placeUserInput(userInputReturnStruct userInput
                             if (autoUncoverNeighboursCoveredMinesVector.size() == 0)
                                 this->fieldArray[coordsTemp.col][coordsTemp.row] = ' ';
                             else
-                                this->fieldArray[coordsTemp.col][coordsTemp.row] = static_cast<char>(autoUncoverNeighboursCoveredMinesVector.size() + 48);
+                                this->fieldArray[coordsTemp.col][coordsTemp.row] = static_cast<char>(autoUncoverNeighboursCoveredMinesVector.size() + 48);                 
+                            printCoords(coordsTemp);
                             this->countEmpty--;
                         }
                     }
@@ -342,6 +369,7 @@ placeUserInputReturnStruct Field::placeUserInput(userInputReturnStruct userInput
             this->fieldArray[userInput.coords.col][userInput.coords.row] = ' ';
         else
             this->fieldArray[userInput.coords.col][userInput.coords.row] = static_cast<char>(neighboursMinesVector.size() + 48);
+        printCoords(userInput.coords);
         this->countEmpty--;
         returnStruct.isTurn = true;
     }
@@ -376,10 +404,14 @@ placeUserInputReturnStruct Field::placeUserInput(userInputReturnStruct userInput
                             // place neighboursMinesVectorNew.size() in fieldArray (convert int to char by adding 48):
                             if (this->fieldArray[i][j] == '-')
                             {
+                                coordsStruct coordsTemp;
+                                coordsTemp.col = i;
+                                coordsTemp.row = j;
                                 if (neighboursMinesVectorNew.size() == 0)
                                         this->fieldArray[i][j] = ' ';
                                 else
                                     this->fieldArray[i][j] = static_cast<char>(neighboursMinesVectorNew.size() + 48);
+                                printCoords(coordsTemp);
                                 this->countEmpty--;
                             }
                         }
@@ -468,10 +500,10 @@ std::vector<coordsStruct> Field::findNeighbours(char **tempArray, coordsStruct c
     {
         if (tempArray[coords.col-1][coords.row-1] == mark)
         {
-            coordsStruct tempCoords;
-            tempCoords.col = coords.col-1;
-            tempCoords.row = coords.row-1;
-            neighboursVector.push_back(tempCoords);
+            coordsStruct coordsTemp;
+            coordsTemp.col = coords.col-1;
+            coordsTemp.row = coords.row-1;
+            neighboursVector.push_back(coordsTemp);
         }
     }
 
@@ -480,10 +512,10 @@ std::vector<coordsStruct> Field::findNeighbours(char **tempArray, coordsStruct c
     {
         if (tempArray[coords.col][coords.row-1] == mark)
         {
-            coordsStruct tempCoords;
-            tempCoords.col = coords.col;
-            tempCoords.row = coords.row-1;
-            neighboursVector.push_back(tempCoords);
+            coordsStruct coordsTemp;
+            coordsTemp.col = coords.col;
+            coordsTemp.row = coords.row-1;
+            neighboursVector.push_back(coordsTemp);
         }
     }
 
@@ -492,10 +524,10 @@ std::vector<coordsStruct> Field::findNeighbours(char **tempArray, coordsStruct c
     {
         if (tempArray[coords.col+1][coords.row-1] == mark)
         {
-            coordsStruct tempCoords;
-            tempCoords.col = coords.col+1;
-            tempCoords.row = coords.row-1;
-            neighboursVector.push_back(tempCoords);
+            coordsStruct coordsTemp;
+            coordsTemp.col = coords.col+1;
+            coordsTemp.row = coords.row-1;
+            neighboursVector.push_back(coordsTemp);
         }
     }
 
@@ -504,10 +536,10 @@ std::vector<coordsStruct> Field::findNeighbours(char **tempArray, coordsStruct c
     {
         if (tempArray[coords.col-1][coords.row] == mark)
         {
-            coordsStruct tempCoords;
-            tempCoords.col = coords.col-1;
-            tempCoords.row = coords.row;
-            neighboursVector.push_back(tempCoords);
+            coordsStruct coordsTemp;
+            coordsTemp.col = coords.col-1;
+            coordsTemp.row = coords.row;
+            neighboursVector.push_back(coordsTemp);
         }
     }
     
@@ -516,10 +548,10 @@ std::vector<coordsStruct> Field::findNeighbours(char **tempArray, coordsStruct c
     {
         if (tempArray[coords.col+1][coords.row] == mark)
         {
-            coordsStruct tempCoords;
-            tempCoords.col = coords.col+1;
-            tempCoords.row = coords.row;
-            neighboursVector.push_back(tempCoords);
+            coordsStruct coordsTemp;
+            coordsTemp.col = coords.col+1;
+            coordsTemp.row = coords.row;
+            neighboursVector.push_back(coordsTemp);
         }
     }
 
@@ -528,10 +560,10 @@ std::vector<coordsStruct> Field::findNeighbours(char **tempArray, coordsStruct c
     {
         if (tempArray[coords.col-1][coords.row+1] == mark)
         {
-            coordsStruct tempCoords;
-            tempCoords.col = coords.col-1;
-            tempCoords.row = coords.row+1;
-            neighboursVector.push_back(tempCoords);
+            coordsStruct coordsTemp;
+            coordsTemp.col = coords.col-1;
+            coordsTemp.row = coords.row+1;
+            neighboursVector.push_back(coordsTemp);
         }
     }
 
@@ -540,10 +572,10 @@ std::vector<coordsStruct> Field::findNeighbours(char **tempArray, coordsStruct c
     {
         if (tempArray[coords.col][coords.row+1] == mark)
         {
-            coordsStruct tempCoords;
-            tempCoords.col = coords.col;
-            tempCoords.row = coords.row+1;
-            neighboursVector.push_back(tempCoords);
+            coordsStruct coordsTemp;
+            coordsTemp.col = coords.col;
+            coordsTemp.row = coords.row+1;
+            neighboursVector.push_back(coordsTemp);
         }
     }
 
@@ -552,10 +584,10 @@ std::vector<coordsStruct> Field::findNeighbours(char **tempArray, coordsStruct c
     {
         if (tempArray[coords.col+1][coords.row+1] == mark)
         {
-            coordsStruct tempCoords;
-            tempCoords.col = coords.col+1;
-            tempCoords.row = coords.row+1;
-            neighboursVector.push_back(tempCoords);
+            coordsStruct coordsTemp;
+            coordsTemp.col = coords.col+1;
+            coordsTemp.row = coords.row+1;
+            neighboursVector.push_back(coordsTemp);
         }
     }
     

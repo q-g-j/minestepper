@@ -52,6 +52,7 @@ int Input::getDifficulty()
         {
             std::cout << "Wrong input, Press ENTER... ";
             getAnyKey();
+            std::cout << "\e[A\r\e[K" << std::flush;
         }
     }
 }
@@ -127,6 +128,7 @@ coordsStruct Input::getDimensions()
         {
             std::cout << "Wrong input, Press ENTER... ";
             getAnyKey();
+            std::cout << "\e[A\r\e[K" << std::flush;
         }
     }
 }
@@ -169,6 +171,7 @@ int Input::getMinesCount(int fieldSize)
         {
             std::cout << "Wrong input, Press ENTER... ";
             getAnyKey();
+            std::cout << "\e[A\r\e[K" << std::flush;
         }
     }
 }
@@ -199,8 +202,12 @@ userInputReturnStruct Input::getUserInput(Field &field)
     
     while (true)
     {
+        field.gotoXY(1, field.getOffsetY() + field.getRows()*2 + 4);
         std::cout << "'h' or 'H': Help" << nl << nl;
         std::cout << "Input: ";
+        std::cout << "                              ";
+        field.gotoXY(8, field.getOffsetY() + field.getRows()*2 + 6);
+        std::cin.clear();
         getline(std::cin, line);
         if (line == "")
             isValidInput = false;
@@ -291,9 +298,9 @@ userInputReturnStruct Input::getUserInput(Field &field)
         }
         else
         {
-            std::cout << "Wrong input, Press ENTER... ";
+            std::cout << "Wrong input, Press ENTER...";
             getAnyKey();
-            field.printAll();
+            std::cout << "\e[A\r\e[K" << std::flush;
         }
     }
 }
