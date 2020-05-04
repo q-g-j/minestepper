@@ -14,8 +14,9 @@ int main()
     common.setRandomSeed();
     
     int rows = 0, cols = 0;
-    int offsetX = 2;
-    int offsetY = 5;
+    int fieldOffsetX = 2;
+    int fieldOffsetY = 5;
+    int fieldCellWidth = 3;
 
     Input input;
 
@@ -60,7 +61,7 @@ int main()
             minesCount = input.getMinesCount(cols*rows);
         }
         
-        Field field(cols, rows, offsetX, offsetY, minesCount, difficultyString);
+        Field field(cols, rows, fieldOffsetX, fieldOffsetY, fieldCellWidth, minesCount, difficultyString);
             
         field.printAll();
         int turn = 1;
@@ -71,7 +72,7 @@ int main()
             #if DEBUG == 1
                 std::cout << " DEBUG: Turn: " << turn;
             #endif
-            field.gotoXY(1, offsetY + field.getRows()*2 + 4);
+            field.gotoXY(1, fieldOffsetY + field.getRows()*2 + 4);
 
             userInput = input.getUserInput(field);
             placeUserInputReturn = field.placeUserInput(userInput, turn);

@@ -1,13 +1,22 @@
 #pragma once
 #include <vector>
 
+#if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+    #define coutsym std::wcout
+    #define stringsym std::wstring
+#else
+    #define coutsym std::cout
+    #define stringsym std::string
+#endif
+
 class Field
 {
 private:
     int cols;
     int rows;
-    int offsetX;
-    int offsetY;
+    int fieldOffsetX;
+    int fieldOffsetY;
+    int fieldCellWidth;
     int minesCount;
     int minesLeft = 0;
     int countEmpty = 0;
@@ -15,9 +24,26 @@ private:
     char** fieldArray;
     char** minesArray;
 public:
-    Field(int cols = 0, int rows = 0, int offsetX = 0, int offsetY = 0,int  minesCount = 0, std::string difficultyString = "");
+    Field(int cols = 0, int rows = 0, int fieldOffsetX = 0, int FieldOffsetY = 0, int fieldCellWidth=0, int minesCount = 0, std::string difficultyString = "");
     ~Field();
     
+    stringsym cornerTopLeftSymbol;
+    stringsym cornerTopRightSymbol;
+    stringsym cornerBottomLeftSymbol;
+    stringsym cornerBottomRightSymbol;
+    stringsym horizontalLineSymbol;
+    stringsym verticalLineSymbol;
+    stringsym downTSymbol;
+    stringsym upTSymbol;
+    stringsym rightTSymbol;
+    stringsym leftTSymbol;
+    stringsym plusSymbol;
+    
+    enum colors
+    {
+        
+    };
+            
     int getCols();
     int getRows();
     int getOffsetX();

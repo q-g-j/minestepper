@@ -12,6 +12,23 @@
 #include "input.hpp"
 #include "os.hpp"
 
+void Input::getEnterKey(std::string wrongInputText)
+{
+    std::string line;
+    while (true)
+    {
+        std::cout << wrongInputText;
+        getline(std::cin, line);
+        if (line == "")
+            break;
+        else
+        {
+            deleteLastLine(wrongInputText.length() + line.length());
+            continue;
+        }
+    }
+}
+
 void Input::deleteLastLine(size_t stringLength)
 {
     OS os;
@@ -91,8 +108,7 @@ int Input::getDifficulty()
             return difficulty;
         else
         {
-            std::cout << wrongInputText;
-            getAnyKey();
+            getEnterKey(wrongInputText);
             deleteLastLine(wrongInputText.length());
             deleteLastLine(inputText.length() + line.length());
         }
@@ -171,8 +187,7 @@ coordsStruct Input::getDimensions()
         }
         else
         {
-            std::cout << wrongInputText;
-            getAnyKey();
+            getEnterKey(wrongInputText);
             deleteLastLine(wrongInputText.length());
             deleteLastLine(inputText.length() + line.length());
         }
@@ -219,24 +234,10 @@ int Input::getMinesCount(int fieldSize)
             return minesCount;
         else
         {
-            std::cout << wrongInputText;
-            getAnyKey();
+            getEnterKey(wrongInputText);
             deleteLastLine(wrongInputText.length());
             deleteLastLine(inputText.length() + line.length());
         }
-    }
-}
-
-bool Input::getAnyKey()
-{
-    std::string line;
-    while (true)
-    {
-        getline(std::cin, line);
-        if (line == "")
-            return true;
-        else
-            return true;
     }
 }
 
@@ -269,7 +270,7 @@ userInputReturnStruct Input::getUserInput(Field &field)
         {
             common.clearScreen();
             field.printExplanation();
-            getAnyKey();
+            getEnterKey(wrongInputText);
             field.printAll();            
             field.gotoXY(1,3);
             std::cout << field.getMinesLeft() << " Mines left...";
@@ -358,8 +359,7 @@ userInputReturnStruct Input::getUserInput(Field &field)
         }
         else
         {
-            std::cout << wrongInputText;
-            getAnyKey();
+            getEnterKey(wrongInputText);
             deleteLastLine(wrongInputText.length());
             deleteLastLine(inputText.length() + line.length());
         }

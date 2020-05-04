@@ -1,10 +1,12 @@
 #include <algorithm>
 #include <iostream>
 #include <random>
+#include <vector>
 
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
     #include <windows.h>
-    #include <stdio.h>
+    #include <io.h>
+    #include <fcntl.h>
 #endif
 
 #include "common.hpp"
@@ -14,12 +16,13 @@
 #include "os.hpp"
 
 // the constructor:
-Field::Field(int cols, int rows, int offsetX, int offsetY, int minesCount, std::string difficultyString)
+Field::Field(int cols, int rows, int fieldOffsetX, int fieldOffsetY, int fieldCellWidth, int minesCount, std::string difficultyString)
 {
     this->cols = cols;
     this->rows = rows;
-    this->offsetX = offsetX;
-    this->offsetY = offsetY;
+    this->fieldOffsetX = fieldOffsetX;
+    this->fieldOffsetY = fieldOffsetY;
+    this->fieldCellWidth = fieldCellWidth;
     this->minesCount = minesCount;
     this->minesLeft = minesCount;
     this->countEmpty = cols * rows;
@@ -54,12 +57,12 @@ int Field::getRows()
 
 int Field::getOffsetX()
 {
-    return this->offsetX;
+    return this->fieldOffsetX;
 }
 
 int Field::getOffsetY()
 {
-    return this->offsetY;
+    return this->fieldOffsetY;
 }
 
 int Field::getMinesLeft()
@@ -126,60 +129,153 @@ void Field::fillMinesArray(coordsStruct userFirstInput)
 // draw this->fieldArray[][] or this->minesArray[][]:
 void Field::drawField(char** array)
 {
-    std::cout << "    ";
-    for (int colNum = 1; colNum <= this->cols; colNum++)
+    OS os;
+    
+    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+    if (! (os.isWine()))
     {
-        if (colNum < 10)
-            std::cout << "  " << colNum << " ";
-        else
-            std::cout << " " << colNum << " ";
+            cornerTopLeftSymbol = L"\x250C";
+            cornerTopRightSymbol = L"\x2510";
+            cornerBottomLeftSymbol = L"\x2514";
+            cornerBottomRightSymbol = L"\x2518";
+            horizontalLineSymbol = L"\x2500";
+            verticalLineSymbol = L"\x2502";
+            downTSymbol = L"\x252C";
+            upTSymbol = L"\x2534";
+            rightTSymbol = L"\x251C";
+            leftTSymbol = L"\x2524";
+            plusSymbol = L"\x253C";
     }
-    std::cout << nl;
-    std::cout << "   ";
-    for (int bar = 1; bar <= this->cols; bar++)
+    else
     {
-        std::cout << " " << "---";
+            cornerTopLeftSymbol = L" ";
+            cornerTopRightSymbol = L" ";
+            cornerBottomLeftSymbol = L" ";
+            cornerBottomRightSymbol = L" ";
+            horizontalLineSymbol = L"-";
+            verticalLineSymbol = L"|";
+            downTSymbol = L" ";
+            upTSymbol = L" ";
+            rightTSymbol = L" ";
+            leftTSymbol = L" ";
+            plusSymbol = L" ";
     }
-    std::cout << nl;
-
-    for (int rowNum = 1; rowNum <= this->rows; rowNum++)
-    {
-        for (int colNum = 1; colNum <= this->cols; colNum++)
+    #else
+        cornerTopLeftSymbol = "\u250C";
+        cornerTopRightSymbol = "\u2510";
+        cornerBottomLeftSymbol = "\u2514";
+        cornerBottomRightSymbol = "\u2518";
+        horizontalLineSymbol = "\u2500";
+        verticalLineSymbol = "\u2502";
+        downTSymbol = "\u252C";
+        upTSymbol = "\u2534";
+        rightTSymbol = "\u251C";
+        leftTSymbol = "\u2524";
+        plusSymbol = "\u253C";
+    #endif
+        
+    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+        if (! (os.isWine()))
         {
-            if (colNum == 1)
+            _setmode(_fileno(stdout), _O_U16TEXT);
+        }
+    #endif
+    
+    std::wcout << "    ";
+    for (int col = 1; col <= this->cols; col++)
+    {
+        if (col < 10)
+            std::wcout << "  " << col << " ";
+        else
+            std::wcout << " " << col << " ";
+    }
+    std::wcout << nl;
+    std::wcout << "   ";
+    coutsym << cornerTopLeftSymbol;
+    for (int col = 1; col <= this->cols; col++)
+    {
+        if (col < this->cols)
+        {
+            for (int width = 0; width < this->fieldCellWidth; width++) coutsym << horizontalLineSymbol;
+            coutsym << downTSymbol;
+        }
+        else
+        {
+            for (int width = 0; width < this->fieldCellWidth; width++) coutsym << horizontalLineSymbol;
+            coutsym << cornerTopRightSymbol;
+        }
+    }
+    std::wcout << nl;
+
+    for (int row = 1; row <= this->rows; row++)
+    {
+        for (int col = 1; col <= this->cols; col++)
+        {
+            if (col == 1)
             {
-                if (rowNum < 10)
-                    std::cout << " " << rowNum << " ";
+                if (row < 10)
+                    std::wcout << " " << row << " ";
                 else
-                    std::cout << rowNum << " ";
+                    std::wcout << row << " ";
             }
-            std::cout << "|" << " " << array[colNum][rowNum] << " ";
-            if (colNum == this->cols)
+            coutsym << verticalLineSymbol;
+            
+            for (int padding = 0; padding < (this->fieldCellWidth-1)/2; padding++)
+                std::wcout << " "; 
+            std::wcout << array[col][row];
+            for (int padding = 0; padding < (this->fieldCellWidth-1)/2; padding++)
+                std::wcout << " ";
+            
+            if (col == this->cols)
             {
-                std::cout << "|";
-                if (rowNum < 10)
-                    std::cout << " " << rowNum << " ";
+                coutsym << verticalLineSymbol;
+                if (row < 10)
+                    std::wcout << " " << row << " ";
                 else
-                    std::cout << rowNum << " ";        
-                std::cout << nl;
-                std::cout << "   ";
+                    std::wcout << row << " ";        
+                std::wcout << nl;
+                std::wcout << "   ";
             }
         }
-        for (int bar = 1; bar <= this->cols; bar++)
-        {
-            std::cout << " " << "---";
-        }       
-        std::cout << nl;
-    }
-    std::cout << "    ";
-    for (int colNum = 1; colNum <= this->cols; colNum++)
-    {
-        if (colNum < 10)
-            std::cout << "  " << colNum << " ";
+
+        if (row < this->rows)
+            coutsym << rightTSymbol;
         else
-            std::cout << " " << colNum << " ";
+            coutsym << cornerBottomLeftSymbol;
+        
+        for (int col = 1; col <= this->cols; col++)
+        {
+            if (col < this->cols)
+            {
+                for (int width = 0; width < this->fieldCellWidth; width++) coutsym << horizontalLineSymbol;
+                if (row < this->rows)
+                    coutsym << plusSymbol;
+                else
+                    coutsym << upTSymbol;
+            }
+            else
+            {
+                for (int width = 0; width < this->fieldCellWidth; width++) coutsym << horizontalLineSymbol;
+                if (row < this->rows)
+                    coutsym << leftTSymbol;
+                else
+                    coutsym << cornerBottomRightSymbol;
+            }
+        }
+
+        std::wcout << nl;        
+        
+
     }
-    std::cout << nl;
+    std::wcout << "    ";
+    for (int col = 1; col <= this->cols; col++)
+    {
+        if (col < 10)
+            std::wcout << "  " << col << " ";
+        else
+            std::wcout << " " << col << " ";
+    }
+    std::wcout << nl;
 }
 
 void Field::gotoXY(int x, int y)
@@ -190,7 +286,6 @@ void Field::gotoXY(int x, int y)
         printf("%c[%d;%df",0x1B,y,x);
     }
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-        CONSOLE_SCREEN_BUFFER_INFO cbsi;
         HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
         COORD coordsNew;
 
@@ -202,7 +297,7 @@ void Field::gotoXY(int x, int y)
 
 void Field::printCoords(coordsStruct coords)
 {
-    gotoXY(this->offsetX + coords.col * 4, this->offsetY + coords.row * 2);
+    gotoXY(this->fieldOffsetX + coords.col * 4, this->fieldOffsetY + coords.row * 2);
     std::cout << this->fieldArray[coords.col][coords.row];
     std::cout << std::flush;
 }
@@ -468,6 +563,8 @@ void Field::printHasWon()
 {
     Common common;
     Input input;
+    std::string wrongInputText = "Press ENTER to go back...";
+    
     common.clearScreen();
     std::cout << "Minestepper" << " - " << this->difficultyString << " (" << this->cols << "x" << this->rows << ") - " << this->minesCount << " mines" << nl << nl;
     for (int i = 1; i <= this->cols; i++)
@@ -482,8 +579,8 @@ void Field::printHasWon()
     drawField(this->fieldArray);
     std::cout << nl;
     std::cout << "Congratulation, you have won!" << nl;
-    std::cout << "Press ENTER to go back...";
-    input.getAnyKey();
+    std::cout << wrongInputText;
+    input.getEnterKey(wrongInputText);
     
 }
 
@@ -491,6 +588,8 @@ void Field::printHasLost()
 {
     Common common;
     Input input;
+    std::string wrongInputText = "Press ENTER to go back...";
+    
     common.clearScreen();
     std::cout << "Minestepper" << " - " << this->difficultyString << " (" << this->cols << "x" << this->rows << ") - " << this->minesCount << " mines" << nl << nl;
     for (int i = 1; i <= this->cols; i++)
@@ -506,8 +605,8 @@ void Field::printHasLost()
     
     std::cout << nl;
     std::cout << "Sry, you have lost!" << nl;
-    std::cout << "Press ENTER to go back...";
-    input.getAnyKey();
+    std::cout << wrongInputText;
+    input.getEnterKey(wrongInputText);
 }
 
 std::vector<coordsStruct> Field::findNeighbours(char **tempArray, coordsStruct coords, char mark)
