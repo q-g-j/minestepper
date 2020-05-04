@@ -16,14 +16,11 @@ bool OS::isWindows()
 bool OS::isWine()
 {
     bool isWineBool = false;
-    if (isWindows())
-    {      
+    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)     
         HKEY hKey;
         LPCSTR lpRegPath = ("SOFTWARE\\Wine");
         if (RegOpenKeyExA(HKEY_CURRENT_USER, lpRegPath, 0, KEY_ALL_ACCESS, &hKey) == ERROR_SUCCESS)
             isWineBool = true;
-        return isWineBool;
-    }
-    else 
-        return false;
+    #endif
+    return isWineBool;
 }

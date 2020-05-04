@@ -189,8 +189,7 @@ void Field::gotoXY(int x, int y)
     {
         printf("%c[%d;%df",0x1B,y,x);
     }
-    else
-    {        
+    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         CONSOLE_SCREEN_BUFFER_INFO cbsi;
         HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
         COORD coordsNew;
@@ -198,7 +197,7 @@ void Field::gotoXY(int x, int y)
         coordsNew.X = x-1;
         coordsNew.Y = y-1;
         SetConsoleCursorPosition(console, coordsNew);
-    }
+    #endif
 }
 
 void Field::printCoords(coordsStruct coords)

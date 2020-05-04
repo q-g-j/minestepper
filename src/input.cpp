@@ -12,34 +12,36 @@
 #include "input.hpp"
 #include "os.hpp"
 
-void Input::deleteLastLines(int numLines)
+void Input::deleteLastLine(size_t stringLength)
 {
     OS os;
-    for (int i = 0; i < numLines; i++)
+    if (! (os.isWindows()) || os.isWine())
     {
-        if (! (os.isWindows()) || os.isWine())
-        {
-            std::cout << "\x1b[A";
-            std::cout << "\33[2K\r";
-            std::cout << std::flush;
-        }
-        else
-        {        
-            CONSOLE_SCREEN_BUFFER_INFO cbsi;
-            HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
-            COORD cursorPosition;
-            
-            if (GetConsoleScreenBufferInfo(console, &cbsi))
-            {
-                cursorPosition = cbsi.dwCursorPosition;
-            }
-            cursorPosition.Y--;
-
-            SetConsoleCursorPosition(console, cursorPosition);
-            std::cout << "\1K\r";
-            std::cout << std::flush;
-        }
+        std::cout << "\x1b[A";
+        std::cout << "\r";
+        for (int i = 0; i < stringLength; i++)
+            std::cout << " ";
+        std::cout << "\r";
+        std::cout << std::flush;
     }
+    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+        CONSOLE_SCREEN_BUFFER_INFO cbsi;
+        HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
+        COORD cursorPosition;
+        
+        if (GetConsoleScreenBufferInfo(console, &cbsi))
+        {
+            cursorPosition = cbsi.dwCursorPosition;
+        }
+        cursorPosition.Y--;
+
+        SetConsoleCursorPosition(console, cursorPosition);
+        std::cout << "\r";
+        for (int i = 0; i < stringLength; i++)
+            std::cout << " ";
+        std::cout << "\r";
+        std::cout << std::flush;
+    #endif
 }
 
 // custom mode: ask user for the game mode (difficulty):
@@ -49,6 +51,8 @@ int Input::getDifficulty()
     std::string line = "";
     int difficulty = 0;
     bool isValidInput = false;
+    std::string inputText = "Input: ";
+    std::string wrongInputText = "Wrong input, Press ENTER...";
 
     common.clearScreen();
     std::cout << "Welcome to Minestepper - a Minesweeper clone!" << nl << nl << nl;
@@ -62,7 +66,7 @@ int Input::getDifficulty()
 
     while (true)
     {
-        std::cout << "Input: ";
+        std::cout << inputText;
         getline(std::cin, line);
         if (line == "")
             isValidInput = false;
@@ -87,9 +91,10 @@ int Input::getDifficulty()
             return difficulty;
         else
         {
-            std::cout << "Wrong input, Press ENTER...";
+            std::cout << wrongInputText;
             getAnyKey();
-            deleteLastLines(2);
+            deleteLastLine(wrongInputText.length());
+            deleteLastLine(inputText.length() + line.length());
         }
     }
 }
@@ -103,12 +108,15 @@ coordsStruct Input::getDimensions()
     int beforeX = 0;
     int afterX = 0;
     bool isValidInput = false;
+    std::string inputText = "Input: ";
+    std::string wrongInputText = "Wrong input, Press ENTER...";
+    
     common.clearScreen();
-    std::cout << "How large do you want the field to be?" << nl << nl;
+    std::cout << "How large do you want the field to be (e.g. 15x10)?" << nl << nl;
 
     while (true)
-    {
-        std::cout << "(e.g. 15x10): ";
+    {        
+        std::cout << inputText;
         getline(std::cin, line);
         if (line == "")
         {
@@ -163,9 +171,10 @@ coordsStruct Input::getDimensions()
         }
         else
         {
-            std::cout << "Wrong input, Press ENTER...";
+            std::cout << wrongInputText;
             getAnyKey();
-            deleteLastLines(2);
+            deleteLastLine(wrongInputText.length());
+            deleteLastLine(inputText.length() + line.length());
         }
     }
 }
@@ -177,12 +186,15 @@ int Input::getMinesCount(int fieldSize)
     std::string line = "";
     int minesCount = 0;
     bool isValidInput = false;
-
+    std::string inputText = "Input: ";
+    std::string wrongInputText = "Wrong input, Press ENTER...";
+    
     common.clearScreen();
+    std::cout << "How many mines to place on the field?" << nl << nl;
 
     while (true)
     {
-        std::cout << "How many mines to place on the field? ";
+        std::cout << inputText;
         getline(std::cin, line);
         if (line == "")
             isValidInput = false;
@@ -207,9 +219,10 @@ int Input::getMinesCount(int fieldSize)
             return minesCount;
         else
         {
-            std::cout << "Wrong input, Press ENTER...";
+            std::cout << wrongInputText;
             getAnyKey();
-            deleteLastLines(2);
+            deleteLastLine(wrongInputText.length());
+            deleteLastLine(inputText.length() + line.length());
         }
     }
 }
@@ -237,13 +250,15 @@ userInputReturnStruct Input::getUserInput(Field &field)
     bool isValidInput = false;
     coordsStruct coords;
     userInputReturnStruct userInput;
+    std::string inputText = "Input: ";
+    std::string wrongInputText = "Wrong input, Press ENTER...";
 
     field.gotoXY(1, field.getOffsetY() + field.getRows() * 2 + 4);
     std::cout << "'h' or 'H': Help" << nl << nl;
 
     while (true)
     {
-        std::cout << "Input:                                       ";
+        std::cout << inputText;
         field.gotoXY(8, field.getOffsetY() + field.getRows()*2 + 6);
         getline(std::cin, line);
         if (line == "")
@@ -338,13 +353,15 @@ userInputReturnStruct Input::getUserInput(Field &field)
         if (isValidInput == true)
         {
             userInput.coords = coords;
+            deleteLastLine(inputText.length() + line.length());
             return userInput;
         }
         else
         {
-            std::cout << "Wrong input, Press ENTER...";
+            std::cout << wrongInputText;
             getAnyKey();
-            deleteLastLines(2);
+            deleteLastLine(wrongInputText.length());
+            deleteLastLine(inputText.length() + line.length());
         }
     }
 }
