@@ -148,17 +148,17 @@ void Field::drawField(char** array)
     }
     else
     {
-            cornerTopLeftSymbol = L" ";
-            cornerTopRightSymbol = L" ";
-            cornerBottomLeftSymbol = L" ";
-            cornerBottomRightSymbol = L" ";
-            horizontalLineSymbol = L"-";
-            verticalLineSymbol = L"|";
-            downTSymbol = L" ";
-            upTSymbol = L" ";
-            rightTSymbol = L" ";
-            leftTSymbol = L" ";
-            plusSymbol = L" ";
+            cornerTopLeftSymbol = L"\ ";
+            cornerTopRightSymbol = L"\ ";
+            cornerBottomLeftSymbol = L"\ ";
+            cornerBottomRightSymbol = L"\ ";
+            horizontalLineSymbol = L"\-";
+            verticalLineSymbol = L"\|";
+            downTSymbol = L"\ ";
+            upTSymbol = L"\ ";
+            rightTSymbol = L"\ ";
+            leftTSymbol = L"\ ";
+            plusSymbol = L"\ ";
     }
     #else
         cornerTopLeftSymbol = "\u250C";
@@ -181,16 +181,16 @@ void Field::drawField(char** array)
         }
     #endif
     
-    std::wcout << "    ";
+    std::wcout << L"    ";
     for (int col = 1; col <= this->cols; col++)
     {
         if (col < 10)
-            std::wcout << "  " << col << " ";
+            std::wcout << L"  " << col << " ";
         else
-            std::wcout << " " << col << " ";
+            std::wcout << L" " << col << " ";
     }
-    std::wcout << nl;
-    std::wcout << "   ";
+    std::wcout << L"\n";
+    std::wcout << L"   ";
     coutsym << cornerTopLeftSymbol;
     for (int col = 1; col <= this->cols; col++)
     {
@@ -205,7 +205,7 @@ void Field::drawField(char** array)
             coutsym << cornerTopRightSymbol;
         }
     }
-    std::wcout << nl;
+    std::wcout << L"\n";
 
     for (int row = 1; row <= this->rows; row++)
     {
@@ -214,27 +214,27 @@ void Field::drawField(char** array)
             if (col == 1)
             {
                 if (row < 10)
-                    std::wcout << " " << row << " ";
+                    std::wcout << L" " << row << " ";
                 else
                     std::wcout << row << " ";
             }
             coutsym << verticalLineSymbol;
             
             for (int padding = 0; padding < (this->fieldCellWidth-1)/2; padding++)
-                std::wcout << " "; 
+                std::wcout << L" "; 
             std::wcout << array[col][row];
             for (int padding = 0; padding < (this->fieldCellWidth-1)/2; padding++)
-                std::wcout << " ";
+                std::wcout << L" ";
             
             if (col == this->cols)
             {
                 coutsym << verticalLineSymbol;
                 if (row < 10)
-                    std::wcout << " " << row << " ";
+                    std::wcout << L" " << row << " ";
                 else
                     std::wcout << row << " ";        
-                std::wcout << nl;
-                std::wcout << "   ";
+                std::wcout << L"\n";
+                std::wcout << L"   ";
             }
         }
 
@@ -263,19 +263,24 @@ void Field::drawField(char** array)
             }
         }
 
-        std::wcout << nl;        
-        
-
+        std::wcout << L"\n";
     }
-    std::wcout << "    ";
+    std::wcout << L"    ";
     for (int col = 1; col <= this->cols; col++)
     {
         if (col < 10)
-            std::wcout << "  " << col << " ";
+            std::wcout << L"  " << col << " ";
         else
-            std::wcout << " " << col << " ";
+            std::wcout << L" " << col << " ";
     }
-    std::wcout << nl;
+    std::wcout << L"\n";
+
+    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+        if (!(os.isWine()))
+        {
+            _setmode(_fileno(stdout), _O_TEXT);
+        }
+    #endif
 }
 
 void Field::gotoXY(int x, int y)
