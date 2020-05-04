@@ -23,6 +23,8 @@ public:
         bool hasWon = false;
         bool isTurn = false;
     };
+    
+    void setRandomSeed();
     void clearScreen();
     coordsStruct intToStruct(int, int);
     int structToInt(coordsStruct, int);

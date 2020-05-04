@@ -10,32 +10,36 @@
 #include "field.hpp"
 #include "common.hpp"
 #include "input.hpp"
+#include "os.hpp"
 
-void Input::moveCursorUp()
+void Input::deleteLastLines(int numLines)
 {
-    extern bool IS_WINE;
-    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-    if (IS_WINE)
+    OS os;
+    for (int i = 0; i < numLines; i++)
     {
-        std::cout << "\x1b[A\r";
-    }
-    else
-    {        
-        CONSOLE_SCREEN_BUFFER_INFO cbsi;
-        HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
-        COORD cursorPosition;
-        
-        if (GetConsoleScreenBufferInfo(console, &cbsi))
+        if (! (os.isWindows()) || os.isWine())
         {
-            cursorPosition = cbsi.dwCursorPosition;
+            std::cout << "\x1b[A";
+            std::cout << "\33[2K\r";
+            std::cout << std::flush;
         }
-        cursorPosition.Y--;
+        else
+        {        
+            CONSOLE_SCREEN_BUFFER_INFO cbsi;
+            HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
+            COORD cursorPosition;
+            
+            if (GetConsoleScreenBufferInfo(console, &cbsi))
+            {
+                cursorPosition = cbsi.dwCursorPosition;
+            }
+            cursorPosition.Y--;
 
-        SetConsoleCursorPosition(console, cursorPosition);
+            SetConsoleCursorPosition(console, cursorPosition);
+            std::cout << "\1K\r";
+            std::cout << std::flush;
+        }
     }
-#else
-    std::cout << "\x1b[A";
-#endif
 }
 
 // custom mode: ask user for the game mode (difficulty):
@@ -85,10 +89,7 @@ int Input::getDifficulty()
         {
             std::cout << "Wrong input, Press ENTER...";
             getAnyKey();
-            moveCursorUp();
-            std::cout << "\r                           \r" << std::flush;
-            moveCursorUp();
-            std::cout << "\r                           \r" << std::flush;
+            deleteLastLines(2);
         }
     }
 }
@@ -164,10 +165,7 @@ coordsStruct Input::getDimensions()
         {
             std::cout << "Wrong input, Press ENTER...";
             getAnyKey();
-            moveCursorUp();
-            std::cout << "\r                           \r" << std::flush;
-            moveCursorUp();
-            std::cout << "\r                           \r" << std::flush;
+            deleteLastLines(2);
         }
     }
 }
@@ -211,10 +209,7 @@ int Input::getMinesCount(int fieldSize)
         {
             std::cout << "Wrong input, Press ENTER...";
             getAnyKey();
-            moveCursorUp();
-            std::cout << "\r                           \r" << std::flush;
-            moveCursorUp();
-            std::cout << "\r                                                        \r" << std::flush;
+            deleteLastLines(2);
         }
     }
 }
@@ -349,10 +344,7 @@ userInputReturnStruct Input::getUserInput(Field &field)
         {
             std::cout << "Wrong input, Press ENTER...";
             getAnyKey();
-            moveCursorUp();
-            std::cout << "\r                           \r" << std::flush;
-            moveCursorUp();
-            std::cout << "\r                           \r" << std::flush;
+            deleteLastLines(2);
         }
     }
 }

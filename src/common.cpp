@@ -1,23 +1,32 @@
 #include <iostream>
+#include "time.h"
+
+#if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+    #include "windows.h"  
+#endif
 
 #include "common.hpp"
 #include "debug.hpp"
-
-#if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-    #include <windows.h>
-    #include <winreg.h>
-#endif
+#include "os.hpp"
 
 using namespace std;
 
-extern bool IS_WINE;
+void Common::setRandomSeed()
+{
+    OS os;
+    if (! (os.isWindows()) || os.isWine())
+        srand(time(NULL));
+    else
+        srand(GetTickCount());
+}
 
 void Common::clearScreen()
 {
-
-#if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+    OS os;
+    if (os.isWindows())
+    {
         // check if running in wine (wine won't find "cls" or "clear"):
-        if (IS_WINE)
+        if (os.isWine())
         {
             // clear screen with cout (won't work in native Windows):
             cout << "\x1B[2J\x1B[H";
@@ -57,9 +66,9 @@ void Common::clearScreen()
 
             bSuccess = SetConsoleCursorPosition(hConsole, coordScreen);
         }
-#else
+    }
+    else
         if (system("clear") != 0) exit(0);
-#endif
 }
 
 // convert coords in type integer to coords in type struct (e.g. position = 4 will return coords.col = 4, coords.row = 1):

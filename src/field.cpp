@@ -11,6 +11,7 @@
 #include "debug.hpp"
 #include "field.hpp"
 #include "input.hpp"
+#include "os.hpp"
 
 // the constructor:
 Field::Field(int cols, int rows, int offsetX, int offsetY, int minesCount, std::string difficultyString)
@@ -183,11 +184,10 @@ void Field::drawField(char** array)
 
 void Field::gotoXY(int x, int y)
 {
-#if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-    extern bool IS_WINE;
-    if (IS_WINE)
+    OS os;
+    if(! (os.isWindows()) || os.isWine())
     {
-    printf("%c[%d;%df",0x1B,y,x);
+        printf("%c[%d;%df",0x1B,y,x);
     }
     else
     {        
@@ -199,10 +199,6 @@ void Field::gotoXY(int x, int y)
         coordsNew.Y = y-1;
         SetConsoleCursorPosition(console, coordsNew);
     }
-        
-#else
-    printf("%c[%d;%df",0x1B,y,x);
-#endif
 }
 
 void Field::printCoords(coordsStruct coords)

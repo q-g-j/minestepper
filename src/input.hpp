@@ -9,7 +9,7 @@ public:
     coordsStruct getDimensions();
     int getMinesCount(int);
     bool getAnyKey();
-    void moveCursorUp();
+    void deleteLastLines(int numLines);
     userInputReturnStruct getUserInput(Field &field);
 };
 

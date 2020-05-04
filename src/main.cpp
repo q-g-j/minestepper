@@ -1,38 +1,21 @@
 #include <iostream>
-#include "time.h"
-
-#if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-    #include "windows.h"
-#endif
 
 #include "common.hpp"
 #include "debug.hpp"
 #include "field.hpp"
 #include "input.hpp"
+#include "os.hpp"
 
 using namespace std;
 
-bool IS_WINE = false;
-
 int main()
 {
+    Common common;
+    common.setRandomSeed();
+    
     int rows = 0, cols = 0;
     int offsetX = 2;
     int offsetY = 5;
-
-#if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-    HKEY hKey;
-    LPCSTR lpRegPath = ("SOFTWARE\\Wine");
-    if (RegOpenKeyExA(HKEY_CURRENT_USER, lpRegPath, 0, KEY_ALL_ACCESS, &hKey) == ERROR_SUCCESS)
-        IS_WINE = true;
-    else
-    {
-        IS_WINE = false;
-        srand(GetTickCount());
-    }
-#else
-    srand(time(NULL)); // initialize random seed
-#endif
 
     Input input;
 
