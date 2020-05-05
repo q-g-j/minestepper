@@ -9,6 +9,6 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -s -Wl,--gc-sections")
 endif()
 
-add_executable(minestepper src/main.cpp src/field.cpp src/common.cpp src/input.cpp src/os.cpp)
+add_executable(minestepper src/main.cpp src/field.cpp src/common.cpp src/input.cpp)
 
 install(TARGETS minestepper RUNTIME DESTINATION bin)

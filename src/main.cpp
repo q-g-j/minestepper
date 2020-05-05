@@ -4,12 +4,10 @@
 #include "debug.hpp"
 #include "field.hpp"
 #include "input.hpp"
-#include "os.hpp"
-
-using namespace std;
 
 int main()
 {
+    
     Common common;
     common.setRandomSeed();
     
@@ -23,7 +21,7 @@ int main()
     while (true)
     {
         int difficulty = 0;
-        string difficultyString = "";
+        std::string difficultyString = "";
         int minesCount = 0;
         coordsStruct dimensions;
         userInputReturnStruct userInput;

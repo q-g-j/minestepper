@@ -10,7 +10,6 @@
 #include "field.hpp"
 #include "common.hpp"
 #include "input.hpp"
-#include "os.hpp"
 
 void Input::getEnterKey(std::string wrongInputText)
 {
@@ -31,21 +30,13 @@ void Input::getEnterKey(std::string wrongInputText)
 
 void Input::deleteLastLine(size_t stringLength)
 {
-    OS os;
-    if (! (os.isWindows()) || os.isWine())
-    {
-        std::cout << "\x1b[A";
-        std::cout << "\r";
-        for (int i = 0; i < stringLength; i++)
-            std::cout << " ";
-        std::cout << "\r";
-        std::cout << std::flush;
-    }
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         CONSOLE_SCREEN_BUFFER_INFO cbsi;
         HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
         COORD cursorPosition;
-        
+        cursorPosition.X = 0;
+        cursorPosition.Y = 0;
+
         if (GetConsoleScreenBufferInfo(console, &cbsi))
         {
             cursorPosition = cbsi.dwCursorPosition;
@@ -53,6 +44,13 @@ void Input::deleteLastLine(size_t stringLength)
         cursorPosition.Y--;
 
         SetConsoleCursorPosition(console, cursorPosition);
+        std::cout << "\r";
+        for (int i = 0; i < stringLength; i++)
+            std::cout << " ";
+        std::cout << "\r";
+        std::cout << std::flush;
+    #else
+        std::cout << "\x1b[A";
         std::cout << "\r";
         for (int i = 0; i < stringLength; i++)
             std::cout << " ";
@@ -270,7 +268,7 @@ userInputReturnStruct Input::getUserInput(Field &field)
         {
             common.clearScreen();
             field.printExplanation();
-            getEnterKey(wrongInputText);
+            getEnterKey("");
             field.printAll();            
             field.gotoXY(1,3);
             std::cout << field.getMinesLeft() << " Mines left...";

@@ -1,4 +1,7 @@
 #include <iostream>
+#include <string>
+#include <codecvt>
+#include <locale>
 #include "time.h"
 
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
@@ -7,65 +10,49 @@
 
 #include "common.hpp"
 #include "debug.hpp"
-#include "os.hpp"
 
-using namespace std;
+using convert_t = std::codecvt_utf8<wchar_t>;
+std::wstring_convert<convert_t, wchar_t> strconverter;
+
+#if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+
+std::wstring Common::stringConvert(std::string str)
+{
+    return strconverter.from_bytes(str);
+}
+
+std::wstring Common::intToString(int num)
+{
+    return std::to_wstring(num);
+}
+
+#else
+std::string Common::stringConvert(std::wstring wstr)
+{
+    return strconverter.to_bytes(wstr);
+}
+
+std::string Common::intToString(int num)
+{
+    return std::to_string(num);
+}
+#endif
 
 void Common::setRandomSeed()
 {
-    OS os;
-    if (! (os.isWindows()) || os.isWine())
+    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+        srand(GetTickCount());
+    #else
         srand(time(NULL));
-    else
-    {
-        #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-            srand(GetTickCount());
-        #endif
-    }
+    #endif
 }
 
 void Common::clearScreen()
 {
-    OS os;
-    if (os.isWine())
-    {
-        // clear screen with cout (won't work in native Windows):
-        cout << "\x1B[2J\x1B[H";
-    }
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-        // Don't use "cls" in native Windows to reduce lag (snippet copied from Microsoft support pages):
-        HANDLE hConsole;
-        hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-        COORD coordScreen = { 0, 0 };    /* here's where we'll home the
-                                            cursor */
-        BOOL bSuccess;
-        DWORD cCharsWritten;
-        CONSOLE_SCREEN_BUFFER_INFO csbi; /* to get buffer info */
-        DWORD dwConSize;                 /* number of character cells in
-                                            the current buffer */
-
-                                            /* get the number of character cells in the current buffer */
-
-        bSuccess = GetConsoleScreenBufferInfo(hConsole, &csbi);
-        dwConSize = csbi.dwSize.X * csbi.dwSize.Y;
-
-        /* fill the entire screen with blanks */
-
-        bSuccess = FillConsoleOutputCharacter(hConsole, (TCHAR)' ', dwConSize, coordScreen, &cCharsWritten);
-
-        /* get the current text attribute */
-
-        bSuccess = GetConsoleScreenBufferInfo(hConsole, &csbi);
-
-        /* now set the buffer's attributes accordingly */
-
-        bSuccess = FillConsoleOutputAttribute(hConsole, csbi.wAttributes, dwConSize, coordScreen, &cCharsWritten);
-
-        /* put the cursor at (0, 0) */
-
-        bSuccess = SetConsoleCursorPosition(hConsole, coordScreen);
+        if (system("cls") != 0) exit(1);
     #else
-        if (system("clear") != 0) exit(0);
+        if (system("clear") != 0) exit(1);
     #endif
 }
 
