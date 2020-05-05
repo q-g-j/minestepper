@@ -48,7 +48,7 @@
     const std::string coveredSymbol = "\u2591";
 #endif
 
-#define nl '\n'
+const char nl = '\n';
     
 class Common
 {
