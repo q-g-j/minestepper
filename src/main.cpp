@@ -66,9 +66,9 @@ int main()
         int turn = 1;
         while (true)
         {
-            field.gotoXY(1,4);
+            field.gotoXY(1, 4);
             input.deleteLastLine(20);
-            field.gotoXY(1,3);
+            field.gotoXY(1, 3);
             std::cout << field.getMinesLeft() << " Mines left...";
             #if DEBUG == 1
                 std::cout << " DEBUG: Turn: " << turn;

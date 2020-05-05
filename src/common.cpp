@@ -27,23 +27,23 @@ void Common::setUnicode(bool sw)
 }
 
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-std::wstring Common::stringConvert(std::string str)
+std::wstring Common::stringConvert(std::string const& str)
 {
     return strconverter.from_bytes(str);
 }
 
-std::wstring Common::intToString(int num)
+std::wstring Common::intToString(int const& num)
 {
     return std::to_wstring(num);
 }
 
 #else
-std::string Common::stringConvert(std::wstring wstr)
+std::string Common::stringConvert(std::wstring const& wstr)
 {
     return strconverter.to_bytes(wstr);
 }
 
-std::string Common::intToString(int num)
+std::string Common::intToString(int const& num)
 {
     return std::to_string(num);
 }
@@ -68,7 +68,7 @@ void Common::clearScreen()
 }
 
 // convert coords in type integer to coords in type struct (e.g. position = 4 will return coords.col = 4, coords.row = 1):
-coordsStruct Common::intToStruct(int position, int cols)
+coordsStruct Common::intToStruct(int& position, int& cols)
 {
     coordsStruct coords;
     
@@ -91,7 +91,7 @@ coordsStruct Common::intToStruct(int position, int cols)
 }
 
 // the above function the other way around
-int Common::structToInt(coordsStruct coords, int cols)
+int Common::structToInt(coordsStruct& coords, int& cols)
 {
     int position = 0;
     if (coords.row == 1)

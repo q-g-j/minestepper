@@ -74,18 +74,18 @@ public:
     };
     
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-    std::wstring intToString(int);
-    std::wstring stringConvert(std::string);
+    std::wstring intToString(int const&);
+    std::wstring stringConvert(std::string const&);
     #else
-    std::string intToString(int);
-    std::string stringConvert(std::wstring);
+    std::string intToString(int const&);
+    std::string stringConvert(std::wstring const&);
     #endif
     
     void setUnicode(bool);
     void setRandomSeed();
     void clearScreen();
-    coordsStruct intToStruct(int, int);
-    int structToInt(coordsStruct, int);
+    coordsStruct intToStruct(int&, int&);
+    int structToInt(coordsStruct&, int&);
 };
 
 typedef struct Common::coordsStruct coordsStruct;

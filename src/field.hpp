@@ -10,13 +10,16 @@ private:
     int fieldOffsetY;
     int fieldCellWidth;
     int minesCount;
-    int minesLeft = 0;
-    int countEmpty = 0;
+    int minesLeft;
+    int countEmpty;
+    int flagsCount;
     std::string difficultyString;
     stringsym** fieldArray;
     stringsym** minesArray;
 public:
-    Field(int cols = 0, int rows = 0, int fieldOffsetX = 0, int FieldOffsetY = 0, int fieldCellWidth=0, int minesCount = 0, std::string difficultyString = "");
+    Field();
+    Field(int const& cols_, int const& rows_, int const& fieldOffsetX_, int const& fieldOffsetY_, int const& fieldCellWidth_, int const& minesCount_, std::string const& difficultyString_);
+    
     ~Field();    
     
     // getter methods:
@@ -29,16 +32,16 @@ public:
     stringsym** createArray();
     void clearFieldArray();
     void clearMinesArray();
-    void fillMinesArray(coordsStruct);
+    void fillMinesArray(coordsStruct&);
     void drawField(stringsym**);
-    void gotoXY(int, int);
-    void printCoords(coordsStruct coords);
+    void gotoXY(int const&, int const&);
+    void printCoords(coordsStruct& coords);
     void printExplanation();
     void printHasWon();
     void printHasLost();
     void printAll();
-    bool isFlagSet(Common::coordsStruct);
-    bool isNumber(Common::coordsStruct);
-    Common::placeUserInputReturnStruct placeUserInput(Common::userInputReturnStruct, int);
-    std::vector<Common::coordsStruct> findNeighbours(stringsym **tempArray, Common::coordsStruct, stringsym);
+    bool isFlagSet(Common::coordsStruct&);
+    bool isNumber(Common::coordsStruct&);
+    Common::placeUserInputReturnStruct placeUserInput(Common::userInputReturnStruct&, int&);
+    std::vector<Common::coordsStruct> findNeighbours(stringsym **tempArray, Common::coordsStruct const&, stringsym const&);
 };

@@ -11,24 +11,24 @@
 #include "common.hpp"
 #include "input.hpp"
 
-void Input::getEnterKey(std::string wrongInputText)
+void Input::getEnterKey(std::string const& text)
 {
     std::string line;
     while (true)
     {
-        std::cout << wrongInputText;
+        std::cout << text;
         getline(std::cin, line);
         if (line == "")
             break;
         else
         {
-            deleteLastLine(wrongInputText.length() + line.length());
+            deleteLastLine(text.length() + line.length());
             continue;
         }
     }
 }
 
-void Input::deleteLastLine(size_t stringLength)
+void Input::deleteLastLine(size_t const& stringLength)
 {
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         CONSOLE_SCREEN_BUFFER_INFO cbsi;
@@ -133,11 +133,9 @@ coordsStruct Input::getDimensions()
         std::cout << inputText;
         getline(std::cin, line);
         if (line == "")
-        {
             isValidInput = false;
         if (line == "q" || line == "Q")
             exit (0);
-        }
         else
         {
             if(line.find("x") != std::string::npos)
@@ -193,7 +191,7 @@ coordsStruct Input::getDimensions()
 }
 
 // custom mode: ask user for the number of mines:
-int Input::getMinesCount(int fieldSize)
+int Input::getMinesCount(int const& fieldSize)
 {
     Common common;
     std::string line = "";
