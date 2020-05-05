@@ -19,12 +19,13 @@ public:
     Field(int cols = 0, int rows = 0, int fieldOffsetX = 0, int FieldOffsetY = 0, int fieldCellWidth=0, int minesCount = 0, std::string difficultyString = "");
     ~Field();    
     
-    // member methods:
+    // getter methods:
     int getCols();
     int getRows();
     int getOffsetX();
     int getOffsetY();
     int getMinesLeft();
+    
     stringsym** createArray();
     void clearFieldArray();
     void clearMinesArray();

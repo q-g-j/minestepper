@@ -269,7 +269,7 @@ userInputReturnStruct Input::getUserInput(Field &field)
             common.clearScreen();
             field.printExplanation();
             getEnterKey("");
-            field.printAll();            
+            field.printAll();
             field.gotoXY(1,3);
             std::cout << field.getMinesLeft() << " Mines left...";
             #if DEBUG == 1
