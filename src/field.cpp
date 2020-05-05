@@ -72,6 +72,11 @@ int Field::getMinesLeft()
     return this->minesLeft;
 }
 
+
+stringsym Field::getCoordsContent(Common::coordsStruct& coords)
+{
+    return this->fieldArray[coords.col][coords.row];
+}
 // use pointers to pointers to be able to create dynamic 2D-arrays
 stringsym** Field::createArray()
 {

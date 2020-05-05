@@ -27,6 +27,7 @@ public:
     int getOffsetX();
     int getOffsetY();
     int getMinesLeft();
+    stringsym getCoordsContent(Common::coordsStruct&);
     
     stringsym** createArray();
     void clearFieldArray();

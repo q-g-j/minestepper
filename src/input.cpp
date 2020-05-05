@@ -45,7 +45,7 @@ void Input::deleteLastLine(size_t const& stringLength)
 
         SetConsoleCursorPosition(console, cursorPosition);
         std::cout << "\r";
-        for (int i = 0; i < stringLength; i++)
+        for (unsigned int i = 0; i < stringLength; i++)
             std::cout << " ";
         std::cout << "\r";
         std::cout << std::flush;
@@ -347,6 +347,16 @@ userInputReturnStruct Input::getUserInput(Field &field)
         }
         if (coords.col > field.getCols() || coords.row > field.getRows())
             isValidInput = false;
+        if (userInput.isFlag == true)
+        {
+            if (field.isNumber(coords) || field.getCoordsContent(coords) == uncoveredSymbol)
+                isValidInput = false;
+        }
+        else
+        {
+            if (field.getCoordsContent(coords) == flagSymbol)
+                isValidInput = false;
+        }
         if (isValidInput == true)
         {
             userInput.coords = coords;
