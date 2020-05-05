@@ -24,7 +24,7 @@ Field::Field(int const& cols_, int const& rows_, int const& fieldOffsetX_, int c
     difficultyString(difficultyString_)
 {
     this->minesLeft = minesCount_;
-    this->countEmpty = cols_ * rows_;
+    this->countCovered = cols_ * rows_;
     this->flagsCount = 0;
     this->difficultyString = difficultyString_;
     this->fieldArray = createArray();
@@ -334,7 +334,7 @@ placeUserInputReturnStruct Field::placeUserInput(userInputReturnStruct& userInpu
             printCoords(userInput.coords);
             this->flagsCount--;
             this->minesLeft++;
-            this->countEmpty++;
+            this->countCovered++;
         }
         else
         {
@@ -342,7 +342,7 @@ placeUserInputReturnStruct Field::placeUserInput(userInputReturnStruct& userInpu
             printCoords(userInput.coords);
             this->flagsCount++;
             this->minesLeft--;
-            this->countEmpty--;
+            this->countCovered--;
         }
     }
     else
@@ -423,7 +423,7 @@ placeUserInputReturnStruct Field::placeUserInput(userInputReturnStruct& userInpu
                                 else
                                     this->fieldArray[coordsTemp.col][coordsTemp.row] = common.intToString(static_cast<int>(autoUncoverNeighboursCoveredMinesVector.size()));
                                 printCoords(coordsTemp);
-                                this->countEmpty--;
+                                this->countCovered--;
                             }
                         }
                     
@@ -440,7 +440,7 @@ placeUserInputReturnStruct Field::placeUserInput(userInputReturnStruct& userInpu
             else
                 this->fieldArray[userInput.coords.col][userInput.coords.row] = common.intToString(static_cast<int>(neighboursMinesVector.size()));
             printCoords(userInput.coords);
-            this->countEmpty--;
+            this->countCovered--;
             returnStruct.isTurn = true;
         }
         
@@ -482,7 +482,7 @@ placeUserInputReturnStruct Field::placeUserInput(userInputReturnStruct& userInpu
                                     else
                                         this->fieldArray[i][j] = common.intToString(static_cast<int>(neighboursMinesVectorNew.size()));
                                     printCoords(coordsTemp);
-                                    this->countEmpty--;
+                                    this->countCovered--;
                                 }
                             }
                         }
@@ -512,7 +512,7 @@ placeUserInputReturnStruct Field::placeUserInput(userInputReturnStruct& userInpu
         }
     }
     // check if player has won:
-    if (this->flagsCount + this->countEmpty == this->minesCount)
+    if (this->flagsCount + this->countCovered == this->minesCount)
     {
         printHasWon();
         returnStruct.hasWon = true;

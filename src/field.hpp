@@ -11,7 +11,7 @@ private:
     int fieldCellWidth;
     int minesCount;
     int minesLeft;
-    int countEmpty;
+    int countCovered;
     int flagsCount;
     std::string difficultyString;
     stringsym** fieldArray;
