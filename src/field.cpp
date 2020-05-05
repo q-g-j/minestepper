@@ -11,21 +11,8 @@
 #include "debug.hpp"
 #include "field.hpp"
 #include "input.hpp"
-        
-// default constructor:
-Field::Field() :
-    cols(1),
-    rows(1),
-    fieldOffsetX(0),
-    fieldOffsetY(0),
-    fieldCellWidth(1),
-    minesCount(1),
-    minesLeft(0),
-    flagsCount(0),
-    difficultyString("")
-{}
 
-// constructor for parameter passing:
+// constructor
 Field::Field(int const& cols_, int const& rows_, int const& fieldOffsetX_, int const& fieldOffsetY_, int const& fieldCellWidth_, int const& minesCount_, std::string const& difficultyString_)
 :
     cols(cols_),
@@ -90,8 +77,9 @@ stringsym** Field::createArray()
 {
     const int colsNum = this->cols + 1;
     const int rowsNum = this->rows + 1;
-    stringsym** tempArray = new stringsym*[colsNum];
-    for (int i=0; i <= this->cols; i++)
+    stringsym** tempArray = nullptr;
+    tempArray = new stringsym*[colsNum];
+    for (int i=0; i < colsNum; i++)
         tempArray[i] = new stringsym[rowsNum];
     return tempArray;
 }
@@ -340,6 +328,7 @@ placeUserInputReturnStruct Field::placeUserInput(userInputReturnStruct& userInpu
             this->fieldArray[userInput.coords.col][userInput.coords.row] = coveredSymbol;
             printCoords(userInput.coords);
             this->flagsCount--;
+            this->minesLeft++;
             this->countEmpty++;
         }
         else
@@ -347,6 +336,7 @@ placeUserInputReturnStruct Field::placeUserInput(userInputReturnStruct& userInpu
             this->fieldArray[userInput.coords.col][userInput.coords.row] = flagSymbol;
             printCoords(userInput.coords);
             this->flagsCount++;
+            this->minesLeft--;
             this->countEmpty--;
         }
     }

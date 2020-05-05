@@ -17,7 +17,6 @@ private:
     stringsym** fieldArray;
     stringsym** minesArray;
 public:
-    Field();
     Field(int const& cols_, int const& rows_, int const& fieldOffsetX_, int const& fieldOffsetY_, int const& fieldCellWidth_, int const& minesCount_, std::string const& difficultyString_);
     
     ~Field();    
