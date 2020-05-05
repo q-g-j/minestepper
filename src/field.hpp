@@ -17,34 +17,9 @@ private:
     stringsym** minesArray;
 public:
     Field(int cols = 0, int rows = 0, int fieldOffsetX = 0, int FieldOffsetY = 0, int fieldCellWidth=0, int minesCount = 0, std::string difficultyString = "");
-    ~Field();
+    ~Field();    
     
-    // field frames:
-    stringsym cornerTopLeftSymbol;
-    stringsym cornerTopRightSymbol;
-    stringsym cornerBottomLeftSymbol;
-    stringsym cornerBottomRightSymbol;
-    stringsym horizontalLineSymbol;
-    stringsym verticalLineSymbol;
-    stringsym downTSymbol;
-    stringsym upTSymbol;
-    stringsym rightTSymbol;
-    stringsym leftTSymbol;
-    stringsym plusSymbol;
-    
-    stringsym flagSymbol;
-    stringsym bombSymbol;
-    stringsym bombHitSymbol;
-    stringsym uncoveredSymbol;
-    stringsym coveredSymbol;
-    
-    enum colors
-    {
-        
-    };
-    
-    void setFrameSymbols();
-    void setCellSymbols();
+    // member methods:
     int getCols();
     int getRows();
     int getOffsetX();

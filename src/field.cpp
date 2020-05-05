@@ -13,7 +13,7 @@
 #include "debug.hpp"
 #include "field.hpp"
 #include "input.hpp"
-
+        
 // the constructor:
 Field::Field(int cols, int rows, int fieldOffsetX, int fieldOffsetY, int fieldCellWidth, int minesCount, std::string difficultyString)
 {
@@ -42,52 +42,6 @@ Field::~Field()
     for (int i=0; i <= cols; i++)
         delete[] this->minesArray[i];
     delete[] this->minesArray;
-}
-
-void Field::setFrameSymbols()
-{    
-    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-        cornerTopLeftSymbol = L"\u250C";
-        cornerTopRightSymbol = L"\u2510";
-        cornerBottomLeftSymbol = L"\u2514";
-        cornerBottomRightSymbol = L"\u2518";
-        horizontalLineSymbol = L"\u2500";
-        verticalLineSymbol = L"\u2502";
-        downTSymbol = L"\u252C";
-        upTSymbol = L"\u2534";
-        rightTSymbol = L"\u251C";
-        leftTSymbol = L"\u2524";
-        plusSymbol = L"\u253C";
-    #else
-        cornerTopLeftSymbol = "\u250C";
-        cornerTopRightSymbol = "\u2510";
-        cornerBottomLeftSymbol = "\u2514";
-        cornerBottomRightSymbol = "\u2518";
-        horizontalLineSymbol = "\u2500";
-        verticalLineSymbol = "\u2502";
-        downTSymbol = "\u252C";
-        upTSymbol = "\u2534";
-        rightTSymbol = "\u251C";
-        leftTSymbol = "\u2524";
-        plusSymbol = "\u253C";
-    #endif
-}
-
-void Field::setCellSymbols()
-{    
-    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-        flagSymbol = L"\u25ba";
-        bombSymbol = L"\u263c";
-        bombHitSymbol = L"#";
-        uncoveredSymbol = L" ";
-        coveredSymbol = L"\u2591";
-    #else
-        flagSymbol = "\u25ba";
-        bombSymbol = "\u263c";
-        bombHitSymbol = "#";
-        uncoveredSymbol = " ";
-        coveredSymbol = "\u2591";
-    #endif    
 }
 
 int Field::getCols()
@@ -129,7 +83,6 @@ stringsym** Field::createArray()
 // fill this->fieldArray[][] with coveredSymbol
 void Field::clearFieldArray()
 {
-    setCellSymbols();
     for (int i=0; i <= this->cols; i++)
     {
         for (int j=0; j <= this->rows; j++)
@@ -142,7 +95,6 @@ void Field::clearFieldArray()
 // fill this->minesArray[][] with " "
 void Field::clearMinesArray()
 {
-    setCellSymbols();
     for (int i=0; i <= this->cols; i++)
     {
         for (int j=0; j <= this->rows; j++)
@@ -155,7 +107,6 @@ void Field::clearMinesArray()
 // place mines at random positions of this->minesArray[][]:
 void Field::fillMinesArray(coordsStruct userFirstInput)
 {
-    setCellSymbols();
     Common common;
     coordsStruct coords;
     int sizeOfFieldArray = this->cols * this->rows;
@@ -177,14 +128,10 @@ void Field::fillMinesArray(coordsStruct userFirstInput)
 // draw this->fieldArray[][] or this->minesArray[][]:
 void Field::drawField(stringsym** array)
 {
-    setFrameSymbols();
-    setCellSymbols();
-
-    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-        _setmode(_fileno(stdout), _O_U16TEXT);
-    #endif
-
-    std::wcout << L"    ";
+    Common common;
+    common.setUnicode(true);
+    
+    std::wcout << L"    ";    
     for (int col = 1; col <= this->cols; col++)
     {
         if (col < 10)
@@ -280,9 +227,7 @@ void Field::drawField(stringsym** array)
     }
     std::wcout << std::endl;
 
-    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-        _setmode(_fileno(stdout), _O_TEXT);
-    #endif
+    common.setUnicode(false);
 }
 
 void Field::gotoXY(int x, int y)
@@ -302,6 +247,7 @@ void Field::gotoXY(int x, int y)
 void Field::printCoords(coordsStruct coords)
 {
     gotoXY(this->fieldOffsetX + coords.col * 4, this->fieldOffsetY + coords.row * 2);
+    
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         std::wstring coordsString = this->fieldArray[coords.col][coords.row];
         WriteConsoleW(GetStdHandle(STD_OUTPUT_HANDLE), coordsString.c_str(), coordsString.size(), nullptr, nullptr);
@@ -313,7 +259,6 @@ void Field::printCoords(coordsStruct coords)
 
 void Field::printExplanation()
 {
-    setCellSymbols();
     std::cout << "In this game your task is to find all hidden mines by uncovering all safe positions." << nl << nl;
     std::cout << "You can guess and sometimes combine where the next mine is." << nl;
     std::cout << "The number on each uncovered square shows how many neighbours contain a mine." << nl << nl;
@@ -345,7 +290,6 @@ void Field::printAll()
 // test coords if they contain a flag:
 bool Field::isFlagSet(coordsStruct coords)
 {
-    setCellSymbols();
     if (this->fieldArray[coords.col][coords.row] == flagSymbol)
         return true;
     else 
@@ -367,8 +311,8 @@ bool Field::isNumber(coordsStruct coords)
 // the main method of class Field which will alter the fieldArray:
 placeUserInputReturnStruct Field::placeUserInput(userInputReturnStruct userInput, int turn)
 {
-    setCellSymbols();
     Common common;
+    
     placeUserInputReturnStruct returnStruct;
     std::vector<coordsStruct> neighboursMinesVector;
     
@@ -568,9 +512,9 @@ placeUserInputReturnStruct Field::placeUserInput(userInputReturnStruct userInput
 
 void Field::printHasWon()
 {
-    setCellSymbols();
     Common common;
     Input input;
+    
     std::string wrongInputText = "Press ENTER to go back...";
     
     common.clearScreen();
@@ -594,11 +538,8 @@ void Field::printHasWon()
 
 void Field::printHasLost()
 {
-    setCellSymbols();
     Common common;
     Input input;
-    
-    setCellSymbols();
     
     std::string wrongInputText = "Press ENTER to go back...";
     

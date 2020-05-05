@@ -14,8 +14,17 @@
 using convert_t = std::codecvt_utf8<wchar_t>;
 std::wstring_convert<convert_t, wchar_t> strconverter;
 
-#if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+void Common::setUnicode(bool sw)
+{
+    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+        if (sw)
+            _setmode(_fileno(stdout), _O_U16TEXT);
+        else
+            _setmode(_fileno(stdout), _O_TEXT);
+    #endif
+}
 
+#if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
 std::wstring Common::stringConvert(std::string str)
 {
     return strconverter.from_bytes(str);
