@@ -384,7 +384,7 @@ userInputReturnStruct Input::getUserInput(Field &field, int firstrun)
             field.printExplanation();
             getEnterKey("");
             field.printAll();
-            field.gotoXY(field.getOffsetX - 1, 3);
+            field.gotoXY(field.getOffsetX() - 1, 3);
             coutconv << field.getMinesLeft() << L" Mines left...";
             #if DEBUG == 1
                 coutconv << L" DEBUG: Turn: " << turn << L"      ";
