@@ -1,13 +1,13 @@
-#include <iostream>
-#include <string>
 #include <codecvt>
+#include <iostream>
 #include <locale>
+#include <string>
 #include "time.h"
 
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-    #include "windows.h"
-    #include <io.h>
     #include <fcntl.h>
+    #include <io.h>
+    #include <windows.h>
 #endif
 
 #include "common.hpp"

@@ -23,7 +23,6 @@ public:
     ~Field();    
     
     // getter methods:
-    int getTurn();
     int getCols();
     int getRows();
     int getOffsetX();
