@@ -399,6 +399,9 @@ userInputReturnStruct Input::getUserInput(Field &field, int firstrun)
         else if  (inputTmp == KEY_SPACE)
         {
             coutconv << L"\b" << std::flush;
+            if (field.isNumber(currentArrayPosition))
+                continue;
+            else;
             userInput.isFlag = true;
             break;
         }
@@ -424,6 +427,9 @@ userInputReturnStruct Input::getUserInput(Field &field, int firstrun)
         else if (input == KEY_SPACE)
         {
             coutconv << "\b" << std::flush;
+            if (field.isNumber(currentArrayPosition))
+                continue;
+            else;
             userInput.isFlag = true;
             break;
         }
