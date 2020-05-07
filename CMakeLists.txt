@@ -9,6 +9,16 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -s -Wl,--gc-sections")
 endif()
 
+#IF (NOT WIN32)
+#    set(CMAKE_CXX_FLAGS "-lncurses -ltinfo")
+#    find_package(Curses REQUIRED)
+#    include_directories(${CURSES_INCLUDE_DIR})
+#ENDIF()
+
 add_executable(minestepper src/main.cpp src/field.cpp src/common.cpp src/input.cpp)
+
+#IF (NOT WIN32)
+#    target_link_libraries(minestepper ${CURSES_LIBRARIES})
+#ENDIF()
 
 install(TARGETS minestepper RUNTIME DESTINATION bin)

@@ -100,3 +100,28 @@ int Common::structToInt(coordsStruct& coords, int& cols)
         return position = (cols) * (coords.row-1) + coords.col;
 }
 
+coordsStruct Common::convCoordsToCursorPosition(coordsStruct& coords, int const& offsetX, int const& offsetY, int const& cellWidth)
+{
+    coordsStruct cursorPosition;
+    cursorPosition.col = offsetX;
+    for (int i = 1; i < coords.col; i ++)
+        cursorPosition.col = cursorPosition.col + (cellWidth + 1);
+    
+    cursorPosition.row = offsetY;
+    for (int i = 1; i < coords.row; i ++)
+        cursorPosition.row = cursorPosition.row + 2;
+    return cursorPosition;
+}
+
+coordsStruct Common::convCursorPositionToCoords(coordsStruct& cursorPosition, int const& offsetX, int const& offsetY, int const& cellWidth)
+{
+    coordsStruct coords;
+    coords.col = 1;
+    for (int i = cursorPosition.col; i > offsetX; i = i - cellWidth + 1)
+        coords.col++;
+    coords.row = 1;
+    for (int i = cursorPosition.row; i > offsetY; i = i - (2))
+        coords.row++;
+    return coords;
+}
+

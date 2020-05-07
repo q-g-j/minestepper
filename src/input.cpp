@@ -1,15 +1,43 @@
 #include <iostream>
+#include <math.h>
 #include <string>
+#include <unistd.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-    #include <windows.h>
+    #include <conio.h>
     #include <stdio.h>
+    #include <windows.h>
+#else
+    #include <termios.h>
 #endif
 
 #include "common.hpp"
 #include "field.hpp"
 #include "common.hpp"
 #include "input.hpp"
+
+#if !defined(_WIN32) && !defined(WIN32) && !defined(_WIN64) && !defined(WIN64)
+    struct termios orig_termios;
+
+    void enableNonCanonicalMode()
+    {
+    tcgetattr(STDIN_FILENO, &orig_termios);
+    atexit(disableNonCanonicalMode);
+
+    struct termios raw = orig_termios;
+    raw.c_lflag &= ~(ECHO | ICANON);
+
+    tcsetattr(STDIN_FILENO, TCSAFLUSH, &raw);
+    }
+
+    void disableNonCanonicalMode()
+    {
+    tcsetattr(STDIN_FILENO, TCSAFLUSH, &orig_termios);
+    }
+
+#endif
 
 void Input::getEnterKey(std::string const& text)
 {
@@ -26,6 +54,16 @@ void Input::getEnterKey(std::string const& text)
             continue;
         }
     }
+}
+
+void Input::hideCursor()
+{
+    coutconv << "\e[?25l";
+}
+
+void Input::showCursor()
+{
+    coutconv << "\e[?25h";
 }
 
 void Input::deleteLastLine(size_t const& stringLength)
@@ -70,14 +108,14 @@ int Input::getDifficulty()
     std::string wrongInputText = "Wrong input, Press ENTER...";
 
     common.clearScreen();
-    std::cout << "Welcome to Minestepper - a Minesweeper clone!" << nl << nl << nl;
-    std::cout << "Choose the size of the field!" << nl;
-    std::cout << "(make sure, that your terminal window is large enough!)" << nl << nl;
-    std::cout << "1: small" << nl;
-    std::cout << "2: medium" << nl;
-    std::cout << "3: large" << nl;
-    std::cout << "4: custom" << nl << nl;
-    std::cout << "q: quit at any time" << nl << nl;
+    std::cout << "Welcome to Minestepper - A Minesweeper Clone!" << newline << newline << newline;
+    std::cout << "Choose the size of the field!" << newline;
+    std::cout << "(make sure, that your terminal window is large enough!)" << newline << newline;
+    std::cout << "1: small" << newline;
+    std::cout << "2: medium" << newline;
+    std::cout << "3: large" << newline;
+    std::cout << "4: custom" << newline << newline;
+    std::cout << "q: quit at any time" << newline << newline;
 
     while (true)
     {
@@ -126,7 +164,7 @@ coordsStruct Input::getDimensions()
     std::string wrongInputText = "Wrong input, Press ENTER...";
     
     common.clearScreen();
-    std::cout << "How large do you want the field to be (e.g. 15x10)?" << nl << nl;
+    std::cout << "How large do you want the field to be (e.g. 15x10)?" << newline << newline;
 
     while (true)
     {        
@@ -201,7 +239,7 @@ int Input::getMinesCount(int const& fieldSize)
     std::string wrongInputText = "Wrong input, Press ENTER...";
     
     common.clearScreen();
-    std::cout << "How many mines to place on the field?" << nl << nl;
+    std::cout << "How many mines to place on the field?" << newline << newline;
 
     while (true)
     {
@@ -238,136 +276,236 @@ int Input::getMinesCount(int const& fieldSize)
 }
 
 // the main function to ask the user for valid coordinates:
-userInputReturnStruct Input::getUserInput(Field &field)
+userInputReturnStruct Input::getUserInput(Field &field, int firstrun)
 {
     Common common;
-    std::string line = "";
-    int beforeComma = 0;
-    int afterComma = 0;
-    bool isValidInput = false;
-    coordsStruct coords;
+    char input;
+    static coordsStruct currentArrayPosition;
+    coordsStruct currentCursorPosition;
     userInputReturnStruct userInput;
     std::string inputText = "Input: ";
     std::string wrongInputText = "Wrong input, Press ENTER...";
+    
+    #if !defined(_WIN32) && !defined(WIN32) && !defined(_WIN64) && !defined(WIN64)
+        enableNonCanonicalMode();    
+    #endif
+    hideCursor();
 
-    field.gotoXY(1, field.getOffsetY() + field.getRows() * 2 + 4);
-    std::cout << "'h' or 'H': Help" << nl << nl;
-
-    while (true)
+    field.gotoXY(1, field.getOffsetY() + field.getRows() * 2 + 1);
+    std::cout << "'h' or 'H': Help" << newline << newline;
+    
+    if (firstrun == 1)
     {
-        std::cout << inputText;
-        field.gotoXY(8, field.getOffsetY() + field.getRows()*2 + 6);
-        getline(std::cin, line);
-        if (line == "")
-            isValidInput = false;
-        else if (line == "q" || line == "Q")
-            exit (0);
-        else if (line == "h" || line == "H")
+        if (field.getCols() % 2 == 0)
+            currentArrayPosition.col = (field.getCols()) / 2;
+        else
+            currentArrayPosition.col = int(field.getCols()/ 2) + 1;
+        if (field.getRows() % 2 == 0)
+            currentArrayPosition.row = (field.getRows()) / 2;
+        else
+            currentArrayPosition.row = int(field.getRows()/ 2) + 1;
+    }
+    
+    currentCursorPosition = common.convCoordsToCursorPosition(currentArrayPosition, field.getOffsetX(), field.getOffsetY(), field.getCellWidth());
+    
+    field.gotoXY(currentCursorPosition.col, currentCursorPosition.row);
+    
+    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+    common.setUnicode(true);
+    coutconv << symbolCursor << std::flush;
+    while(1)
+    {
+        int inputTmp = 0;
+        input = 0;
+        if ((inputTmp = _getch()) == 224)
+        {
+            input = _getch();
+            if (input == KEY_UP)
+            {
+                if (currentArrayPosition.row > 1)
+                {
+                    coutconv << L"\b";
+                    field.printCoords(currentArrayPosition);
+                    currentArrayPosition.row--;
+                    currentCursorPosition = common.convCoordsToCursorPosition(currentArrayPosition, field.getOffsetX(), field.getOffsetY(), field.getCellWidth());
+                    field.gotoXY(currentCursorPosition.col, currentCursorPosition.row);
+                    coutconv << symbolCursor << std::flush;
+                }
+            }
+            else if (input == KEY_DOWN)
+            {
+                if (currentArrayPosition.row < field.getRows())
+                {
+                    coutconv << L"\b";
+                    field.printCoords(currentArrayPosition);
+                    currentArrayPosition.row++;
+                    currentCursorPosition = common.convCoordsToCursorPosition(currentArrayPosition, field.getOffsetX(), field.getOffsetY(), field.getCellWidth());
+                    field.gotoXY(currentCursorPosition.col, currentCursorPosition.row);
+                    coutconv << symbolCursor << std::flush;
+                }
+            }
+            else if (input == KEY_LEFT)
+            {
+                if (currentArrayPosition.col > 1)
+                {
+                    coutconv << L"\b";
+                    field.printCoords(currentArrayPosition);
+                    currentArrayPosition.col--;
+                    currentCursorPosition = common.convCoordsToCursorPosition(currentArrayPosition, field.getOffsetX(), field.getOffsetY(), field.getCellWidth());
+                    field.gotoXY(currentCursorPosition.col, currentCursorPosition.row);
+                    coutconv << symbolCursor << std::flush;
+                }
+            }
+            else if (input == KEY_RIGHT)
+            {
+                if (currentArrayPosition.col < field.getCols())
+                {
+                    coutconv << L"\b";
+                    field.printCoords(currentArrayPosition);
+                    currentArrayPosition.col++;
+                    currentCursorPosition = common.convCoordsToCursorPosition(currentArrayPosition, field.getOffsetX(), field.getOffsetY(), field.getCellWidth());
+                    field.gotoXY(currentCursorPosition.col, currentCursorPosition.row);
+                    coutconv << symbolCursor << std::flush;
+                }
+            }
+        }
+        else if (inputTmp == 'q' || inputTmp == 'Q')
+            exit(0);
+        else if (inputTmp == 'h' || inputTmp == 'H')
         {
             common.clearScreen();
             field.printExplanation();
             getEnterKey("");
             field.printAll();
             field.gotoXY(1,3);
-            std::cout << field.getMinesLeft() << " Mines left...";
+            coutconv << field.getMinesLeft() << L" Mines left...";
             #if DEBUG == 1
-                std::cout << " DEBUG: Turn: " << turn;
+                coutconv << L" DEBUG: Turn: " << turn << L"      ";
             #endif
-            field.gotoXY(1, field.getOffsetY() + field.getRows()*2 + 4);
-            std::cout << "'h' or 'H': Help" << nl << nl;
+            field.gotoXY(1, field.getOffsetY() + field.getRows()*2 + 1);
+            coutconv << L"'h' or 'H': Help" << newline << newline;            
+            field.gotoXY(currentCursorPosition.col, currentCursorPosition.row);
+            coutconv << symbolCursor << std::flush;
             continue;
         }
-        else
+        else if (inputTmp == KEY_ENTER)
         {
-            if(line.find(",") != std::string::npos && line.find("f") == std::string::npos)
-            {
-                isValidInput = true;
-                try
-                {
-                    beforeComma = stoi(line.substr(0, line.find(",")));
-                }
-                catch (...)
-                {
-                    isValidInput = false;
-                }
-                try
-                {
-                    afterComma = stoi(line.substr(line.find(",") + 1));
-                }
-                catch (...)
-                {
-                    try
-                    {
-                        afterComma = stoi(line.substr(line.find(",")));
-                    }
-                    catch (...)
-                    {
-                        isValidInput = false;
-                    }
-                }
-                coords.col = beforeComma;
-                coords.row = afterComma;
-            }
-            else if (line.find(",") != std::string::npos && line.find("f") != std::string::npos)
-            {
-                isValidInput = true;
-                try
-                {
-                    beforeComma = stoi(line.substr(1, line.find(",")));
-                }
-                catch (...)
-                {
-                    isValidInput = false;
-                }
-                try
-                {
-                    afterComma = stoi(line.substr(line.find(",") + 1));
-                }
-                catch (...)
-                {
-                    try
-                    {
-                        afterComma = stoi(line.substr(line.find(",")));
-                    }
-                    catch (...)
-                    {
-                        isValidInput = false;
-                    }
-                }
-                coords.col = beforeComma;
-                coords.row = afterComma;
-                if (coords.col > field.getCols() || coords.row > field.getRows())
-                    isValidInput = false;
-                else
-                    if (field.isNumber(coords) != true)
-                        userInput.isFlag = true;
-                    else
-                        isValidInput = false;
-            }     
+            coutconv << L"\b" << std::flush;
+            if (field.getCoordsContent(currentArrayPosition) == symbolFlag)
+                continue;
+            else
+                break;
         }
-        if (coords.col > field.getCols() || coords.row > field.getRows())
-            isValidInput = false;
-        if (userInput.isFlag == true)
+        else if  (inputTmp == KEY_SPACE)
         {
-            if (field.isNumber(coords) || field.getCoordsContent(coords) == uncoveredSymbol)
-                isValidInput = false;
+            coutconv << L"\b" << std::flush;
+            userInput.isFlag = true;
+            break;
         }
         else
-        {
-            if (field.getCoordsContent(coords) == flagSymbol)
-                isValidInput = false;
-        }
-        if (isValidInput == true)
-        {
-            userInput.coords = coords;
-            deleteLastLine(inputText.length() + line.length());
-            return userInput;
-        }
-        else
-        {
-            getEnterKey(wrongInputText);
-            deleteLastLine(wrongInputText.length());
-            deleteLastLine(inputText.length() + line.length());
-        }
+            continue;
     }
+    common.setUnicode(false);
+
+    #else
+    coutconv << symbolCursor << std::flush;
+    while (read(STDIN_FILENO, &input, 1) == 1)
+    {
+        if (input == 'q' || input == 'Q')
+            exit(0);
+        else if (input == KEY_ENTER)
+        {
+            coutconv << "\b" << std::flush;
+            if (field.getCoordsContent(currentArrayPosition) == symbolFlag)
+                continue;
+            else
+                break;
+        }
+        else if (input == KEY_SPACE)
+        {
+            coutconv << "\b" << std::flush;
+            userInput.isFlag = true;
+            break;
+        }
+        else if (input == 'h' || input == 'H')
+        {
+            common.clearScreen();
+            field.printExplanation();
+            getEnterKey("");
+            field.printAll();
+            field.gotoXY(1,3);
+            coutconv << field.getMinesLeft() << " Mines left...";
+            #if DEBUG == 1
+                coutconv << " DEBUG: Turn: " << turn << "      ";
+            #endif
+            field.gotoXY(1, field.getOffsetY() + field.getRows()*2 + 1);
+            coutconv << "'h' or 'H': Help" << newline << newline;            
+            field.gotoXY(currentCursorPosition.col, currentCursorPosition.row);
+            coutconv << symbolCursor << std::flush;
+            continue;
+        }
+        else if (input == KEY_UP)
+        {
+            if (currentArrayPosition.row > 1)
+            {
+                coutconv << "\b";
+                field.printCoords(currentArrayPosition);
+                currentArrayPosition.row--;
+                currentCursorPosition = common.convCoordsToCursorPosition(currentArrayPosition, field.getOffsetX(), field.getOffsetY(), field.getCellWidth());
+                field.gotoXY(currentCursorPosition.col, currentCursorPosition.row);
+                coutconv << symbolCursor << std::flush;
+            }
+        }
+        else if (input == KEY_DOWN)
+        {
+            if (currentArrayPosition.row < field.getRows())
+            {
+                coutconv << "\b";
+                field.printCoords(currentArrayPosition);
+                currentArrayPosition.row++;
+                currentCursorPosition = common.convCoordsToCursorPosition(currentArrayPosition, field.getOffsetX(), field.getOffsetY(), field.getCellWidth());
+                field.gotoXY(currentCursorPosition.col, currentCursorPosition.row);
+                coutconv << symbolCursor << std::flush;
+            }
+        }
+        else if (input == KEY_LEFT)
+        {
+            if (currentArrayPosition.col > 1)
+            {
+                coutconv << "\b";
+                field.printCoords(currentArrayPosition);
+                currentArrayPosition.col--;
+                currentCursorPosition = common.convCoordsToCursorPosition(currentArrayPosition, field.getOffsetX(), field.getOffsetY(), field.getCellWidth());
+                field.gotoXY(currentCursorPosition.col, currentCursorPosition.row);
+                coutconv << symbolCursor << std::flush;
+            }
+        }
+        else if (input == KEY_RIGHT)
+        {
+            if (currentArrayPosition.col < field.getCols())
+            {
+                coutconv << "\b";
+                field.printCoords(currentArrayPosition);
+                currentArrayPosition.col++;
+                currentCursorPosition = common.convCoordsToCursorPosition(currentArrayPosition, field.getOffsetX(), field.getOffsetY(), field.getCellWidth());
+                field.gotoXY(currentCursorPosition.col, currentCursorPosition.row);
+                coutconv << symbolCursor << std::flush;
+            }
+        }
+        else
+            continue;
+    }
+    #endif
+    
+    userInput.coords.col = currentArrayPosition.col;
+    userInput.coords.row = currentArrayPosition.row;
+    
+    showCursor();
+    #if !defined(_WIN32) && !defined(WIN32) && !defined(_WIN64) && !defined(WIN64)
+        disableNonCanonicalMode();
+    #endif
+    
+    firstrun++;
+
+    return userInput;
 }

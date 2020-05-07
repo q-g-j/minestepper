@@ -11,8 +11,8 @@ int main()
     common.setRandomSeed();
     
     int rows = 0, cols = 0;
-    int fieldOffsetX = 2;
-    int fieldOffsetY = 5;
+    int fieldOffsetX = 6;
+    int fieldOffsetY = 6;
     int fieldCellWidth = 3;
 
     Input input;
@@ -63,18 +63,21 @@ int main()
         field.printAll();
         
         int turn = 1;
+        int firstrun = 1;
+
         while (true)
         {
             field.gotoXY(1, 4);
             input.deleteLastLine(20);
             field.gotoXY(1, 3);
-            std::cout << field.getMinesLeft() << " Mines left...";
+            std::cout << field.getMinesLeft() << " Mines left..." << std::flush;
             #if DEBUG == 1
-                std::cout << " DEBUG: Turn: " << turn;
+                std::cout << " DEBUG: Turn: " << turn <<  "     " << std::flush;
             #endif
             field.gotoXY(1, fieldOffsetY + field.getRows()*2 + 4);
 
-            userInput = input.getUserInput(field);
+            userInput = input.getUserInput(field, firstrun);            
+            firstrun = 0;
             placeUserInputReturn = field.placeUserInput(userInput, turn);
             if (placeUserInputReturn.hasLost)
                 break;
@@ -82,10 +85,9 @@ int main()
                 break;
             else
             {
-                if (placeUserInputReturn.isTurn == true)
+                if (placeUserInputReturn.isTurn)
                     turn++;
             }
-                
         }
     }    
     

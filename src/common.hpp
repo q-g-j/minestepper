@@ -2,53 +2,55 @@
 
 // Windows and Linux seem to handle unicode strings differently (use wide strings only for Windows):
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-    #define coutsym std::wcout
-    #define stringsym std::wstring
+    #define coutconv std::wcout
+    #define stringconv std::wstring
 #else
-    #define coutsym std::cout
-    #define stringsym std::string
+    #define coutconv std::cout
+    #define stringconv std::string
 #endif
 
 // define frame and cell symbols:
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-    const std::wstring cornerTopLeftSymbol = L"\u250C";
-    const std::wstring cornerTopRightSymbol = L"\u2510";
-    const std::wstring cornerBottomLeftSymbol = L"\u2514";
-    const std::wstring cornerBottomRightSymbol = L"\u2518";
-    const std::wstring horizontalLineSymbol = L"\u2500";
-    const std::wstring verticalLineSymbol = L"\u2502";
-    const std::wstring downTSymbol = L"\u252C";
-    const std::wstring upTSymbol = L"\u2534";
-    const std::wstring rightTSymbol = L"\u251C";
-    const std::wstring leftTSymbol = L"\u2524";
-    const std::wstring plusSymbol = L"\u253C";
+    const stringconv symbolCornerTopLeft = L"\u250C";
+    const stringconv symbolCornerTopRight = L"\u2510";
+    const stringconv symbolCornerBottomLeft = L"\u2514";
+    const stringconv symbolCornerBottomRight = L"\u2518";
+    const stringconv symbolHorizontalLine = L"\u2500";
+    const stringconv symbolVerticalLine = L"\u2502";
+    const stringconv symbolDownT = L"\u252C";
+    const stringconv symbolUpT = L"\u2534";
+    const stringconv symbolRightT = L"\u251C";
+    const stringconv symbolLeftT = L"\u2524";
+    const stringconv symbolPlus = L"\u253C";
     
-    const std::wstring flagSymbol = L"\u25ba";
-    const std::wstring bombSymbol = L"\u263c";
-    const std::wstring bombHitSymbol = L"#";
-    const std::wstring uncoveredSymbol = L" ";
-    const std::wstring coveredSymbol = L"\u2591";
+    const stringconv symbolFlag = L"\u25ba";
+    const stringconv symbolMine = L"\u263c";
+    const stringconv symbolMineHit = L"#";
+    const stringconv symbolUncovered = L" ";
+    const stringconv symbolCovered = L"\u2591";
+    const stringconv symbolCursor = L"\u2588";
 #else
-    const std::string cornerTopLeftSymbol = "\u250C";
-    const std::string cornerTopRightSymbol = "\u2510";
-    const std::string cornerBottomLeftSymbol = "\u2514";
-    const std::string cornerBottomRightSymbol = "\u2518";
-    const std::string horizontalLineSymbol = "\u2500";
-    const std::string verticalLineSymbol = "\u2502";
-    const std::string downTSymbol = "\u252C";
-    const std::string upTSymbol = "\u2534";
-    const std::string rightTSymbol = "\u251C";
-    const std::string leftTSymbol = "\u2524";
-    const std::string plusSymbol = "\u253C";
+    const stringconv symbolCornerTopLeft = "\u250C";
+    const stringconv symbolCornerTopRight = "\u2510";
+    const stringconv symbolCornerBottomLeft = "\u2514";
+    const stringconv symbolCornerBottomRight = "\u2518";
+    const stringconv symbolHorizontalLine = "\u2500";
+    const stringconv symbolVerticalLine = "\u2502";
+    const stringconv symbolDownT = "\u252C";
+    const stringconv symbolUpT = "\u2534";
+    const stringconv symbolRightT = "\u251C";
+    const stringconv symbolLeftT = "\u2524";
+    const stringconv symbolPlus = "\u253C";
     
-    const std::string flagSymbol = "\u25ba";
-    const std::string bombSymbol = "\u263c";
-    const std::string bombHitSymbol = "#";
-    const std::string uncoveredSymbol = " ";
-    const std::string coveredSymbol = "\u2591";
+    const stringconv symbolFlag = "\u25ba";
+    const stringconv symbolMine = "\u263c";
+    const stringconv symbolMineHit = "#";
+    const stringconv symbolUncovered = " ";
+    const stringconv symbolCovered = "\u2591";
+    const stringconv symbolCursor = "\u2588";
 #endif
 
-const char nl = '\n';
+const char newline = '\n';
     
 class Common
 {
@@ -74,8 +76,8 @@ public:
     };
     
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-    std::wstring intToString(int const&);
-    std::wstring stringConvert(std::string const&);
+    stringconv intToString(int const&);
+    stringconv stringConvert(std::string const&);
     #else
     std::string intToString(int const&);
     std::string stringConvert(std::wstring const&);
@@ -86,6 +88,8 @@ public:
     void clearScreen();
     coordsStruct intToStruct(int&, int&);
     int structToInt(coordsStruct&, int&);
+    coordsStruct convCursorPositionToCoords(coordsStruct&, int const&, int const&, int const&);
+    coordsStruct convCoordsToCursorPosition(coordsStruct&, int const&, int const&, int const&);
 };
 
 typedef struct Common::coordsStruct coordsStruct;
