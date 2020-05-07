@@ -69,7 +69,7 @@ int main()
         {
             field.gotoXY(1, 4);
             input.deleteLastLine(20);
-            field.gotoXY(1, 3);
+            field.gotoXY(field.getOffsetX() - 1, 3);
             std::cout << field.getMinesLeft() << " Mines left..." << std::flush;
             #if DEBUG == 1
                 std::cout << " DEBUG: Turn: " << turn <<  "     " << std::flush;

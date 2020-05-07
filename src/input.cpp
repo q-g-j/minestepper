@@ -66,7 +66,10 @@ void Input::showCursor(bool showFlag)
         cursorInfo.bVisible = showFlag; // set the cursor visibility
         SetConsoleCursorInfo(out, &cursorInfo);
     #else
-        coutconv << "\e[?25h";
+        if (showFlag == true)
+            coutconv << "\e[?25h";
+        else
+            coutconv << "\e[?25l";
     #endif
 }
 
@@ -295,7 +298,7 @@ userInputReturnStruct Input::getUserInput(Field &field, int firstrun)
     #endif
     showCursor(false);
 
-    field.gotoXY(1, field.getOffsetY() + field.getRows() * 2 + 1);
+    field.gotoXY(field.getOffsetX() - 1, field.getOffsetY() + field.getRows() * 2 + 1);
     std::cout << "'h' or 'H': Help" << newline << newline;
     
     if (firstrun == 1)
@@ -381,12 +384,12 @@ userInputReturnStruct Input::getUserInput(Field &field, int firstrun)
             field.printExplanation();
             getEnterKey("");
             field.printAll();
-            field.gotoXY(1,3);
+            field.gotoXY(field.getOffsetX - 1, 3);
             coutconv << field.getMinesLeft() << L" Mines left...";
             #if DEBUG == 1
                 coutconv << L" DEBUG: Turn: " << turn << L"      ";
             #endif
-            field.gotoXY(1, field.getOffsetY() + field.getRows()*2 + 1);
+            field.gotoXY(field.getOffsetX() - 1, field.getOffsetY() + field.getRows()*2 + 1);
             coutconv << L"'h' or 'H': Help" << newline << newline;            
             field.gotoXY(currentCursorPosition.col, currentCursorPosition.row);
             coutconv << symbolCursor << std::flush;
@@ -443,12 +446,12 @@ userInputReturnStruct Input::getUserInput(Field &field, int firstrun)
             field.printExplanation();
             getEnterKey("");
             field.printAll();
-            field.gotoXY(1,3);
+            field.gotoXY(field.getOffsetX() - 1, 3);
             coutconv << field.getMinesLeft() << " Mines left...";
             #if DEBUG == 1
                 coutconv << " DEBUG: Turn: " << turn << "      ";
             #endif
-            field.gotoXY(1, field.getOffsetY() + field.getRows()*2 + 1);
+            field.gotoXY(field.getOffsetX() - 1, field.getOffsetY() + field.getRows()*2 + 1);
             coutconv << "'h' or 'H': Help" << newline << newline;            
             field.gotoXY(currentCursorPosition.col, currentCursorPosition.row);
             coutconv << symbolCursor << std::flush;
