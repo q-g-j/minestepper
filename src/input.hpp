@@ -29,8 +29,7 @@ public:
     int getDifficulty();
     coordsStruct getDimensions();
     int getMinesCount(int const&);
-    void hideCursor();
-    void showCursor();
+    void showCursor(bool);
     void getEnterKey(std::string const&);
     void deleteLastLine(size_t const&);
     userInputReturnStruct getUserInput(Field &field, int);

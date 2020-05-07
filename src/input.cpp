@@ -1,9 +1,8 @@
 #include <iostream>
 #include <math.h>
-#include <string>
-#include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string>
 
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
     #include <conio.h>
@@ -11,6 +10,7 @@
     #include <windows.h>
 #else
     #include <termios.h>
+#include <unistd.h>
 #endif
 
 #include "common.hpp"
@@ -55,15 +55,19 @@ void Input::getEnterKey(std::string const& text)
         }
     }
 }
-
-void Input::hideCursor()
+void Input::showCursor(bool showFlag)
 {
-    coutconv << "\e[?25l";
-}
+    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+        HANDLE out = GetStdHandle(STD_OUTPUT_HANDLE);
 
-void Input::showCursor()
-{
-    coutconv << "\e[?25h";
+        CONSOLE_CURSOR_INFO     cursorInfo;
+
+        GetConsoleCursorInfo(out, &cursorInfo);
+        cursorInfo.bVisible = showFlag; // set the cursor visibility
+        SetConsoleCursorInfo(out, &cursorInfo);
+    #else
+        coutconv << "\e[?25h";
+    #endif
 }
 
 void Input::deleteLastLine(size_t const& stringLength)
@@ -289,7 +293,7 @@ userInputReturnStruct Input::getUserInput(Field &field, int firstrun)
     #if !defined(_WIN32) && !defined(WIN32) && !defined(_WIN64) && !defined(WIN64)
         enableNonCanonicalMode();    
     #endif
-    hideCursor();
+    showCursor(false);
 
     field.gotoXY(1, field.getOffsetY() + field.getRows() * 2 + 1);
     std::cout << "'h' or 'H': Help" << newline << newline;
@@ -500,7 +504,7 @@ userInputReturnStruct Input::getUserInput(Field &field, int firstrun)
     userInput.coords.col = currentArrayPosition.col;
     userInput.coords.row = currentArrayPosition.row;
     
-    showCursor();
+    showCursor(true);
     #if !defined(_WIN32) && !defined(WIN32) && !defined(_WIN64) && !defined(WIN64)
         disableNonCanonicalMode();
     #endif
