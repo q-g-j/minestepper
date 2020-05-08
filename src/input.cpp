@@ -144,7 +144,10 @@ int Input::getDifficulty()
         if (line == "")
             isValidInput = false;
         if (line == "q" || line == "Q")
-            exit (0);
+        {
+            common.clearScreen();
+            exit(0);
+        }
         else
         {
             try
@@ -193,7 +196,10 @@ CoordsStruct Input::getDimensions()
         if (line == "")
             isValidInput = false;
         if (line == "q" || line == "Q")
-            exit (0);
+        {
+            common.clearScreen();
+            exit(0);
+        }
         else
         {
             if(line.find("x") != std::string::npos)
@@ -268,7 +274,10 @@ int Input::getMinesCount(int const& fieldSize)
         if (line == "")
             isValidInput = false;
         if (line == "q" || line == "Q")
-            exit (0);
+        {
+            common.clearScreen();
+            exit(0);
+        }
         else
         {
             try
@@ -373,7 +382,10 @@ UserInputReturnStruct Input::getUserInput(Field &field, int firstrun)
             }
         }
         else if (inputTmp == 'q' || inputTmp == 'Q')
+        {
+            common.clearScreen();
             exit(0);
+        }
         else if (inputTmp == 'h' || inputTmp == 'H')
         {
             print.printHelp(field, currentArrayPosition);
@@ -390,7 +402,7 @@ UserInputReturnStruct Input::getUserInput(Field &field, int firstrun)
         else if  (inputTmp == KEY_SPACE)
         {
             coutconv << L"\b" << std::flush;
-            if (field.isNumber(currentArrayPosition))
+            if (field.isNumber(currentArrayPosition) || field.getCoordsContent(currentArrayPosition) == L" ")
                 continue;
             else;
             userInput.isFlag = true;
@@ -406,7 +418,10 @@ UserInputReturnStruct Input::getUserInput(Field &field, int firstrun)
     while (read(STDIN_FILENO, &inputKey, 1) == 1)
     {
         if (inputKey == 'q' || inputKey == 'Q')
+        {
+            common.clearScreen();
             exit(0);
+        }
         else if (inputKey == 'h' || inputKey == 'H')
         {
             print.printHelp(field, currentArrayPosition);
@@ -423,7 +438,7 @@ UserInputReturnStruct Input::getUserInput(Field &field, int firstrun)
         else if (inputKey == KEY_SPACE)
         {
             std::cout << "\b" << std::flush;
-            if (field.isNumber(currentArrayPosition))
+            if (field.isNumber(currentArrayPosition) || field.getCoordsContent(currentArrayPosition) == " ")
                 continue;
             else;
             userInput.isFlag = true;
