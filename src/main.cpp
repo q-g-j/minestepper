@@ -4,63 +4,69 @@
 #include "debug.hpp"
 #include "field.hpp"
 #include "input.hpp"
+#include "print.hpp"
 
 int main()
 {
     Common common;
-    common.setRandomSeed();
+    Print print;
     
-    int rows = 0, cols = 0;
+    common.setRandomSeed();
     int fieldOffsetX = 6;
     int fieldOffsetY = 6;
     int fieldCellWidth = 3;
+    int rows = 0, cols = 0;
+    int difficulty = 0;
+    int minesCount = 0;
+    std::string difficultyString;
 
     Input input;
 
     while (true)
     {
-        int difficulty = 0;
-        std::string difficultyString = "";
-        int minesCount = 0;
-        coordsStruct dimensions;
-        userInputReturnStruct userInput;
-        placeUserInputReturnStruct placeUserInputReturn;
+        CoordsStruct dimensions;
+        DifficultyStruct D;
         
+        UserInputReturnStruct userInput;
+        PlaceUserInputReturnStruct placeUserInputReturn;
         difficulty = input.getDifficulty();
         
         if (difficulty == 1) 
         {
-            difficultyString = "Small";
-            cols = 9;
-            rows = 9;
-            minesCount = 10;
+            difficultyString = D.Small.title;
+            cols = D.Small.cols;
+            rows = D.Small.rows;
+            minesCount = D.Small.mines;
         }        
         else if (difficulty == 2) 
         {
-            difficultyString = "Medium";
-            cols = 16;
-            rows = 16;
-            minesCount = 40;
+            difficultyString = D.Medium.title;
+            cols = D.Medium.cols;
+            rows = D.Medium.rows;
+            minesCount = D.Medium.rows;
         }
         else if (difficulty == 3) 
         {
-            difficultyString = "Large";
-            cols = 28;
-            rows = 16;
-            minesCount = 99;
+            difficultyString = D.Large.title;
+            cols = D.Large.cols;
+            rows = D.Large.rows;
+            minesCount = D.Large.mines;
         }
         else
         {
-            difficultyString = "Custom";
+            difficultyString = D.Custom.title;
             dimensions = input.getDimensions();
             rows = dimensions.row;
             cols = dimensions.col;
             minesCount = input.getMinesCount(cols*rows);
         }
         
-        Field field(cols, rows, fieldOffsetX, fieldOffsetY, fieldCellWidth, minesCount, difficultyString);
-            
-        field.printAll();
+        Field field(cols, rows, fieldOffsetX, fieldOffsetY, fieldCellWidth, minesCount, difficultyString);            
+        
+        common.clearScreen();
+        print.printTitle(difficultyString, cols, rows, minesCount);
+        field.drawField();
+        std::cout << newline;
         
         int turn = 1;
         int firstrun = 1;
@@ -70,9 +76,9 @@ int main()
             field.gotoXY(1, 4);
             input.deleteLastLine(20);
             field.gotoXY(field.getOffsetX() - 1, 3);
-            std::cout << field.getMinesLeft() << " Mines left..." << std::flush;
+            std::cout << field.getMinesLeft() << print.minesLeftText << std::flush;
             #if DEBUG == 1
-                std::cout << " DEBUG: Turn: " << turn <<  "     " << std::flush;
+                std::cout << print.debugTurnCountText << turn <<  "     " << std::flush;
             #endif
             field.gotoXY(1, fieldOffsetY + field.getRows()*2 + 4);
 

@@ -15,7 +15,7 @@ endif()
 #    include_directories(${CURSES_INCLUDE_DIR})
 #ENDIF()
 
-add_executable(minestepper src/main.cpp src/field.cpp src/common.cpp src/input.cpp)
+add_executable(minestepper src/main.cpp src/field.cpp src/common.cpp src/input.cpp src/print.cpp)
 
 #IF (NOT WIN32)
 #    target_link_libraries(minestepper ${CURSES_LIBRARIES})

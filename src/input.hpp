@@ -8,6 +8,13 @@
 class Input
 {
 private:
+    
+    enum Direction
+    {
+        UP, DOWN, LEFT, RIGHT
+    };
+    void showCursor(bool);
+    void moveCursor(Field &field, CoordsStruct&, Direction &direction);
 
 public:
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
@@ -27,12 +34,12 @@ public:
     #endif
     
     int getDifficulty();
-    coordsStruct getDimensions();
+    CoordsStruct getDimensions();
     int getMinesCount(int const&);
-    void showCursor(bool);
+    
     void getEnterKey(std::string const&);
     void deleteLastLine(size_t const&);
-    userInputReturnStruct getUserInput(Field &field, int);
+    UserInputReturnStruct getUserInput(Field &field, int);
 };
 
 
