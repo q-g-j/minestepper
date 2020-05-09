@@ -45,7 +45,6 @@ public:
     std::string stringConvert(std::wstring const&);
     #endif
     
-    void setColors();
     void setUnicode(bool);
     void setRandomSeed();
     void clearScreen();

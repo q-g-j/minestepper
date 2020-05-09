@@ -8,7 +8,7 @@ private:
     // color codes:
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         enum Code {        
-            DEFAULT          = 7,
+            DEFAULT             = 7,
             FG_WHITE            = 2,
             FG_RED              = 4,
             FG_GREEN            = 2,
