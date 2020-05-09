@@ -252,7 +252,7 @@ void Field::gotoXY(int const& x, int const& y)
         coordsNew.Y = y;
         SetConsoleCursorPosition(hConsole, coordsNew);
     #else
-        printf("%c[%d;%df",0x1B,y,x);
+        printf("%c[%d;%df",0x1B,y + 1,x + 1);
     #endif
 }
 
