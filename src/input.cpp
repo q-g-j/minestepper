@@ -90,7 +90,7 @@ void Input::moveCursor(Field &field, coordsStruct& CurrentArrayPosition, Directi
         CurrentArrayPosition.col++;
     currentCursorPosition = common.convCoordsToCursorPosition(CurrentArrayPosition, field.getOffsetX(), field.getOffsetY(), field.getCellWidth());
     field.gotoXY(currentCursorPosition.col, currentCursorPosition.row);
-    coutconv << symbolCursor << std::flush;
+    coutconv << field.symbolCursor << std::flush;
 }
 
 void Input::deleteLastLine(size_t const& stringLength)
@@ -340,7 +340,7 @@ userInputReturnStruct Input::getUserInput(Field &field, int firstrun)
     
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
     common.setUnicode(true);
-    coutconv << symbolCursor << std::flush;
+    coutconv << field.symbolCursor << std::flush;
     while(1)
     {
         int inputTmp = 0;
@@ -394,7 +394,7 @@ userInputReturnStruct Input::getUserInput(Field &field, int firstrun)
         else if (inputTmp == KEY_ENTER)
         {
             coutconv << L"\b" << std::flush;
-            if (field.getCoordsContent(CurrentArrayPosition) == symbolFlag)
+            if (field.getCoordsContent(CurrentArrayPosition) == field.symbolFlag)
                 continue;
             else
                 break;
@@ -414,7 +414,7 @@ userInputReturnStruct Input::getUserInput(Field &field, int firstrun)
     common.setUnicode(false);
 
     #else
-    std::cout << symbolCursor << std::flush;
+    std::cout << field.symbolCursor << std::flush;
     while (read(STDIN_FILENO, &inputKey, 1) == 1)
     {
         if (inputKey == 'q' || inputKey == 'Q')
@@ -430,7 +430,7 @@ userInputReturnStruct Input::getUserInput(Field &field, int firstrun)
         else if (inputKey == KEY_ENTER)
         {
             std::cout << "\b" << std::flush;
-            if (field.getCoordsContent(CurrentArrayPosition) == symbolFlag)
+            if (field.getCoordsContent(CurrentArrayPosition) == field.symbolFlag)
                 continue;
             else
                 break;

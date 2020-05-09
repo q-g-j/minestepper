@@ -5,14 +5,13 @@
     void disableNonCanonicalMode();
 #endif
 
-enum class Direction : int
-{
-    UP, DOWN, LEFT, RIGHT
-};
-
 class Input
 {
 private:
+    enum class Direction : int
+    {
+        UP, DOWN, LEFT, RIGHT
+    };
 
     void showCursor(bool);
     void moveCursor(Field &field, coordsStruct&, Direction &direction);

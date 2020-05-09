@@ -19,12 +19,12 @@ std::string Print::setDifficultyTexts(int const& mode)
 
 void Print::printTitle(std::string const& difficultyString, int const& cols, int const& rows, int const& minesCount)
 {
-    std::cout << "Minestepper - " << difficultyString << " (" << cols << "x" << rows << ") - " << minesCount << " mines" << newline << newline << newline;
+    std::cout << "Minesweeper - " << difficultyString << " (" << cols << "x" << rows << ") - " << minesCount << " mines" << newline << newline << newline;
 }
 
 void Print::printMenu()
 {
-    std::cout << "Welcome to Minestepper - A Minesweeper Clone!" << newline << newline << newline;
+    std::cout << "Welcome to Minesweeper!" << newline << newline << newline;
     std::cout << "Choose the size of the field!" << newline;
     std::cout << "(make sure, that your terminal window is large enough!)" << newline << newline;
     std::cout << "1: small" << newline;
@@ -90,12 +90,12 @@ void Print::printHelp(Field &field, coordsStruct &CurrentArrayPosition)
     currentCursorPosition = common.convCoordsToCursorPosition(CurrentArrayPosition, field.getOffsetX(), field.getOffsetY(), field.getCellWidth());
     field.gotoXY(currentCursorPosition.col, currentCursorPosition.row);
     common.setUnicode(true);
-    coutconv << symbolCursor << std::flush;
+    coutconv << field.symbolCursor << std::flush;
 }
 
 void Print::printExplanation()
 {
-    coutconv << "Minestepper - A Minesweeper Clone" << newline << newline;
+    coutconv << "Minesweeper" << newline << newline;
     coutconv << "In this game your task is to find all hidden mines by uncovering all safe positions." << newline << newline;
     coutconv << "You can guess and sometimes combine where the next mine is." << newline;
     coutconv << "The number on each uncovered square shows how many neighbours contain a mine." << newline << newline;

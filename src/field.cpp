@@ -197,7 +197,10 @@ void Field::drawField()
             for (int padding = 0; padding < (this->fieldCellWidth-1)/2; padding++)
                 std::wcout << L" ";
             
-            coutconv << this->fieldArray[col][row]; // <----------------------------------------------
+            coordsStruct Coords;
+            Coords.col = col;
+            Coords.row = row;
+            printCoords(Coords);
             
             for (int padding = 0; padding < (this->fieldCellWidth-1)/2; padding++)
                 std::wcout << L" ";
@@ -258,22 +261,68 @@ void Field::gotoXY(int const& x, int const& y)
 
 void Field::printCoords(coordsStruct& coords)
 {
+    Common common;
+    
+    std::string content;
     coordsStruct coordsTemp;
-    coordsTemp.col = getOffsetX();
-    for (int i = 1; i < coords.col; i ++)
-        coordsTemp.col = coordsTemp.col + (getCellWidth() + 1);
-    
-    coordsTemp.row = getOffsetY();
-    for (int i = 1; i < coords.row; i ++)
-        coordsTemp.row = coordsTemp.row + 2;
-    
+    coordsTemp = common.convCoordsToCursorPosition(coords, this->fieldOffsetX, this->fieldOffsetY, this->fieldCellWidth);
     gotoXY(coordsTemp.col, coordsTemp.row);
     
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+        HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+        if (isNumber(coords))
+        {
+            if      (getCoordsContent(coords) == L"1")
+                SetConsoleTextAttribute(hConsole, fg_bright_blue);
+            else if (getCoordsContent(coords) == L"2")
+                SetConsoleTextAttribute(hConsole, fg_green);
+            else if (getCoordsContent(coords) == L"3")
+                SetConsoleTextAttribute(hConsole, fg_red);
+            else if (getCoordsContent(coords) == L"4")
+                SetConsoleTextAttribute(hConsole, fg_magenta);
+            else if (getCoordsContent(coords) == L"5")
+                SetConsoleTextAttribute(hConsole, fg_brown);
+            else if (getCoordsContent(coords) == L"6")
+                SetConsoleTextAttribute(hConsole, fg_yellow);
+            else if (getCoordsContent(coords) == L"7")
+                SetConsoleTextAttribute(hConsole, fg_bright_red);
+            else if (getCoordsContent(coords) == L"8")
+                SetConsoleTextAttribute(hConsole, fg_red);
+            else
+                SetConsoleTextAttribute(hConsole, fg_reset);
+        }
+        else if (getCoordsContent(coords) == symbolMineHit || getCoordsContent(coords) == symbolMine)
+            SetConsoleTextAttribute(hConsole, fg_red);
         std::wstring coordsString = this->fieldArray[coords.col][coords.row];
-        WriteConsoleW(GetStdHandle(STD_OUTPUT_HANDLE), coordsString.c_str(), static_cast<DWORD>(coordsString.size()), nullptr, nullptr);
+        WriteConsoleW(hConsole, coordsString.c_str(), static_cast<DWORD>(coordsString.size()), nullptr, nullptr);
+        SetConsoleTextAttribute(hConsole, fg_reset);
     #else
-        coutconv << (this->fieldArray[coords.col][coords.row]) << std::flush;
+        if (isNumber(coords))
+        {
+            if      (getCoordsContent(coords) == "1")
+                content = fg_blue + (this->fieldArray[coords.col][coords.row]);
+            else if (getCoordsContent(coords) == "2")
+                content = fg_green + (this->fieldArray[coords.col][coords.row]);
+            else if (getCoordsContent(coords) == "3")
+                content = fg_red + (this->fieldArray[coords.col][coords.row]);
+            else if (getCoordsContent(coords) == "4")
+                content = fg_magenta + (this->fieldArray[coords.col][coords.row]);
+            else if (getCoordsContent(coords) == "5")
+                content = fg_bright_yellow + (this->fieldArray[coords.col][coords.row]);
+            else if (getCoordsContent(coords) == "6")
+                content = fg_yellow + (this->fieldArray[coords.col][coords.row]);
+            else if (getCoordsContent(coords) == "7")
+                content = fg_bright_red + (this->fieldArray[coords.col][coords.row]);
+            else if (getCoordsContent(coords) == "8")
+                content = fg_red + (this->fieldArray[coords.col][coords.row]);
+            else
+                content = fg_reset + (this->fieldArray[coords.col][coords.row]);
+        }
+        else
+            content = fg_reset + (this->fieldArray[coords.col][coords.row]);
+            
+        coutconv << content << std::flush;
+        coutconv << fg_reset << std::flush;
     #endif
 }
 
@@ -440,7 +489,7 @@ placeUserInputReturnStruct Field::placeUserInput(userInputReturnStruct& UserInpu
         // check if the player hit a mine which ends the game:
         if (this->minesArray[UserInput.Coords.col][UserInput.Coords.row] == symbolMine)
         {
-            this->minesArray[UserInput.Coords.col][UserInput.Coords.row] = symbolMineHit;    
+            this->minesArray[UserInput.Coords.col][UserInput.Coords.row] = symbolMineHit;
     
             common.clearScreen();
             print.printTitle(this->difficultyString, this->cols, this->rows, this->minesCount);
@@ -459,7 +508,6 @@ placeUserInputReturnStruct Field::placeUserInput(userInputReturnStruct& UserInpu
                     this->fieldArray[i][j] = this->minesArray[i][j];
                 }
             }
-            std::cout << newline;
             drawField();
     
             print.printHasLost();

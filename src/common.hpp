@@ -1,16 +1,19 @@
 #pragma once
+#include <string>
 
 // Windows and Linux seem to handle unicode strings differently (use wide strings only for Windows):
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
     #define coutconv std::wcout
     #define stringconv std::wstring
+    #define tostringconv std::to_wstring
 #else
     #define coutconv std::cout
     #define stringconv std::string
+    #define tostringconv std::to_string
 #endif
 
 const char newline = '\n';
-    
+
 class Common
 {
 private:
@@ -42,6 +45,7 @@ public:
     std::string stringConvert(std::wstring const&);
     #endif
     
+    void setColors();
     void setUnicode(bool);
     void setRandomSeed();
     void clearScreen();
