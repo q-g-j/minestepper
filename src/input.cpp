@@ -79,7 +79,7 @@ void Input::moveCursor(Field &field, coordsStruct& CurrentArrayPosition, Directi
     Common common;
     coordsStruct currentCursorPosition;
     std::wcout << L"\b";
-    field.printCoords(CurrentArrayPosition);
+    field.printCoords(CurrentArrayPosition, false);
     if (direction == Direction::UP)
         CurrentArrayPosition.row--;
     else if (direction == Direction::DOWN)
@@ -314,8 +314,10 @@ userInputReturnStruct Input::getUserInput(Field &field, int firstrun)
     static coordsStruct CurrentArrayPosition;
     coordsStruct CurrentCursorPosition;
     userInputReturnStruct UserInput;
-    
-    #if !defined(_WIN32) && !defined(WIN32) && !defined(_WIN64) && !defined(WIN64)
+
+    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+        HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    #else
         enableNonCanonicalMode();    
     #endif
     showCursor(false);
@@ -340,7 +342,12 @@ userInputReturnStruct Input::getUserInput(Field &field, int firstrun)
     
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
     common.setUnicode(true);
-    coutconv << field.symbolCursor << std::flush;
+
+    if (field.getCoordsContent(CurrentArrayPosition) == field.symbolFlag || field.isNumber(CurrentArrayPosition))
+        field.printCoords(CurrentArrayPosition, true);
+    else
+        coutconv << field.symbolCursor << std::flush;
+
     while(1)
     {
         int inputTmp = 0;
@@ -395,7 +402,9 @@ userInputReturnStruct Input::getUserInput(Field &field, int firstrun)
         {
             coutconv << L"\b" << std::flush;
             if (field.getCoordsContent(CurrentArrayPosition) == field.symbolFlag)
+            {
                 continue;
+            }
             else
                 break;
         }
@@ -404,8 +413,8 @@ userInputReturnStruct Input::getUserInput(Field &field, int firstrun)
             coutconv << L"\b" << std::flush;
             if (field.isNumber(CurrentArrayPosition) || field.getCoordsContent(CurrentArrayPosition) == L" ")
                 continue;
-            else;
-            UserInput.isFlag = true;
+            else
+                UserInput.isFlag = true;
             break;
         }
         else
@@ -414,7 +423,10 @@ userInputReturnStruct Input::getUserInput(Field &field, int firstrun)
     common.setUnicode(false);
 
     #else
-    std::cout << field.symbolCursor << std::flush;
+    if (field.getCoordsContent(CurrentArrayPosition) == field.symbolFlag || field.isNumber(CurrentArrayPosition))
+        field.printCoords(CurrentArrayPosition, true);
+    else
+        std::cout << field.symbolCursor << std::flush;
     while (read(STDIN_FILENO, &inputKey, 1) == 1)
     {
         if (inputKey == 'q' || inputKey == 'Q')

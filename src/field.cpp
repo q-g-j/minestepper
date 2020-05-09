@@ -200,7 +200,7 @@ void Field::drawField()
             coordsStruct Coords;
             Coords.col = col;
             Coords.row = row;
-            printCoords(Coords);
+            printCoords(Coords, false);
             
             for (int padding = 0; padding < (this->fieldCellWidth-1)/2; padding++)
                 std::wcout << L" ";
@@ -259,7 +259,7 @@ void Field::gotoXY(int const& x, int const& y)
     #endif
 }
 
-void Field::printCoords(coordsStruct& coords)
+void Field::printCoords(coordsStruct& coords, bool isCursor)
 {
     Common common;
     
@@ -272,57 +272,121 @@ void Field::printCoords(coordsStruct& coords)
         HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
         if (isNumber(coords))
         {
-            if      (getCoordsContent(coords) == L"1")
-                SetConsoleTextAttribute(hConsole, fg_bright_blue);
-            else if (getCoordsContent(coords) == L"2")
-                SetConsoleTextAttribute(hConsole, fg_green);
-            else if (getCoordsContent(coords) == L"3")
-                SetConsoleTextAttribute(hConsole, fg_red);
-            else if (getCoordsContent(coords) == L"4")
-                SetConsoleTextAttribute(hConsole, fg_magenta);
-            else if (getCoordsContent(coords) == L"5")
-                SetConsoleTextAttribute(hConsole, fg_brown);
-            else if (getCoordsContent(coords) == L"6")
-                SetConsoleTextAttribute(hConsole, fg_yellow);
-            else if (getCoordsContent(coords) == L"7")
-                SetConsoleTextAttribute(hConsole, fg_bright_red);
-            else if (getCoordsContent(coords) == L"8")
-                SetConsoleTextAttribute(hConsole, fg_red);
+            if (isCursor == false)
+            {
+                if (getCoordsContent(coords) == L"1")
+                    SetConsoleTextAttribute(hConsole, fg_light_blue);
+                else if (getCoordsContent(coords) == L"2")
+                    SetConsoleTextAttribute(hConsole, fg_light_green);
+                else if (getCoordsContent(coords) == L"3")
+                    SetConsoleTextAttribute(hConsole, fg_light_red);
+                else if (getCoordsContent(coords) == L"4")
+                    SetConsoleTextAttribute(hConsole, fg_magenta);
+                else if (getCoordsContent(coords) == L"5")
+                    SetConsoleTextAttribute(hConsole, fg_yellow);
+                else if (getCoordsContent(coords) == L"6")
+                    SetConsoleTextAttribute(hConsole, fg_green);
+                else if (getCoordsContent(coords) == L"7")
+                    SetConsoleTextAttribute(hConsole, fg_cyan);
+                else if (getCoordsContent(coords) == L"8")
+                    SetConsoleTextAttribute(hConsole, fg_white);
+                else
+                    SetConsoleTextAttribute(hConsole, color_default);
+            }
             else
-                SetConsoleTextAttribute(hConsole, fg_reset);
+            {
+                if (getCoordsContent(coords) == L"1")
+                    SetConsoleTextAttribute(hConsole, bg_light_blue);
+                else if (getCoordsContent(coords) == L"2")
+                    SetConsoleTextAttribute(hConsole, bg_light_green);
+                else if (getCoordsContent(coords) == L"3")
+                    SetConsoleTextAttribute(hConsole, bg_light_red);
+                else if (getCoordsContent(coords) == L"4")
+                    SetConsoleTextAttribute(hConsole, bg_magenta);
+                else if (getCoordsContent(coords) == L"5")
+                    SetConsoleTextAttribute(hConsole, bg_yellow);
+                else if (getCoordsContent(coords) == L"6")
+                    SetConsoleTextAttribute(hConsole, bg_green);
+                else if (getCoordsContent(coords) == L"7")
+                    SetConsoleTextAttribute(hConsole, bg_cyan);
+                else if (getCoordsContent(coords) == L"8")
+                    SetConsoleTextAttribute(hConsole, bg_black);
+                else
+                    SetConsoleTextAttribute(hConsole, color_default);
+            }
+        }
+        else if (getCoordsContent(coords) == symbolFlag)
+        {
+            if (isCursor)
+                SetConsoleTextAttribute(hConsole, bg_red);
+            else
+                SetConsoleTextAttribute(hConsole, fg_red);
         }
         else if (getCoordsContent(coords) == symbolMineHit || getCoordsContent(coords) == symbolMine)
             SetConsoleTextAttribute(hConsole, fg_red);
         std::wstring coordsString = this->fieldArray[coords.col][coords.row];
         WriteConsoleW(hConsole, coordsString.c_str(), static_cast<DWORD>(coordsString.size()), nullptr, nullptr);
-        SetConsoleTextAttribute(hConsole, fg_reset);
+        SetConsoleTextAttribute(hConsole, color_default);
     #else
         if (isNumber(coords))
         {
-            if      (getCoordsContent(coords) == "1")
-                content = fg_blue + (this->fieldArray[coords.col][coords.row]);
-            else if (getCoordsContent(coords) == "2")
-                content = fg_green + (this->fieldArray[coords.col][coords.row]);
-            else if (getCoordsContent(coords) == "3")
-                content = fg_red + (this->fieldArray[coords.col][coords.row]);
-            else if (getCoordsContent(coords) == "4")
-                content = fg_magenta + (this->fieldArray[coords.col][coords.row]);
-            else if (getCoordsContent(coords) == "5")
-                content = fg_bright_yellow + (this->fieldArray[coords.col][coords.row]);
-            else if (getCoordsContent(coords) == "6")
-                content = fg_yellow + (this->fieldArray[coords.col][coords.row]);
-            else if (getCoordsContent(coords) == "7")
-                content = fg_bright_red + (this->fieldArray[coords.col][coords.row]);
-            else if (getCoordsContent(coords) == "8")
-                content = fg_red + (this->fieldArray[coords.col][coords.row]);
+            if (isCursor == false)
+            {
+                if (getCoordsContent(coords) == "1")
+                    content = fg_light_blue + (this->fieldArray[coords.col][coords.row]);
+                else if (getCoordsContent(coords) == "2")
+                    content = fg_light_green + (this->fieldArray[coords.col][coords.row]);
+                else if (getCoordsContent(coords) == "3")
+                    content = fg_light_red + (this->fieldArray[coords.col][coords.row]);
+                else if (getCoordsContent(coords) == "4")
+                    content = fg_magenta + (this->fieldArray[coords.col][coords.row]);
+                else if (getCoordsContent(coords) == "5")
+                    content = fg_yellow + (this->fieldArray[coords.col][coords.row]);
+                else if (getCoordsContent(coords) == "6")
+                    content = fg_green + (this->fieldArray[coords.col][coords.row]);
+                else if (getCoordsContent(coords) == "7")
+                    content = fg_light_red + (this->fieldArray[coords.col][coords.row]);
+                else if (getCoordsContent(coords) == "8")
+                    content = fg_white + (this->fieldArray[coords.col][coords.row]);
+                else
+                    content = color_default + (this->fieldArray[coords.col][coords.row]);
+            }
             else
-                content = fg_reset + (this->fieldArray[coords.col][coords.row]);
+            {
+                if (getCoordsContent(coords) == "1")
+                    content = bg_light_blue + (this->fieldArray[coords.col][coords.row]);
+                else if (getCoordsContent(coords) == "2")
+                    content = bg_light_green + (this->fieldArray[coords.col][coords.row]);
+                else if (getCoordsContent(coords) == "3")
+                    content = bg_light_red + (this->fieldArray[coords.col][coords.row]);
+                else if (getCoordsContent(coords) == "4")
+                    content = bg_magenta + (this->fieldArray[coords.col][coords.row]);
+                else if (getCoordsContent(coords) == "5")
+                    content = bg_yellow + (this->fieldArray[coords.col][coords.row]);
+                else if (getCoordsContent(coords) == "6")
+                    content = bg_green + (this->fieldArray[coords.col][coords.row]);
+                else if (getCoordsContent(coords) == "7")
+                    content = bg_light_red + (this->fieldArray[coords.col][coords.row]);
+                else if (getCoordsContent(coords) == "8")
+                    content = bg_black + (this->fieldArray[coords.col][coords.row]);
+                else
+                    content = color_default + (this->fieldArray[coords.col][coords.row]);
+            }
         }
+        else if (getCoordsContent(coords) == symbolFlag)
+        {
+            if (isCursor)
+                content = bg_red + (this->fieldArray[coords.col][coords.row]);
+            else
+                content = fg_red + (this->fieldArray[coords.col][coords.row]);
+        }
+        else if (getCoordsContent(coords) == symbolMineHit || getCoordsContent(coords) == symbolMine)
+            content = fg_red + (this->fieldArray[coords.col][coords.row]);
         else
-            content = fg_reset + (this->fieldArray[coords.col][coords.row]);
+            content = color_default + (this->fieldArray[coords.col][coords.row]);
             
         coutconv << content << std::flush;
-        coutconv << fg_reset << std::flush;
+        coutconv << color_default << std::flush;
     #endif
 }
 
@@ -464,7 +528,7 @@ placeUserInputReturnStruct Field::placeUserInput(userInputReturnStruct& UserInpu
         if (isFlagSet(UserInput.Coords) == true)
         {
             this->fieldArray[UserInput.Coords.col][UserInput.Coords.row] = symbolCovered;
-            printCoords(UserInput.Coords);
+            printCoords(UserInput.Coords, false);
             this->flagsCount--;
             this->minesLeft++;
             this->countCovered++;
@@ -472,7 +536,7 @@ placeUserInputReturnStruct Field::placeUserInput(userInputReturnStruct& UserInpu
         else
         {
             this->fieldArray[UserInput.Coords.col][UserInput.Coords.row] = symbolFlag;
-            printCoords(UserInput.Coords);
+            printCoords(UserInput.Coords, false);
             this->flagsCount++;
             this->minesLeft--;
             this->countCovered--;
@@ -595,7 +659,7 @@ placeUserInputReturnStruct Field::placeUserInput(userInputReturnStruct& UserInpu
                                     this->fieldArray[coordsTemp.col][coordsTemp.row] = symbolUncovered;
                                 else
                                     this->fieldArray[coordsTemp.col][coordsTemp.row] = common.intToString(static_cast<int>(autoUncoverNeighboursCoveredMinesVector.size()));
-                                printCoords(coordsTemp);
+                                printCoords(coordsTemp, false);
                                 this->countCovered--;
                             }
                         }
@@ -612,7 +676,7 @@ placeUserInputReturnStruct Field::placeUserInput(userInputReturnStruct& UserInpu
                 this->fieldArray[UserInput.Coords.col][UserInput.Coords.row] = symbolUncovered;
             else
                 this->fieldArray[UserInput.Coords.col][UserInput.Coords.row] = common.intToString(static_cast<int>(neighboursMinesVector.size()));
-            printCoords(UserInput.Coords);
+            printCoords(UserInput.Coords, false);
             this->countCovered--;
             returnStruct.isTurn = true;
         }
@@ -654,7 +718,7 @@ placeUserInputReturnStruct Field::placeUserInput(userInputReturnStruct& UserInpu
                                         this->fieldArray[i][j] = symbolUncovered;
                                     else
                                         this->fieldArray[i][j] = common.intToString(static_cast<int>(neighboursMinesVectorNew.size()));
-                                    printCoords(coordsTemp);
+                                    printCoords(coordsTemp, false);
                                     this->countCovered--;
                                 }
                             }
