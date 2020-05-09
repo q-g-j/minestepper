@@ -30,7 +30,6 @@ Field::Field(int const& cols_, int const& rows_, int const& fieldOffsetX_, int c
     this->difficultyString = difficultyString_;
     this->fieldArray = createArray();
     this->minesArray = createArray();
-    this->cursorArray = createArray();
     clearFieldArray();
     clearMinesArray();
 }
@@ -45,11 +44,7 @@ Field::~Field()
     
     for (int i=0; i <= cols; i++)
         delete[] this->minesArray[i];
-    delete[] this->minesArray;   
-    
-    for (int i=0; i <= cols; i++)
-        delete[] this->cursorArray[i];
-    delete[] this->cursorArray;
+    delete[] this->minesArray;
 }
 
 // some getters:
