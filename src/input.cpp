@@ -91,6 +91,8 @@ void Input::moveCursor(Field &field, coordsStruct& CurrentArrayPosition, Directi
     currentCursorPosition = common.convCoordsToCursorPosition(CurrentArrayPosition, field.getOffsetX(), field.getOffsetY(), field.getCellWidth());
     field.gotoXY(currentCursorPosition.col, currentCursorPosition.row);
     coutconv << field.symbolCursor << std::flush;
+    if (field.getCoordsContent(CurrentArrayPosition) == field.symbolFlag || field.isNumber(CurrentArrayPosition))
+        field.printCoords(CurrentArrayPosition, true);
 }
 
 void Input::deleteLastLine(size_t const& stringLength)
