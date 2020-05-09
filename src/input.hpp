@@ -5,16 +5,17 @@
     void disableNonCanonicalMode();
 #endif
 
+enum class Direction : int
+{
+    UP, DOWN, LEFT, RIGHT
+};
+
 class Input
 {
 private:
-    
-    enum Direction
-    {
-        UP, DOWN, LEFT, RIGHT
-    };
+
     void showCursor(bool);
-    void moveCursor(Field &field, CoordsStruct&, Direction &direction);
+    void moveCursor(Field &field, coordsStruct&, Direction &direction);
 
 public:
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
@@ -34,12 +35,12 @@ public:
     #endif
     
     int getDifficulty();
-    CoordsStruct getDimensions();
+    coordsStruct getDimensions();
     int getMinesCount(int const&);
     
     void getEnterKey(std::string const&);
     void deleteLastLine(size_t const&);
-    UserInputReturnStruct getUserInput(Field &field, int);
+    userInputReturnStruct getUserInput(Field &field, int);
 };
 
 

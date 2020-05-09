@@ -64,13 +64,37 @@ private:
     // private methods
     void clearFieldArray();
     void clearMinesArray();
-    void fillMinesArray(CoordsStruct&);
-    std::vector<Common::CoordsStruct> findNeighbours(stringconv **tempArray, Common::CoordsStruct const&, stringconv const&);
+    void fillMinesArray(coordsStruct&);
+    std::vector<Common::coordsStruct> findNeighbours(stringconv **tempArray, Common::coordsStruct const&, stringconv const&);
 public:
     Field(int const& cols_, int const& rows_, int const& fieldOffsetX_, int const& fieldOffsetY_, int const& fieldCellWidth_, int const& minesCount_, std::string const& difficultyString_);
-    
-    ~Field();    
-    
+    ~Field();
+
+    struct SmallStruct
+    {
+        int columns;
+        int rows;
+        int mines;
+    };
+    struct MediumStruct
+    {
+        int columns;
+        int rows;
+        int mines;
+    };
+    struct LargeStruct
+    {
+        int columns;
+        int rows;
+        int mines;
+    };
+    struct DifficultyStruct
+    {
+        SmallStruct Small;
+        MediumStruct Medium;
+        LargeStruct Large;
+    };
+
     // getter methods:
     int getCols();
     int getRows();
@@ -80,13 +104,15 @@ public:
     int getMinesLeft();
     int getCellWidth();
     std::string getDifficultyString();
-    stringconv getCoordsContent(Common::CoordsStruct const&);
+    stringconv getCoordsContent(Common::coordsStruct const&);
 
     // public methods:
     void drawField();
     void gotoXY(int const&, int const&);
-    void printCoords(CoordsStruct&);
-    bool isFlagSet(Common::CoordsStruct&);
-    bool isNumber(Common::CoordsStruct&);
-    Common::PlaceUserInputReturnStruct placeUserInput(Common::UserInputReturnStruct&, int&);
+    void printCoords(coordsStruct&);
+    bool isFlagSet(Common::coordsStruct&);
+    bool isNumber(Common::coordsStruct&);
+    Common::placeUserInputReturnStruct placeUserInput(Common::userInputReturnStruct&, int&);
 };
+
+typedef struct Field::DifficultyStruct DifficultyStruct;

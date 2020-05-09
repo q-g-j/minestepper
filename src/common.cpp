@@ -68,9 +68,9 @@ void Common::clearScreen()
 }
 
 // convert coords in type integer to coords in type struct (e.g. position = 4 will return coords.col = 4, coords.row = 1):
-CoordsStruct Common::intToStruct(int& position, int& cols)
+coordsStruct Common::intToStruct(int& position, int& cols)
 {
-    CoordsStruct coords;
+    coordsStruct coords;
     
     if (position <= cols)
     {
@@ -91,7 +91,7 @@ CoordsStruct Common::intToStruct(int& position, int& cols)
 }
 
 // the above function the other way around
-int Common::structToInt(CoordsStruct& coords, int& cols)
+int Common::structToInt(coordsStruct& coords, int& cols)
 {
     int position = 0;
     if (coords.row == 1)
@@ -100,9 +100,9 @@ int Common::structToInt(CoordsStruct& coords, int& cols)
         return position = (cols) * (coords.row-1) + coords.col;
 }
 
-CoordsStruct Common::convCoordsToCursorPosition(CoordsStruct& coords, int const& offsetX, int const& offsetY, int const& cellWidth)
+coordsStruct Common::convCoordsToCursorPosition(coordsStruct& coords, int const& offsetX, int const& offsetY, int const& cellWidth)
 {
-    CoordsStruct cursorPosition;
+    coordsStruct cursorPosition;
     cursorPosition.col = offsetX;
     for (int i = 1; i < coords.col; i ++)
         cursorPosition.col = cursorPosition.col + (cellWidth + 1);
@@ -113,14 +113,14 @@ CoordsStruct Common::convCoordsToCursorPosition(CoordsStruct& coords, int const&
     return cursorPosition;
 }
 
-CoordsStruct Common::convCursorPositionToCoords(CoordsStruct& cursorPosition, int const& offsetX, int const& offsetY, int const& cellWidth)
+coordsStruct Common::convCursorPositionToCoords(coordsStruct& cursorPosition, int const& offsetX, int const& offsetY, int const& cellWidth)
 {
-    CoordsStruct coords;
+    coordsStruct coords;
     coords.col = 1;
     for (int i = cursorPosition.col; i > offsetX; i = i - cellWidth + 1)
         coords.col++;
     coords.row = 1;
-    for (int i = cursorPosition.row; i > offsetY; i = i - (2))
+    for (int i = cursorPosition.row; i > offsetY; i = i - 2)
         coords.row++;
     return coords;
 }

@@ -7,58 +7,72 @@
 #include "print.hpp"
 
 int main()
-{
+{   
     Common common;
+    Input input;
     Print print;
+    DifficultyStruct Size;
+
+    /* these values can be changed: */
+    Size.Small.columns = 9;
+    Size.Small.rows = 9;
+    Size.Small.mines = 10;
+
+    Size.Medium.columns = 16;
+    Size.Medium.rows = 16;
+    Size.Medium.mines = 40;
+
+    Size.Large.columns = 22;
+    Size.Large.rows = 16;
+    Size.Large.mines = 99;
+
+    // set X/Y position of the field
+    int fieldOffsetX = 6;
+    int fieldOffsetY = 5;
+    /* ----------------------------*/
     
     common.setRandomSeed();
-    int fieldOffsetX = 6;
-    int fieldOffsetY = 6;
     int fieldCellWidth = 3;
     int rows = 0, cols = 0;
     int difficulty = 0;
     int minesCount = 0;
+    coordsStruct Dimensions;
     std::string difficultyString;
 
-    Input input;
-
     while (true)
-    {
-        CoordsStruct dimensions;
-        DifficultyStruct D;
-        
-        UserInputReturnStruct userInput;
-        PlaceUserInputReturnStruct placeUserInputReturn;
+    {        
+        userInputReturnStruct UserInput;
+        placeUserInputReturnStruct PlaceUserInputReturn;
         difficulty = input.getDifficulty();
         
         if (difficulty == 1) 
         {
-            difficultyString = D.Small.title;
-            cols = D.Small.cols;
-            rows = D.Small.rows;
-            minesCount = D.Small.mines;
+            difficultyString = print.setDifficultyTexts(1);
+            cols = Size.Small.columns;
+            rows = Size.Small.rows;
+            minesCount = Size.Small.mines;
         }        
         else if (difficulty == 2) 
         {
-            difficultyString = D.Medium.title;
-            cols = D.Medium.cols;
-            rows = D.Medium.rows;
-            minesCount = D.Medium.rows;
+            difficultyString = print.setDifficultyTexts(2);
+            cols = Size.Medium.columns;
+            rows = Size.Medium.rows;
+            minesCount = Size.Medium.mines;
         }
         else if (difficulty == 3) 
         {
-            difficultyString = D.Large.title;
-            cols = D.Large.cols;
-            rows = D.Large.rows;
-            minesCount = D.Large.mines;
+            difficultyString = print.setDifficultyTexts(3);
+            cols = Size.Large.columns;
+            rows = Size.Large.rows;
+            minesCount = Size.Large.mines;
         }
         else
         {
-            difficultyString = D.Custom.title;
-            dimensions = input.getDimensions();
-            rows = dimensions.row;
-            cols = dimensions.col;
-            minesCount = input.getMinesCount(cols*rows);
+            difficultyString = print.setDifficultyTexts(4);
+            Dimensions = input.getDimensions();
+            rows = Dimensions.row;
+            cols = Dimensions.col;
+            minesCount = input.getMinesCount(cols * rows);
         }
         
         Field field(cols, rows, fieldOffsetX, fieldOffsetY, fieldCellWidth, minesCount, difficultyString);            
@@ -66,7 +80,6 @@ int main()
         common.clearScreen();
         print.printTitle(difficultyString, cols, rows, minesCount);
         field.drawField();
-        std::cout << newline;
         
         int turn = 1;
         int firstrun = 1;
@@ -75,23 +88,23 @@ int main()
         {
             field.gotoXY(1, 4);
             input.deleteLastLine(20);
-            field.gotoXY(field.getOffsetX() - 1, 3);
+            field.gotoXY(field.getOffsetX() - 1, field.getOffsetY() - 2);
             std::cout << field.getMinesLeft() << print.minesLeftText << std::flush;
             #if DEBUG == 1
                 std::cout << print.debugTurnCountText << turn <<  "     " << std::flush;
             #endif
             field.gotoXY(1, fieldOffsetY + field.getRows()*2 + 4);
 
-            userInput = input.getUserInput(field, firstrun);            
+            UserInput = input.getUserInput(field, firstrun);            
             firstrun = 0;
-            placeUserInputReturn = field.placeUserInput(userInput, turn);
-            if (placeUserInputReturn.hasLost)
+            PlaceUserInputReturn = field.placeUserInput(UserInput, turn);
+            if (PlaceUserInputReturn.hasLost)
                 break;
-            else if (placeUserInputReturn.hasWon)
+            else if (PlaceUserInputReturn.hasWon)
                 break;
             else
             {
-                if (placeUserInputReturn.isTurn)
+                if (PlaceUserInputReturn.isTurn)
                     turn++;
             }
         }

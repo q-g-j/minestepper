@@ -9,6 +9,14 @@
 #include "input.hpp"
 #include "print.hpp"
 
+std::string Print::setDifficultyTexts(int const& mode)
+{
+    if (mode == 1) return "small";
+    else if (mode == 2) return "medium";
+    else if (mode == 3) return "large";
+    else return "custom";
+}
+
 void Print::printTitle(std::string const& difficultyString, int const& cols, int const& rows, int const& minesCount)
 {
     std::cout << "Minestepper - " << difficultyString << " (" << cols << "x" << rows << ") - " << minesCount << " mines" << newline << newline << newline;
@@ -57,13 +65,13 @@ void Print::printHasLost()
     input.getEnterKey(goBackString);
 }
 
-void Print::printHelp(Field &field, CoordsStruct &currentArrayPosition)
+void Print::printHelp(Field &field, coordsStruct &CurrentArrayPosition)
 {
     Common common;
     Input input;
     
     common.setUnicode(false);
-    CoordsStruct currentCursorPosition;
+    coordsStruct currentCursorPosition;
     common.clearScreen();
     printExplanation();
     input.getEnterKey("");
@@ -71,15 +79,15 @@ void Print::printHelp(Field &field, CoordsStruct &currentArrayPosition)
     printTitle(field.getDifficultyString(), field.getCols(), field.getRows(), field.getMinesCount());
     field.drawField();
     std::cout << newline;
-    field.gotoXY(field.getOffsetX() - 1, 3);
+    field.gotoXY(field.getOffsetX() - 1, field.getOffsetY() - 2);
     coutconv << field.getMinesLeft();
     std::cout << minesLeftText;
     #if DEBUG == 1
         std::cout << debugTurnCountText << turn << "      ";
     #endif
-    field.gotoXY(field.getOffsetX() - 1, field.getOffsetY() + field.getRows()*2 + 1);
+    field.gotoXY(field.getOffsetX() - 1, field.getOffsetY() + field.getRows()*2);
     std::cout << getHelpText << newline << newline;
-    currentCursorPosition = common.convCoordsToCursorPosition(currentArrayPosition, field.getOffsetX(), field.getOffsetY(), field.getCellWidth());
+    currentCursorPosition = common.convCoordsToCursorPosition(CurrentArrayPosition, field.getOffsetX(), field.getOffsetY(), field.getCellWidth());
     field.gotoXY(currentCursorPosition.col, currentCursorPosition.row);
     common.setUnicode(true);
     coutconv << symbolCursor << std::flush;
