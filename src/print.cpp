@@ -90,7 +90,7 @@ void Print::printHelp(Field &field, coordsStruct &CurrentArrayPosition)
     currentCursorPosition = common.convCoordsToCursorPosition(CurrentArrayPosition, field.getOffsetX(), field.getOffsetY(), field.getCellWidth());
     field.gotoXY(currentCursorPosition.col, currentCursorPosition.row);
     common.setUnicode(true);
-    coutconv << field.symbolCursor << std::flush;
+    field.printCoords(CurrentArrayPosition, true);
 }
 
 void Print::printExplanation()
