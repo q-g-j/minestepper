@@ -94,6 +94,7 @@ stringconv Field::getCoordsContent(Common::coordsStruct const& coords)
 }
 
 // use pointers to pointers to be able to create dynamic 2D-arrays
+// (could use vectors, but will leave this for now):
 stringconv** Field::createArray()
 {
     const int colsNum = this->cols + 1;
@@ -254,6 +255,7 @@ void Field::gotoXY(int const& x, int const& y)
     #endif
 }
 
+// the main method to print the content of a particular cell:
 void Field::printCoords(coordsStruct& coords, bool isCursor)
 {
     Common common;
@@ -406,14 +408,15 @@ bool Field::isNumber(coordsStruct& coords)
     return false;
 }
 
-std::vector<coordsStruct> Field::findNeighbours(stringconv **tempArray, coordsStruct const& coords, stringconv const& mark)
+// find neighbors of a cell at "coords" that hold a given content (passed by variable symbol)
+std::vector<coordsStruct> Field::findNeighbours(stringconv **tempArray, coordsStruct const& coords, stringconv const& symbol)
 {
     std::vector<coordsStruct> neighboursVector;
     
     // up left:
     if (coords.col-1 > 0 && coords.row-1 > 0)
     {
-        if (tempArray[coords.col-1][coords.row-1] == mark)
+        if (tempArray[coords.col-1][coords.row-1] == symbol)
         {
             coordsStruct coordsTemp;
             coordsTemp.col = coords.col-1;
@@ -425,7 +428,7 @@ std::vector<coordsStruct> Field::findNeighbours(stringconv **tempArray, coordsSt
     // up middle:
     if (coords.row-1 > 0)
     {
-        if (tempArray[coords.col][coords.row-1] == mark)
+        if (tempArray[coords.col][coords.row-1] == symbol)
         {
             coordsStruct coordsTemp;
             coordsTemp.col = coords.col;
@@ -437,7 +440,7 @@ std::vector<coordsStruct> Field::findNeighbours(stringconv **tempArray, coordsSt
     // up right:
     if (coords.col+1 <= this->cols && coords.row-1 > 0)
     {
-        if (tempArray[coords.col+1][coords.row-1] == mark)
+        if (tempArray[coords.col+1][coords.row-1] == symbol)
         {
             coordsStruct coordsTemp;
             coordsTemp.col = coords.col+1;
@@ -449,7 +452,7 @@ std::vector<coordsStruct> Field::findNeighbours(stringconv **tempArray, coordsSt
     // middle left:
     if (coords.col-1 > 0)
     {
-        if (tempArray[coords.col-1][coords.row] == mark)
+        if (tempArray[coords.col-1][coords.row] == symbol)
         {
             coordsStruct coordsTemp;
             coordsTemp.col = coords.col-1;
@@ -461,7 +464,7 @@ std::vector<coordsStruct> Field::findNeighbours(stringconv **tempArray, coordsSt
     // middle right:
     if (coords.col+1 <= this->cols)
     {
-        if (tempArray[coords.col+1][coords.row] == mark)
+        if (tempArray[coords.col+1][coords.row] == symbol)
         {
             coordsStruct coordsTemp;
             coordsTemp.col = coords.col+1;
@@ -473,7 +476,7 @@ std::vector<coordsStruct> Field::findNeighbours(stringconv **tempArray, coordsSt
     // down left:
     if (coords.col-1 > 0 && coords.row+1 <= this->rows)
     {
-        if (tempArray[coords.col-1][coords.row+1] == mark)
+        if (tempArray[coords.col-1][coords.row+1] == symbol)
         {
             coordsStruct coordsTemp;
             coordsTemp.col = coords.col-1;
@@ -485,7 +488,7 @@ std::vector<coordsStruct> Field::findNeighbours(stringconv **tempArray, coordsSt
     // down middle:
     if (coords.row+1 <= this->rows)
     {
-        if (tempArray[coords.col][coords.row+1] == mark)
+        if (tempArray[coords.col][coords.row+1] == symbol)
         {
             coordsStruct coordsTemp;
             coordsTemp.col = coords.col;
@@ -497,7 +500,7 @@ std::vector<coordsStruct> Field::findNeighbours(stringconv **tempArray, coordsSt
     // down right:
     if (coords.col+1 <= this->cols && coords.row+1 <= this->rows)
     {
-        if (tempArray[coords.col+1][coords.row+1] == mark)
+        if (tempArray[coords.col+1][coords.row+1] == symbol)
         {
             coordsStruct coordsTemp;
             coordsTemp.col = coords.col+1;
@@ -754,8 +757,6 @@ placeUserInputReturnStruct Field::placeUserInput(userInputReturnStruct& UserInpu
                 if (this->minesArray[i][j] == symbolMine)
                     this->fieldArray[i][j] = symbolMine;
         }
-        
-        std::cout << newline;
         
         drawField();
         print.printHasWon();

@@ -2,7 +2,7 @@
 
 #include "common.hpp"
 #include "field.hpp"
-
+    
 class Print
 {
 private:
@@ -16,8 +16,13 @@ public:
     const std::string debugTurnCountText = " DEBUG: Turn: ";
 
     // public methods:
-    std::string setDifficultyTexts(int const&);
+    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+        std::string setTextColor(int const&);
+    #else
+        std::string setTextColor(std::string const&);
+    #endif
     void printTitle(std::string const&, int const&, int const&, int const&);
+    std::string setDifficultyTexts(int const&);
     void printMenu();
     void printCustomGetDimensions();
     void printCustomGetMinesCount();

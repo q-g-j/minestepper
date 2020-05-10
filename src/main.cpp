@@ -89,7 +89,9 @@ int main()
             field.gotoXY(1, 4);
             input.deleteLastLine(20);
             field.gotoXY(field.getOffsetX() - 1, field.getOffsetY() - 2);
+            std::cout << print.setTextColor(fg_light_red);
             std::cout << field.getMinesLeft() << print.minesLeftText << std::flush;
+            std::cout << print.setTextColor(color_default);
             #if DEBUG == 1
                 std::cout << print.debugTurnCountText << turn <<  "     " << std::flush;
             #endif

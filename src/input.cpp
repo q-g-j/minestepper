@@ -19,33 +19,37 @@
 #include "input.hpp"
 #include "print.hpp"
 
+// Linux: need to enable "non canonical mode" to make arrow keys and SPACE work (no need to press ENTER):
 #if !defined(_WIN32) && !defined(WIN32) && !defined(_WIN64) && !defined(WIN64)
     struct termios orig_termios;
 
     void enableNonCanonicalMode()
     {
-    tcgetattr(STDIN_FILENO, &orig_termios);
-    atexit(disableNonCanonicalMode);
+        tcgetattr(STDIN_FILENO, &orig_termios);
+        atexit(disableNonCanonicalMode);
 
-    struct termios raw = orig_termios;
-    raw.c_lflag &= ~(ECHO | ICANON);
+        struct termios raw = orig_termios;
+        raw.c_lflag &= ~(ECHO | ICANON);
 
-    tcsetattr(STDIN_FILENO, TCSAFLUSH, &raw);
+        tcsetattr(STDIN_FILENO, TCSAFLUSH, &raw);
     }
 
     void disableNonCanonicalMode()
     {
-    tcsetattr(STDIN_FILENO, TCSAFLUSH, &orig_termios);
+        tcsetattr(STDIN_FILENO, TCSAFLUSH, &orig_termios);
     }
 
 #endif
 
 void Input::getEnterKey(std::string const& text)
 {
+    Print print;
     std::string line;
     while (true)
     {
+        std::cout << print.setTextColor(fg_white);
         std::cout << text;
+        std::cout << print.setTextColor(color_default);
         getline(std::cin, line);
         if (line == "")
             break;
@@ -56,7 +60,9 @@ void Input::getEnterKey(std::string const& text)
         }
     }
 }
-void Input::showCursor(bool showFlag)
+
+// disable the input cursor during game play:
+void Input::showCursor(bool show)
 {
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         HANDLE out = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -64,16 +70,17 @@ void Input::showCursor(bool showFlag)
         CONSOLE_CURSOR_INFO     cursorInfo;
 
         GetConsoleCursorInfo(out, &cursorInfo);
-        cursorInfo.bVisible = showFlag; // set the cursor visibility
+        cursorInfo.bVisible = show; // set the cursor visibility
         SetConsoleCursorInfo(out, &cursorInfo);
     #else
-        if (showFlag == true)
+        if (show == true)
             coutconv << "\e[?25h";
         else
             coutconv << "\e[?25l";
     #endif
 }
 
+// move the players cursor in 4 directions with the arrow keys:
 void Input::moveCursor(Field &field, coordsStruct& CurrentArrayPosition, Direction &direction)
 {
     Common common;
@@ -95,6 +102,7 @@ void Input::moveCursor(Field &field, coordsStruct& CurrentArrayPosition, Directi
         field.printCoords(CurrentArrayPosition, true);
 }
 
+// erase particular lines instead of clearing the whole screen:
 void Input::deleteLastLine(size_t const& stringLength)
 {
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
@@ -141,7 +149,9 @@ int Input::getDifficulty()
 
     while (true)
     {
+        std::cout << print.setTextColor(fg_white);
         std::cout << print.inputText;
+        std::cout << print.setTextColor(color_default);
         getline(std::cin, line);
         if (line == "")
             isValidInput = false;
@@ -192,8 +202,10 @@ coordsStruct Input::getDimensions()
     print.printCustomGetDimensions();
 
     while (true)
-    {        
+    {
+        std::cout << print.setTextColor(fg_white);
         std::cout << print.inputText;
+        std::cout << print.setTextColor(color_default);
         getline(std::cin, line);
         if (line == "")
             isValidInput = false;
@@ -271,7 +283,9 @@ int Input::getMinesCount(int const& fieldSize)
 
     while (true)
     {
+        std::cout << print.setTextColor(fg_white);
         std::cout << print.inputText;
+        std::cout << print.setTextColor(color_default);
         getline(std::cin, line);
         if (line == "")
             isValidInput = false;
@@ -325,7 +339,9 @@ userInputReturnStruct Input::getUserInput(Field &field, int firstrun)
     showCursor(false);
 
     field.gotoXY(field.getOffsetX() - 1, field.getOffsetY() + field.getRows() * 2);
+    std::cout << print.setTextColor(fg_white);
     std::cout << print.getHelpText << newline << newline;
+    std::cout << print.setTextColor(color_default);
     
     if (firstrun == 1)
     {

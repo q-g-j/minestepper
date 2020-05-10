@@ -16,6 +16,7 @@
 using convert_t = std::codecvt_utf8<wchar_t>;
 std::wstring_convert<convert_t, wchar_t> strconverter;
 
+// enable unicode mode in Windows to be able to print the symbols:
 void Common::setUnicode(bool sw)
 {
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
@@ -26,6 +27,7 @@ void Common::setUnicode(bool sw)
     #endif
 }
 
+// for Windows: convert a string to wide string and vice versa:
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
 std::wstring Common::stringConvert(std::string const& str)
 {
@@ -38,6 +40,7 @@ std::string Common::stringConvert(std::wstring const& wstr)
 }
 #endif
 
+// convert an integer to string or wide string:
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
 std::wstring Common::intToString(int const& num)
 {
@@ -50,6 +53,7 @@ std::string Common::intToString(int const& num)
 }
 #endif
 
+// needed for random_shuffle() (place the mines):
 void Common::setRandomSeed()
 {
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
@@ -59,6 +63,7 @@ void Common::setRandomSeed()
     #endif
 }
 
+// only used on start, game begin and exit, to avoid screen blinking / slow refresh during the game:
 void Common::clearScreen()
 {
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
@@ -101,6 +106,7 @@ int Common::structToInt(coordsStruct& coords, int& cols)
         return position = (cols) * (coords.row-1) + coords.col;
 }
 
+// can't use raw coordinates when placing the players cursor, due to the drawn lines and cell width:
 coordsStruct Common::convCoordsToCursorPosition(coordsStruct& coords, int const& offsetX, int const& offsetY, int const& cellWidth)
 {
     coordsStruct cursorPosition;
@@ -113,16 +119,3 @@ coordsStruct Common::convCoordsToCursorPosition(coordsStruct& coords, int const&
         cursorPosition.row = cursorPosition.row + 2;
     return cursorPosition;
 }
-
-coordsStruct Common::convCursorPositionToCoords(coordsStruct& cursorPosition, int const& offsetX, int const& offsetY, int const& cellWidth)
-{
-    coordsStruct coords;
-    coords.col = 1;
-    for (int i = cursorPosition.col; i > offsetX; i = i - cellWidth + 1)
-        coords.col++;
-    coords.row = 1;
-    for (int i = cursorPosition.row; i > offsetY; i = i - 2)
-        coords.row++;
-    return coords;
-}
-
