@@ -195,6 +195,11 @@ int Input::getDifficulty()
         char inputKey = ' ';
         while (read(STDIN_FILENO, &inputKey, 1) == 1)
         {
+            if (inputKey == 'q' || inputKey == 'Q')
+            {
+                common.clearScreen();
+                exit (0);
+            }
             if (inputKey == '1')
             {
                 difficulty = 1;
