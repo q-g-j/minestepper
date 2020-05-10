@@ -2,7 +2,7 @@
 
 A small console based clone of Minesweeper to teach myself C++.
 
-![alt text](https://github.com/q-g-j/minesweeper/blob/master/screenshot.jpg?raw=true)
+![](https://github.com/q-g-j/minesweeper/blob/master/images/screenshot.jpg?raw=true)
 
 ***Features:***
 - cursor navigation through the arrow keys
