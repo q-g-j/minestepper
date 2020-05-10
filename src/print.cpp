@@ -4,11 +4,11 @@
     #include <windows.h>
 #endif
 
-#include "colors.hpp"
-#include "common.hpp"
-#include "field.hpp"
-#include "input.hpp"
-#include "print.hpp"
+#include "../include/colors.hpp"
+#include "../include/common.hpp"
+#include "../include/field.hpp"
+#include "../include/input.hpp"
+#include "../include/print.hpp"
 
 std::string Print::setDifficultyTexts(int const& mode)
 {

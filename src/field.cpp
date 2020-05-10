@@ -7,12 +7,12 @@
     #include <windows.h>
 #endif
 
-#include "colors.hpp"
-#include "common.hpp"
-#include "debug.hpp"
-#include "field.hpp"
-#include "input.hpp"
-#include "print.hpp"
+#include "../include/colors.hpp"
+#include "../include/common.hpp"
+#include "../include/debug.hpp"
+#include "../include/field.hpp"
+#include "../include/input.hpp"
+#include "../include/print.hpp"
 
 // constructor
 Field::Field(int const& cols_, int const& rows_, int const& fieldOffsetX_, int const& fieldOffsetY_, int const& fieldCellWidth_, int const& minesCount_, std::string const& difficultyString_)

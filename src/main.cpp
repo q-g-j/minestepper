@@ -1,11 +1,11 @@
 #include <iostream>
 
-#include "colors.hpp"
-#include "common.hpp"
-#include "debug.hpp"
-#include "field.hpp"
-#include "input.hpp"
-#include "print.hpp"
+#include "../include/colors.hpp"
+#include "../include/common.hpp"
+#include "../include/debug.hpp"
+#include "../include/field.hpp"
+#include "../include/input.hpp"
+#include "../include/print.hpp"
 
 int main()
 {   

@@ -10,8 +10,8 @@
     #include <windows.h>
 #endif
 
-#include "common.hpp"
-#include "debug.hpp"
+#include "../include/common.hpp"
+#include "../include/debug.hpp"
 
 using convert_t = std::codecvt_utf8<wchar_t>;
 std::wstring_convert<convert_t, wchar_t> strconverter;

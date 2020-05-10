@@ -13,12 +13,12 @@
 #include <unistd.h>
 #endif
 
-#include "colors.hpp"
-#include "common.hpp"
-#include "field.hpp"
-#include "common.hpp"
-#include "input.hpp"
-#include "print.hpp"
+#include "../include/colors.hpp"
+#include "../include/common.hpp"
+#include "../include/field.hpp"
+#include "../include/common.hpp"
+#include "../include/input.hpp"
+#include "../include/print.hpp"
 
 // Linux: need to enable "non canonical mode" to make arrow keys and SPACE work (no need to press ENTER):
 #if !defined(_WIN32) && !defined(WIN32) && !defined(_WIN64) && !defined(WIN64)
