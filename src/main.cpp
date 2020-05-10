@@ -47,6 +47,7 @@ int main()
     {        
         userInputReturnStruct UserInput;
         placeUserInputReturnStruct PlaceUserInputReturn;
+        common.clearScreen();
         difficulty = input.getDifficulty();
         
         if (difficulty == 1) 
