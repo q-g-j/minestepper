@@ -7,6 +7,7 @@
     #include <windows.h>
 #endif
 
+#include "colors.hpp"
 #include "common.hpp"
 #include "debug.hpp"
 #include "field.hpp"

@@ -4,25 +4,11 @@
     #include <windows.h>
 #endif
 
+#include "colors.hpp"
 #include "common.hpp"
 #include "field.hpp"
 #include "input.hpp"
 #include "print.hpp"
-
-#if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-    std::string Print::setTextColor(int const& colorCodeWindows)
-    {
-        HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-        SetConsoleTextAttribute(hConsole, colorCodeWindows);
-        return "";
-    }
-#else
-    std::string Print::setTextColor(std::string const& colorCodeLinux)
-    {
-        std::string color = colorCodeLinux;
-        return color;
-    }
-#endif
 
 std::string Print::setDifficultyTexts(int const& mode)
 {

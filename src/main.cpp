@@ -1,5 +1,6 @@
 #include <iostream>
 
+#include "colors.hpp"
 #include "common.hpp"
 #include "debug.hpp"
 #include "field.hpp"
@@ -8,6 +9,7 @@
 
 int main()
 {   
+    Colors colors;
     Common common;
     Input input;
     Print print;
@@ -89,9 +91,9 @@ int main()
             field.gotoXY(1, 4);
             input.deleteLastLine(20);
             field.gotoXY(field.getOffsetX() - 1, field.getOffsetY() - 2);
-            std::cout << print.setTextColor(fg_light_red);
+            std::cout << colors.setTextColor(colors.fg_light_red);
             std::cout << field.getMinesLeft() << print.minesLeftText << std::flush;
-            std::cout << print.setTextColor(color_default);
+            std::cout << colors.setTextColor(colors.color_default);
             #if DEBUG == 1
                 std::cout << print.debugTurnCountText << turn <<  "     " << std::flush;
             #endif

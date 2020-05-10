@@ -16,7 +16,7 @@ endif()
 #ENDIF()
 
 include_directories(include)
-add_executable(minesweeper src/main.cpp src/field.cpp src/common.cpp src/input.cpp src/print.cpp )
+add_executable(minesweeper src/main.cpp src/colors.cpp src/field.cpp src/common.cpp src/input.cpp src/print.cpp )
 
 #IF (NOT WIN32)
 #    target_link_libraries(minesweeper ${CURSES_LIBRARIES})

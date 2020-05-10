@@ -13,6 +13,7 @@
 #include <unistd.h>
 #endif
 
+#include "colors.hpp"
 #include "common.hpp"
 #include "field.hpp"
 #include "common.hpp"
@@ -47,9 +48,9 @@ void Input::getEnterKey(std::string const& text)
     std::string line;
     while (true)
     {
-        std::cout << print.setTextColor(fg_white);
+        std::cout << setTextColor(fg_white);
         std::cout << text;
-        std::cout << print.setTextColor(color_default);
+        std::cout << setTextColor(color_default);
         getline(std::cin, line);
         if (line == "")
             break;
@@ -149,9 +150,9 @@ int Input::getDifficulty()
 
     while (true)
     {
-        std::cout << print.setTextColor(fg_white);
+        std::cout << setTextColor(fg_white);
         std::cout << print.inputText;
-        std::cout << print.setTextColor(color_default);
+        std::cout << setTextColor(color_default);
         getline(std::cin, line);
         if (line == "")
             isValidInput = false;
@@ -203,9 +204,9 @@ coordsStruct Input::getDimensions()
 
     while (true)
     {
-        std::cout << print.setTextColor(fg_white);
+        std::cout << setTextColor(fg_white);
         std::cout << print.inputText;
-        std::cout << print.setTextColor(color_default);
+        std::cout << setTextColor(color_default);
         getline(std::cin, line);
         if (line == "")
             isValidInput = false;
@@ -283,9 +284,9 @@ int Input::getMinesCount(int const& fieldSize)
 
     while (true)
     {
-        std::cout << print.setTextColor(fg_white);
+        std::cout << setTextColor(fg_white);
         std::cout << print.inputText;
-        std::cout << print.setTextColor(color_default);
+        std::cout << setTextColor(color_default);
         getline(std::cin, line);
         if (line == "")
             isValidInput = false;
@@ -339,9 +340,9 @@ userInputReturnStruct Input::getUserInput(Field &field, int firstrun)
     showCursor(false);
 
     field.gotoXY(field.getOffsetX() - 1, field.getOffsetY() + field.getRows() * 2);
-    std::cout << print.setTextColor(fg_white);
+    std::cout << setTextColor(fg_white);
     std::cout << print.getHelpText << newline << newline;
-    std::cout << print.setTextColor(color_default);
+    std::cout << setTextColor(color_default);
     
     if (firstrun == 1)
     {

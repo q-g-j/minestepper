@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 
-class Field
+class Field : Colors
 {
 private:
     // private variables:
