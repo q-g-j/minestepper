@@ -15,6 +15,7 @@ endif()
 #    include_directories(${CURSES_INCLUDE_DIR})
 #ENDIF()
 
+include_directories(include)
 add_executable(minesweeper src/main.cpp src/field.cpp src/common.cpp src/input.cpp src/print.cpp )
 
 #IF (NOT WIN32)

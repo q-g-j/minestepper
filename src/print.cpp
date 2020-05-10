@@ -53,23 +53,23 @@ void Print::printMenu()
     std::cout << "Choose the size of the field!" << newline;
     std::cout << "(make sure, that your terminal window is large enough!)" << newline << newline;
     std::cout << setTextColor(fg_light_green);
-    std::cout << "1:   ";
+    std::cout << "   1:  ";
     std::cout << setTextColor(color_default);
     std::cout << "small" << newline;
     std::cout << setTextColor(fg_light_blue);
-    std::cout << "2:   ";
+    std::cout << "   2:  ";
     std::cout << setTextColor(color_default);
     std::cout << "medium" << newline;
     std::cout << setTextColor(fg_yellow);
-    std::cout << "3:   ";
+    std::cout << "   3:  ";
     std::cout << setTextColor(color_default);
     std::cout << "large" << newline;
     std::cout << setTextColor(fg_magenta);
-    std::cout << "4:   ";
+    std::cout << "   4:  ";
     std::cout << setTextColor(color_default);
     std::cout << "custom" << newline << newline;
     std::cout << setTextColor(fg_light_red);
-    std::cout << "q:   ";
+    std::cout << "   q:  ";
     std::cout << setTextColor(color_default);
     std::cout << "quit at any time" << newline << newline;
 }

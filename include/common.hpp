@@ -130,6 +130,7 @@ const char newline = '\n';
     const std::string bg_light_magenta      = "\033[47;" + std::to_string(FG_LIGHT_MAGENTA) + "m";
     const std::string bg_light_cyan         = "\033[47;" + std::to_string(FG_LIGHT_CYAN) + "m";
 #endif
+
 class Common
 {
 private:
