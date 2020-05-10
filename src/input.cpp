@@ -155,9 +155,9 @@ int Input::getDifficulty()
     Common common;
     Print print;
     int difficulty = 0;
-
-    common.clearScreen();
+    
     print.printMenu();
+    
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         while (true)
         {
@@ -234,8 +234,7 @@ coordsStruct Input::getDimensions()
     int beforeX = 0;
     int afterX = 0;
     bool isValidInput = false;
-    
-    common.clearScreen();
+
     print.printCustomGetDimensions();
     
     while (true)

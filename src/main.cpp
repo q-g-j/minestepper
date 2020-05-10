@@ -73,10 +73,12 @@ int main()
         else
         {
             difficultyString = print.setDifficultyTexts(4);
+            common.clearScreen();
             input.showCursor(true);
             Dimensions = input.getDimensions();
             rows = Dimensions.row;
             cols = Dimensions.col;
+            common.clearScreen();
             minesCount = input.getMinesCount(cols * rows);
             input.showCursor(false);
         }
