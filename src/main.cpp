@@ -8,7 +8,7 @@
 #include "../include/print.hpp"
 
 int main()
-{   
+{
     Colors colors;
     Common common;
     Input input;
@@ -41,6 +41,8 @@ int main()
     coordsStruct Dimensions;
     std::string difficultyString;
 
+    input.showCursor(false);
+    
     while (true)
     {        
         userInputReturnStruct UserInput;
@@ -71,10 +73,12 @@ int main()
         else
         {
             difficultyString = print.setDifficultyTexts(4);
+            input.showCursor(true);
             Dimensions = input.getDimensions();
             rows = Dimensions.row;
             cols = Dimensions.col;
             minesCount = input.getMinesCount(cols * rows);
+            input.showCursor(false);
         }
         
         Field field(cols, rows, fieldOffsetX, fieldOffsetY, fieldCellWidth, minesCount, difficultyString);            

@@ -12,8 +12,6 @@ private:
     {
         UP, DOWN, LEFT, RIGHT
     };
-
-    void showCursor(bool);
     void moveCursor(Field &field, coordsStruct&, Direction &direction);
 
 public:
@@ -32,7 +30,8 @@ public:
         #define KEY_ENTER '\n'
         #define KEY_SPACE ' '
     #endif
-    
+
+    void showCursor(bool);    
     int getDifficulty();
     coordsStruct getDimensions();
     int getMinesCount(int const&);

@@ -45,21 +45,33 @@
 void Input::getEnterKey(std::string const& text)
 {
     Print print;
-    std::string line;
-    while (true)
-    {
-        std::cout << setTextColor(fg_white);
-        std::cout << text;
-        std::cout << setTextColor(color_default);
-        getline(std::cin, line);
-        if (line == "")
-            break;
-        else
+    
+    std::cout << setTextColor(fg_white);
+    std::cout << text << std::flush;
+    std::cout << setTextColor(color_default);
+    
+    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+        while (true)
         {
-            deleteLastLine(text.length() + line.length());
-            continue;
+            int inputKey = 0;
+            if ((inputKey = _getch()) == KEY_ENTER)
+                break;
+            else
+                continue;
         }
-    }
+    #else
+        enableNonCanonicalMode();  
+        char inputKey = ' ';
+        while (read(STDIN_FILENO, &inputKey, 1) == 1)
+        {
+            if (inputKey == KEY_ENTER)
+                break;
+            else
+                continue;
+        }
+        disableNonCanonicalMode();
+        std::cout << newline;
+    #endif
 }
 
 // disable the input cursor during game play:
@@ -68,7 +80,8 @@ void Input::showCursor(bool show)
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         HANDLE out = GetStdHandle(STD_OUTPUT_HANDLE);
 
-        CONSOLE_CURSOR_INFO     cursorInfo;
+        CONSOLE_CURSOR_INFO cursorInfo;
+        cursorInfo.dwSize = 1;
 
         GetConsoleCursorInfo(out, &cursorInfo);
         cursorInfo.bVisible = show; // set the cursor visibility
@@ -79,6 +92,7 @@ void Input::showCursor(bool show)
         else
             coutconv << "\e[?25l";
     #endif
+        std::cout << std::flush;
 }
 
 // move the players cursor in 4 directions with the arrow keys:
@@ -140,51 +154,73 @@ int Input::getDifficulty()
 {
     Common common;
     Print print;
-    
-    std::string line = "";
     int difficulty = 0;
-    bool isValidInput = false;
 
     common.clearScreen();
     print.printMenu();
-
-    while (true)
-    {
-        std::cout << setTextColor(fg_white);
-        std::cout << print.inputText;
-        std::cout << setTextColor(color_default);
-        getline(std::cin, line);
-        if (line == "")
-            isValidInput = false;
-        if (line == "q" || line == "Q")
+    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+        while (true)
         {
-            common.clearScreen();
-            exit(0);
-        }
-        else
-        {
-            try
+            int inputKey = 0;
+            if ((inputKey = _getch()) == 'q' || inputKey == 'Q')
             {
-                difficulty = stoi(line);
+                common.clearScreen();
+                exit(0);
             }
-            catch (...)
+            else if (inputKey == '1')
             {
-                isValidInput = false;
+                difficulty = 1;
+                break;
             }
-            if (difficulty <= 4 && difficulty >= 1)
-                isValidInput = true;
+            else if (inputKey == '2')
+            {
+                difficulty = 2;
+                break;
+            }
+            else if (inputKey == '3')
+            {
+                difficulty = 3;
+                break;
+            }
+            else if (inputKey == '4')
+            {
+                difficulty = 4;
+                break;
+            }
             else
-                isValidInput = false;
+                continue;
         }
-        if (isValidInput == true)
-            return difficulty;
-        else
+    #else
+        enableNonCanonicalMode();
+        char inputKey = ' ';
+        while (read(STDIN_FILENO, &inputKey, 1) == 1)
         {
-            getEnterKey(print.wrongInputText);
-            deleteLastLine(print.wrongInputText.length());
-            deleteLastLine(print.inputText.length() + line.length());
+            if (inputKey == '1')
+            {
+                difficulty = 1;
+                break;
+            }
+            else if (inputKey == '2')
+            {
+                difficulty = 2;
+                break;
+            }
+            else if (inputKey == '3')
+            {
+                difficulty = 3;
+                break;
+            }
+            else if (inputKey == '4')
+            {
+                difficulty = 4;
+                break;
+            }
+            else
+                continue;
         }
-    }
+        disableNonCanonicalMode();
+    #endif
+    return difficulty;
 }
 
 // custom mode: ask user for the size of the field:
@@ -201,7 +237,7 @@ coordsStruct Input::getDimensions()
     
     common.clearScreen();
     print.printCustomGetDimensions();
-
+    
     while (true)
     {
         std::cout << setTextColor(fg_white);
@@ -333,11 +369,9 @@ userInputReturnStruct Input::getUserInput(Field &field, int firstrun)
     userInputReturnStruct UserInput;
 
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-        HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
     #else
         enableNonCanonicalMode();    
     #endif
-    showCursor(false);
 
     field.gotoXY(field.getOffsetX() - 1, field.getOffsetY() + field.getRows() * 2);
     std::cout << setTextColor(fg_white);
@@ -514,8 +548,7 @@ userInputReturnStruct Input::getUserInput(Field &field, int firstrun)
     
     UserInput.Coords.col = CurrentArrayPosition.col;
     UserInput.Coords.row = CurrentArrayPosition.row;
-    
-    showCursor(true);
+
     #if !defined(_WIN32) && !defined(WIN32) && !defined(_WIN64) && !defined(WIN64)
         disableNonCanonicalMode();
     #endif
