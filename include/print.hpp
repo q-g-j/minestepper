@@ -1,8 +1,6 @@
 #pragma once
-
-#include "common.hpp"
     
-class Print : Colors
+class Print
 {
 private:
     

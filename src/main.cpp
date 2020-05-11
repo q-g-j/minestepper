@@ -13,6 +13,7 @@ int main()
     Common common;
     Input input;
     Print print;
+    
     DifficultyStruct Size;
 
     /* these values can be changed: */

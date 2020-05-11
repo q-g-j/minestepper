@@ -19,6 +19,7 @@
 #include "../include/common.hpp"
 #include "../include/input.hpp"
 #include "../include/print.hpp"
+#include "../include/symbols.hpp"
 
 // Linux: need to enable "non canonical mode" to make arrow keys and SPACE work (no need to press ENTER):
 #if !defined(_WIN32) && !defined(WIN32) && !defined(_WIN64) && !defined(WIN64)
@@ -44,11 +45,12 @@
 
 void Input::getEnterKey(std::string const& text)
 {
+    Colors colors;
     Print print;
     
-    std::cout << setTextColor(fg_white);
+    std::cout << colors.setTextColor(colors.fg_white);
     std::cout << text << std::flush;
-    std::cout << setTextColor(color_default);
+    std::cout << colors.setTextColor(colors.color_default);
     
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         while (true)
@@ -99,6 +101,8 @@ void Input::showCursor(bool show)
 void Input::moveCursor(Field &field, coordsStruct& CurrentArrayPosition, Direction &direction)
 {
     Common common;
+    Symbols symbols;
+    
     coordsStruct currentCursorPosition;
     std::wcout << L"\b";
     field.printCoords(CurrentArrayPosition, false);
@@ -112,8 +116,8 @@ void Input::moveCursor(Field &field, coordsStruct& CurrentArrayPosition, Directi
         CurrentArrayPosition.col++;
     currentCursorPosition = common.convCoordsToCursorPosition(CurrentArrayPosition, field.getOffsetX(), field.getOffsetY(), field.getCellWidth());
     field.gotoXY(currentCursorPosition.col, currentCursorPosition.row);
-    coutconv << field.symbolCursor << std::flush;
-    if (field.getCoordsContent(CurrentArrayPosition) == field.symbolFlag || field.isNumber(CurrentArrayPosition))
+    coutconv << symbols.symbolCursor << std::flush;
+    if (field.getCoordsContent(CurrentArrayPosition) == symbols.symbolFlag || field.isNumber(CurrentArrayPosition))
         field.printCoords(CurrentArrayPosition, true);
 }
 
@@ -231,6 +235,7 @@ int Input::getDifficulty()
 // custom mode: ask user for the size of the field:
 coordsStruct Input::getDimensions()
 {
+    Colors colors;
     Common common;
     Print print;
     
@@ -244,9 +249,9 @@ coordsStruct Input::getDimensions()
     
     while (true)
     {
-        std::cout << setTextColor(fg_white);
+        std::cout << colors.setTextColor(colors.fg_white);
         std::cout << print.inputText;
-        std::cout << setTextColor(color_default);
+        std::cout << colors.setTextColor(colors.color_default);
         getline(std::cin, line);
         if (line == "")
             isValidInput = false;
@@ -312,6 +317,7 @@ coordsStruct Input::getDimensions()
 // custom mode: ask user for the number of mines:
 int Input::getMinesCount(int const& fieldSize)
 {
+    Colors colors;
     Common common;
     Print print;
     
@@ -324,9 +330,9 @@ int Input::getMinesCount(int const& fieldSize)
 
     while (true)
     {
-        std::cout << setTextColor(fg_white);
+        std::cout << colors.setTextColor(colors.fg_white);
         std::cout << print.inputText;
-        std::cout << setTextColor(color_default);
+        std::cout << colors.setTextColor(colors.color_default);
         getline(std::cin, line);
         if (line == "")
             isValidInput = false;
@@ -364,8 +370,10 @@ int Input::getMinesCount(int const& fieldSize)
 // the main function to ask the user for valid coordinates:
 userInputReturnStruct Input::getUserInput(Field &field, int firstrun)
 {
+    Colors colors;
     Common common;
     Print print;
+    Symbols symbols;
     
     char inputKey;
     static coordsStruct CurrentArrayPosition;
@@ -378,9 +386,9 @@ userInputReturnStruct Input::getUserInput(Field &field, int firstrun)
     #endif
 
     field.gotoXY(field.getOffsetX() - 1, field.getOffsetY() + field.getRows() * 2);
-    std::cout << setTextColor(fg_white);
+    std::cout << colors.setTextColor(colors.fg_white);
     std::cout << print.getHelpText << newline << newline;
-    std::cout << setTextColor(color_default);
+    std::cout << colors.setTextColor(colors.color_default);
     
     if (firstrun == 1)
     {
@@ -400,10 +408,10 @@ userInputReturnStruct Input::getUserInput(Field &field, int firstrun)
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
     common.setUnicode(true);
 
-    if (field.getCoordsContent(CurrentArrayPosition) == field.symbolFlag || field.isNumber(CurrentArrayPosition))
+    if (field.getCoordsContent(CurrentArrayPosition) == symbols.symbolFlag || field.isNumber(CurrentArrayPosition))
         field.printCoords(CurrentArrayPosition, true);
     else
-        coutconv << field.symbolCursor << std::flush;
+        coutconv << symbols.symbolCursor << std::flush;
 
     while(1)
     {
@@ -458,7 +466,7 @@ userInputReturnStruct Input::getUserInput(Field &field, int firstrun)
         else if (inputTmp == KEY_ENTER)
         {
             coutconv << L"\b" << std::flush;
-            if (field.getCoordsContent(CurrentArrayPosition) == field.symbolFlag)
+            if (field.getCoordsContent(CurrentArrayPosition) == symbols.symbolFlag)
             {
                 continue;
             }
@@ -480,10 +488,10 @@ userInputReturnStruct Input::getUserInput(Field &field, int firstrun)
     common.setUnicode(false);
 
     #else
-    if (field.getCoordsContent(CurrentArrayPosition) == field.symbolFlag || field.isNumber(CurrentArrayPosition))
+    if (field.getCoordsContent(CurrentArrayPosition) == symbols.symbolFlag || field.isNumber(CurrentArrayPosition))
         field.printCoords(CurrentArrayPosition, true);
     else
-        std::cout << field.symbolCursor << std::flush;
+        std::cout << symbols.symbolCursor << std::flush;
     while (read(STDIN_FILENO, &inputKey, 1) == 1)
     {
         if (inputKey == 'q' || inputKey == 'Q')
@@ -499,7 +507,7 @@ userInputReturnStruct Input::getUserInput(Field &field, int firstrun)
         else if (inputKey == KEY_ENTER)
         {
             std::cout << "\b" << std::flush;
-            if (field.getCoordsContent(CurrentArrayPosition) == field.symbolFlag)
+            if (field.getCoordsContent(CurrentArrayPosition) == symbols.symbolFlag)
                 continue;
             else
                 break;

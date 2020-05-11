@@ -9,6 +9,7 @@
 #include "../include/field.hpp"
 #include "../include/input.hpp"
 #include "../include/print.hpp"
+#include "../include/symbols.hpp"
 
 std::string Print::setDifficultyTexts(int const& mode)
 {
@@ -20,43 +21,45 @@ std::string Print::setDifficultyTexts(int const& mode)
 
 void Print::printTitle(std::string const& difficultyString, int const& cols, int const& rows, int const& minesCount)
 {
-    std::cout << setTextColor(fg_light_blue);
+    Colors colors;
+    std::cout << colors.setTextColor(colors.fg_light_blue);
     std::cout << "MINESWEEPER";
-    std::cout << setTextColor(fg_white);
+    std::cout << colors.setTextColor(colors.fg_white);
     std::cout << " - " << difficultyString << " (" << cols << "x" << rows << ") - " << minesCount << " mines";
-    std::cout << setTextColor(color_default);
+    std::cout << colors.setTextColor(colors.color_default);
     std::cout << newline << newline << newline;
 }
 
 void Print::printMenu()
 {
-    std::cout << setTextColor(fg_white);
+    Colors colors;
+    std::cout << colors.setTextColor(colors.fg_white);
     std::cout << "Welcome to ";
-    std::cout << setTextColor(fg_light_blue);
+    std::cout << colors.setTextColor(colors.fg_light_blue);
     std::cout << "MINESWEEPER!";
-    std::cout << setTextColor(color_default);
+    std::cout << colors.setTextColor(colors.color_default);
     std::cout << newline << newline << newline;
     std::cout << "Choose the size of the field!" << newline;
     std::cout << "(make sure, that your terminal window is large enough!)" << newline << newline;
-    std::cout << setTextColor(fg_light_green);
+    std::cout << colors.setTextColor(colors.fg_light_green);
     std::cout << "   1:  ";
-    std::cout << setTextColor(color_default);
+    std::cout << colors.setTextColor(colors.color_default);
     std::cout << "small" << newline;
-    std::cout << setTextColor(fg_light_blue);
+    std::cout << colors.setTextColor(colors.fg_light_blue);
     std::cout << "   2:  ";
-    std::cout << setTextColor(color_default);
+    std::cout << colors.setTextColor(colors.color_default);
     std::cout << "medium" << newline;
-    std::cout << setTextColor(fg_yellow);
+    std::cout << colors.setTextColor(colors.fg_yellow);
     std::cout << "   3:  ";
-    std::cout << setTextColor(color_default);
+    std::cout << colors.setTextColor(colors.color_default);
     std::cout << "large" << newline;
-    std::cout << setTextColor(fg_magenta);
+    std::cout << colors.setTextColor(colors.fg_magenta);
     std::cout << "   4:  ";
-    std::cout << setTextColor(color_default);
+    std::cout << colors.setTextColor(colors.color_default);
     std::cout << "custom" << newline << newline;
-    std::cout << setTextColor(fg_light_red);
+    std::cout << colors.setTextColor(colors.fg_light_red);
     std::cout << "   q:  ";
-    std::cout << setTextColor(color_default);
+    std::cout << colors.setTextColor(colors.color_default);
     std::cout << "quit at any time" << newline << newline;
 }
 
@@ -93,8 +96,10 @@ void Print::printHasLost()
 
 void Print::printHelp(Field &field, coordsStruct &CurrentArrayPosition)
 {
+    Colors colors;
     Common common;
     Input input;
+    Symbols symbols;
     
     common.setUnicode(false);
     coordsStruct currentCursorPosition;
@@ -106,30 +111,31 @@ void Print::printHelp(Field &field, coordsStruct &CurrentArrayPosition)
     field.drawField();
     std::cout << newline;
     field.gotoXY(field.getOffsetX() - 1, field.getOffsetY() - 2);
-    std::cout << setTextColor(fg_light_red);
+    std::cout << colors.setTextColor(colors.fg_light_red);
     std::cout << field.getMinesLeft() << minesLeftText << std::flush;
-    std::cout << setTextColor(color_default);
+    std::cout << colors.setTextColor(colors.color_default);
     #if DEBUG == 1
         std::cout << debugTurnCountText << turn << "      ";
     #endif
     field.gotoXY(field.getOffsetX() - 1, field.getOffsetY() + field.getRows()*2);
-    std::cout << setTextColor(fg_white);
+    std::cout << colors.setTextColor(colors.fg_white);
     std::cout << getHelpText << newline << newline;
-    std::cout << setTextColor(color_default);
+    std::cout << colors.setTextColor(colors.color_default);
     currentCursorPosition = common.convCoordsToCursorPosition(CurrentArrayPosition, field.getOffsetX(), field.getOffsetY(), field.getCellWidth());
     field.gotoXY(currentCursorPosition.col, currentCursorPosition.row);
     common.setUnicode(true);
-    if (field.getCoordsContent(CurrentArrayPosition) == field.symbolFlag || field.isNumber(CurrentArrayPosition))
+    if (field.getCoordsContent(CurrentArrayPosition) == symbols.symbolFlag || field.isNumber(CurrentArrayPosition))
         field.printCoords(CurrentArrayPosition, true);
     else
-        coutconv << field.symbolCursor << std::flush;
+        coutconv << symbols.symbolCursor << std::flush;
 }
 
 void Print::printExplanation()
 {
-    std::cout << setTextColor(fg_light_blue);
+    Colors colors;
+    std::cout << colors.setTextColor(colors.fg_light_blue);
     coutconv << "MINESWEEPER" << newline << newline;
-    std::cout << setTextColor(color_default);
+    std::cout << colors.setTextColor(colors.color_default);
     coutconv << "In this game your task is to find all hidden mines by uncovering all safe positions." << newline << newline;
     coutconv << "You can guess and sometimes combine where the next mine is." << newline;
     coutconv << "The number on each uncovered square shows how many neighbours contain a mine." << newline << newline;
@@ -142,7 +148,7 @@ void Print::printExplanation()
     coutconv << "ENTER:         sweep" << newline;
     coutconv << "SPACE:         place or remove a flag" << newline;
     coutconv << "q or Q:        quit" << newline << newline;
-    std::cout << setTextColor(fg_white);
+    std::cout << colors.setTextColor(colors.fg_white);
     coutconv << "Press ENTER to go back...";
-    std::cout << setTextColor(color_default);
+    std::cout << colors.setTextColor(colors.color_default);
 }

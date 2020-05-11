@@ -13,6 +13,7 @@
 #include "../include/field.hpp"
 #include "../include/input.hpp"
 #include "../include/print.hpp"
+#include "../include/symbols.hpp"
 
 // constructor
 Field::Field(int const& cols_, int const& rows_, int const& fieldOffsetX_, int const& fieldOffsetY_, int const& fieldCellWidth_, int const& minesCount_, std::string const& difficultyString_)
@@ -110,11 +111,13 @@ stringconv** Field::createArray()
 // fill this->fieldArray[][] with coveredSymbol
 void Field::clearFieldArray()
 {
+    Symbols symbols;
+
     for (int i=0; i <= this->cols; i++)
     {
         for (int j=0; j <= this->rows; j++)
         {
-            this->fieldArray[i][j] = symbolCovered;
+            this->fieldArray[i][j] = symbols.symbolCovered;
         }
     }
 }
@@ -122,11 +125,13 @@ void Field::clearFieldArray()
 // fill this->minesArray[][] with " "
 void Field::clearMinesArray()
 {
+    Symbols symbols;
+    
     for (int i=0; i <= this->cols; i++)
     {
         for (int j=0; j <= this->rows; j++)
         {
-            this->minesArray[i][j] = symbolUncovered;
+            this->minesArray[i][j] = symbols.symbolUncovered;
         }
     }
 }
@@ -135,6 +140,8 @@ void Field::clearMinesArray()
 void Field::fillMinesArray(coordsStruct& userFirstInput)
 {
     Common common;
+    Symbols symbols;
+    
     coordsStruct coords;
     int sizeOfFieldArray = this->cols * this->rows;
     std::vector<int> tempVector;
@@ -148,7 +155,7 @@ void Field::fillMinesArray(coordsStruct& userFirstInput)
     for (int i = 0; i < this->minesCount; i++)
     {
         coords = common.intToStruct(tempVector.at(i), this->cols);
-        this->minesArray[coords.col][coords.row] = symbolMine;
+        this->minesArray[coords.col][coords.row] = symbols.symbolMine;
     }
 }
 
@@ -156,26 +163,28 @@ void Field::fillMinesArray(coordsStruct& userFirstInput)
 void Field::drawField()
 {
     Common common;
+    Symbols symbols;
+    
     common.setUnicode(true);
 
     for (int i = 0; i < this->fieldOffsetY - 4; i++)
         std::wcout << L"\n";
     for (int i = 0; i < this->fieldOffsetX - 2; i++)
         std::wcout << L" ";
-    coutconv << symbolCornerTopLeft;
+    coutconv << symbols.symbolCornerTopLeft;
     for (int col = 1; col <= this->cols; col++)
     {
         if (col < this->cols)
         {
             for (int width = 0; width < this->fieldCellWidth; width++)
-                coutconv << symbolHorizontalLine;
-            coutconv << symbolDownT;
+                coutconv << symbols.symbolHorizontalLine;
+            coutconv << symbols.symbolDownT;
         }
         else
         {
             for (int width = 0; width < this->fieldCellWidth; width++)
-                coutconv << symbolHorizontalLine;
-            coutconv << symbolCornerTopRight;
+                coutconv << symbols.symbolHorizontalLine;
+            coutconv << symbols.symbolCornerTopRight;
         }
     }
     std::wcout << L"\n";
@@ -189,7 +198,7 @@ void Field::drawField()
                 for (int i = 0; i < this->fieldOffsetX - 2; i++)
                     std::wcout << L" ";
             }
-            coutconv << symbolVerticalLine;
+            coutconv << symbols.symbolVerticalLine;
             
             for (int padding = 0; padding < (this->fieldCellWidth-1)/2; padding++)
                 std::wcout << L" ";
@@ -204,7 +213,7 @@ void Field::drawField()
             
             if (col == this->cols)
             {
-                coutconv << symbolVerticalLine;      
+                coutconv << symbols.symbolVerticalLine;      
                 std::wcout << L"\n";
                 for (int i = 0; i < this->fieldOffsetX - 2; i++)
                     std::wcout << L" ";
@@ -212,29 +221,29 @@ void Field::drawField()
         }
 
         if (row < this->rows)
-            coutconv << symbolRightT;
+            coutconv << symbols.symbolRightT;
         else
-            coutconv << symbolCornerBottomLeft;
+            coutconv << symbols.symbolCornerBottomLeft;
         
         for (int col = 1; col <= this->cols; col++)
         {
             if (col < this->cols)
             {
                 for (int width = 0; width < this->fieldCellWidth; width++)
-                    coutconv << symbolHorizontalLine;
+                    coutconv << symbols.symbolHorizontalLine;
                 if (row < this->rows)
-                    coutconv << symbolPlus;
+                    coutconv << symbols.symbolPlus;
                 else
-                    coutconv << symbolUpT;
+                    coutconv << symbols.symbolUpT;
             }
             else
             {
                 for (int width = 0; width < this->fieldCellWidth; width++)
-                    coutconv << symbolHorizontalLine;
+                    coutconv << symbols.symbolHorizontalLine;
                 if (row < this->rows)
-                    coutconv << symbolLeftT;
+                    coutconv << symbols.symbolLeftT;
                 else
-                    coutconv << symbolCornerBottomRight;
+                    coutconv << symbols.symbolCornerBottomRight;
             }
         }
         std::wcout << L"\n";
@@ -259,10 +268,13 @@ void Field::gotoXY(int const& x, int const& y)
 // the main method to print the content of a particular cell:
 void Field::printCoords(coordsStruct& coords, bool isCursor)
 {
+    Colors colors;
     Common common;
+    Symbols symbols;
     
     std::string content;
     coordsStruct coordsTemp;
+
     coordsTemp = common.convCoordsToCursorPosition(coords, this->fieldOffsetX, this->fieldOffsetY, this->fieldCellWidth);
     gotoXY(coordsTemp.col, coordsTemp.row);
     
@@ -273,125 +285,127 @@ void Field::printCoords(coordsStruct& coords, bool isCursor)
             if (isCursor == false)
             {
                 if (getCoordsContent(coords) == L"1")
-                    SetConsoleTextAttribute(hConsole, fg_light_blue);
+                    SetConsoleTextAttribute(hConsole, colors.fg_light_blue);
                 else if (getCoordsContent(coords) == L"2")
-                    SetConsoleTextAttribute(hConsole, fg_light_green);
+                    SetConsoleTextAttribute(hConsole, colors.fg_light_green);
                 else if (getCoordsContent(coords) == L"3")
-                    SetConsoleTextAttribute(hConsole, fg_light_red);
+                    SetConsoleTextAttribute(hConsole, colors.fg_light_red);
                 else if (getCoordsContent(coords) == L"4")
-                    SetConsoleTextAttribute(hConsole, fg_magenta);
+                    SetConsoleTextAttribute(hConsole, colors.fg_magenta);
                 else if (getCoordsContent(coords) == L"5")
-                    SetConsoleTextAttribute(hConsole, fg_yellow);
+                    SetConsoleTextAttribute(hConsole, colors.fg_yellow);
                 else if (getCoordsContent(coords) == L"6")
-                    SetConsoleTextAttribute(hConsole, fg_green);
+                    SetConsoleTextAttribute(hConsole, colors.fg_green);
                 else if (getCoordsContent(coords) == L"7")
-                    SetConsoleTextAttribute(hConsole, fg_cyan);
+                    SetConsoleTextAttribute(hConsole, colors.fg_cyan);
                 else if (getCoordsContent(coords) == L"8")
-                    SetConsoleTextAttribute(hConsole, fg_white);
+                    SetConsoleTextAttribute(hConsole, colors.fg_white);
                 else
-                    SetConsoleTextAttribute(hConsole, color_default);
+                    SetConsoleTextAttribute(hConsole, colors.color_default);
             }
             else
             {
                 if (getCoordsContent(coords) == L"1")
-                    SetConsoleTextAttribute(hConsole, bg_light_blue);
+                    SetConsoleTextAttribute(hConsole, colors.bg_light_blue);
                 else if (getCoordsContent(coords) == L"2")
-                    SetConsoleTextAttribute(hConsole, bg_light_green);
+                    SetConsoleTextAttribute(hConsole, colors.bg_light_green);
                 else if (getCoordsContent(coords) == L"3")
-                    SetConsoleTextAttribute(hConsole, bg_light_red);
+                    SetConsoleTextAttribute(hConsole, colors.bg_light_red);
                 else if (getCoordsContent(coords) == L"4")
-                    SetConsoleTextAttribute(hConsole, bg_magenta);
+                    SetConsoleTextAttribute(hConsole, colors.bg_magenta);
                 else if (getCoordsContent(coords) == L"5")
-                    SetConsoleTextAttribute(hConsole, bg_yellow);
+                    SetConsoleTextAttribute(hConsole, colors.bg_yellow);
                 else if (getCoordsContent(coords) == L"6")
-                    SetConsoleTextAttribute(hConsole, bg_green);
+                    SetConsoleTextAttribute(hConsole, colors.bg_green);
                 else if (getCoordsContent(coords) == L"7")
-                    SetConsoleTextAttribute(hConsole, bg_cyan);
+                    SetConsoleTextAttribute(hConsole, colors.bg_cyan);
                 else if (getCoordsContent(coords) == L"8")
-                    SetConsoleTextAttribute(hConsole, bg_black);
+                    SetConsoleTextAttribute(hConsole, colors.bg_black);
                 else
-                    SetConsoleTextAttribute(hConsole, color_default);
+                    SetConsoleTextAttribute(hConsole, colors.color_default);
             }
         }
-        else if (getCoordsContent(coords) == symbolFlag)
+        else if (getCoordsContent(coords) == symbols.symbolFlag)
         {
             if (isCursor)
-                SetConsoleTextAttribute(hConsole, bg_red);
+                SetConsoleTextAttribute(hConsole, colors.bg_red);
             else
-                SetConsoleTextAttribute(hConsole, fg_red);
+                SetConsoleTextAttribute(hConsole, colors.fg_red);
         }
-        else if (getCoordsContent(coords) == symbolMineHit || getCoordsContent(coords) == symbolMine)
-            SetConsoleTextAttribute(hConsole, fg_red);
+        else if (getCoordsContent(coords) == symbols.symbolMineHit || getCoordsContent(coords) == symbols.symbolMine)
+            SetConsoleTextAttribute(hConsole, colors.fg_red);
         std::wstring coordsString = this->fieldArray[coords.col][coords.row];
         WriteConsoleW(hConsole, coordsString.c_str(), static_cast<DWORD>(coordsString.size()), nullptr, nullptr);
-        SetConsoleTextAttribute(hConsole, color_default);
+        SetConsoleTextAttribute(hConsole, colors.color_default);
     #else
         if (isNumber(coords))
         {
             if (isCursor == false)
             {
                 if (getCoordsContent(coords) == "1")
-                    content = fg_light_blue + (this->fieldArray[coords.col][coords.row]);
+                    content = colors.fg_light_blue + (this->fieldArray[coords.col][coords.row]);
                 else if (getCoordsContent(coords) == "2")
-                    content = fg_light_green + (this->fieldArray[coords.col][coords.row]);
+                    content = colors.fg_light_green + (this->fieldArray[coords.col][coords.row]);
                 else if (getCoordsContent(coords) == "3")
-                    content = fg_light_red + (this->fieldArray[coords.col][coords.row]);
+                    content = colors.fg_light_red + (this->fieldArray[coords.col][coords.row]);
                 else if (getCoordsContent(coords) == "4")
-                    content = fg_magenta + (this->fieldArray[coords.col][coords.row]);
+                    content = colors.fg_magenta + (this->fieldArray[coords.col][coords.row]);
                 else if (getCoordsContent(coords) == "5")
-                    content = fg_yellow + (this->fieldArray[coords.col][coords.row]);
+                    content = colors.fg_yellow + (this->fieldArray[coords.col][coords.row]);
                 else if (getCoordsContent(coords) == "6")
-                    content = fg_green + (this->fieldArray[coords.col][coords.row]);
+                    content = colors.fg_green + (this->fieldArray[coords.col][coords.row]);
                 else if (getCoordsContent(coords) == "7")
-                    content = fg_light_red + (this->fieldArray[coords.col][coords.row]);
+                    content = colors.fg_light_red + (this->fieldArray[coords.col][coords.row]);
                 else if (getCoordsContent(coords) == "8")
-                    content = fg_white + (this->fieldArray[coords.col][coords.row]);
+                    content = colors.fg_white + (this->fieldArray[coords.col][coords.row]);
                 else
-                    content = color_default + (this->fieldArray[coords.col][coords.row]);
+                    content = colors.color_default + (this->fieldArray[coords.col][coords.row]);
             }
             else
             {
                 if (getCoordsContent(coords) == "1")
-                    content = bg_light_blue + (this->fieldArray[coords.col][coords.row]);
+                    content = colors.bg_light_blue + (this->fieldArray[coords.col][coords.row]);
                 else if (getCoordsContent(coords) == "2")
-                    content = bg_light_green + (this->fieldArray[coords.col][coords.row]);
+                    content = colors.bg_light_green + (this->fieldArray[coords.col][coords.row]);
                 else if (getCoordsContent(coords) == "3")
-                    content = bg_light_red + (this->fieldArray[coords.col][coords.row]);
+                    content = colors.bg_light_red + (this->fieldArray[coords.col][coords.row]);
                 else if (getCoordsContent(coords) == "4")
-                    content = bg_magenta + (this->fieldArray[coords.col][coords.row]);
+                    content = colors.bg_magenta + (this->fieldArray[coords.col][coords.row]);
                 else if (getCoordsContent(coords) == "5")
-                    content = bg_yellow + (this->fieldArray[coords.col][coords.row]);
+                    content = colors.bg_yellow + (this->fieldArray[coords.col][coords.row]);
                 else if (getCoordsContent(coords) == "6")
-                    content = bg_green + (this->fieldArray[coords.col][coords.row]);
+                    content = colors.bg_green + (this->fieldArray[coords.col][coords.row]);
                 else if (getCoordsContent(coords) == "7")
-                    content = bg_light_red + (this->fieldArray[coords.col][coords.row]);
+                    content = colors.bg_light_red + (this->fieldArray[coords.col][coords.row]);
                 else if (getCoordsContent(coords) == "8")
-                    content = bg_black + (this->fieldArray[coords.col][coords.row]);
+                    content = colors.bg_black + (this->fieldArray[coords.col][coords.row]);
                 else
-                    content = color_default + (this->fieldArray[coords.col][coords.row]);
+                    content = colors.color_default + (this->fieldArray[coords.col][coords.row]);
             }
         }
-        else if (getCoordsContent(coords) == symbolFlag)
+        else if (getCoordsContent(coords) == symbols.symbolFlag)
         {
             if (isCursor)
-                content = bg_red + (this->fieldArray[coords.col][coords.row]);
+                content = colors.bg_red + (this->fieldArray[coords.col][coords.row]);
             else
-                content = fg_red + (this->fieldArray[coords.col][coords.row]);
+                content = colors.fg_red + (this->fieldArray[coords.col][coords.row]);
         }
-        else if (getCoordsContent(coords) == symbolMineHit || getCoordsContent(coords) == symbolMine)
-            content = fg_red + (this->fieldArray[coords.col][coords.row]);
+        else if (getCoordsContent(coords) == symbols.symbolMineHit || getCoordsContent(coords) == symbols.symbolMine)
+            content = colors.fg_red + (this->fieldArray[coords.col][coords.row]);
         else
-            content = color_default + (this->fieldArray[coords.col][coords.row]);
+            content = colors.color_default + (this->fieldArray[coords.col][coords.row]);
             
         coutconv << content << std::flush;
-        coutconv << color_default << std::flush;
+        coutconv << colors.color_default << std::flush;
     #endif
 }
 
 // test coords if they contain a flag:
 bool Field::isFlagSet(coordsStruct& coords)
 {
-    if (this->fieldArray[coords.col][coords.row] == symbolFlag)
+    Symbols symbols;
+    
+    if (this->fieldArray[coords.col][coords.row] == symbols.symbolFlag)
         return true;
     else 
         return false;
@@ -518,6 +532,8 @@ placeUserInputReturnStruct Field::placeUserInput(userInputReturnStruct& UserInpu
 {
     Common common;
     Print print;
+    Symbols symbols;
+    
     placeUserInputReturnStruct returnStruct;
     std::vector<coordsStruct> neighboursMinesVector;
     
@@ -526,7 +542,7 @@ placeUserInputReturnStruct Field::placeUserInput(userInputReturnStruct& UserInpu
     {
         if (isFlagSet(UserInput.Coords) == true)
         {
-            this->fieldArray[UserInput.Coords.col][UserInput.Coords.row] = symbolCovered;
+            this->fieldArray[UserInput.Coords.col][UserInput.Coords.row] = symbols.symbolCovered;
             printCoords(UserInput.Coords, false);
             this->flagsCount--;
             this->minesLeft++;
@@ -534,7 +550,7 @@ placeUserInputReturnStruct Field::placeUserInput(userInputReturnStruct& UserInpu
         }
         else
         {
-            this->fieldArray[UserInput.Coords.col][UserInput.Coords.row] = symbolFlag;
+            this->fieldArray[UserInput.Coords.col][UserInput.Coords.row] = symbols.symbolFlag;
             printCoords(UserInput.Coords, false);
             this->flagsCount++;
             this->minesLeft--;
@@ -550,9 +566,9 @@ placeUserInputReturnStruct Field::placeUserInput(userInputReturnStruct& UserInpu
         }
         
         // check if the player hit a mine which ends the game:
-        if (this->minesArray[UserInput.Coords.col][UserInput.Coords.row] == symbolMine)
+        if (this->minesArray[UserInput.Coords.col][UserInput.Coords.row] == symbols.symbolMine)
         {
-            this->minesArray[UserInput.Coords.col][UserInput.Coords.row] = symbolMineHit;
+            this->minesArray[UserInput.Coords.col][UserInput.Coords.row] = symbols.symbolMineHit;
     
             common.clearScreen();
             print.printTitle(this->difficultyString, this->cols, this->rows, this->minesCount);
@@ -560,7 +576,7 @@ placeUserInputReturnStruct Field::placeUserInput(userInputReturnStruct& UserInpu
             {
                 for (int j = 1; j <= this->rows; j++)
                 {
-                    if (this->fieldArray[i][j] == symbolFlag && this->minesArray[i][j] != symbolMine && this->minesArray[i][j] != symbolMineHit) // && this->minesArray[i][j] == coveredSymbol)
+                    if (this->fieldArray[i][j] == symbols.symbolFlag && this->minesArray[i][j] != symbols.symbolMine && this->minesArray[i][j] != symbols.symbolMineHit) // && this->minesArray[i][j] == coveredSymbol)
                         this->minesArray[i][j] = this->fieldArray[i][j];
                 }
             }
@@ -584,15 +600,15 @@ placeUserInputReturnStruct Field::placeUserInput(userInputReturnStruct& UserInpu
         {
             // create a new vector of surrounding mines:
             std::vector<coordsStruct> autoUncoverNeighboursMinesVector;
-            autoUncoverNeighboursMinesVector = findNeighbours(this->minesArray, UserInput.Coords, symbolMine);
+            autoUncoverNeighboursMinesVector = findNeighbours(this->minesArray, UserInput.Coords, symbols.symbolMine);
             
             // create a new vector of surrounding flags:
             std::vector<coordsStruct> autoUncoverNeighboursFlagsVector;
-            autoUncoverNeighboursFlagsVector = findNeighbours(this->fieldArray, UserInput.Coords, symbolFlag);
+            autoUncoverNeighboursFlagsVector = findNeighbours(this->fieldArray, UserInput.Coords, symbols.symbolFlag);
             
             // create a new vector of surrounding covered squares:
             std::vector<coordsStruct> autoUncoverNeighboursCoveredVector;
-            autoUncoverNeighboursCoveredVector = findNeighbours(this->fieldArray, UserInput.Coords, symbolCovered);
+            autoUncoverNeighboursCoveredVector = findNeighbours(this->fieldArray, UserInput.Coords, symbols.symbolCovered);
             
             // create a new empty vector for missed mines:
             std::vector<coordsStruct> autoUncoverMissedMinesVector;
@@ -607,7 +623,7 @@ placeUserInputReturnStruct Field::placeUserInput(userInputReturnStruct& UserInpu
                     // and add this mines position to autoUncoverMissedMinesVector:
                     for (int i = 0; i < static_cast<int>(autoUncoverNeighboursCoveredVector.size()); i++)
                     {
-                        if (this->minesArray[autoUncoverNeighboursCoveredVector.at(i).col][autoUncoverNeighboursCoveredVector.at(i).row] == symbolMine)
+                        if (this->minesArray[autoUncoverNeighboursCoveredVector.at(i).col][autoUncoverNeighboursCoveredVector.at(i).row] == symbols.symbolMine)
                             autoUncoverMissedMinesVector.push_back(autoUncoverNeighboursCoveredVector.at(i));
                     }
                     // if there are missed mines, reveal the minesArray - player has lost:
@@ -615,7 +631,7 @@ placeUserInputReturnStruct Field::placeUserInput(userInputReturnStruct& UserInpu
                     {
                         for (int i = 0; i < static_cast<int>(autoUncoverMissedMinesVector.size()); i++)
                         {
-                            this->minesArray[autoUncoverMissedMinesVector.at(i).col][autoUncoverMissedMinesVector.at(i).row] = symbolMineHit;
+                            this->minesArray[autoUncoverMissedMinesVector.at(i).col][autoUncoverMissedMinesVector.at(i).row] = symbols.symbolMineHit;
                         }
                         returnStruct.hasLost = 1;
                         common.clearScreen();
@@ -624,7 +640,7 @@ placeUserInputReturnStruct Field::placeUserInput(userInputReturnStruct& UserInpu
                         {
                             for (int j = 1; j <= this->rows; j++)
                             {
-                                if (this->fieldArray[i][j] == symbolFlag && this->minesArray[i][j] != symbolMine && this->minesArray[i][j] != symbolMineHit) // && this->minesArray[i][j] == coveredSymbol)
+                                if (this->fieldArray[i][j] == symbols.symbolFlag && this->minesArray[i][j] != symbols.symbolMine && this->minesArray[i][j] != symbols.symbolMineHit) // && this->minesArray[i][j] == coveredSymbol)
                                     this->minesArray[i][j] = this->fieldArray[i][j];
                             }
                         }
@@ -653,9 +669,9 @@ placeUserInputReturnStruct Field::placeUserInput(userInputReturnStruct& UserInpu
                                 coordsTemp.col = autoUncoverNeighboursCoveredVector.at(i).col;
                                 coordsTemp.row = autoUncoverNeighboursCoveredVector.at(i).row;
                                 std::vector<coordsStruct> autoUncoverNeighboursCoveredMinesVector;
-                                autoUncoverNeighboursCoveredMinesVector = findNeighbours(this->minesArray, coordsTemp, symbolMine);
+                                autoUncoverNeighboursCoveredMinesVector = findNeighbours(this->minesArray, coordsTemp, symbols.symbolMine);
                                 if (autoUncoverNeighboursCoveredMinesVector.size() == 0)
-                                    this->fieldArray[coordsTemp.col][coordsTemp.row] = symbolUncovered;
+                                    this->fieldArray[coordsTemp.col][coordsTemp.row] = symbols.symbolUncovered;
                                 else
                                     this->fieldArray[coordsTemp.col][coordsTemp.row] = common.intToString(static_cast<int>(autoUncoverNeighboursCoveredMinesVector.size()));
                                 printCoords(coordsTemp, false);
@@ -670,9 +686,9 @@ placeUserInputReturnStruct Field::placeUserInput(userInputReturnStruct& UserInpu
         else
         {
             // uncover the players choice and place the number of surrounding mines in it:
-            neighboursMinesVector = findNeighbours(this->minesArray, UserInput.Coords, symbolMine);
+            neighboursMinesVector = findNeighbours(this->minesArray, UserInput.Coords, symbols.symbolMine);
             if (neighboursMinesVector.size() == 0)
-                this->fieldArray[UserInput.Coords.col][UserInput.Coords.row] = symbolUncovered;
+                this->fieldArray[UserInput.Coords.col][UserInput.Coords.row] = symbols.symbolUncovered;
             else
                 this->fieldArray[UserInput.Coords.col][UserInput.Coords.row] = common.intToString(static_cast<int>(neighboursMinesVector.size()));
             printCoords(UserInput.Coords, false);
@@ -691,30 +707,30 @@ placeUserInputReturnStruct Field::placeUserInput(userInputReturnStruct& UserInpu
                 {
                     for (int j = 1; j <= this->rows; j++)
                     {
-                        if (this->fieldArray[i][j] == symbolCovered)
+                        if (this->fieldArray[i][j] == symbols.symbolCovered)
                         {
                             // create a new vector of neighbours containing " ":
                             coordsStruct coordsBase;
                             coordsBase.col = i;
                             coordsBase.row = j;
                             std::vector<coordsStruct> neighboursZerosVector;
-                            neighboursZerosVector = findNeighbours(this->fieldArray, coordsBase, symbolUncovered);
+                            neighboursZerosVector = findNeighbours(this->fieldArray, coordsBase, symbols.symbolUncovered);
                             
 
                             // if there is a neighbour containing a " " create a new vector of neighbours containing mines:
                             if (neighboursZerosVector.size() != 0)
                             {
                                 std::vector<coordsStruct> neighboursMinesVectorNew;
-                                neighboursMinesVectorNew = findNeighbours(this->minesArray, coordsBase, symbolMine);
+                                neighboursMinesVectorNew = findNeighbours(this->minesArray, coordsBase, symbols.symbolMine);
         
                                 // place neighboursMinesVectorNew.size() in fieldArray:
-                                if (this->fieldArray[i][j] == symbolCovered)
+                                if (this->fieldArray[i][j] == symbols.symbolCovered)
                                 {
                                     coordsStruct coordsTemp;
                                     coordsTemp.col = i;
                                     coordsTemp.row = j;
                                     if (neighboursMinesVectorNew.size() == 0)
-                                        this->fieldArray[i][j] = symbolUncovered;
+                                        this->fieldArray[i][j] = symbols.symbolUncovered;
                                     else
                                         this->fieldArray[i][j] = common.intToString(static_cast<int>(neighboursMinesVectorNew.size()));
                                     printCoords(coordsTemp, false);
@@ -731,14 +747,14 @@ placeUserInputReturnStruct Field::placeUserInput(userInputReturnStruct& UserInpu
                 {
                     for (int b = 1; b <= this->rows; b++)
                     {
-                        if (this->fieldArray[a][b] == symbolCovered)
+                        if (this->fieldArray[a][b] == symbols.symbolCovered)
                         {
                             // create a new vector of neighbours containing " ":
                             coordsStruct coordsBaseNew;
                             coordsBaseNew.col = a;
                             coordsBaseNew.row = b;
                             std::vector<coordsStruct> neighboursZerosVectorNew;
-                            neighboursZerosVectorNew = findNeighbours(this->fieldArray, coordsBaseNew, symbolUncovered);
+                            neighboursZerosVectorNew = findNeighbours(this->fieldArray, coordsBaseNew, symbols.symbolUncovered);
                             if (neighboursZerosVectorNew.size() != 0)
                                 run = true;
                         }
@@ -755,8 +771,8 @@ placeUserInputReturnStruct Field::placeUserInput(userInputReturnStruct& UserInpu
         for (int i = 1; i <= this->cols; i++)
         {
             for (int j = 1; j <= this->rows; j++)
-                if (this->minesArray[i][j] == symbolMine)
-                    this->fieldArray[i][j] = symbolMine;
+                if (this->minesArray[i][j] == symbols.symbolMine)
+                    this->fieldArray[i][j] = symbols.symbolMine;
         }
         
         drawField();

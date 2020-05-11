@@ -1,6 +1,6 @@
 **Minesweeper**
 
-A small console based clone of Minesweeper to teach myself C++.
+A small console based version of Minesweeper to teach myself C++.
 
 ![](https://github.com/q-g-j/minesweeper/blob/master/images/screenshot.jpg?raw=true)
 

@@ -5,7 +5,7 @@
     void disableNonCanonicalMode();
 #endif
 
-class Input : Colors
+class Input
 {
 private:
     enum class Direction : int

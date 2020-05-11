@@ -1,5 +1,4 @@
 #pragma once
-#include <string>
 
 // Windows and Linux seem to handle unicode strings differently (use wide strings only for Windows):
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
