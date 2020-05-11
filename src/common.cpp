@@ -69,7 +69,8 @@ void Common::clearScreen()
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         if (system("cls") != 0) exit(1);
     #else
-        if (system("clear") != 0) exit(1);
+        //if (system("clear") != 0) exit(1);
+        std::cout << "\x1B[2J\x1B[H";
     #endif
 }
 
