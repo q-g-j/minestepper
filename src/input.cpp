@@ -72,8 +72,8 @@ void Input::getEnterKey(std::string const& text)
                 continue;
         }
         disableNonCanonicalMode();
-        std::cout << newline;
     #endif
+    std::cout << newline;
 }
 
 // disable the input cursor during game play:
@@ -146,7 +146,7 @@ void Input::deleteLastLine(size_t const& stringLength)
     #else
         std::cout << "\x1b[A";
         std::cout << "\r";
-        for (int i = 0; i < stringLength; i++)
+        for (unsigned int i = 0; i < stringLength; i++)
             std::cout << " ";
         std::cout << "\r";
         std::cout << std::flush;
