@@ -157,6 +157,7 @@ void Input::deleteLastLine(size_t const& stringLength)
 int Input::getDifficulty()
 {
     Common common;
+    Input input;
     Print print;
     int difficulty = 0;
     
@@ -169,7 +170,8 @@ int Input::getDifficulty()
             if ((inputKey = _getch()) == 'q' || inputKey == 'Q')
             {
                 common.clearScreen();
-                exit(0);
+                input.showCursor(true);
+                exit (0);
             }
             else if (inputKey == '1')
             {
@@ -202,6 +204,7 @@ int Input::getDifficulty()
             if (inputKey == 'q' || inputKey == 'Q')
             {
                 common.clearScreen();
+                input.showCursor(true);
                 exit (0);
             }
             if (inputKey == '1')
@@ -236,6 +239,7 @@ int Input::getDifficulty()
 coordsStruct Input::getDimensions()
 {
     Colors colors;
+    Input input;
     Common common;
     Print print;
     
@@ -258,7 +262,8 @@ coordsStruct Input::getDimensions()
         if (line == "q" || line == "Q")
         {
             common.clearScreen();
-            exit(0);
+            input.showCursor(true);
+            exit (0);
         }
         else
         {
@@ -319,6 +324,7 @@ int Input::getMinesCount(int const& fieldSize)
 {
     Colors colors;
     Common common;
+    Input input;
     Print print;
     
     std::string line = "";
@@ -339,7 +345,8 @@ int Input::getMinesCount(int const& fieldSize)
         if (line == "q" || line == "Q")
         {
             common.clearScreen();
-            exit(0);
+            input.showCursor(true);
+            exit (0);
         }
         else
         {
@@ -372,6 +379,7 @@ userInputReturnStruct Input::getUserInput(Field &field, int firstrun)
 {
     Colors colors;
     Common common;
+    Input input;
     Print print;
     Symbols symbols;
     
@@ -456,7 +464,8 @@ userInputReturnStruct Input::getUserInput(Field &field, int firstrun)
         else if (inputTmp == 'q' || inputTmp == 'Q')
         {
             common.clearScreen();
-            exit(0);
+            input.showCursor(true);
+            exit (0);
         }
         else if (inputTmp == 'h' || inputTmp == 'H')
         {
@@ -497,7 +506,8 @@ userInputReturnStruct Input::getUserInput(Field &field, int firstrun)
         if (inputKey == 'q' || inputKey == 'Q')
         {
             common.clearScreen();
-            exit(0);
+            input.showCursor(true);
+            exit (0);
         }
         else if (inputKey == 'h' || inputKey == 'H')
         {
