@@ -204,7 +204,6 @@ int Input::getDifficulty()
             if (inputKey == 'q' || inputKey == 'Q')
             {
                 common.clearScreen();
-                input.showCursor(true);
                 exit (0);
             }
             if (inputKey == '1')
@@ -262,7 +261,6 @@ coordsStruct Input::getDimensions()
         if (line == "q" || line == "Q")
         {
             common.clearScreen();
-            input.showCursor(true);
             exit (0);
         }
         else
@@ -345,7 +343,6 @@ int Input::getMinesCount(int const& fieldSize)
         if (line == "q" || line == "Q")
         {
             common.clearScreen();
-            input.showCursor(true);
             exit (0);
         }
         else
@@ -464,7 +461,6 @@ userInputReturnStruct Input::getUserInput(Field &field, int firstrun)
         else if (inputTmp == 'q' || inputTmp == 'Q')
         {
             common.clearScreen();
-            input.showCursor(true);
             exit (0);
         }
         else if (inputTmp == 'h' || inputTmp == 'H')
@@ -506,7 +502,6 @@ userInputReturnStruct Input::getUserInput(Field &field, int firstrun)
         if (inputKey == 'q' || inputKey == 'Q')
         {
             common.clearScreen();
-            input.showCursor(true);
             exit (0);
         }
         else if (inputKey == 'h' || inputKey == 'H')
