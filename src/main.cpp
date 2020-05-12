@@ -17,17 +17,17 @@ int main()
     DifficultyStruct Size;
 
     /* these values can be changed: */
-    Size.small.columns  = 9;
-    Size.small.rows     = 9;
-    Size.small.mines    = 10;
+    Size.Small.columns  = 9;
+    Size.Small.rows     = 9;
+    Size.Small.mines    = 10;
 
-    Size.medium.columns = 16;
-    Size.medium.rows    = 16;
-    Size.medium.mines   = 40;
+    Size.Medium.columns = 16;
+    Size.Medium.rows    = 16;
+    Size.Medium.mines   = 40;
 
-    Size.large.columns  = 22;
-    Size.large.rows     = 16;
-    Size.large.mines    = 99;
+    Size.Large.columns  = 22;
+    Size.Large.rows     = 16;
+    Size.Large.mines    = 99;
 
     // set X/Y position of the field
     int fieldOffsetX    = 6;
@@ -45,7 +45,7 @@ int main()
     input.showCursor(false);
     
     while (true)
-    {        
+    {
         UserInputReturnStruct userInput;
         PlaceUserInputReturnStruct placeUserInputReturn;
         common.clearScreen();
@@ -54,23 +54,23 @@ int main()
         if (difficulty == 1) 
         {
             difficultyString = print.setDifficultyTexts(1);
-            cols = Size.small.columns;
-            rows = Size.small.rows;
-            minesCount = Size.small.mines;
+            cols = Size.Small.columns;
+            rows = Size.Small.rows;
+            minesCount = Size.Small.mines;
         }        
         else if (difficulty == 2) 
         {
             difficultyString = print.setDifficultyTexts(2);
-            cols = Size.medium.columns;
-            rows = Size.medium.rows;
-            minesCount = Size.medium.mines;
+            cols = Size.Medium.columns;
+            rows = Size.Medium.rows;
+            minesCount = Size.Medium.mines;
         }
         else if (difficulty == 3) 
         {
             difficultyString = print.setDifficultyTexts(3);
-            cols = Size.large.columns;
-            rows = Size.large.rows;
-            minesCount = Size.large.mines;
+            cols = Size.Large.columns;
+            rows = Size.Large.rows;
+            minesCount = Size.Large.mines;
         }
         else
         {

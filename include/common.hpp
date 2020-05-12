@@ -15,15 +15,36 @@ const char newline = '\n';
 
 class Common
 {
-private:
-    
 public:
+    struct SmallStruct
+    {
+        int columns;
+        int rows;
+        int mines;
+    };
+    struct MediumStruct
+    {
+        int columns;
+        int rows;
+        int mines;
+    };
+    struct LargeStruct
+    {
+        int columns;
+        int rows;
+        int mines;
+    };
+    struct DifficultyStruct
+    {
+        SmallStruct Small;
+        MediumStruct Medium;
+        LargeStruct Large;
+    };
     struct CoordsStruct
     {
         int col = 0;
         int row = 0;
-    };
-    
+    };    
     struct UserInputReturnStruct
     {
         CoordsStruct Coords;
@@ -52,6 +73,7 @@ public:
     CoordsStruct convCoordsToCursorPosition(CoordsStruct&, int const&, int const&, int const&);
 };
 
+typedef struct Common::DifficultyStruct DifficultyStruct;
 typedef struct Common::CoordsStruct CoordsStruct;
 typedef struct Common::UserInputReturnStruct UserInputReturnStruct;
 typedef struct Common::PlaceUserInputReturnStruct PlaceUserInputReturnStruct;

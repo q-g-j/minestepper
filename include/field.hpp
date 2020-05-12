@@ -30,31 +30,6 @@ public:
     Field(int const& cols_, int const& rows_, int const& fieldOffsetX_, int const& fieldOffsetY_, int const& fieldCellWidth_, int const& minesCount_, std::string const& difficultyString_);
     ~Field();
 
-    struct SmallStruct
-    {
-        int columns;
-        int rows;
-        int mines;
-    };
-    struct MediumStruct
-    {
-        int columns;
-        int rows;
-        int mines;
-    };
-    struct LargeStruct
-    {
-        int columns;
-        int rows;
-        int mines;
-    };
-    struct DifficultyStruct
-    {
-        SmallStruct small;
-        MediumStruct medium;
-        LargeStruct large;
-    };
-
     // getter methods:
     int getCols();
     int getRows();
@@ -74,5 +49,3 @@ public:
     bool isNumber(Common::CoordsStruct&);
     Common::PlaceUserInputReturnStruct placeUserInput(Common::UserInputReturnStruct&, int&);
 };
-
-typedef struct Field::DifficultyStruct DifficultyStruct;
