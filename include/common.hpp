@@ -18,18 +18,18 @@ class Common
 private:
     
 public:
-    struct coordsStruct
+    struct CoordsStruct
     {
         int col = 0;
         int row = 0;
     };
     
-    struct userInputReturnStruct
+    struct UserInputReturnStruct
     {
-        coordsStruct Coords;
+        CoordsStruct Coords;
         bool isFlag = false;
     };
-    struct placeUserInputReturnStruct
+    struct PlaceUserInputReturnStruct
     {
         bool hasLost = false;
         bool hasWon = false;
@@ -47,11 +47,11 @@ public:
     void setUnicode(bool);
     void setRandomSeed();
     void clearScreen();
-    coordsStruct intToStruct(int&, int&);
-    int structToInt(coordsStruct&, int&);
-    coordsStruct convCoordsToCursorPosition(coordsStruct&, int const&, int const&, int const&);
+    CoordsStruct intToStruct(int&, int&);
+    int structToInt(CoordsStruct&, int&);
+    CoordsStruct convCoordsToCursorPosition(CoordsStruct&, int const&, int const&, int const&);
 };
 
-typedef struct Common::coordsStruct coordsStruct;
-typedef struct Common::userInputReturnStruct userInputReturnStruct;
-typedef struct Common::placeUserInputReturnStruct placeUserInputReturnStruct;
+typedef struct Common::CoordsStruct CoordsStruct;
+typedef struct Common::UserInputReturnStruct UserInputReturnStruct;
+typedef struct Common::PlaceUserInputReturnStruct PlaceUserInputReturnStruct;

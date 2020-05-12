@@ -12,7 +12,7 @@ private:
     {
         UP, DOWN, LEFT, RIGHT
     };
-    void moveCursor(Field &field, coordsStruct&, Direction &direction);
+    void moveCursor(Field &field, CoordsStruct&, Direction &direction);
 
 public:
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
@@ -33,12 +33,12 @@ public:
 
     void showCursor(bool);    
     int getDifficulty();
-    coordsStruct getDimensions();
+    CoordsStruct getDimensions();
     int getMinesCount(int const&);
     
     void getEnterKey(std::string const&);
     void deleteLastLine(size_t const&);
-    userInputReturnStruct getUserInput(Field &field, int);
+    UserInputReturnStruct getUserInput(Field &field, int);
 };
 
 

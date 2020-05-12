@@ -17,21 +17,21 @@ int main()
     DifficultyStruct Size;
 
     /* these values can be changed: */
-    Size.Small.columns = 9;
-    Size.Small.rows = 9;
-    Size.Small.mines = 10;
+    Size.small.columns  = 9;
+    Size.small.rows     = 9;
+    Size.small.mines    = 10;
 
-    Size.Medium.columns = 16;
-    Size.Medium.rows = 16;
-    Size.Medium.mines = 40;
+    Size.medium.columns = 16;
+    Size.medium.rows    = 16;
+    Size.medium.mines   = 40;
 
-    Size.Large.columns = 22;
-    Size.Large.rows = 16;
-    Size.Large.mines = 99;
+    Size.large.columns  = 22;
+    Size.large.rows     = 16;
+    Size.large.mines    = 99;
 
     // set X/Y position of the field
-    int fieldOffsetX = 6;
-    int fieldOffsetY = 5;
+    int fieldOffsetX    = 6;
+    int fieldOffsetY    = 5;
     /* ----------------------------*/
     
     common.setRandomSeed();
@@ -39,47 +39,47 @@ int main()
     int rows = 0, cols = 0;
     int difficulty = 0;
     int minesCount = 0;
-    coordsStruct Dimensions;
+    CoordsStruct dimensions;
     std::string difficultyString;
 
     input.showCursor(false);
     
     while (true)
     {        
-        userInputReturnStruct UserInput;
-        placeUserInputReturnStruct PlaceUserInputReturn;
+        UserInputReturnStruct userInput;
+        PlaceUserInputReturnStruct placeUserInputReturn;
         common.clearScreen();
         difficulty = input.getDifficulty();
         
         if (difficulty == 1) 
         {
             difficultyString = print.setDifficultyTexts(1);
-            cols = Size.Small.columns;
-            rows = Size.Small.rows;
-            minesCount = Size.Small.mines;
+            cols = Size.small.columns;
+            rows = Size.small.rows;
+            minesCount = Size.small.mines;
         }        
         else if (difficulty == 2) 
         {
             difficultyString = print.setDifficultyTexts(2);
-            cols = Size.Medium.columns;
-            rows = Size.Medium.rows;
-            minesCount = Size.Medium.mines;
+            cols = Size.medium.columns;
+            rows = Size.medium.rows;
+            minesCount = Size.medium.mines;
         }
         else if (difficulty == 3) 
         {
             difficultyString = print.setDifficultyTexts(3);
-            cols = Size.Large.columns;
-            rows = Size.Large.rows;
-            minesCount = Size.Large.mines;
+            cols = Size.large.columns;
+            rows = Size.large.rows;
+            minesCount = Size.large.mines;
         }
         else
         {
             difficultyString = print.setDifficultyTexts(4);
             common.clearScreen();
             input.showCursor(true);
-            Dimensions = input.getDimensions();
-            rows = Dimensions.row;
-            cols = Dimensions.col;
+            dimensions = input.getDimensions();
+            rows = dimensions.row;
+            cols = dimensions.col;
             common.clearScreen();
             minesCount = input.getMinesCount(cols * rows);
             input.showCursor(false);
@@ -107,16 +107,16 @@ int main()
             #endif
             field.gotoXY(1, fieldOffsetY + field.getRows()*2 + 4);
 
-            UserInput = input.getUserInput(field, firstrun);            
+            userInput = input.getUserInput(field, firstrun);            
             firstrun = 0;
-            PlaceUserInputReturn = field.placeUserInput(UserInput, turn);
-            if (PlaceUserInputReturn.hasLost)
+            placeUserInputReturn = field.placeUserInput(userInput, turn);
+            if (placeUserInputReturn.hasLost)
                 break;
-            else if (PlaceUserInputReturn.hasWon)
+            else if (placeUserInputReturn.hasWon)
                 break;
             else
             {
-                if (PlaceUserInputReturn.isTurn)
+                if (placeUserInputReturn.isTurn)
                     turn++;
             }
         }

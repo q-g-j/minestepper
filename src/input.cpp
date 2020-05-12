@@ -98,27 +98,27 @@ void Input::showCursor(bool show)
 }
 
 // move the players cursor in 4 directions with the arrow keys:
-void Input::moveCursor(Field &field, coordsStruct& CurrentArrayPosition, Direction &direction)
+void Input::moveCursor(Field &field, CoordsStruct& currentArrayPosition, Direction &direction)
 {
     Common common;
     Symbols symbols;
     
-    coordsStruct currentCursorPosition;
+    CoordsStruct currentCursorPosition;
     std::wcout << L"\b";
-    field.printCoords(CurrentArrayPosition, false);
+    field.printCoords(currentArrayPosition, false);
     if (direction == Direction::UP)
-        CurrentArrayPosition.row--;
+        currentArrayPosition.row--;
     else if (direction == Direction::DOWN)
-        CurrentArrayPosition.row++;
+        currentArrayPosition.row++;
     else if (direction == Direction::LEFT)
-        CurrentArrayPosition.col--;
+        currentArrayPosition.col--;
     else if (direction == Direction::RIGHT)
-        CurrentArrayPosition.col++;
-    currentCursorPosition = common.convCoordsToCursorPosition(CurrentArrayPosition, field.getOffsetX(), field.getOffsetY(), field.getCellWidth());
+        currentArrayPosition.col++;
+    currentCursorPosition = common.convCoordsToCursorPosition(currentArrayPosition, field.getOffsetX(), field.getOffsetY(), field.getCellWidth());
     field.gotoXY(currentCursorPosition.col, currentCursorPosition.row);
     coutconv << symbols.symbolCursor << std::flush;
-    if (field.getCoordsContent(CurrentArrayPosition) == symbols.symbolFlag || field.isNumber(CurrentArrayPosition))
-        field.printCoords(CurrentArrayPosition, true);
+    if (field.getCoordsContent(currentArrayPosition) == symbols.symbolFlag || field.isNumber(currentArrayPosition))
+        field.printCoords(currentArrayPosition, true);
 }
 
 // erase particular lines instead of clearing the whole screen:
@@ -157,7 +157,6 @@ void Input::deleteLastLine(size_t const& stringLength)
 int Input::getDifficulty()
 {
     Common common;
-    Input input;
     Print print;
     int difficulty = 0;
     
@@ -170,7 +169,6 @@ int Input::getDifficulty()
             if ((inputKey = _getch()) == 'q' || inputKey == 'Q')
             {
                 common.clearScreen();
-                input.showCursor(true);
                 exit (0);
             }
             else if (inputKey == '1')
@@ -235,13 +233,13 @@ int Input::getDifficulty()
 }
 
 // custom mode: ask user for the size of the field:
-coordsStruct Input::getDimensions()
+CoordsStruct Input::getDimensions()
 {
     Colors colors;
     Common common;
     Print print;
     
-    coordsStruct dimensions;
+    CoordsStruct dimensions;
     std::string line = "";
     int beforeX = 0;
     int afterX = 0;
@@ -370,7 +368,7 @@ int Input::getMinesCount(int const& fieldSize)
 }
 
 // the main function to ask the user for valid coordinates:
-userInputReturnStruct Input::getUserInput(Field &field, int firstrun)
+UserInputReturnStruct Input::getUserInput(Field &field, int firstrun)
 {
     Colors colors;
     Common common;
@@ -378,9 +376,9 @@ userInputReturnStruct Input::getUserInput(Field &field, int firstrun)
     Symbols symbols;
     
     char inputKey;
-    static coordsStruct CurrentArrayPosition;
-    coordsStruct CurrentCursorPosition;
-    userInputReturnStruct UserInput;
+    static CoordsStruct currentArrayPosition;
+    CoordsStruct currentCursorPosition;
+    UserInputReturnStruct userInput;
 
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
     #else
@@ -395,23 +393,23 @@ userInputReturnStruct Input::getUserInput(Field &field, int firstrun)
     if (firstrun == 1)
     {
         if (field.getCols() % 2 == 0)
-            CurrentArrayPosition.col = (field.getCols()) / 2;
+            currentArrayPosition.col = (field.getCols()) / 2;
         else
-            CurrentArrayPosition.col = int(field.getCols()/ 2) + 1;
+            currentArrayPosition.col = int(field.getCols()/ 2) + 1;
         if (field.getRows() % 2 == 0)
-            CurrentArrayPosition.row = (field.getRows()) / 2;
+            currentArrayPosition.row = (field.getRows()) / 2;
         else
-            CurrentArrayPosition.row = int(field.getRows()/ 2) + 1;
+            currentArrayPosition.row = int(field.getRows()/ 2) + 1;
     }
     
-    CurrentCursorPosition = common.convCoordsToCursorPosition(CurrentArrayPosition, field.getOffsetX(), field.getOffsetY(), field.getCellWidth());    
-    field.gotoXY(CurrentCursorPosition.col, CurrentCursorPosition.row);
+    currentCursorPosition = common.convCoordsToCursorPosition(currentArrayPosition, field.getOffsetX(), field.getOffsetY(), field.getCellWidth());    
+    field.gotoXY(currentCursorPosition.col, currentCursorPosition.row);
     
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
     common.setUnicode(true);
 
-    if (field.getCoordsContent(CurrentArrayPosition) == symbols.symbolFlag || field.isNumber(CurrentArrayPosition))
-        field.printCoords(CurrentArrayPosition, true);
+    if (field.getCoordsContent(currentArrayPosition) == symbols.symbolFlag || field.isNumber(currentArrayPosition))
+        field.printCoords(currentArrayPosition, true);
     else
         coutconv << symbols.symbolCursor << std::flush;
 
@@ -424,34 +422,34 @@ userInputReturnStruct Input::getUserInput(Field &field, int firstrun)
             inputKey = _getch();
             if (inputKey == KEY_UP)
             {
-                if (CurrentArrayPosition.row > 1)
+                if (currentArrayPosition.row > 1)
                 {
                     Direction direction = Direction::UP;
-                    moveCursor(field, CurrentArrayPosition, direction);
+                    moveCursor(field, currentArrayPosition, direction);
                 }
             }
             else if (inputKey == KEY_DOWN)
             {
-                if (CurrentArrayPosition.row < field.getRows())
+                if (currentArrayPosition.row < field.getRows())
                 {
                     Direction direction = Direction::DOWN;
-                    moveCursor(field, CurrentArrayPosition, direction);
+                    moveCursor(field, currentArrayPosition, direction);
                 }
             }
             else if (inputKey == KEY_LEFT)
             {
-                if (CurrentArrayPosition.col > 1)
+                if (currentArrayPosition.col > 1)
                 {
                     Direction direction = Direction::LEFT;
-                    moveCursor(field, CurrentArrayPosition, direction);
+                    moveCursor(field, currentArrayPosition, direction);
                 }
             }
             else if (inputKey == KEY_RIGHT)
             {
-                if (CurrentArrayPosition.col < field.getCols())
+                if (currentArrayPosition.col < field.getCols())
                 {
                     Direction direction = Direction::RIGHT;
-                    moveCursor(field, CurrentArrayPosition, direction);
+                    moveCursor(field, currentArrayPosition, direction);
                 }
             }
         }
@@ -462,13 +460,13 @@ userInputReturnStruct Input::getUserInput(Field &field, int firstrun)
         }
         else if (inputTmp == 'h' || inputTmp == 'H')
         {
-            print.printHelp(field, CurrentArrayPosition);
+            print.printHelp(field, currentArrayPosition);
             continue;
         }
         else if (inputTmp == KEY_ENTER)
         {
             coutconv << L"\b" << std::flush;
-            if (field.getCoordsContent(CurrentArrayPosition) == symbols.symbolFlag)
+            if (field.getCoordsContent(currentArrayPosition) == symbols.symbolFlag)
             {
                 continue;
             }
@@ -478,10 +476,10 @@ userInputReturnStruct Input::getUserInput(Field &field, int firstrun)
         else if  (inputTmp == KEY_SPACE)
         {
             coutconv << L"\b" << std::flush;
-            if (field.isNumber(CurrentArrayPosition) || field.getCoordsContent(CurrentArrayPosition) == L" ")
+            if (field.isNumber(currentArrayPosition) || field.getCoordsContent(currentArrayPosition) == L" ")
                 continue;
             else
-                UserInput.isFlag = true;
+                userInput.isFlag = true;
             break;
         }
         else
@@ -490,8 +488,8 @@ userInputReturnStruct Input::getUserInput(Field &field, int firstrun)
     common.setUnicode(false);
 
     #else
-    if (field.getCoordsContent(CurrentArrayPosition) == symbols.symbolFlag || field.isNumber(CurrentArrayPosition))
-        field.printCoords(CurrentArrayPosition, true);
+    if (field.getCoordsContent(currentArrayPosition) == symbols.symbolFlag || field.isNumber(currentArrayPosition))
+        field.printCoords(currentArrayPosition, true);
     else
         std::cout << symbols.symbolCursor << std::flush;
     while (read(STDIN_FILENO, &inputKey, 1) == 1)
@@ -503,13 +501,13 @@ userInputReturnStruct Input::getUserInput(Field &field, int firstrun)
         }
         else if (inputKey == 'h' || inputKey == 'H')
         {
-            print.printHelp(field, CurrentArrayPosition);
+            print.printHelp(field, currentArrayPosition);
             continue;
         }
         else if (inputKey == KEY_ENTER)
         {
             std::cout << "\b" << std::flush;
-            if (field.getCoordsContent(CurrentArrayPosition) == symbols.symbolFlag)
+            if (field.getCoordsContent(currentArrayPosition) == symbols.symbolFlag)
                 continue;
             else
                 break;
@@ -517,42 +515,42 @@ userInputReturnStruct Input::getUserInput(Field &field, int firstrun)
         else if (inputKey == KEY_SPACE)
         {
             std::cout << "\b" << std::flush;
-            if (field.isNumber(CurrentArrayPosition) || field.getCoordsContent(CurrentArrayPosition) == " ")
+            if (field.isNumber(currentArrayPosition) || field.getCoordsContent(currentArrayPosition) == " ")
                 continue;
             else;
-            UserInput.isFlag = true;
+            userInput.isFlag = true;
             break;
         }
         else if (inputKey == KEY_UP)
         {
-            if (CurrentArrayPosition.row > 1)
+            if (currentArrayPosition.row > 1)
             {
                 Direction direction = Direction::UP;
-                moveCursor(field, CurrentArrayPosition, direction);
+                moveCursor(field, currentArrayPosition, direction);
             }
         }
         else if (inputKey == KEY_DOWN)
         {
-            if (CurrentArrayPosition.row < field.getRows())
+            if (currentArrayPosition.row < field.getRows())
             {
                 Direction direction = Direction::DOWN;
-                moveCursor(field, CurrentArrayPosition, direction);
+                moveCursor(field, currentArrayPosition, direction);
             }
         }
         else if (inputKey == KEY_LEFT)
         {
-            if (CurrentArrayPosition.col > 1)
+            if (currentArrayPosition.col > 1)
             {
                 Direction direction = Direction::LEFT;
-                moveCursor(field, CurrentArrayPosition, direction);
+                moveCursor(field, currentArrayPosition, direction);
             }
         }
         else if (inputKey == KEY_RIGHT)
         {
-            if (CurrentArrayPosition.col < field.getCols())
+            if (currentArrayPosition.col < field.getCols())
             {
                 Direction direction = Direction::RIGHT;
-                moveCursor(field, CurrentArrayPosition, direction);
+                moveCursor(field, currentArrayPosition, direction);
             }
         }
         else
@@ -560,8 +558,8 @@ userInputReturnStruct Input::getUserInput(Field &field, int firstrun)
     }
     #endif
     
-    UserInput.Coords.col = CurrentArrayPosition.col;
-    UserInput.Coords.row = CurrentArrayPosition.row;
+    userInput.Coords.col = currentArrayPosition.col;
+    userInput.Coords.row = currentArrayPosition.row;
 
     #if !defined(_WIN32) && !defined(WIN32) && !defined(_WIN64) && !defined(WIN64)
         disableNonCanonicalMode();
@@ -569,5 +567,5 @@ userInputReturnStruct Input::getUserInput(Field &field, int firstrun)
     
     firstrun++;
 
-    return UserInput;
+    return userInput;
 }

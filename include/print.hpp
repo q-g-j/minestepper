@@ -19,6 +19,6 @@ public:
     void printCustomGetMinesCount();
     void printHasWon();
     void printHasLost();
-    void printHelp(Field &field, coordsStruct&);
+    void printHelp(Field &field, CoordsStruct&);
     void printExplanation();
 };

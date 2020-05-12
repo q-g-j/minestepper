@@ -94,7 +94,7 @@ void Print::printHasLost()
     input.getEnterKey(goBackString);
 }
 
-void Print::printHelp(Field &field, coordsStruct &CurrentArrayPosition)
+void Print::printHelp(Field &field, CoordsStruct &currentArrayPosition)
 {
     Colors colors;
     Common common;
@@ -102,7 +102,7 @@ void Print::printHelp(Field &field, coordsStruct &CurrentArrayPosition)
     Symbols symbols;
     
     common.setUnicode(false);
-    coordsStruct currentCursorPosition;
+    CoordsStruct currentCursorPosition;
     common.clearScreen();
     printExplanation();
     input.getEnterKey("");
@@ -121,11 +121,11 @@ void Print::printHelp(Field &field, coordsStruct &CurrentArrayPosition)
     std::cout << colors.setTextColor(colors.fg_white);
     std::cout << getHelpText << newline << newline;
     std::cout << colors.setTextColor(colors.color_default);
-    currentCursorPosition = common.convCoordsToCursorPosition(CurrentArrayPosition, field.getOffsetX(), field.getOffsetY(), field.getCellWidth());
+    currentCursorPosition = common.convCoordsToCursorPosition(currentArrayPosition, field.getOffsetX(), field.getOffsetY(), field.getCellWidth());
     field.gotoXY(currentCursorPosition.col, currentCursorPosition.row);
     common.setUnicode(true);
-    if (field.getCoordsContent(CurrentArrayPosition) == symbols.symbolFlag || field.isNumber(CurrentArrayPosition))
-        field.printCoords(CurrentArrayPosition, true);
+    if (field.getCoordsContent(currentArrayPosition) == symbols.symbolFlag || field.isNumber(currentArrayPosition))
+        field.printCoords(currentArrayPosition, true);
     else
         coutconv << symbols.symbolCursor << std::flush;
 }
@@ -142,7 +142,7 @@ void Print::printExplanation()
     coutconv << "If you're sure that you have found a mine, place a flag on it's position by pressing SPACE." << newline;
     coutconv << "To remove the flag, just repeat your input. You may place or remove as many flags in a row as you wish." << newline << newline;
     coutconv << "You can reselect a numbered cell with ENTER to automatically uncover all remaining neighbours," << newline;
-    coutconv << "as long as you put all flags right! Otherwise you might lose" << newline << newline;
+    coutconv << "as long as you put all flags right! Otherwise you might lose..." << newline << newline;
     coutconv << "Explanations:" << newline << newline;
     coutconv << "Arrow Keys:    navigate" << newline;
     coutconv << "ENTER:         sweep" << newline;
