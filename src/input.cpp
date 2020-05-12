@@ -10,7 +10,7 @@
     #include <windows.h>
 #else
     #include <termios.h>
-#include <unistd.h>
+    #include <unistd.h>
 #endif
 
 #include "../include/colors.hpp"
@@ -238,7 +238,6 @@ int Input::getDifficulty()
 coordsStruct Input::getDimensions()
 {
     Colors colors;
-    Input input;
     Common common;
     Print print;
     
@@ -322,7 +321,6 @@ int Input::getMinesCount(int const& fieldSize)
 {
     Colors colors;
     Common common;
-    Input input;
     Print print;
     
     std::string line = "";
@@ -376,7 +374,6 @@ userInputReturnStruct Input::getUserInput(Field &field, int firstrun)
 {
     Colors colors;
     Common common;
-    Input input;
     Print print;
     Symbols symbols;
     
