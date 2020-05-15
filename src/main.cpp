@@ -106,7 +106,8 @@ int main()
                 std::cout << print.debugTurnCountText << turn <<  "     " << std::flush;
             #endif
             field.gotoXY(1, fieldOffsetY + field.getRows()*2 + 4);
-
+            
+            input.showCursor(false);
             userInput = input.getUserInput(field, firstrun);            
             firstrun = 0;
             placeUserInputReturn = field.placeUserInput(userInput, turn);
