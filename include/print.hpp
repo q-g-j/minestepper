@@ -21,4 +21,5 @@ public:
     void printHasLost();
     void printHelp(Field &field, CoordsStruct&);
     void printExplanation();
+    void deleteLastLine(size_t const&);
 };

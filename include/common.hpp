@@ -58,11 +58,11 @@ public:
     };
     
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-    stringconv intToString(int const&);
-    stringconv stringConvert(std::string const&);
+        stringconv intToString(int const&);
+        stringconv stringConvert(std::string const&);
     #else
-    std::string intToString(int const&);
-    std::string stringConvert(std::wstring const&);
+        std::string intToString(int const&);
+        std::string stringConvert(std::wstring const&);
     #endif
     
     void setUnicode(bool);

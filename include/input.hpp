@@ -37,7 +37,6 @@ public:
     int getMinesCount(int const&);
     
     void getEnterKey(std::string const&);
-    void deleteLastLine(size_t const&);
     UserInputReturnStruct getUserInput(Field &field, int);
 };
 

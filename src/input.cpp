@@ -121,38 +121,6 @@ void Input::moveCursor(Field &field, CoordsStruct& currentArrayPosition, Directi
         field.printCoords(currentArrayPosition, true);
 }
 
-// erase particular lines instead of clearing the whole screen:
-void Input::deleteLastLine(size_t const& stringLength)
-{
-    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-        CONSOLE_SCREEN_BUFFER_INFO cbsi;
-        HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
-        COORD cursorPosition;
-        cursorPosition.X = 0;
-        cursorPosition.Y = 0;
-
-        if (GetConsoleScreenBufferInfo(console, &cbsi))
-        {
-            cursorPosition = cbsi.dwCursorPosition;
-        }
-        cursorPosition.Y--;
-
-        SetConsoleCursorPosition(console, cursorPosition);
-        std::cout << "\r";
-        for (unsigned int i = 0; i < stringLength; i++)
-            std::cout << " ";
-        std::cout << "\r";
-        std::cout << std::flush;
-    #else
-        std::cout << "\x1b[A";
-        std::cout << "\r";
-        for (unsigned int i = 0; i < stringLength; i++)
-            std::cout << " ";
-        std::cout << "\r";
-        std::cout << std::flush;
-    #endif
-}
-
 // custom mode: ask user for the game mode (difficulty):
 int Input::getDifficulty()
 {
@@ -308,8 +276,8 @@ CoordsStruct Input::getDimensions()
         else
         {
             getEnterKey(print.wrongInputText);
-            deleteLastLine(print.wrongInputText.length());
-            deleteLastLine(print.inputText.length() + line.length());
+            print.deleteLastLine(print.wrongInputText.length());
+            print.deleteLastLine(print.inputText.length() + line.length());
         }
     }
 }
@@ -361,8 +329,8 @@ int Input::getMinesCount(int const& fieldSize)
         else
         {
             getEnterKey(print.wrongInputText);
-            deleteLastLine(print.wrongInputText.length());
-            deleteLastLine(print.inputText.length() + line.length());
+            print.deleteLastLine(print.wrongInputText.length());
+            print.deleteLastLine(print.inputText.length() + line.length());
         }
     }
 }
