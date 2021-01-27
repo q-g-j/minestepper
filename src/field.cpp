@@ -39,14 +39,6 @@ Field::Field(int const& cols_, int const& rows_, int const& fieldOffsetX_, int c
 // deconstructor:
 Field::~Field()
 {
-    // delete pointer (2D-)arrays to avoid memory leaks:
-    for (int i=0; i <= cols; i++)
-        delete[] this->fieldArray[i];
-    delete[] this->fieldArray;
-    
-    for (int i=0; i <= cols; i++)
-        delete[] this->minesArray[i];
-    delete[] this->minesArray;
 }
 
 // some getters:
@@ -95,16 +87,13 @@ stringconv Field::getCoordsContent(Common::CoordsStruct const& coords)
     return this->fieldArray[coords.col][coords.row];
 }
 
-// use pointers to pointers to be able to create dynamic 2D-arrays
-// (could use vectors, but will leave this for now):
-stringconv** Field::createArray()
+// use 2D vectors for the game field:
+std::vector<std::vector<stringconv>> Field::createArray()
 {
     const int colsNum = this->cols + 1;
     const int rowsNum = this->rows + 1;
-    stringconv** tempArray = nullptr;
-    tempArray = new stringconv*[colsNum];
-    for (int i=0; i < colsNum; i++)
-        tempArray[i] = new stringconv[rowsNum];
+    std::vector<std::vector<stringconv>> tempArray;
+    tempArray.resize(rowsNum, std::vector<stringconv>(colsNum));
     return tempArray;
 }
 
@@ -122,7 +111,7 @@ void Field::clearFieldArray()
     }
 }
 
-// fill this->minesArray[][] with " "
+// fill this->minesArray[][] with symbolZero
 void Field::clearMinesArray()
 {
     Symbols symbols;
@@ -424,7 +413,7 @@ bool Field::isNumber(CoordsStruct& coords)
 }
 
 // find neighbors of a cell at "coords" that hold a given content (passed by variable symbol)
-std::vector<CoordsStruct> Field::findNeighbours(stringconv **tempArray, CoordsStruct const& coords, stringconv const& symbol)
+std::vector<CoordsStruct> Field::findNeighbours(std::vector<std::vector<stringconv>> const& tempArray, CoordsStruct const& coords, stringconv const& symbol)
 {
     std::vector<CoordsStruct> neighboursVector;
     
