@@ -25,7 +25,7 @@ public:
         const stringconv symbolFlag = L"\u25ba";
         const stringconv symbolMine = L"\u263c";
         const stringconv symbolMineHit = L"#";
-        const stringconv symbolUncovered = L" ";
+        const stringconv symbolZero = L" ";
         const stringconv symbolCovered = L"\u2591";
         const stringconv symbolCursor = L"\u2588";
     #else
@@ -44,7 +44,7 @@ public:
         const stringconv symbolFlag = "\u25ba";
         const stringconv symbolMine = colors.fg_red + "\u263c" + colors.color_default;
         const stringconv symbolMineHit = colors.fg_red + "#" + colors.color_default;
-        const stringconv symbolUncovered = " ";
+        const stringconv symbolZero = " ";
         const stringconv symbolCovered = "\u2591";
         const stringconv symbolCursor = "\u2588";
     #endif

@@ -1,4 +1,4 @@
-#pragma once
+#pragma onces
     
 class Print
 {

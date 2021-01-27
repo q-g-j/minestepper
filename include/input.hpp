@@ -1,4 +1,4 @@
-#pragma once
+#pragma onces
 
 #if !defined(_WIN32) && !defined(WIN32) && !defined(_WIN64) && !defined(WIN64)
     void enableNonCanonicalMode();

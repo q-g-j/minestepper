@@ -45,7 +45,7 @@ public:
     void drawField();
     void gotoXY(int const&, int const&);
     void printCoords(CoordsStruct&, bool);
-    bool isFlagSet(Common::CoordsStruct&);
+    bool isFlag(Common::CoordsStruct&);
     bool isNumber(Common::CoordsStruct&);
     Common::PlaceUserInputReturnStruct placeUserInput(Common::UserInputReturnStruct&, int&);
 };

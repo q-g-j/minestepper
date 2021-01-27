@@ -64,7 +64,7 @@ void Common::setRandomSeed()
     #endif
 }
 
-// only used on start, game begin and exit, to avoid screen blinking / slow refresh during the game:
+// clear the whole screen. Used rarely to avoid screen blinking / slow refresh during the game:
 void Common::clearScreen()
 {
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
@@ -75,8 +75,9 @@ void Common::clearScreen()
     #endif
 }
 
-// convert coords in type integer to coords in type struct (e.g. position = 4 will return coords.col = 4, coords.row = 1):
-CoordsStruct Common::intToStruct(int& position, int& cols)
+// convert coords of type integer to coords of type struct 
+// (e.g. "position = 4" will return "coords.col = 4, coords.row = 1"):
+CoordsStruct Common::convIntToCoords(int& position, int& cols)
 {
     CoordsStruct coords;
     
@@ -99,7 +100,7 @@ CoordsStruct Common::intToStruct(int& position, int& cols)
 }
 
 // the above function the other way around
-int Common::structToInt(CoordsStruct& coords, int& cols)
+int Common::convCoordsToInt(CoordsStruct& coords, int& cols)
 {
     int position = 0;
     if (coords.row == 1)
@@ -108,7 +109,7 @@ int Common::structToInt(CoordsStruct& coords, int& cols)
         return position = (cols) * (coords.row-1) + coords.col;
 }
 
-// can't use raw coordinates when placing the players cursor, due to the drawn lines and cell width:
+// can't use raw coordinates when placing the players cursor, due to the drawn lines and the cell width:
 CoordsStruct Common::convCoordsToCursorPosition(CoordsStruct& coords, int const& offsetX, int const& offsetY, int const& cellWidth)
 {
     CoordsStruct cursorPosition;
