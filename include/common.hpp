@@ -44,7 +44,7 @@ public:
     {
         int col = 0;
         int row = 0;
-    };    
+    };
     struct UserInputReturnStruct
     {
         CoordsStruct Coords;
@@ -56,7 +56,7 @@ public:
         bool hasWon = false;
         bool isTurn = false;
     };
-    
+
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         stringconv intToString(int const&);
         stringconv stringConvert(std::string const&);
@@ -64,12 +64,12 @@ public:
         std::string intToString(int const&);
         std::string stringConvert(std::wstring const&);
     #endif
-    
+
     void setUnicode(bool);
     void setRandomSeed();
     void clearScreen();
     CoordsStruct convIntToCoords(int&, int&);
-    int convCoordsToInt(CoordsStruct&, int&);
+    unsigned int convCoordsToInt(CoordsStruct&, int&);
     CoordsStruct convCoordsToCursorPosition(CoordsStruct&, int const&, int const&, int const&);
 };
 

@@ -75,12 +75,12 @@ void Common::clearScreen()
     #endif
 }
 
-// convert coords of type integer to coords of type struct 
+// convert coords of type integer to coords of type struct
 // (e.g. "position = 4" will return "coords.col = 4, coords.row = 1"):
 CoordsStruct Common::convIntToCoords(int& position, int& cols)
 {
     CoordsStruct coords;
-    
+
     if (position <= cols)
     {
         coords.col = position;
@@ -100,7 +100,7 @@ CoordsStruct Common::convIntToCoords(int& position, int& cols)
 }
 
 // the above function the other way around
-int Common::convCoordsToInt(CoordsStruct& coords, int& cols)
+unsigned int Common::convCoordsToInt(CoordsStruct& coords, int& cols)
 {
     int position = 0;
     if (coords.row == 1)
@@ -116,7 +116,7 @@ CoordsStruct Common::convCoordsToCursorPosition(CoordsStruct& coords, int const&
     cursorPosition.col = offsetX;
     for (int i = 1; i < coords.col; i ++)
         cursorPosition.col = cursorPosition.col + (cellWidth + 1);
-    
+
     cursorPosition.row = offsetY;
     for (int i = 1; i < coords.row; i ++)
         cursorPosition.row = cursorPosition.row + 2;

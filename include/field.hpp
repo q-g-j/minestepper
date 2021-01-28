@@ -15,15 +15,15 @@ private:
     int countCovered;
     int flagsCount;
     std::string difficultyString;
-    std::vector<std::vector<stringconv>> fieldArray;
-    std::vector<std::vector<stringconv>> minesArray;
-    std::vector<std::vector<stringconv>> cursorArray;
-    std::vector<std::vector<stringconv>> createArray();
+    std::vector<std::vector<stringconv>> field2DVector;
+    std::vector<std::vector<stringconv>> mines2DVector;
+    std::vector<std::vector<stringconv>> cursor2DVector;
     
     // private methods
-    void clearFieldArray();
-    void clearMinesArray();
-    void fillMinesArray(CoordsStruct&);
+    void clearField();
+    void clearMines();
+    std::vector<std::vector<stringconv>> create2DVector();
+    void fillMines(CoordsStruct&);
     std::vector<CoordsStruct> findNeighbours(std::vector<std::vector<stringconv>> const&, CoordsStruct const&, stringconv const&);
     
 public:

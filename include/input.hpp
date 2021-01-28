@@ -1,4 +1,4 @@
-#pragma onces
+#pragma once
 
 #if !defined(_WIN32) && !defined(WIN32) && !defined(_WIN64) && !defined(WIN64)
     void enableNonCanonicalMode();
@@ -30,12 +30,11 @@ public:
         #define KEY_ENTER '\n'
         #define KEY_SPACE ' '
     #endif
-
-    void showCursor(bool);    
+    void showCursor(bool);
     int getDifficulty();
     CoordsStruct getDimensions();
     int getMinesCount(int const&);
-    
+
     void getEnterKey(std::string const&);
     UserInputReturnStruct getUserInput(Field &field, int);
 };

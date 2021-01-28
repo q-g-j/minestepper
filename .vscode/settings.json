@@ -1,5 +1,8 @@
 {
     "cmake.buildDirectory": "${workspaceRoot}/build/${buildType}",
+    "cmake.preferredGenerators": [],
+    // "cmake.cmakePath": "D:\\msys32\\mingw32\\bin\\cmake.exe",
+    "cmake.cmakePath": "D:\\cygwin\\bin\\cmake.exe",
     "files.associations": {
         "array": "cpp",
         "atomic": "cpp",

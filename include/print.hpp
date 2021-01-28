@@ -1,9 +1,9 @@
-#pragma onces
-    
+#pragma once
+
 class Print
 {
 private:
-    
+
 public:
     // public constants:
     const std::string inputText = "Input: ";
