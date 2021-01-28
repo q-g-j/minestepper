@@ -76,33 +76,33 @@ void Print::printCustomGetMinesCount()
 void Print::printHasWon()
 {
     Input input;
-    
+
     std::string goBackString =  "Press ENTER to go back...";
     std::cout << newline;
     std::cout << "Congratulation, you have won!" << newline;
     input.getEnterKey(goBackString);
-    
+
 }
 
 void Print::printHasLost()
 {
     Input input;
-    
+
     std::string goBackString = "Press ENTER to go back...";
     std::cout << newline;
     std::cout << "Sry, you have lost!" << newline;
     input.getEnterKey(goBackString);
 }
 
-void Print::printHelp(Field &field, CoordsStruct &currentArrayPosition)
+void Print::printHelp(Field &field, Common::CoordsStruct &currentArrayPosition)
 {
     Colors colors;
     Common common;
     Input input;
     Symbols symbols;
-    
+
     common.setUnicode(false);
-    CoordsStruct currentCursorPosition;
+    Common::CoordsStruct currentCursorPosition;
     common.clearScreen();
     printExplanation();
     input.getEnterKey("");

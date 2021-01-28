@@ -18,14 +18,15 @@ private:
     std::vector<std::vector<stringconv>> field2DVector;
     std::vector<std::vector<stringconv>> mines2DVector;
     std::vector<std::vector<stringconv>> cursor2DVector;
-    
+
     // private methods
     void clearField();
     void clearMines();
     std::vector<std::vector<stringconv>> create2DVector();
-    void fillMines(CoordsStruct&);
-    std::vector<CoordsStruct> findNeighbours(std::vector<std::vector<stringconv>> const&, CoordsStruct const&, stringconv const&);
-    
+    void fillMines(Common::CoordsStruct&);
+    std::vector<Common::CoordsStruct> findNeighbours(std::vector<std::vector<stringconv>> const&, Common::CoordsStruct const&, stringconv const&);
+    void autoUncoverRecursive();
+
 public:
     Field(int const& cols_, int const& rows_, int const& fieldOffsetX_, int const& fieldOffsetY_, int const& fieldCellWidth_, int const& minesCount_, std::string const& difficultyString_);
     ~Field();
@@ -44,7 +45,7 @@ public:
     // public methods:
     void drawField();
     void gotoXY(int const&, int const&);
-    void printCoords(CoordsStruct&, bool);
+    void printCoords(Common::CoordsStruct&, bool);
     bool isFlag(Common::CoordsStruct&);
     bool isNumber(Common::CoordsStruct&);
     Common::PlaceUserInputReturnStruct placeUserInput(Common::UserInputReturnStruct&, int&);

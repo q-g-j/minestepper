@@ -13,8 +13,8 @@ int main()
     Common common;
     Input input;
     Print print;
-    
-    DifficultyStruct Size;
+
+    Common::DifficultyStruct Size;
 
     /* these values can be changed: */
     Size.Small.columns  = 9;
@@ -33,39 +33,39 @@ int main()
     int fieldOffsetX    = 6;
     int fieldOffsetY    = 5;
     /* ----------------------------*/
-    
+
     common.setRandomSeed();
     int fieldCellWidth = 3;
     int rows = 0, cols = 0;
     int difficulty = 0;
     int minesCount = 0;
-    CoordsStruct dimensions;
+    Common::CoordsStruct dimensions;
     std::string difficultyString;
 
     input.showCursor(false);
-    
+
     while (true)
     {
-        UserInputReturnStruct userInput;
-        PlaceUserInputReturnStruct placeUserInputReturn;
+        Common::UserInputReturnStruct userInput;
+        Common::PlaceUserInputReturnStruct placeUserInputReturn;
         common.clearScreen();
         difficulty = input.getDifficulty();
-        
-        if (difficulty == 1) 
+
+        if (difficulty == 1)
         {
             difficultyString = print.setDifficultyTexts(1);
             cols = Size.Small.columns;
             rows = Size.Small.rows;
             minesCount = Size.Small.mines;
-        }        
-        else if (difficulty == 2) 
+        }
+        else if (difficulty == 2)
         {
             difficultyString = print.setDifficultyTexts(2);
             cols = Size.Medium.columns;
             rows = Size.Medium.rows;
             minesCount = Size.Medium.mines;
         }
-        else if (difficulty == 3) 
+        else if (difficulty == 3)
         {
             difficultyString = print.setDifficultyTexts(3);
             cols = Size.Large.columns;
@@ -84,13 +84,13 @@ int main()
             minesCount = input.getMinesCount(cols * rows);
             input.showCursor(false);
         }
-        
-        Field field(cols, rows, fieldOffsetX, fieldOffsetY, fieldCellWidth, minesCount, difficultyString);            
-        
+
+        Field field(cols, rows, fieldOffsetX, fieldOffsetY, fieldCellWidth, minesCount, difficultyString);
+
         common.clearScreen();
         print.printTitle(difficultyString, cols, rows, minesCount);
         field.drawField();
-        
+
         int turn = 1;
         int firstrun = 1;
 
@@ -106,9 +106,9 @@ int main()
                 std::cout << print.debugTurnCountText << turn <<  "     " << std::flush;
             #endif
             field.gotoXY(1, fieldOffsetY + field.getRows()*2 + 4);
-            
+
             input.showCursor(false);
-            userInput = input.getUserInput(field, firstrun);            
+            userInput = input.getUserInput(field, firstrun);
             firstrun = 0;
             placeUserInputReturn = field.placeUserInput(userInput, turn);
             if (placeUserInputReturn.hasLost)
@@ -121,7 +121,7 @@ int main()
                     turn++;
             }
         }
-    }    
-    
+    }
+
     return 0;
 }

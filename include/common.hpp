@@ -1,6 +1,6 @@
 #pragma once
 
-// Windows and Linux seem to handle unicode strings differently (use wide strings only for Windows):
+// Windows and Linux seem to handle unicode strings differently (use wide strings for Windows):
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
     #define coutconv std::wcout
     #define stringconv std::wstring
@@ -72,8 +72,3 @@ public:
     unsigned int convCoordsToInt(CoordsStruct&, int&);
     CoordsStruct convCoordsToCursorPosition(CoordsStruct&, int const&, int const&, int const&);
 };
-
-typedef struct Common::DifficultyStruct DifficultyStruct;
-typedef struct Common::CoordsStruct CoordsStruct;
-typedef struct Common::UserInputReturnStruct UserInputReturnStruct;
-typedef struct Common::PlaceUserInputReturnStruct PlaceUserInputReturnStruct;

@@ -47,11 +47,11 @@ void Input::getEnterKey(std::string const& text)
 {
     Colors colors;
     Print print;
-    
+
     std::cout << colors.setTextColor(colors.fg_white);
     std::cout << text << std::flush;
     std::cout << colors.setTextColor(colors.color_default);
-    
+
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         while (true)
         {
@@ -62,7 +62,7 @@ void Input::getEnterKey(std::string const& text)
                 continue;
         }
     #else
-        enableNonCanonicalMode();  
+        enableNonCanonicalMode();
         char inputKey = ' ';
         while (read(STDIN_FILENO, &inputKey, 1) == 1)
         {
@@ -98,12 +98,12 @@ void Input::showCursor(bool show)
 }
 
 // move the players cursor in 4 directions with the arrow keys:
-void Input::moveCursor(Field &field, CoordsStruct& currentArrayPosition, Direction &direction)
+void Input::moveCursor(Field &field, Common::CoordsStruct& currentArrayPosition, Direction &direction)
 {
     Common common;
     Symbols symbols;
-    
-    CoordsStruct currentCursorPosition;
+
+    Common::CoordsStruct currentCursorPosition;
     std::wcout << L"\b";
     field.printCoords(currentArrayPosition, false);
     if (direction == Direction::UP)
@@ -127,9 +127,9 @@ int Input::getDifficulty()
     Common common;
     Print print;
     int difficulty = 0;
-    
+
     print.printMenu();
-    
+
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         while (true)
         {
@@ -201,20 +201,20 @@ int Input::getDifficulty()
 }
 
 // custom mode: ask user for the size of the field:
-CoordsStruct Input::getDimensions()
+Common::CoordsStruct Input::getDimensions()
 {
     Colors colors;
     Common common;
     Print print;
-    
-    CoordsStruct dimensions;
+
+    Common::CoordsStruct dimensions;
     std::string line = "";
     int beforeX = 0;
     int afterX = 0;
     bool isValidInput = false;
 
     print.printCustomGetDimensions();
-    
+
     while (true)
     {
         std::cout << colors.setTextColor(colors.fg_white);
@@ -288,11 +288,11 @@ int Input::getMinesCount(int const& fieldSize)
     Colors colors;
     Common common;
     Print print;
-    
+
     std::string line = "";
     int minesCount = 0;
     bool isValidInput = false;
-    
+
     common.clearScreen();
     print.printCustomGetMinesCount();
 
@@ -336,28 +336,28 @@ int Input::getMinesCount(int const& fieldSize)
 }
 
 // the main function to ask the user for valid coordinates:
-UserInputReturnStruct Input::getUserInput(Field &field, int firstrun)
+Common::UserInputReturnStruct Input::getUserInput(Field &field, int firstrun)
 {
     Colors colors;
     Common common;
     Print print;
     Symbols symbols;
-    
+
     char inputKey;
-    static CoordsStruct currentArrayPosition;
-    CoordsStruct currentCursorPosition;
-    UserInputReturnStruct userInput;
+    static Common::CoordsStruct currentArrayPosition;
+    Common::CoordsStruct currentCursorPosition;
+    Common::UserInputReturnStruct userInput;
 
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
     #else
-        enableNonCanonicalMode();    
+        enableNonCanonicalMode();
     #endif
 
     field.gotoXY(field.getOffsetX() - 1, field.getOffsetY() + field.getRows() * 2);
     std::cout << colors.setTextColor(colors.fg_white);
     std::cout << print.getHelpText << newline << newline;
     std::cout << colors.setTextColor(colors.color_default);
-    
+
     if (firstrun == 1)
     {
         if (field.getCols() % 2 == 0)
@@ -369,10 +369,10 @@ UserInputReturnStruct Input::getUserInput(Field &field, int firstrun)
         else
             currentArrayPosition.row = int(field.getRows()/ 2) + 1;
     }
-    
-    currentCursorPosition = common.convCoordsToCursorPosition(currentArrayPosition, field.getOffsetX(), field.getOffsetY(), field.getCellWidth());    
+
+    currentCursorPosition = common.convCoordsToCursorPosition(currentArrayPosition, field.getOffsetX(), field.getOffsetY(), field.getCellWidth());
     field.gotoXY(currentCursorPosition.col, currentCursorPosition.row);
-    
+
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
     common.setUnicode(true);
 
@@ -525,14 +525,14 @@ UserInputReturnStruct Input::getUserInput(Field &field, int firstrun)
             continue;
     }
     #endif
-    
+
     userInput.Coords.col = currentArrayPosition.col;
     userInput.Coords.row = currentArrayPosition.row;
 
     #if !defined(_WIN32) && !defined(WIN32) && !defined(_WIN64) && !defined(WIN64)
         disableNonCanonicalMode();
     #endif
-    
+
     firstrun++;
 
     return userInput;
