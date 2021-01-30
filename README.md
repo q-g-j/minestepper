@@ -13,6 +13,7 @@ A small console based version of Minesweeper to teach myself C++.
 - press ENTER on a number to auto-reveal safe cells similar to the Windows-version (if flags are placed right)
 
 It compiles and runs in Linux and Windows but might look a bit different on both, depending on the terminal(-settings) used.
+The screenshot was taken from konsole (the default terminal in KDE Plasma) in Linux.
 
-To compile you can use cmake + make or import into some IDE (like KDevelop, VSCode...).
+To compile you can use gcc with g++, cmake and make or import into some IDE (like KDevelop, VSCode...).
 No extra libraries needed.
