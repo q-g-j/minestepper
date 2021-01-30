@@ -1,5 +1,7 @@
 {
     "cmake.cmakePath": "D:\\msys32\\mingw32\\bin\\cmake.exe",
+    //"cmake.cmakePath": "D:\\cygwin\\bin\\cmake.exe",
+    "cmake.buildDirectory": "${workspaceFolder}\\build\\${buildKit}\\${buildType}",
     "files.associations": {
         "codecvt": "cpp",
         "array": "cpp",
