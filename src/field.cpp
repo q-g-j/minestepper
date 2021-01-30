@@ -420,7 +420,7 @@ bool Field::isNumber(Common::CoordsStruct& coords)
     return false;
 }
 
-// find neighbors of a cell at "coords" that hold a given content (passed by variable symbol)
+// find neighbours of a cell at "coords" that hold a given content (passed by variable symbol)
 std::vector<Common::CoordsStruct> Field::findNeighbours(std::vector<std::vector<stringconv>> const& temp2DVector, Common::CoordsStruct const& coords, stringconv const& symbol)
 {
     std::vector<Common::CoordsStruct> neighboursVector;
@@ -524,14 +524,33 @@ std::vector<Common::CoordsStruct> Field::findNeighbours(std::vector<std::vector<
     return neighboursVector;
 }
 
-void autoUncoverRecursive()
+// automatically uncover all connected cells, as long as they have no neighbour mines:
+void Field::autoUncoverRecursive(Common::CoordsStruct const& coords)
 {
-    ;
+    Common common;
+    Symbols symbols;
+
+    // create vector holding covered neighbours:
+    std::vector<Common::CoordsStruct> neighboursCoveredVector;
+    neighboursCoveredVector = findNeighbours(this->field2DVector, coords, symbols.symbolCovered);
+
+    for (size_t i = 0; i < neighboursCoveredVector.size(); i++)
+    {
+        std::vector<Common::CoordsStruct> neighboursMinesVector;
+        neighboursMinesVector = findNeighbours(this->mines2DVector, neighboursCoveredVector.at(i), symbols.symbolMine);
+        if (neighboursMinesVector.size() == 0)
+            this->field2DVector[neighboursCoveredVector.at(i).col][neighboursCoveredVector.at(i).row] = symbols.symbolZero;
+        else
+            this->field2DVector[neighboursCoveredVector.at(i).col][neighboursCoveredVector.at(i).row] = common.intToString(neighboursMinesVector.size());
+        printCoords(neighboursCoveredVector.at(i), false);
+        this->countCovered--;
+        if (neighboursMinesVector.size() == 0)
+            autoUncoverRecursive(neighboursCoveredVector.at(i));
+    }
 }
 
 // the main method of class Field which will alter this->field2DVector.
 // Takes single coords from Input::UserInput method.
-// TODO: write recursive helper function for auto-uncovering!
 Common::PlaceUserInputReturnStruct Field::placeUserInput(Common::UserInputReturnStruct& userInput, int& turn)
 {
     Common common;
@@ -539,7 +558,6 @@ Common::PlaceUserInputReturnStruct Field::placeUserInput(Common::UserInputReturn
     Symbols symbols;
 
     Common::PlaceUserInputReturnStruct returnStruct;
-    std::vector<Common::CoordsStruct> neighboursMinesVector;
 
     // set or remove flag if requested
     if (userInput.isFlag == true)
@@ -623,9 +641,9 @@ Common::PlaceUserInputReturnStruct Field::placeUserInput(Common::UserInputReturn
                 // only proceed if the flag number matches the number of actual surrounding mines:
                 if (autoUncoverNeighboursMinesVector.size() == autoUncoverNeighboursFlagsVector.size())
                 {
-                    // for each not uncovered neighbour of UserInput.Coords check if the player has missed a mine
+                    // for each covered neighbour of userInput.Coords check if the player has missed a mine
                     // and add this mines position to autoUncoverMissedMinesVector:
-                    for (int i = 0; i < static_cast<int>(autoUncoverNeighboursCoveredVector.size()); i++)
+                    for (size_t i = 0; i < autoUncoverNeighboursCoveredVector.size(); i++)
                     {
                         if (this->mines2DVector[autoUncoverNeighboursCoveredVector.at(i).col][autoUncoverNeighboursCoveredVector.at(i).row] == symbols.symbolMine)
                             autoUncoverMissedMinesVector.push_back(autoUncoverNeighboursCoveredVector.at(i));
@@ -633,7 +651,7 @@ Common::PlaceUserInputReturnStruct Field::placeUserInput(Common::UserInputReturn
                     // if there are missed mines, reveal the mines2DVector - player has lost:
                     if (autoUncoverMissedMinesVector.size() != 0)
                     {
-                        for (int i = 0; i < static_cast<int>(autoUncoverMissedMinesVector.size()); i++)
+                        for (size_t i = 0; i < autoUncoverMissedMinesVector.size(); i++)
                         {
                             this->mines2DVector[autoUncoverMissedMinesVector.at(i).col][autoUncoverMissedMinesVector.at(i).row] = symbols.symbolMineHit;
                         }
@@ -666,8 +684,8 @@ Common::PlaceUserInputReturnStruct Field::placeUserInput(Common::UserInputReturn
                     {
                         if (autoUncoverNeighboursMinesVector.size() == autoUncoverNeighboursFlagsVector.size())
                         {
-                            // for each not uncovered neighbour of UserInput.Coords, print the number of surrounding mines:
-                            for (int i = 0; i < static_cast<int>(autoUncoverNeighboursCoveredVector.size()); i++)
+                            // for each covered neighbour of userInput.Coords, print the number of surrounding mines:
+                            for (size_t i = 0; i < autoUncoverNeighboursCoveredVector.size(); i++)
                             {
                                 Common::CoordsStruct coordsTemp;
                                 coordsTemp.col = autoUncoverNeighboursCoveredVector.at(i).col;
@@ -690,7 +708,7 @@ Common::PlaceUserInputReturnStruct Field::placeUserInput(Common::UserInputReturn
         else
         {
             // uncover the players choice and place the number of surrounding mines in it:
-            neighboursMinesVector = findNeighbours(this->mines2DVector, userInput.Coords, symbols.symbolMine);
+            std::vector<Common::CoordsStruct> neighboursMinesVector = findNeighbours(this->mines2DVector, userInput.Coords, symbols.symbolMine);
             if (neighboursMinesVector.size() == 0)
                 this->field2DVector[userInput.Coords.col][userInput.Coords.row] = symbols.symbolZero;
             else
@@ -700,72 +718,15 @@ Common::PlaceUserInputReturnStruct Field::placeUserInput(Common::UserInputReturn
             returnStruct.isTurn = true;
         }
 
-        // automatically uncover all neighbour squares of squares containing symbolZero
-        bool run = true;
-        if (neighboursMinesVector.size() == 0)
+        // Call recursive method autoUncoverRecursive() to automatically uncover all connected cells, as long as
+        // they have no neighbour mines:
+        std::vector<Common::CoordsStruct> autouncoverNeighboursMinesVector = findNeighbours(this->mines2DVector, userInput.Coords, symbols.symbolMine);
+        if (autouncoverNeighboursMinesVector.size() == 0)
         {
-            while (run == true)
-            {
-                // for each free position do:
-                for (int i = 1; i <= this->cols; i++)
-                {
-                    for (int j = 1; j <= this->rows; j++)
-                    {
-                        if (this->field2DVector[i][j] == symbols.symbolCovered)
-                        {
-                            // create a new vector of neighbours containing symbolZero:
-                            Common::CoordsStruct coordsBase;
-                            coordsBase.col = i;
-                            coordsBase.row = j;
-                            std::vector<Common::CoordsStruct> neighboursZerosVector;
-                            neighboursZerosVector = findNeighbours(this->field2DVector, coordsBase, symbols.symbolZero);
-
-                            // if there is a neighbour containing symbolZero create a new vector of neighbours containing mines:
-                            if (neighboursZerosVector.size() != 0)
-                            {
-                                std::vector<Common::CoordsStruct> neighboursMinesVectorNew;
-                                neighboursMinesVectorNew = findNeighbours(this->mines2DVector, coordsBase, symbols.symbolMine);
-
-                                // place neighboursMinesVectorNew.size() in field2DVector:
-                                if (this->field2DVector[i][j] == symbols.symbolCovered)
-                                {
-                                    Common::CoordsStruct coordsTemp;
-                                    coordsTemp.col = i;
-                                    coordsTemp.row = j;
-                                    if (neighboursMinesVectorNew.size() == 0)
-                                        this->field2DVector[i][j] = symbols.symbolZero;
-                                    else
-                                        this->field2DVector[i][j] = common.intToString(static_cast<int>(neighboursMinesVectorNew.size()));
-                                    printCoords(coordsTemp, false);
-                                    this->countCovered--;
-                                }
-                            }
-                        }
-                    }
-                }
-                run = false;
-
-                // repeat if necessary:
-                for (int a = 1; a <= this->cols; a++)
-                {
-                    for (int b = 1; b <= this->rows; b++)
-                    {
-                        if (this->field2DVector[a][b] == symbols.symbolCovered)
-                        {
-                            // create a new vector of neighbours containing symbolZero:
-                            Common::CoordsStruct coordsBaseNew;
-                            coordsBaseNew.col = a;
-                            coordsBaseNew.row = b;
-                            std::vector<Common::CoordsStruct> neighboursZerosVectorNew;
-                            neighboursZerosVectorNew = findNeighbours(this->field2DVector, coordsBaseNew, symbols.symbolZero);
-                            if (neighboursZerosVectorNew.size() != 0)
-                                run = true;
-                        }
-                    }
-                }
-            }
+            autoUncoverRecursive(userInput.Coords);
         }
     }
+
     // check if player has won:
     if (this->flagsCount + this->countCovered == this->minesCount)
     {

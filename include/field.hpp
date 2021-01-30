@@ -25,7 +25,7 @@ private:
     std::vector<std::vector<stringconv>> create2DVector();
     void fillMines(Common::CoordsStruct&);
     std::vector<Common::CoordsStruct> findNeighbours(std::vector<std::vector<stringconv>> const&, Common::CoordsStruct const&, stringconv const&);
-    void autoUncoverRecursive();
+    void autoUncoverRecursive(Common::CoordsStruct const&);
 
 public:
     Field(int const& cols_, int const& rows_, int const& fieldOffsetX_, int const& fieldOffsetY_, int const& fieldCellWidth_, int const& minesCount_, std::string const& difficultyString_);
