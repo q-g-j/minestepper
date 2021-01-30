@@ -27,7 +27,7 @@ int main()
 
     Size.Large.columns  = 22;
     Size.Large.rows     = 16;
-    Size.Large.mines    = 5;
+    Size.Large.mines    = 99;
 
     // set X/Y position of the field
     int fieldOffsetX    = 6;
