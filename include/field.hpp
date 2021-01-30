@@ -36,6 +36,7 @@ public:
     int getRows();
     int getOffsetX();
     int getOffsetY();
+    int getCovered();
     int getMinesCount();
     int getMinesLeft();
     int getCellWidth();

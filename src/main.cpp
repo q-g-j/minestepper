@@ -27,7 +27,7 @@ int main()
 
     Size.Large.columns  = 22;
     Size.Large.rows     = 16;
-    Size.Large.mines    = 99;
+    Size.Large.mines    = 5;
 
     // set X/Y position of the field
     int fieldOffsetX    = 6;
@@ -103,7 +103,7 @@ int main()
             std::cout << field.getMinesLeft() << print.minesLeftText << std::flush;
             std::cout << colors.setTextColor(colors.color_default);
             #if DEBUG == 1
-                std::cout << print.debugTurnCountText << turn <<  "     " << std::flush;
+                std::cout << field.getCovered() <<  "     " << std::flush;
             #endif
             field.gotoXY(1, fieldOffsetY + field.getRows()*2 + 4);
 

@@ -67,6 +67,11 @@ int Field::getCellWidth()
     return this->fieldCellWidth;
 }
 
+int Field::getCovered()
+{
+    return this->countCovered;
+}
+
 int Field::getMinesCount()
 {
     return this->minesCount;
@@ -520,7 +525,6 @@ std::vector<Common::CoordsStruct> Field::findNeighbours(std::vector<std::vector<
             neighboursVector.push_back(tempCoords);
         }
     }
-
     return neighboursVector;
 }
 
@@ -530,22 +534,33 @@ void Field::autoUncoverRecursive(Common::CoordsStruct const& coords)
     Common common;
     Symbols symbols;
 
+    // need to keep track of auto-uncovered cells for counting purpose:
+    static std::vector<unsigned int> poolVector;
+
     // create vector holding covered neighbours:
     std::vector<Common::CoordsStruct> neighboursCoveredVector;
     neighboursCoveredVector = findNeighbours(this->field2DVector, coords, symbols.symbolCovered);
 
     for (size_t i = 0; i < neighboursCoveredVector.size(); i++)
     {
-        std::vector<Common::CoordsStruct> neighboursMinesVector;
-        neighboursMinesVector = findNeighbours(this->mines2DVector, neighboursCoveredVector.at(i), symbols.symbolMine);
-        if (neighboursMinesVector.size() == 0)
-            this->field2DVector[neighboursCoveredVector.at(i).col][neighboursCoveredVector.at(i).row] = symbols.symbolZero;
-        else
-            this->field2DVector[neighboursCoveredVector.at(i).col][neighboursCoveredVector.at(i).row] = common.intToString(neighboursMinesVector.size());
-        printCoords(neighboursCoveredVector.at(i), false);
-        this->countCovered--;
-        if (neighboursMinesVector.size() == 0)
-            autoUncoverRecursive(neighboursCoveredVector.at(i));
+            std::vector<Common::CoordsStruct> neighboursMinesVector;
+            neighboursMinesVector = findNeighbours(this->mines2DVector, neighboursCoveredVector.at(i), symbols.symbolMine);
+            if (neighboursMinesVector.size() == 0)
+            {
+                this->field2DVector[neighboursCoveredVector.at(i).col][neighboursCoveredVector.at(i).row] = symbols.symbolZero;
+            }
+            else
+            {
+                this->field2DVector[neighboursCoveredVector.at(i).col][neighboursCoveredVector.at(i).row] = common.intToString(neighboursMinesVector.size());
+            }
+            if (std::find(poolVector.begin(), poolVector.end(), common.convCoordsToInt(neighboursCoveredVector.at(i), this->cols)) == poolVector.end())
+            {
+                poolVector.push_back(common.convCoordsToInt(neighboursCoveredVector.at(i), this->cols));
+                this->countCovered--;
+            }
+            printCoords(neighboursCoveredVector.at(i), false);
+            if (neighboursMinesVector.size() == 0)
+                autoUncoverRecursive(neighboursCoveredVector.at(i));
     }
 }
 
