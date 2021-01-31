@@ -149,14 +149,14 @@ void Field::fillMines(Common::CoordsStruct& userFirstInput)
     std::vector<int> tempVector;
     for (unsigned int i = 1; i <= sizeOffield2DVector; i++)
     {
-        if (i != common.convCoordsToInt(userFirstInput, this->cols))
+        if (i != common.coordsToInt(userFirstInput, this->cols))
             tempVector.push_back(i);
     }
 
     std::random_shuffle(tempVector.begin(), tempVector.end());
     for (int i = 0; i < this->minesCount; i++)
     {
-        coords = common.convIntToCoords(tempVector.at(i), this->cols);
+        coords = common.intToCoords(tempVector.at(i), this->cols);
         this->mines2DVector[coords.col][coords.row] = symbols.symbolMine;
     }
 }
@@ -277,7 +277,7 @@ void Field::printCoords(Common::CoordsStruct& coords, bool isCursor)
     std::string content;
     Common::CoordsStruct tempCoords;
 
-    tempCoords = common.convCoordsToCursorPosition(coords, this->fieldOffsetX, this->fieldOffsetY, this->fieldCellWidth);
+    tempCoords = common.coordsToCursorPosition(coords, this->fieldOffsetX, this->fieldOffsetY, this->fieldCellWidth);
     gotoXY(tempCoords.col, tempCoords.row);
 
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
@@ -542,7 +542,7 @@ void Field::autoUncoverRecursive(Common::CoordsStruct const& coords, std::vector
     {
             std::vector<Common::CoordsStruct> neighboursMinesVector;
             neighboursMinesVector = findNeighbours(this->mines2DVector, neighboursCoveredVector.at(i), symbols.symbolMine);
-            if (std::find(poolVector.begin(), poolVector.end(), common.convCoordsToInt(neighboursCoveredVector.at(i), this->cols)) == poolVector.end())
+            if (std::find(poolVector.begin(), poolVector.end(), common.coordsToInt(neighboursCoveredVector.at(i), this->cols)) == poolVector.end() || poolVector.size() == 0)
             {
                 if (neighboursMinesVector.size() == 0)
                 {
@@ -552,10 +552,10 @@ void Field::autoUncoverRecursive(Common::CoordsStruct const& coords, std::vector
                 {
                     this->field2DVector[neighboursCoveredVector.at(i).col][neighboursCoveredVector.at(i).row] = common.intToString(neighboursMinesVector.size());
                 }
-                poolVector.push_back(common.convCoordsToInt(neighboursCoveredVector.at(i), this->cols));
+                poolVector.push_back(common.coordsToInt(neighboursCoveredVector.at(i), this->cols));
                 this->countCovered--;
+                printCoords(neighboursCoveredVector.at(i), false);
             }
-            printCoords(neighboursCoveredVector.at(i), false);
             if (neighboursMinesVector.size() == 0)
                 autoUncoverRecursive(neighboursCoveredVector.at(i), poolVector);
     }

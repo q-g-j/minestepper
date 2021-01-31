@@ -77,7 +77,7 @@ void Common::clearScreen()
 
 // convert coords of type integer to coords of type struct
 // (e.g. "position = 4" will return "coords.col = 4, coords.row = 1"):
-Common::CoordsStruct Common::convIntToCoords(int& position, int& cols)
+Common::CoordsStruct Common::intToCoords(int& position, int& cols)
 {
     CoordsStruct coords;
 
@@ -100,7 +100,7 @@ Common::CoordsStruct Common::convIntToCoords(int& position, int& cols)
 }
 
 // the above function the other way around
-unsigned int Common::convCoordsToInt(CoordsStruct& coords, int& cols)
+unsigned int Common::coordsToInt(CoordsStruct& coords, int& cols)
 {
     int position = 0;
     if (coords.row == 1)
@@ -110,7 +110,7 @@ unsigned int Common::convCoordsToInt(CoordsStruct& coords, int& cols)
 }
 
 // can't use raw coordinates when placing the players cursor, due to the drawn lines and the cell width:
-Common::CoordsStruct Common::convCoordsToCursorPosition(CoordsStruct& coords, int const& offsetX, int const& offsetY, int const& cellWidth)
+Common::CoordsStruct Common::coordsToCursorPosition(CoordsStruct& coords, int const& offsetX, int const& offsetY, int const& cellWidth)
 {
     CoordsStruct cursorPosition;
     cursorPosition.col = offsetX;

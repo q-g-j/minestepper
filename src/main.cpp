@@ -19,7 +19,7 @@ int main()
     /* these values can be changed: */
     Size.Small.columns  = 9;
     Size.Small.rows     = 9;
-    Size.Small.mines    = 10;
+    Size.Small.mines    = 5;
 
     Size.Medium.columns = 16;
     Size.Medium.rows    = 16;
@@ -103,7 +103,7 @@ int main()
             std::cout << field.getMinesLeft() << print.minesLeftText << std::flush;
             std::cout << colors.setTextColor(colors.color_default);
             #if DEBUG == 1
-                std::cout << field.getCovered() <<  "     " << std::flush;
+                std::cout << " Covered left: " << field.getCovered() <<  "     " << std::flush;
             #endif
             field.gotoXY(1, fieldOffsetY + field.getRows()*2 + 4);
 

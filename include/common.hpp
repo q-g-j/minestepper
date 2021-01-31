@@ -68,7 +68,7 @@ public:
     void setUnicode(bool);
     void setRandomSeed();
     void clearScreen();
-    CoordsStruct convIntToCoords(int&, int&);
-    unsigned int convCoordsToInt(CoordsStruct&, int&);
-    CoordsStruct convCoordsToCursorPosition(CoordsStruct&, int const&, int const&, int const&);
+    CoordsStruct intToCoords(int&, int&);
+    unsigned int coordsToInt(CoordsStruct&, int&);
+    CoordsStruct coordsToCursorPosition(CoordsStruct&, int const&, int const&, int const&);
 };

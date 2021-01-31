@@ -114,7 +114,7 @@ void Input::moveCursor(Field &field, Common::CoordsStruct& currentArrayPosition,
         currentArrayPosition.col--;
     else if (direction == Direction::RIGHT)
         currentArrayPosition.col++;
-    currentCursorPosition = common.convCoordsToCursorPosition(currentArrayPosition, field.getOffsetX(), field.getOffsetY(), field.getCellWidth());
+    currentCursorPosition = common.coordsToCursorPosition(currentArrayPosition, field.getOffsetX(), field.getOffsetY(), field.getCellWidth());
     field.gotoXY(currentCursorPosition.col, currentCursorPosition.row);
     coutconv << symbols.symbolCursor << std::flush;
     if (field.getCoordsContent(currentArrayPosition) == symbols.symbolFlag || field.isNumber(currentArrayPosition))
@@ -370,7 +370,7 @@ Common::UserInputReturnStruct Input::getUserInput(Field &field, int firstrun)
             currentArrayPosition.row = int(field.getRows()/ 2) + 1;
     }
 
-    currentCursorPosition = common.convCoordsToCursorPosition(currentArrayPosition, field.getOffsetX(), field.getOffsetY(), field.getCellWidth());
+    currentCursorPosition = common.coordsToCursorPosition(currentArrayPosition, field.getOffsetX(), field.getOffsetY(), field.getCellWidth());
     field.gotoXY(currentCursorPosition.col, currentCursorPosition.row);
 
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)

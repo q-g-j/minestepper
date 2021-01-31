@@ -121,7 +121,7 @@ void Print::printHelp(Field &field, Common::CoordsStruct &currentArrayPosition)
     std::cout << colors.setTextColor(colors.fg_white);
     std::cout << getHelpText << newline << newline;
     std::cout << colors.setTextColor(colors.color_default);
-    currentCursorPosition = common.convCoordsToCursorPosition(currentArrayPosition, field.getOffsetX(), field.getOffsetY(), field.getCellWidth());
+    currentCursorPosition = common.coordsToCursorPosition(currentArrayPosition, field.getOffsetX(), field.getOffsetY(), field.getCellWidth());
     field.gotoXY(currentCursorPosition.col, currentCursorPosition.row);
     common.setUnicode(true);
     if (field.getCoordsContent(currentArrayPosition) == symbols.symbolFlag || field.isNumber(currentArrayPosition))
