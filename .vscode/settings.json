@@ -2,6 +2,7 @@
     "cmake.cmakePath": "D:\\msys32\\mingw32\\bin\\cmake.exe",
     //"cmake.cmakePath": "D:\\cygwin\\bin\\cmake.exe",
     "cmake.buildDirectory": "${workspaceFolder}\\build\\${buildKit}\\${buildType}",
+    "C_Cpp.intelliSenseEngine": "Default",
     "files.associations": {
         "codecvt": "cpp",
         "array": "cpp",
@@ -66,5 +67,5 @@
         "cinttypes": "cpp",
         "typeinfo": "cpp"
     },
-    "C_Cpp.errorSquiggles": "Disabled"
+    "C_Cpp.errorSquiggles": "Enabled"
 }

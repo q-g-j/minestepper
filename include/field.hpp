@@ -26,6 +26,8 @@ private:
     void fillMines(Common::CoordsStruct&);
     std::vector<Common::CoordsStruct> findNeighbours(std::vector<std::vector<stringconv>> const&, Common::CoordsStruct const&, stringconv const&);
     void autoUncoverRecursive(Common::CoordsStruct const&, std::vector<unsigned int>&);
+    Common::PlaceUserInputReturnStruct gameWon();
+    Common::PlaceUserInputReturnStruct gameLost();
 
 public:
     Field(int const& cols_, int const& rows_, int const& fieldOffsetX_, int const& fieldOffsetY_, int const& fieldCellWidth_, int const& minesCount_, std::string const& difficultyString_);

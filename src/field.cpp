@@ -144,6 +144,12 @@ void Field::fillMines(Common::CoordsStruct& userFirstInput)
     Common common;
     Symbols symbols;
 
+    #if CUSTOM_FIELD == 1
+    this->mines2DVector[1][9] = symbols.symbolMine;
+    this->mines2DVector[2][9] = symbols.symbolMine;
+    this->mines2DVector[4][9] = symbols.symbolMine;
+    this->minesCount = 3;
+    #else
     Common::CoordsStruct coords;
     size_t sizeOffield2DVector = this->cols * this->rows;
     std::vector<int> tempVector;
@@ -159,6 +165,7 @@ void Field::fillMines(Common::CoordsStruct& userFirstInput)
         coords = common.intToCoords(tempVector.at(i), this->cols);
         this->mines2DVector[coords.col][coords.row] = symbols.symbolMine;
     }
+    #endif
 }
 
 // draw this->field2DVector[][]:
@@ -568,6 +575,60 @@ void Field::autoUncoverRecursive(Common::CoordsStruct const& coords, std::vector
     }
 }
 
+Common::PlaceUserInputReturnStruct Field::gameWon()
+{
+    Common common;
+    Print print;
+    Symbols symbols;
+
+    Common::PlaceUserInputReturnStruct returnStruct;
+
+    common.clearScreen();
+    print.printTitle(this->difficultyString, this->cols, this->rows, this->minesCount);
+    for (int i = 1; i <= this->cols; i++)
+    {
+        for (int j = 1; j <= this->rows; j++)
+            if (this->mines2DVector[i][j] == symbols.symbolMine)
+                this->field2DVector[i][j] = symbols.symbolMine;
+    }
+
+    drawField();
+    print.printHasWon();
+    returnStruct.hasWon = true;
+    return returnStruct;
+}
+
+Common::PlaceUserInputReturnStruct Field::gameLost()
+{
+    Common common;
+    Print print;
+    Symbols symbols;
+
+    common.clearScreen();
+    print.printTitle(this->difficultyString, this->cols, this->rows, this->minesCount);
+    for (int i = 1; i <= this->cols; i++)
+    {
+        for (int j = 1; j <= this->rows; j++)
+        {
+            if (this->field2DVector[i][j] == symbols.symbolFlag && this->mines2DVector[i][j] != symbols.symbolMine && this->mines2DVector[i][j] != symbols.symbolMineHit) // && this->mines2DVector[i][j] == coveredSymbol)
+                this->mines2DVector[i][j] = this->field2DVector[i][j];
+        }
+    }
+    for (int i = 1; i <= this->cols; i++)
+    {
+        for (int j = 1; j <= this->rows; j++)
+        {
+            this->field2DVector[i][j] = this->mines2DVector[i][j];
+        }
+    }
+    drawField();
+
+    print.printHasLost();
+    Common::PlaceUserInputReturnStruct returnStruct;
+    returnStruct.hasLost = true;
+    return returnStruct;
+}
+
 // the main method of class Field which will alter this->field2DVector.
 // Takes single coords from Input::UserInput method.
 Common::PlaceUserInputReturnStruct Field::placeUserInput(Common::UserInputReturnStruct& userInput, int& turn)
@@ -608,28 +669,7 @@ Common::PlaceUserInputReturnStruct Field::placeUserInput(Common::UserInputReturn
         if (this->mines2DVector[userInput.Coords.col][userInput.Coords.row] == symbols.symbolMine)
         {
             this->mines2DVector[userInput.Coords.col][userInput.Coords.row] = symbols.symbolMineHit;
-
-            common.clearScreen();
-            print.printTitle(this->difficultyString, this->cols, this->rows, this->minesCount);
-            for (int i = 1; i <= this->cols; i++)
-            {
-                for (int j = 1; j <= this->rows; j++)
-                {
-                    if (this->field2DVector[i][j] == symbols.symbolFlag && this->mines2DVector[i][j] != symbols.symbolMine && this->mines2DVector[i][j] != symbols.symbolMineHit) // && this->mines2DVector[i][j] == coveredSymbol)
-                        this->mines2DVector[i][j] = this->field2DVector[i][j];
-                }
-            }
-            for (int i = 1; i <= this->cols; i++)
-            {
-                for (int j = 1; j <= this->rows; j++)
-                {
-                    this->field2DVector[i][j] = this->mines2DVector[i][j];
-                }
-            }
-            drawField();
-
-            print.printHasLost();
-            returnStruct.hasLost = true;
+            returnStruct = gameLost();
             return returnStruct;
         }
 
@@ -672,28 +712,7 @@ Common::PlaceUserInputReturnStruct Field::placeUserInput(Common::UserInputReturn
                         {
                             this->mines2DVector[autoUncoverMissedMinesVector.at(i).col][autoUncoverMissedMinesVector.at(i).row] = symbols.symbolMineHit;
                         }
-                        returnStruct.hasLost = 1;
-                        common.clearScreen();
-                        print.printTitle(this->difficultyString, this->cols, this->rows, this->minesCount);
-                        for (int i = 1; i <= this->cols; i++)
-                        {
-                            for (int j = 1; j <= this->rows; j++)
-                            {
-                                if (this->field2DVector[i][j] == symbols.symbolFlag && this->mines2DVector[i][j] != symbols.symbolMine && this->mines2DVector[i][j] != symbols.symbolMineHit) // && this->mines2DVector[i][j] == coveredSymbol)
-                                    this->mines2DVector[i][j] = this->field2DVector[i][j];
-                            }
-                        }
-                        for (int i = 1; i <= this->cols; i++)
-                        {
-                            for (int j = 1; j <= this->rows; j++)
-                            {
-                                this->field2DVector[i][j] = this->mines2DVector[i][j];
-                            }
-                        }
-                        std::cout << newline;
-                        drawField();
-
-                        print.printHasLost();
+                        returnStruct = gameLost();
                         return returnStruct;
                     }
                     // else if all flags are placed correctly:
@@ -768,20 +787,7 @@ Common::PlaceUserInputReturnStruct Field::placeUserInput(Common::UserInputReturn
 
     // check if player has won:
     if (this->flagsCount + this->countCovered == this->minesCount)
-    {
-        common.clearScreen();
-        print.printTitle(this->difficultyString, this->cols, this->rows, this->minesCount);
-        for (int i = 1; i <= this->cols; i++)
-        {
-            for (int j = 1; j <= this->rows; j++)
-                if (this->mines2DVector[i][j] == symbols.symbolMine)
-                    this->field2DVector[i][j] = symbols.symbolMine;
-        }
-
-        drawField();
-        print.printHasWon();
-        returnStruct.hasWon = true;
-    }
+        returnStruct = gameWon();
 
     return returnStruct;
 }
