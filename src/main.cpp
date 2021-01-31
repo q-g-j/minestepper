@@ -23,7 +23,7 @@ int main()
 
     Size.Medium.columns = 16;
     Size.Medium.rows    = 16;
-    Size.Medium.mines   = 19;
+    Size.Medium.mines   = 40;
 
     Size.Large.columns  = 22;
     Size.Large.rows     = 16;
