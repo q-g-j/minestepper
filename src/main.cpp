@@ -19,7 +19,7 @@ int main()
     /* these values can be changed: */
     Size.Small.columns  = 9;
     Size.Small.rows     = 9;
-    Size.Small.mines    = 5;
+    Size.Small.mines    = 10;
 
     Size.Medium.columns = 16;
     Size.Medium.rows    = 16;
