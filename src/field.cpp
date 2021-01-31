@@ -529,13 +529,10 @@ std::vector<Common::CoordsStruct> Field::findNeighbours(std::vector<std::vector<
 }
 
 // automatically uncover all connected cells, as long as they have no neighbour mines:
-void Field::autoUncoverRecursive(Common::CoordsStruct const& coords)
+void Field::autoUncoverRecursive(Common::CoordsStruct const& coords, std::vector<unsigned int> &poolVector)
 {
     Common common;
     Symbols symbols;
-
-    // need to keep track of auto-uncovered cells for counting purpose:
-    static std::vector<unsigned int> poolVector;
 
     // create vector holding covered neighbours:
     std::vector<Common::CoordsStruct> neighboursCoveredVector;
@@ -545,22 +542,22 @@ void Field::autoUncoverRecursive(Common::CoordsStruct const& coords)
     {
             std::vector<Common::CoordsStruct> neighboursMinesVector;
             neighboursMinesVector = findNeighbours(this->mines2DVector, neighboursCoveredVector.at(i), symbols.symbolMine);
-            if (neighboursMinesVector.size() == 0)
-            {
-                this->field2DVector[neighboursCoveredVector.at(i).col][neighboursCoveredVector.at(i).row] = symbols.symbolZero;
-            }
-            else
-            {
-                this->field2DVector[neighboursCoveredVector.at(i).col][neighboursCoveredVector.at(i).row] = common.intToString(neighboursMinesVector.size());
-            }
             if (std::find(poolVector.begin(), poolVector.end(), common.convCoordsToInt(neighboursCoveredVector.at(i), this->cols)) == poolVector.end())
             {
+                if (neighboursMinesVector.size() == 0)
+                {
+                    this->field2DVector[neighboursCoveredVector.at(i).col][neighboursCoveredVector.at(i).row] = symbols.symbolZero;
+                }
+                else
+                {
+                    this->field2DVector[neighboursCoveredVector.at(i).col][neighboursCoveredVector.at(i).row] = common.intToString(neighboursMinesVector.size());
+                }
                 poolVector.push_back(common.convCoordsToInt(neighboursCoveredVector.at(i), this->cols));
                 this->countCovered--;
             }
             printCoords(neighboursCoveredVector.at(i), false);
             if (neighboursMinesVector.size() == 0)
-                autoUncoverRecursive(neighboursCoveredVector.at(i));
+                autoUncoverRecursive(neighboursCoveredVector.at(i), poolVector);
     }
 }
 
@@ -710,7 +707,8 @@ Common::PlaceUserInputReturnStruct Field::placeUserInput(Common::UserInputReturn
                                 if (autoUncoverNeighboursCoveredMinesVector.size() == 0)
                                 {
                                     this->field2DVector[tempCoords.col][tempCoords.row] = symbols.symbolZero;
-                                    autoUncoverRecursive(tempCoords);
+                                    std::vector<unsigned int> poolVector;
+                                    autoUncoverRecursive(tempCoords, poolVector);
                                 }
                                 else
                                     this->field2DVector[tempCoords.col][tempCoords.row] = common.intToString(static_cast<int>(autoUncoverNeighboursCoveredMinesVector.size()));
@@ -741,7 +739,8 @@ Common::PlaceUserInputReturnStruct Field::placeUserInput(Common::UserInputReturn
         std::vector<Common::CoordsStruct> autouncoverNeighboursMinesVector = findNeighbours(this->mines2DVector, userInput.Coords, symbols.symbolMine);
         if (autouncoverNeighboursMinesVector.size() == 0)
         {
-            autoUncoverRecursive(userInput.Coords);
+            std::vector<unsigned int> poolVector;
+            autoUncoverRecursive(userInput.Coords, poolVector);
         }
     }
 
