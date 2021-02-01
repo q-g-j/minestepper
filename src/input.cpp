@@ -126,6 +126,7 @@ int Input::getDifficulty()
 {
     Common common;
     Print print;
+    
     int difficulty = 0;
 
     print.printMenu();

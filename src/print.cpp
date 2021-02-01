@@ -145,7 +145,7 @@ void Print::printExplanation()
     coutconv << "as long as you put all flags right! Otherwise you might lose..." << newline << newline;
     coutconv << "Explanations:" << newline << newline;
     coutconv << "Arrow Keys:    navigate" << newline;
-    coutconv << "ENTER:         sweep" << newline;
+    coutconv << "ENTER:         uncover" << newline;
     coutconv << "SPACE:         place or remove a flag" << newline;
     coutconv << "q or Q:        quit" << newline << newline;
     std::cout << colors.setTextColor(colors.fg_white);

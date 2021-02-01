@@ -29,7 +29,6 @@ Field::Field(int const& cols_, int const& rows_, int const& fieldOffsetX_, int c
     this->minesLeft = minesCount_;
     this->countCovered = cols_ * rows_;
     this->flagsCount = 0;
-    this->difficultyString = difficultyString_;
     this->field2DVector = create2DVector();
     this->mines2DVector = create2DVector();
     clearField();
@@ -151,9 +150,9 @@ void Field::fillMines(Common::CoordsStruct& userFirstInput)
     this->minesCount = 3;
     #else
     Common::CoordsStruct coords;
-    size_t sizeOffield2DVector = this->cols * this->rows;
+    size_t sizeofField2DVector = this->cols * this->rows;
     std::vector<int> tempVector;
-    for (unsigned int i = 1; i <= sizeOffield2DVector; i++)
+    for (unsigned int i = 1; i <= sizeofField2DVector; i++)
     {
         if (i != common.coordsToInt(userFirstInput, this->cols))
             tempVector.push_back(i);
