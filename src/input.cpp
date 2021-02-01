@@ -266,7 +266,7 @@ Common::CoordsStruct Input::getDimensions()
             {
                 isValidInput = false;
             }
-            if (beforeX < 5 || afterX < 5 || beforeX > 25 || afterX > 25)
+            if (beforeX < 5 || afterX < 5 || beforeX > 26 || afterX > 20)
             {
                 isValidInput = false;
             }
