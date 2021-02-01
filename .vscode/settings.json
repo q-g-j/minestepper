@@ -1,6 +1,6 @@
 {
-    //"cmake.cmakePath": "D:\\msys32\\mingw32\\bin\\cmake.exe",
-    "cmake.cmakePath": "D:\\cygwin\\bin\\cmake.exe",
+    "cmake.cmakePath": "D:\\msys32\\mingw32\\bin\\cmake.exe",
+    //"cmake.cmakePath": "D:\\cygwin\\bin\\cmake.exe",
     "cmake.buildDirectory": "${workspaceFolder}\\build\\${buildKit}\\${buildType}",
     "C_Cpp.intelliSenseEngine": "Default",
     "C_Cpp.errorSquiggles": "Enabled",
