@@ -336,12 +336,14 @@ void Field::printCoords(Common::CoordsStruct& coords, bool isCursor)
         else if (getCoordsContent(coords) == symbols.symbolFlag)
         {
             if (isCursor)
-                SetConsoleTextAttribute(hConsole, colors.bg_red);
+                SetConsoleTextAttribute(hConsole, colors.bg_cyan);
             else
-                SetConsoleTextAttribute(hConsole, colors.fg_red);
+                SetConsoleTextAttribute(hConsole, colors.fg_cyan);
         }
-        else if (getCoordsContent(coords) == symbols.symbolMineHit || getCoordsContent(coords) == symbols.symbolMine)
+        else if (getCoordsContent(coords) == symbols.symbolMine)
             SetConsoleTextAttribute(hConsole, colors.fg_red);
+        else if (getCoordsContent(coords) == symbols.symbolMineHit)
+            SetConsoleTextAttribute(hConsole, colors.fg_yellow);
         std::wstring coordsString = this->field2DVector[coords.col][coords.row];
         WriteConsoleW(hConsole, coordsString.c_str(), static_cast<DWORD>(coordsString.size()), nullptr, nullptr);
         SetConsoleTextAttribute(hConsole, colors.color_default);
@@ -351,42 +353,42 @@ void Field::printCoords(Common::CoordsStruct& coords, bool isCursor)
             if (isCursor == false)
             {
                 if (getCoordsContent(coords) == "1")
-                    content = colors.fg_light_blue + (this->field2DVector[coords.col][coords.row]);
+                    content = colors.fg_light_blue + "1";
                 else if (getCoordsContent(coords) == "2")
-                    content = colors.fg_light_green + (this->field2DVector[coords.col][coords.row]);
+                    content = colors.fg_light_green + "2";
                 else if (getCoordsContent(coords) == "3")
-                    content = colors.fg_light_red + (this->field2DVector[coords.col][coords.row]);
+                    content = colors.fg_light_red + "3";
                 else if (getCoordsContent(coords) == "4")
-                    content = colors.fg_magenta + (this->field2DVector[coords.col][coords.row]);
+                    content = colors.fg_magenta + "4";
                 else if (getCoordsContent(coords) == "5")
-                    content = colors.fg_yellow + (this->field2DVector[coords.col][coords.row]);
+                    content = colors.fg_yellow + "5";
                 else if (getCoordsContent(coords) == "6")
-                    content = colors.fg_green + (this->field2DVector[coords.col][coords.row]);
+                    content = colors.fg_green + "6";
                 else if (getCoordsContent(coords) == "7")
-                    content = colors.fg_light_red + (this->field2DVector[coords.col][coords.row]);
+                    content = colors.fg_light_red + "7";
                 else if (getCoordsContent(coords) == "8")
-                    content = colors.fg_white + (this->field2DVector[coords.col][coords.row]);
+                    content = colors.fg_white + "8";
                 else
                     content = colors.color_default + (this->field2DVector[coords.col][coords.row]);
             }
             else
             {
                 if (getCoordsContent(coords) == "1")
-                    content = colors.bg_light_blue + (this->field2DVector[coords.col][coords.row]);
+                    content = colors.bg_light_blue + "1";
                 else if (getCoordsContent(coords) == "2")
-                    content = colors.bg_light_green + (this->field2DVector[coords.col][coords.row]);
+                    content = colors.bg_light_green + "2";
                 else if (getCoordsContent(coords) == "3")
-                    content = colors.bg_light_red + (this->field2DVector[coords.col][coords.row]);
+                    content = colors.bg_light_red + "3";
                 else if (getCoordsContent(coords) == "4")
-                    content = colors.bg_magenta + (this->field2DVector[coords.col][coords.row]);
+                    content = colors.bg_magenta + "4";
                 else if (getCoordsContent(coords) == "5")
-                    content = colors.bg_yellow + (this->field2DVector[coords.col][coords.row]);
+                    content = colors.bg_yellow + "5";
                 else if (getCoordsContent(coords) == "6")
-                    content = colors.bg_green + (this->field2DVector[coords.col][coords.row]);
+                    content = colors.bg_green + "6";
                 else if (getCoordsContent(coords) == "7")
-                    content = colors.bg_light_red + (this->field2DVector[coords.col][coords.row]);
+                    content = colors.bg_light_red + "7";
                 else if (getCoordsContent(coords) == "8")
-                    content = colors.bg_black + (this->field2DVector[coords.col][coords.row]);
+                    content = colors.bg_black + "8";
                 else
                     content = colors.color_default + (this->field2DVector[coords.col][coords.row]);
             }
@@ -394,12 +396,14 @@ void Field::printCoords(Common::CoordsStruct& coords, bool isCursor)
         else if (getCoordsContent(coords) == symbols.symbolFlag)
         {
             if (isCursor)
-                content = colors.bg_red + (this->field2DVector[coords.col][coords.row]);
+                content = colors.bg_cyan + symbols.symbolFlag;
             else
-                content = colors.fg_red + (this->field2DVector[coords.col][coords.row]);
+                content = colors.fg_cyan + symbols.symbolFlag;
         }
-        else if (getCoordsContent(coords) == symbols.symbolMineHit || getCoordsContent(coords) == symbols.symbolMine)
-            content = colors.fg_red + (this->field2DVector[coords.col][coords.row]);
+        else if (getCoordsContent(coords) == symbols.symbolMine)
+            content = colors.fg_red + symbols.symbolMine;
+        else if (getCoordsContent(coords) == symbols.symbolMineHit)
+            content = colors.fg_yellow + symbols.symbolMineHit;
         else
             content = colors.color_default + (this->field2DVector[coords.col][coords.row]);
 

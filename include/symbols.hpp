@@ -42,8 +42,8 @@ public:
         const stringconv symbolPlus = "\u253C";
         
         const stringconv symbolFlag = "\u25ba";
-        const stringconv symbolMine = colors.fg_red + "\u263c" + colors.color_default;
-        const stringconv symbolMineHit = colors.fg_red + "#" + colors.color_default;
+        const stringconv symbolMine = "\u263c";
+        const stringconv symbolMineHit = "#";
         const stringconv symbolZero = " ";
         const stringconv symbolCovered = "\u2591";
         const stringconv symbolCursor = "\u2588";
