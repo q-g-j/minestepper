@@ -29,10 +29,8 @@ Field::Field(int const& cols_, int const& rows_, int const& fieldOffsetX_, int c
     this->minesLeft = minesCount_;
     this->countCovered = cols_ * rows_;
     this->flagsCount = 0;
-    this->field2DVector = create2DVector();
-    this->mines2DVector = create2DVector();
-    clearField();
-    clearMines();
+    this->field2DVector = create2DVector("field");
+    this->mines2DVector = create2DVector("mines");
 }
 
 // deconstructor:
@@ -92,19 +90,28 @@ stringconv Field::getCoordsContent(Common::CoordsStruct const& coords)
 }
 
 // use 2D vectors for the game field:
-std::vector<std::vector<stringconv>> Field::create2DVector()
+std::vector<std::vector<stringconv>> Field::create2DVector(std::string const& vectorType)
 {
     Symbols symbols;
 
     const int colsNum = this->cols + 1;
     const int rowsNum = this->rows + 1;
     std::vector<std::vector<stringconv>> temp2DVector;
-        for(int i=0; i<colsNum; i++) {
-            std::vector<stringconv> row;
-            for(int j=0; j<rowsNum; j++) {
-                    row.push_back(symbols.symbolZero);
+    for(int i = 0; i < colsNum; i++)
+    {
+        std::vector<stringconv> row;
+        for(int j = 0; j < rowsNum; j++)
+        {
+            if (vectorType == "field")
+            {
+                row.push_back(symbols.symbolCovered);
             }
-            temp2DVector.push_back(row);
+            else if (vectorType == "mines")
+            {
+                row.push_back(symbols.symbolZero);
+            }
+        }
+        temp2DVector.push_back(row);
     }
     return temp2DVector;
 }
@@ -114,9 +121,9 @@ void Field::clearField()
 {
     Symbols symbols;
 
-    for (int i=0; i <= this->cols; i++)
+    for (int i = 0; i <= this->cols; i++)
     {
-        for (int j=0; j <= this->rows; j++)
+        for (int j = 0; j <= this->rows; j++)
         {
             this->field2DVector[i][j] = symbols.symbolCovered;
         }
@@ -128,9 +135,9 @@ void Field::clearMines()
 {
     Symbols symbols;
 
-    for (int i=0; i <= this->cols; i++)
+    for (int i = 0; i <= this->cols; i++)
     {
-        for (int j=0; j <= this->rows; j++)
+        for (int j = 0; j <= this->rows; j++)
         {
             this->mines2DVector[i][j] = symbols.symbolZero;
         }
@@ -336,12 +343,12 @@ void Field::printCoords(Common::CoordsStruct& coords, bool isCursor)
         else if (getCoordsContent(coords) == symbols.symbolFlag)
         {
             if (isCursor)
-                SetConsoleTextAttribute(hConsole, colors.bg_cyan);
+                SetConsoleTextAttribute(hConsole, colors.bg_red);
             else
-                SetConsoleTextAttribute(hConsole, colors.fg_cyan);
+                SetConsoleTextAttribute(hConsole, colors.fg_red);
         }
         else if (getCoordsContent(coords) == symbols.symbolMine)
-            SetConsoleTextAttribute(hConsole, colors.fg_red);
+            SetConsoleTextAttribute(hConsole, colors.fg_light_red);
         else if (getCoordsContent(coords) == symbols.symbolMineHit)
             SetConsoleTextAttribute(hConsole, colors.fg_yellow);
         std::wstring coordsString = this->field2DVector[coords.col][coords.row];
@@ -396,18 +403,18 @@ void Field::printCoords(Common::CoordsStruct& coords, bool isCursor)
         else if (getCoordsContent(coords) == symbols.symbolFlag)
         {
             if (isCursor)
-                content = colors.bg_cyan + symbols.symbolFlag;
+                content = colors.bg_red + symbols.symbolFlag;
             else
-                content = colors.fg_cyan + symbols.symbolFlag;
+                content = colors.fg_red + symbols.symbolFlag;
         }
         else if (getCoordsContent(coords) == symbols.symbolMine)
-            content = colors.fg_red + symbols.symbolMine;
+            content = colors.fg_light_red + symbols.symbolMine;
         else if (getCoordsContent(coords) == symbols.symbolMineHit)
             content = colors.fg_yellow + symbols.symbolMineHit;
         else
             content = colors.color_default + (this->field2DVector[coords.col][coords.row]);
 
-        coutconv << content << std::flush;
+        coutconv << content;
         coutconv << colors.color_default << std::flush;
     #endif
 }

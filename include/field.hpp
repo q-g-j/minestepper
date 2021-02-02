@@ -22,7 +22,7 @@ private:
     // private methods
     void clearField();
     void clearMines();
-    std::vector<std::vector<stringconv>> create2DVector();
+    std::vector<std::vector<stringconv>> create2DVector(std::string const&);
     void fillMines(Common::CoordsStruct&);
     std::vector<Common::CoordsStruct> findNeighbours(std::vector<std::vector<stringconv>> const&, Common::CoordsStruct const&, stringconv const&);
     void autoUncoverRecursive(Common::CoordsStruct const&, std::vector<unsigned int>&);
