@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../include/debug.hpp"
+
 #if !defined(_WIN32) && !defined(WIN32) && !defined(_WIN64) && !defined(WIN64)
     void enableNonCanonicalMode();
     void disableNonCanonicalMode();

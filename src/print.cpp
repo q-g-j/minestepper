@@ -1,15 +1,16 @@
 #include <iostream>
 
-#if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-    #include <windows.h>
-#endif
-
 #include "../include/colors.hpp"
 #include "../include/common.hpp"
+#include "../include/debug.hpp"
 #include "../include/field.hpp"
 #include "../include/input.hpp"
 #include "../include/print.hpp"
 #include "../include/symbols.hpp"
+
+#if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+    #include <windows.h>
+#endif
 
 std::string Print::setDifficultyTexts(int const& mode)
 {
@@ -125,9 +126,13 @@ void Print::printHelp(Field &field, Common::CoordsStruct &currentArrayPosition)
     field.gotoXY(currentCursorPosition.col, currentCursorPosition.row);
     common.setUnicode(true);
     if (field.getCoordsContent(currentArrayPosition) == symbols.symbolFlag || field.isNumber(currentArrayPosition))
+    {
         field.printCoords(currentArrayPosition, true);
+    }
     else
+    {
         coutconv << symbols.symbolCursor << std::flush;
+    }
 }
 
 void Print::printExplanation()
@@ -171,14 +176,18 @@ void Print::deleteLastLine(size_t const& stringLength)
         SetConsoleCursorPosition(console, cursorPosition);
         std::cout << "\r";
         for (unsigned int i = 0; i < stringLength; i++)
+        {
             std::cout << " ";
+        }
         std::cout << "\r";
         std::cout << std::flush;
     #else
         std::cout << "\x1b[A";
         std::cout << "\r";
         for (unsigned int i = 0; i < stringLength; i++)
+        {
             std::cout << " ";
+        }
         std::cout << "\r";
         std::cout << std::flush;
     #endif

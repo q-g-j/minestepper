@@ -4,15 +4,15 @@
 #include <string>
 #include "time.h"
 
+#include "../include/common.hpp"
+#include "../include/debug.hpp"
+
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
     #include <fcntl.h>
     #include <io.h>
     #include <stdio.h>
     #include <windows.h>
 #endif
-
-#include "../include/common.hpp"
-#include "../include/debug.hpp"
 
 using convert_t = std::codecvt_utf8<wchar_t>;
 std::wstring_convert<convert_t, wchar_t> strconverter;
@@ -22,9 +22,13 @@ void Common::setUnicode(bool sw)
 {
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         if (sw)
+        {
             _setmode(_fileno(stdout), 0x00020000);
+        }
         else
+        {
             _setmode(_fileno(stdout), _O_TEXT);
+        }
     #endif
 }
 
@@ -104,9 +108,13 @@ unsigned int Common::coordsToInt(CoordsStruct& coords, int& cols)
 {
     int position = 0;
     if (coords.row == 1)
+    {
         return position = coords.col;
+    }
     else
+    {
         return position = (cols) * (coords.row-1) + coords.col;
+    }
 }
 
 // can't use raw coordinates when placing the players cursor, due to the drawn lines and the cell width:
@@ -115,10 +123,14 @@ Common::CoordsStruct Common::coordsToCursorPosition(CoordsStruct& coords, int co
     CoordsStruct cursorPosition;
     cursorPosition.col = offsetX;
     for (int i = 1; i < coords.col; i ++)
+    {
         cursorPosition.col = cursorPosition.col + (cellWidth + 1);
+    }
 
     cursorPosition.row = offsetY;
     for (int i = 1; i < coords.row; i ++)
+    {
         cursorPosition.row = cursorPosition.row + 2;
+    }
     return cursorPosition;
 }

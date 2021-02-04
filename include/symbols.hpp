@@ -2,6 +2,7 @@
 
 #include "../include/colors.hpp"
 #include "../include/common.hpp"
+#include "../include/debug.hpp"
 
 class Symbols
 {

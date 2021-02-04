@@ -1,6 +1,8 @@
 #pragma once
 #include <vector>
 
+#include "../include/debug.hpp"
+
 class Field
 {
 private:

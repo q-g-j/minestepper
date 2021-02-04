@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../include/debug.hpp"
+
 class Print
 {
 private:

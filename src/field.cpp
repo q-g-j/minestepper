@@ -3,10 +3,6 @@
 #include <random>
 #include <vector>
 
-#if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-    #include <windows.h>
-#endif
-
 #include "../include/colors.hpp"
 #include "../include/common.hpp"
 #include "../include/debug.hpp"
@@ -14,6 +10,10 @@
 #include "../include/input.hpp"
 #include "../include/print.hpp"
 #include "../include/symbols.hpp"
+
+#if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+    #include <windows.h>
+#endif
 
 // constructor
 Field::Field(int const& cols_, int const& rows_, int const& fieldOffsetX_, int const& fieldOffsetY_, int const& fieldCellWidth_, int const& minesCount_, std::string const& difficultyString_)
@@ -162,7 +162,9 @@ void Field::fillMines(Common::CoordsStruct& userFirstInput)
     for (unsigned int i = 1; i <= sizeofField2DVector; i++)
     {
         if (i != common.coordsToInt(userFirstInput, this->cols))
+        {
             tempVector.push_back(i);
+        }
     }
 
     std::random_shuffle(tempVector.begin(), tempVector.end());
@@ -183,22 +185,30 @@ void Field::drawField()
     common.setUnicode(true);
 
     for (int i = 0; i < this->fieldOffsetY - 4; i++)
+    {
         std::wcout << L"\n";
+    }
     for (int i = 0; i < this->fieldOffsetX - 2; i++)
+    {
         std::wcout << L" ";
+    }
     coutconv << symbols.symbolCornerTopLeft;
     for (int col = 1; col <= this->cols; col++)
     {
         if (col < this->cols)
         {
             for (int width = 0; width < this->fieldCellWidth; width++)
+            {
                 coutconv << symbols.symbolHorizontalLine;
+            }
             coutconv << symbols.symbolDownT;
         }
         else
         {
             for (int width = 0; width < this->fieldCellWidth; width++)
+            {
                 coutconv << symbols.symbolHorizontalLine;
+            }
             coutconv << symbols.symbolCornerTopRight;
         }
     }
@@ -211,12 +221,16 @@ void Field::drawField()
             if (col == 1)
             {
                 for (int i = 0; i < this->fieldOffsetX - 2; i++)
+                {
                     std::wcout << L" ";
+                }
             }
             coutconv << symbols.symbolVerticalLine;
 
             for (int padding = 0; padding < (this->fieldCellWidth-1)/2; padding++)
+            {
                 std::wcout << L" ";
+            }
 
             Common::CoordsStruct Coords;
             Coords.col = col;
@@ -224,41 +238,61 @@ void Field::drawField()
             printCoords(Coords, false);
 
             for (int padding = 0; padding < (this->fieldCellWidth-1)/2; padding++)
+            {
                 std::wcout << L" ";
+            }
 
             if (col == this->cols)
             {
                 coutconv << symbols.symbolVerticalLine;
                 std::wcout << L"\n";
                 for (int i = 0; i < this->fieldOffsetX - 2; i++)
+                {
                     std::wcout << L" ";
+                }
             }
         }
 
         if (row < this->rows)
+        {
             coutconv << symbols.symbolRightT;
+        }
         else
+        {
             coutconv << symbols.symbolCornerBottomLeft;
+        }
 
         for (int col = 1; col <= this->cols; col++)
         {
             if (col < this->cols)
             {
                 for (int width = 0; width < this->fieldCellWidth; width++)
+                {
                     coutconv << symbols.symbolHorizontalLine;
+                }
                 if (row < this->rows)
+                {
                     coutconv << symbols.symbolPlus;
+                }
                 else
+                {
                     coutconv << symbols.symbolUpT;
+                }
             }
             else
             {
                 for (int width = 0; width < this->fieldCellWidth; width++)
+                {
                     coutconv << symbols.symbolHorizontalLine;
+                }
                 if (row < this->rows)
+                {
                     coutconv << symbols.symbolLeftT;
+                }
                 else
+                {
                     coutconv << symbols.symbolCornerBottomRight;
+                }
             }
         }
         std::wcout << L"\n";
@@ -300,57 +334,101 @@ void Field::printCoords(Common::CoordsStruct& coords, bool isCursor)
             if (isCursor == false)
             {
                 if (getCoordsContent(coords) == L"1")
-                    SetConsoleTextAttribute(hConsole, colors.fg_light_blue);
+                {
+                    SetConsoleTextAttribute(hConsole, colors.fg_number_1);
+                }
                 else if (getCoordsContent(coords) == L"2")
-                    SetConsoleTextAttribute(hConsole, colors.fg_light_green);
+                {
+                    SetConsoleTextAttribute(hConsole, colors.fg_number_2);
+                }
                 else if (getCoordsContent(coords) == L"3")
-                    SetConsoleTextAttribute(hConsole, colors.fg_light_red);
+                {
+                    SetConsoleTextAttribute(hConsole, colors.fg_number_3);
+                }
                 else if (getCoordsContent(coords) == L"4")
-                    SetConsoleTextAttribute(hConsole, colors.fg_magenta);
+                {
+                    SetConsoleTextAttribute(hConsole, colors.fg_number_4);
+                }
                 else if (getCoordsContent(coords) == L"5")
-                    SetConsoleTextAttribute(hConsole, colors.fg_yellow);
+                {
+                    SetConsoleTextAttribute(hConsole, colors.fg_number_5);
+                }
                 else if (getCoordsContent(coords) == L"6")
-                    SetConsoleTextAttribute(hConsole, colors.fg_green);
+                {
+                    SetConsoleTextAttribute(hConsole, colors.fg_number_6);
+                }
                 else if (getCoordsContent(coords) == L"7")
-                    SetConsoleTextAttribute(hConsole, colors.fg_cyan);
+                {
+                    SetConsoleTextAttribute(hConsole, colors.fg_number_7);
+                }
                 else if (getCoordsContent(coords) == L"8")
-                    SetConsoleTextAttribute(hConsole, colors.fg_white);
+                {
+                    SetConsoleTextAttribute(hConsole, colors.fg_number_8);
+                }
                 else
+                {
                     SetConsoleTextAttribute(hConsole, colors.color_default);
+                }
             }
             else
             {
                 if (getCoordsContent(coords) == L"1")
-                    SetConsoleTextAttribute(hConsole, colors.bg_light_blue);
+                {
+                    SetConsoleTextAttribute(hConsole, colors.bg_number_1);
+                }
                 else if (getCoordsContent(coords) == L"2")
-                    SetConsoleTextAttribute(hConsole, colors.bg_light_green);
+                {
+                    SetConsoleTextAttribute(hConsole, colors.bg_number_2);
+                }
                 else if (getCoordsContent(coords) == L"3")
-                    SetConsoleTextAttribute(hConsole, colors.bg_light_red);
+                {
+                    SetConsoleTextAttribute(hConsole, colors.bg_number_3);
+                }
                 else if (getCoordsContent(coords) == L"4")
-                    SetConsoleTextAttribute(hConsole, colors.bg_magenta);
+                {
+                    SetConsoleTextAttribute(hConsole, colors.bg_number_4);
+                }
                 else if (getCoordsContent(coords) == L"5")
-                    SetConsoleTextAttribute(hConsole, colors.bg_yellow);
+                {
+                    SetConsoleTextAttribute(hConsole, colors.bg_number_5);
+                }
                 else if (getCoordsContent(coords) == L"6")
-                    SetConsoleTextAttribute(hConsole, colors.bg_green);
+                {
+                    SetConsoleTextAttribute(hConsole, colors.bg_number_6);
+                }
                 else if (getCoordsContent(coords) == L"7")
-                    SetConsoleTextAttribute(hConsole, colors.bg_cyan);
+                {
+                    SetConsoleTextAttribute(hConsole, colors.bg_number_7);
+                }
                 else if (getCoordsContent(coords) == L"8")
-                    SetConsoleTextAttribute(hConsole, colors.bg_black);
+                {
+                    SetConsoleTextAttribute(hConsole, colors.bg_number_8);
+                }
                 else
+                {
                     SetConsoleTextAttribute(hConsole, colors.color_default);
+                }
             }
         }
         else if (getCoordsContent(coords) == symbols.symbolFlag)
         {
             if (isCursor)
-                SetConsoleTextAttribute(hConsole, colors.bg_red);
+            {
+                SetConsoleTextAttribute(hConsole, colors.bg_flag);
+            }
             else
-                SetConsoleTextAttribute(hConsole, colors.fg_red);
+            {
+                SetConsoleTextAttribute(hConsole, colors.fg_flag);
+            }
         }
         else if (getCoordsContent(coords) == symbols.symbolMine)
-            SetConsoleTextAttribute(hConsole, colors.fg_light_red);
+        {
+            SetConsoleTextAttribute(hConsole, colors.mine);
+        }
         else if (getCoordsContent(coords) == symbols.symbolMineHit)
-            SetConsoleTextAttribute(hConsole, colors.fg_yellow);
+        {
+            SetConsoleTextAttribute(hConsole, colors.minehit);
+        }
         std::wstring coordsString = this->field2DVector[coords.col][coords.row];
         WriteConsoleW(hConsole, coordsString.c_str(), static_cast<DWORD>(coordsString.size()), nullptr, nullptr);
         SetConsoleTextAttribute(hConsole, colors.color_default);
@@ -360,59 +438,105 @@ void Field::printCoords(Common::CoordsStruct& coords, bool isCursor)
             if (isCursor == false)
             {
                 if (getCoordsContent(coords) == "1")
-                    content = colors.fg_light_blue + "1";
+                {
+                    content = colors.fg_number_1 + "1";
+                }
                 else if (getCoordsContent(coords) == "2")
-                    content = colors.fg_light_green + "2";
+                {
+                    content = colors.fg_number_2 + "2";
+                }
                 else if (getCoordsContent(coords) == "3")
-                    content = colors.fg_light_red + "3";
+                {
+                    content = colors.fg_number_3 + "3";
+                }
                 else if (getCoordsContent(coords) == "4")
-                    content = colors.fg_magenta + "4";
+                {
+                    content = colors.fg_number_4 + "4";
+                }
                 else if (getCoordsContent(coords) == "5")
-                    content = colors.fg_yellow + "5";
+                {
+                    content = colors.fg_number_5 + "5";
+                }
                 else if (getCoordsContent(coords) == "6")
-                    content = colors.fg_green + "6";
+                {
+                    content = colors.fg_number_6 + "6";
+                }
                 else if (getCoordsContent(coords) == "7")
-                    content = colors.fg_light_red + "7";
+                {
+                    content = colors.fg_number_7 + "7";
+                }
                 else if (getCoordsContent(coords) == "8")
-                    content = colors.fg_white + "8";
+                {
+                    content = colors.fg_number_8 + "8";
+                }
                 else
+                {
                     content = colors.color_default + (this->field2DVector[coords.col][coords.row]);
+                }
             }
             else
             {
                 if (getCoordsContent(coords) == "1")
-                    content = colors.bg_light_blue + "1";
+                {
+                    content = colors.bg_number_1 + "1";
+                }
                 else if (getCoordsContent(coords) == "2")
-                    content = colors.bg_light_green + "2";
+                {
+                    content = colors.bg_number_2 + "2";
+                }
                 else if (getCoordsContent(coords) == "3")
-                    content = colors.bg_light_red + "3";
+                {
+                    content = colors.bg_number_3 + "3";
+                }
                 else if (getCoordsContent(coords) == "4")
-                    content = colors.bg_magenta + "4";
+                {
+                    content = colors.bg_number_4 + "4";
+                }
                 else if (getCoordsContent(coords) == "5")
-                    content = colors.bg_yellow + "5";
+                {
+                    content = colors.bg_number_5 + "5";
+                }
                 else if (getCoordsContent(coords) == "6")
-                    content = colors.bg_green + "6";
+                {
+                    content = colors.bg_number_6 + "6";
+                }
                 else if (getCoordsContent(coords) == "7")
-                    content = colors.bg_light_red + "7";
+                {
+                    content = colors.bg_number_7 + "7";
+                }
                 else if (getCoordsContent(coords) == "8")
-                    content = colors.bg_black + "8";
+                {
+                    content = colors.bg_number_8 + "8";
+                }
                 else
+                {
                     content = colors.color_default + (this->field2DVector[coords.col][coords.row]);
+                }
             }
         }
         else if (getCoordsContent(coords) == symbols.symbolFlag)
         {
             if (isCursor)
-                content = colors.bg_red + symbols.symbolFlag;
+            {
+                content = colors.bg_flag + symbols.symbolFlag;
+            }
             else
-                content = colors.fg_red + symbols.symbolFlag;
+            {
+                content = colors.fg_flag + symbols.symbolFlag;
+            }
         }
         else if (getCoordsContent(coords) == symbols.symbolMine)
-            content = colors.fg_light_red + symbols.symbolMine;
+        {
+            content = colors.mine + symbols.symbolMine;
+        }
         else if (getCoordsContent(coords) == symbols.symbolMineHit)
-            content = colors.fg_yellow + symbols.symbolMineHit;
+        {
+            content = colors.minehit + symbols.symbolMineHit;
+        }
         else
+        {
             content = colors.color_default + (this->field2DVector[coords.col][coords.row]);
+        }
 
         coutconv << content;
         coutconv << colors.color_default << std::flush;
@@ -425,9 +549,13 @@ bool Field::isFlag(Common::CoordsStruct& coords)
     Symbols symbols;
 
     if (this->field2DVector[coords.col][coords.row] == symbols.symbolFlag)
+    {
         return true;
+    }
     else
+    {
         return false;
+    }
 }
 
 // test coords if they contain a number:
@@ -437,7 +565,9 @@ bool Field::isNumber(Common::CoordsStruct& coords)
     for (int i = 1; i < 8; i++)
     {
         if (this->field2DVector[coords.col][coords.row] == common.intToString(i))
+        {
             return true;
+        }
     }
     return false;
 }
@@ -578,10 +708,12 @@ void Field::autoUncoverRecursive(Common::CoordsStruct const& coords, std::vector
                     poolVector.push_back(common.coordsToInt(neighboursCoveredVector.at(i), this->cols));
                     printCoords(neighboursCoveredVector.at(i), false);
                 }
-            }            
+            }
         }
         if (neighboursMinesVector.size() == 0)
+        {
             autoUncoverRecursive(neighboursCoveredVector.at(i), poolVector);
+        }
     }
 }
 
@@ -598,8 +730,12 @@ Common::PlaceUserInputReturnStruct Field::gameWon()
     for (int i = 1; i <= this->cols; i++)
     {
         for (int j = 1; j <= this->rows; j++)
+        {
             if (this->mines2DVector[i][j] == symbols.symbolMine)
+            {
                 this->field2DVector[i][j] = symbols.symbolMine;
+            }
+        }
     }
 
     drawField();
@@ -620,8 +756,11 @@ Common::PlaceUserInputReturnStruct Field::gameLost()
     {
         for (int j = 1; j <= this->rows; j++)
         {
-            if (this->field2DVector[i][j] == symbols.symbolFlag && this->mines2DVector[i][j] != symbols.symbolMine && this->mines2DVector[i][j] != symbols.symbolMineHit) // && this->mines2DVector[i][j] == coveredSymbol)
+            if (this->field2DVector[i][j] == symbols.symbolFlag && this->mines2DVector[i][j] \
+            != symbols.symbolMine && this->mines2DVector[i][j] != symbols.symbolMineHit)
+            {
                 this->mines2DVector[i][j] = this->field2DVector[i][j];
+            }
         }
     }
     for (int i = 1; i <= this->cols; i++)
@@ -713,7 +852,9 @@ Common::PlaceUserInputReturnStruct Field::placeUserInput(Common::UserInputReturn
                     for (size_t i = 0; i < autoUncoverNeighboursCoveredVector.size(); i++)
                     {
                         if (this->mines2DVector[autoUncoverNeighboursCoveredVector.at(i).col][autoUncoverNeighboursCoveredVector.at(i).row] == symbols.symbolMine)
+                        {
                             autoUncoverMissedMinesVector.push_back(autoUncoverNeighboursCoveredVector.at(i));
+                        }
                     }
                     // if there are missed mines, reveal the mines2DVector - player has lost:
                     if (autoUncoverMissedMinesVector.size() != 0)
@@ -740,7 +881,7 @@ Common::PlaceUserInputReturnStruct Field::placeUserInput(Common::UserInputReturn
                                 autoUncoverNeighboursCoveredMinesVector = findNeighbours(this->mines2DVector, tempCoords, symbols.symbolMine);
                                 std::vector<unsigned int> poolVector;
                                 if (autoUncoverNeighboursCoveredMinesVector.size() == 0)
-                                {                                    
+                                {
                                     if (std::find(poolVector.begin(), poolVector.end(), common.coordsToInt(tempCoords, this->cols)) == poolVector.end())
                                     {
                                         this->field2DVector[tempCoords.col][tempCoords.row] = symbols.symbolZero;
@@ -749,7 +890,7 @@ Common::PlaceUserInputReturnStruct Field::placeUserInput(Common::UserInputReturn
                                     autoUncoverRecursive(tempCoords, poolVector);
                                 }
                                 else
-                                {                                    
+                                {
                                     if (std::find(poolVector.begin(), poolVector.end(), common.coordsToInt(tempCoords, this->cols)) == poolVector.end())
                                     {
                                         this->field2DVector[tempCoords.col][tempCoords.row] = common.intToString(static_cast<int>(autoUncoverNeighboursCoveredMinesVector.size()));
@@ -767,9 +908,13 @@ Common::PlaceUserInputReturnStruct Field::placeUserInput(Common::UserInputReturn
             // uncover the players choice and place the number of surrounding mines in it:
             std::vector<Common::CoordsStruct> neighboursMinesVector = findNeighbours(this->mines2DVector, userInput.Coords, symbols.symbolMine);
             if (neighboursMinesVector.size() == 0)
+            {
                 this->field2DVector[userInput.Coords.col][userInput.Coords.row] = symbols.symbolZero;
+            }
             else
+            {
                 this->field2DVector[userInput.Coords.col][userInput.Coords.row] = common.intToString(static_cast<int>(neighboursMinesVector.size()));
+            }
             printCoords(userInput.Coords, false);
             returnStruct.isTurn = true;
         }
@@ -790,14 +935,18 @@ Common::PlaceUserInputReturnStruct Field::placeUserInput(Common::UserInputReturn
         for (int j = 1; j <= this->rows; j++)
         {
             if (this->field2DVector[i][j] == symbols.symbolCovered)
+            {
                 countCoveredTemp++;
+            }
         }
     }
     this->countCovered = countCoveredTemp;
 
     // check if player has won:
     if (this->flagsCount + this->countCovered == this->minesCount)
+    {
         returnStruct = gameWon();
+    }
 
     return returnStruct;
 }

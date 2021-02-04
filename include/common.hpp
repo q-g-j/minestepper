@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../include/debug.hpp"
+
 // Windows and Linux seem to handle unicode strings differently (use wide strings for Windows):
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
     #define coutconv std::wcout

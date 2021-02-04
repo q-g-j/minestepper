@@ -112,13 +112,19 @@ int main()
             firstrun = 0;
             placeUserInputReturn = field.placeUserInput(userInput, turn);
             if (placeUserInputReturn.hasLost)
+            {
                 break;
+            }
             else if (placeUserInputReturn.hasWon)
+            {
                 break;
+            }
             else
             {
                 if (placeUserInputReturn.isTurn)
+                {
                     turn++;
+                }
             }
         }
     }

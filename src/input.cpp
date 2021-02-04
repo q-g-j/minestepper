@@ -4,6 +4,15 @@
 #include <stdlib.h>
 #include <string>
 
+#include "../include/colors.hpp"
+#include "../include/common.hpp"
+#include "../include/debug.hpp"
+#include "../include/field.hpp"
+#include "../include/common.hpp"
+#include "../include/input.hpp"
+#include "../include/print.hpp"
+#include "../include/symbols.hpp"
+
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
     #include <conio.h>
     #include <stdio.h>
@@ -12,14 +21,6 @@
     #include <termios.h>
     #include <unistd.h>
 #endif
-
-#include "../include/colors.hpp"
-#include "../include/common.hpp"
-#include "../include/field.hpp"
-#include "../include/common.hpp"
-#include "../include/input.hpp"
-#include "../include/print.hpp"
-#include "../include/symbols.hpp"
 
 // Linux: need to enable "non canonical mode" to make arrow keys and SPACE work (no need to press ENTER):
 #if !defined(_WIN32) && !defined(WIN32) && !defined(_WIN64) && !defined(WIN64)
@@ -57,9 +58,13 @@ void Input::getEnterKey(std::string const& text)
         {
             int inputKey = 0;
             if ((inputKey = _getch()) == KEY_ENTER)
+            {
                 break;
+            }
             else
+            {
                 continue;
+            }
         }
     #else
         enableNonCanonicalMode();
@@ -67,9 +72,13 @@ void Input::getEnterKey(std::string const& text)
         while (read(STDIN_FILENO, &inputKey, 1) == 1)
         {
             if (inputKey == KEY_ENTER)
+            {
                 break;
+            }
             else
+            {
                 continue;
+            }
         }
         disableNonCanonicalMode();
     #endif
@@ -90,9 +99,13 @@ void Input::showCursor(bool show)
         SetConsoleCursorInfo(out, &cursorInfo);
     #else
         if (show == true)
+        {
             coutconv << "\e[?25h";
+        }
         else
+        {
             coutconv << "\e[?25l";
+        }
     #endif
         std::cout << std::flush;
 }
@@ -107,18 +120,28 @@ void Input::moveCursor(Field &field, Common::CoordsStruct& currentArrayPosition,
     std::wcout << L"\b";
     field.printCoords(currentArrayPosition, false);
     if (direction == Direction::UP)
+    {
         currentArrayPosition.row--;
+    }
     else if (direction == Direction::DOWN)
+    {
         currentArrayPosition.row++;
+    }
     else if (direction == Direction::LEFT)
+    {
         currentArrayPosition.col--;
+    }
     else if (direction == Direction::RIGHT)
+    {
         currentArrayPosition.col++;
+    }
     currentCursorPosition = common.coordsToCursorPosition(currentArrayPosition, field.getOffsetX(), field.getOffsetY(), field.getCellWidth());
     field.gotoXY(currentCursorPosition.col, currentCursorPosition.row);
     coutconv << symbols.symbolCursor << std::flush;
     if (field.getCoordsContent(currentArrayPosition) == symbols.symbolFlag || field.isNumber(currentArrayPosition))
+    {
         field.printCoords(currentArrayPosition, true);
+    }
 }
 
 // custom mode: ask user for the game mode (difficulty):
@@ -162,7 +185,9 @@ int Input::getDifficulty()
                 break;
             }
             else
+            {
                 continue;
+            }
         }
     #else
         enableNonCanonicalMode();
@@ -196,7 +221,9 @@ int Input::getDifficulty()
                 break;
             }
             else
+            {
                 continue;
+            }
         }
         disableNonCanonicalMode();
     #endif
@@ -225,7 +252,9 @@ Common::CoordsStruct Input::getDimensions()
         std::cout << colors.setTextColor(colors.color_default);
         getline(std::cin, line);
         if (line == "")
+        {
             isValidInput = false;
+        }
         if (line == "q" || line == "Q")
         {
             common.clearScreen();
@@ -307,7 +336,9 @@ int Input::getMinesCount(int const& fieldSize)
         std::cout << colors.setTextColor(colors.color_default);
         getline(std::cin, line);
         if (line == "")
+        {
             isValidInput = false;
+        }
         if (line == "q" || line == "Q")
         {
             common.clearScreen();
@@ -325,12 +356,18 @@ int Input::getMinesCount(int const& fieldSize)
                 isValidInput = false;
             }
             if (minesCount > 0 && minesCount < fieldSize)
+            {
                 isValidInput = true;
+            }
             else
+            {
                 isValidInput = false;
+            }
         }
         if (isValidInput == true)
+        {
             return minesCount;
+        }
         else
         {
             getEnterKey(print.wrongInputText);
@@ -366,13 +403,21 @@ Common::UserInputReturnStruct Input::getUserInput(Field &field, int firstrun)
     if (firstrun == 1)
     {
         if (field.getCols() % 2 == 0)
+        {
             currentArrayPosition.col = (field.getCols()) / 2;
+        }
         else
+        {
             currentArrayPosition.col = int(field.getCols()/ 2) + 1;
+        }
         if (field.getRows() % 2 == 0)
+        {
             currentArrayPosition.row = (field.getRows()) / 2;
+        }
         else
+        {
             currentArrayPosition.row = int(field.getRows()/ 2) + 1;
+        }
     }
 
     currentCursorPosition = common.coordsToCursorPosition(currentArrayPosition, field.getOffsetX(), field.getOffsetY(), field.getCellWidth());
@@ -382,9 +427,13 @@ Common::UserInputReturnStruct Input::getUserInput(Field &field, int firstrun)
     common.setUnicode(true);
 
     if (field.getCoordsContent(currentArrayPosition) == symbols.symbolFlag || field.isNumber(currentArrayPosition))
+    {
         field.printCoords(currentArrayPosition, true);
+    }
     else
+    {
         coutconv << symbols.symbolCursor << std::flush;
+    }
 
     while(1)
     {
@@ -445,27 +494,39 @@ Common::UserInputReturnStruct Input::getUserInput(Field &field, int firstrun)
                 continue;
             }
             else
+            {
                 break;
+            }
         }
         else if  (inputTmp == KEY_SPACE)
         {
             coutconv << L"\b" << std::flush;
             if (field.isNumber(currentArrayPosition) || field.getCoordsContent(currentArrayPosition) == L" ")
+            {
                 continue;
+            }
             else
+            {
                 userInput.isFlag = true;
+            }
             break;
         }
         else
+        {
             continue;
+        }
     }
     common.setUnicode(false);
 
     #else
     if (field.getCoordsContent(currentArrayPosition) == symbols.symbolFlag || field.isNumber(currentArrayPosition))
+    {
         field.printCoords(currentArrayPosition, true);
+    }
     else
+    {
         std::cout << symbols.symbolCursor << std::flush;
+    }
     while (read(STDIN_FILENO, &inputKey, 1) == 1)
     {
         if (inputKey == 'q' || inputKey == 'Q')
@@ -483,15 +544,21 @@ Common::UserInputReturnStruct Input::getUserInput(Field &field, int firstrun)
         {
             std::cout << "\b" << std::flush;
             if (field.getCoordsContent(currentArrayPosition) == symbols.symbolFlag)
+            {
                 continue;
+            }
             else
+            {
                 break;
+            }
         }
         else if (inputKey == KEY_SPACE)
         {
             std::cout << "\b" << std::flush;
             if (field.isNumber(currentArrayPosition) || field.getCoordsContent(currentArrayPosition) == " ")
+            {
                 continue;
+            }
             else;
             userInput.isFlag = true;
             break;
