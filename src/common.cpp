@@ -104,7 +104,7 @@ Common::CoordsStruct Common::intToCoords(int& position, int& cols)
 }
 
 // the above function the other way around
-unsigned int Common::coordsToInt(CoordsStruct& coords, int& cols)
+unsigned int Common::coordsToInt(CoordsStruct const& coords, int const& cols)
 {
     int position = 0;
     if (coords.row == 1)
@@ -118,17 +118,17 @@ unsigned int Common::coordsToInt(CoordsStruct& coords, int& cols)
 }
 
 // can't use raw coordinates when placing the players cursor, due to the drawn lines and the cell width:
-Common::CoordsStruct Common::coordsToCursorPosition(CoordsStruct& coords, int const& offsetX, int const& offsetY, int const& cellWidth)
+Common::CoordsStruct Common::coordsToCursorPosition(CoordsStruct const& coords, int const& offsetX, int const& offsetY, int const& cellWidth)
 {
     CoordsStruct cursorPosition;
     cursorPosition.col = offsetX;
-    for (int i = 1; i < coords.col; i ++)
+    for (int i = 1; i < coords.col; ++i)
     {
         cursorPosition.col = cursorPosition.col + (cellWidth + 1);
     }
 
     cursorPosition.row = offsetY;
-    for (int i = 1; i < coords.row; i ++)
+    for (int i = 1; i < coords.row; ++i)
     {
         cursorPosition.row = cursorPosition.row + 2;
     }

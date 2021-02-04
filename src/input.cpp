@@ -121,19 +121,19 @@ void Input::moveCursor(Field &field, Common::CoordsStruct& currentArrayPosition,
     field.printCoords(currentArrayPosition, false);
     if (direction == Direction::UP)
     {
-        currentArrayPosition.row--;
+        --currentArrayPosition.row;
     }
     else if (direction == Direction::DOWN)
     {
-        currentArrayPosition.row++;
+        ++currentArrayPosition.row;
     }
     else if (direction == Direction::LEFT)
     {
-        currentArrayPosition.col--;
+        --currentArrayPosition.col;
     }
     else if (direction == Direction::RIGHT)
     {
-        currentArrayPosition.col++;
+        ++currentArrayPosition.col;
     }
     currentCursorPosition = common.coordsToCursorPosition(currentArrayPosition, field.getOffsetX(), field.getOffsetY(), field.getCellWidth());
     field.gotoXY(currentCursorPosition.col, currentCursorPosition.row);
@@ -149,7 +149,7 @@ int Input::getDifficulty()
 {
     Common common;
     Print print;
-    
+
     int difficulty = 0;
 
     print.printMenu();
@@ -607,7 +607,7 @@ Common::UserInputReturnStruct Input::getUserInput(Field &field, int firstrun)
         disableNonCanonicalMode();
     #endif
 
-    firstrun++;
+    ++firstrun;
 
     return userInput;
 }

@@ -115,9 +115,6 @@ void Print::printHelp(Field &field, Common::CoordsStruct &currentArrayPosition)
     std::cout << colors.setTextColor(colors.fg_light_red);
     std::cout << field.getMinesLeft() << minesLeftText << std::flush;
     std::cout << colors.setTextColor(colors.color_default);
-    #if DEBUG == 1
-        std::cout << debugTurnCountText << turn << "      ";
-    #endif
     field.gotoXY(field.getOffsetX() - 1, field.getOffsetY() + field.getRows()*2);
     std::cout << colors.setTextColor(colors.fg_white);
     std::cout << getHelpText << newline << newline;
@@ -171,11 +168,11 @@ void Print::deleteLastLine(size_t const& stringLength)
         {
             cursorPosition = cbsi.dwCursorPosition;
         }
-        cursorPosition.Y--;
+        --cursorPosition.Y;
 
         SetConsoleCursorPosition(console, cursorPosition);
         std::cout << "\r";
-        for (unsigned int i = 0; i < stringLength; i++)
+        for (unsigned int i = 0; i < stringLength; ++i)
         {
             std::cout << " ";
         }
@@ -184,7 +181,7 @@ void Print::deleteLastLine(size_t const& stringLength)
     #else
         std::cout << "\x1b[A";
         std::cout << "\r";
-        for (unsigned int i = 0; i < stringLength; i++)
+        for (unsigned int i = 0; i < stringLength; ++i)
         {
             std::cout << " ";
         }

@@ -71,6 +71,6 @@ public:
     void setRandomSeed();
     void clearScreen();
     CoordsStruct intToCoords(int&, int&);
-    unsigned int coordsToInt(CoordsStruct&, int&);
-    CoordsStruct coordsToCursorPosition(CoordsStruct&, int const&, int const&, int const&);
+    unsigned int coordsToInt(CoordsStruct const&, int const&);
+    CoordsStruct coordsToCursorPosition(CoordsStruct const&, int const&, int const&, int const&);
 };

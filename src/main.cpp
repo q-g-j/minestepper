@@ -103,7 +103,8 @@ int main()
             std::cout << field.getMinesLeft() << print.minesLeftText << std::flush;
             std::cout << colors.setTextColor(colors.color_default);
             #if DEBUG == 1
-                std::cout << " Covered left: " << field.getCovered() <<  "     " << std::flush;
+                field.gotoXY(field.getOffsetX() - 1 + 17, field.getOffsetY() - 2);
+                std::cout << "Covered left: " << field.getCovered() <<  "     " << std::flush;
             #endif
             field.gotoXY(1, fieldOffsetY + field.getRows()*2 + 4);
 
@@ -123,7 +124,7 @@ int main()
             {
                 if (placeUserInputReturn.isTurn)
                 {
-                    turn++;
+                    ++turn;
                 }
             }
         }
