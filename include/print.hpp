@@ -21,7 +21,7 @@ public:
     void printCustomGetMinesCount();
     void printHasWon();
     void printHasLost();
-    void printHelp(Field &field, Common::CoordsStruct&);
+    void printHelp(Field &field, Common::CoordsStruct const&);
     void printExplanation();
     void deleteLastLine(size_t const&);
 };

@@ -147,32 +147,33 @@ void Field::clearMines()
 // place mines at random positions of this->mines2DVector[][]:
 void Field::fillMines(Common::CoordsStruct& userFirstInput)
 {
-    Common common;
     Symbols symbols;
 
-    #if CUSTOM_FIELD == 1
-    this->mines2DVector[1][9] = symbols.symbolMine;
-    this->mines2DVector[2][9] = symbols.symbolMine;
-    this->mines2DVector[4][9] = symbols.symbolMine;
-    this->minesCount = 3;
+    #if STATIC_FIELD == 1
+        this->mines2DVector[1][9] = symbols.symbolMine;
+        this->mines2DVector[2][9] = symbols.symbolMine;
+        this->mines2DVector[4][9] = symbols.symbolMine;
+        this->minesCount = 3;
     #else
-    Common::CoordsStruct coords;
-    size_t sizeofField2DVector = this->cols * this->rows;
-    std::vector<int> tempVector;
-    for (unsigned int i = 1; i <= sizeofField2DVector; ++i)
-    {
-        if (i != common.coordsToInt(userFirstInput, this->cols))
-        {
-            tempVector.push_back(i);
-        }
-    }
+        Common common;
 
-    std::random_shuffle(tempVector.begin(), tempVector.end());
-    for (int i = 0; i < this->minesCount; ++i)
-    {
-        coords = common.intToCoords(tempVector.at(i), this->cols);
-        this->mines2DVector[coords.col][coords.row] = symbols.symbolMine;
-    }
+        Common::CoordsStruct coords;
+        size_t sizeofField2DVector = this->cols * this->rows;
+        std::vector<int> tempVector;
+        for (unsigned int i = 1; i <= sizeofField2DVector; ++i)
+        {
+            if (i != common.coordsToInt(userFirstInput, this->cols))
+            {
+                tempVector.push_back(i);
+            }
+        }
+
+        std::random_shuffle(tempVector.begin(), tempVector.end());
+        for (int i = 0; i < this->minesCount; ++i)
+        {
+            coords = common.intToCoords(tempVector.at(i), this->cols);
+            this->mines2DVector[coords.col][coords.row] = symbols.symbolMine;
+        }
     #endif
 }
 
@@ -319,7 +320,7 @@ void Field::gotoXY(int const& x, int const& y)
 }
 
 // the main method to print the content of a particular cell:
-void Field::printCoords(Common::CoordsStruct& coords, bool isCursor)
+void Field::printCoords(Common::CoordsStruct const& coords, bool isCursor)
 {
     Colors colors;
     Common common;
@@ -548,7 +549,7 @@ void Field::printCoords(Common::CoordsStruct& coords, bool isCursor)
 }
 
 // test coords if they contain a flag:
-bool Field::isFlag(Common::CoordsStruct& coords)
+bool Field::isFlag(Common::CoordsStruct const& coords)
 {
     Symbols symbols;
 
@@ -563,7 +564,7 @@ bool Field::isFlag(Common::CoordsStruct& coords)
 }
 
 // test coords if they contain a number:
-bool Field::isNumber(Common::CoordsStruct& coords)
+bool Field::isNumber(Common::CoordsStruct const& coords)
 {
     Common common;
     for (int i = 1; i < 8; ++i)

@@ -50,8 +50,8 @@ public:
     // public methods:
     void drawField();
     void gotoXY(int const&, int const&);
-    void printCoords(Common::CoordsStruct&, bool);
-    bool isFlag(Common::CoordsStruct&);
-    bool isNumber(Common::CoordsStruct&);
+    void printCoords(Common::CoordsStruct const&, bool);
+    bool isFlag(Common::CoordsStruct const&);
+    bool isNumber(Common::CoordsStruct const&);
     Common::PlaceUserInputReturnStruct placeUserInput(Common::UserInputReturnStruct&, int&);
 };

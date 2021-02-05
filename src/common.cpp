@@ -81,7 +81,7 @@ void Common::clearScreen()
 
 // convert coords of type integer to coords of type struct
 // (e.g. "position = 4" will return "coords.col = 4, coords.row = 1"):
-Common::CoordsStruct Common::intToCoords(int& position, int& cols)
+Common::CoordsStruct Common::intToCoords(int const& position, int const& cols)
 {
     CoordsStruct coords;
 

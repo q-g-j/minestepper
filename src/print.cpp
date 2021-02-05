@@ -95,7 +95,7 @@ void Print::printHasLost()
     input.getEnterKey(goBackString);
 }
 
-void Print::printHelp(Field &field, Common::CoordsStruct &currentArrayPosition)
+void Print::printHelp(Field &field, Common::CoordsStruct const& currentArrayPosition)
 {
     Colors colors;
     Common common;
