@@ -14,5 +14,15 @@ A small console based version of Minesweeper to teach myself C++.
 
 It compiles and runs in Linux and Windows but might look a bit different on both, depending on the terminal(-settings) used.
 
-To compile you can use gcc with g++, cmake and make or import into some IDE (like KDevelop, VSCode...).
+To compile you need a c++ compiler (like gcc with g++ or clang) and optionally cmake or import the cloned folder into some IDE (like KDevelop, Code::Blocks, ...).
 No extra libraries needed.
+
+**Example for cmake in Linux:**
+
+```
+git clone https://github.com/q-g-j/minesweeper.git
+mkdir -p minesweeper/build
+cd minesweeper/build
+cmake ..
+cmake --build .
+```
