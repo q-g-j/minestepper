@@ -96,13 +96,11 @@ std::vector<std::vector<stringconv>> Field::create2DVector(std::string const& ve
 {
     Symbols symbols;
 
-    const int colsNum = this->cols + 1;
-    const int rowsNum = this->rows + 1;
     std::vector<std::vector<stringconv>> temp2DVector;
-    for(int i = 0; i < colsNum; ++i)
+    for(int i = 0; i <= this->cols; ++i)
     {
         std::vector<stringconv> row;
-        for(int j = 0; j < rowsNum; ++j)
+        for(int j = 0; j <= this->rows; ++j)
         {
             if (vectorType == "field")
             {
@@ -237,7 +235,10 @@ void Field::drawField()
             Common::CoordsStruct Coords;
             Coords.col = col;
             Coords.row = row;
-            printCoords(Coords, false);
+
+            //printCoords(Coords, false);
+
+            coutconv << symbols.symbolCovered;
 
             for (int padding = 0; padding < (this->fieldCellWidth-1)/2; ++padding)
             {
@@ -299,6 +300,7 @@ void Field::drawField()
         }
         std::wcout << L"\n";
     }
+    coutconv << std::flush;
     common.setUnicode(false);
 }
 
@@ -734,14 +736,11 @@ void Field::autoUncoverRecursive(Common::CoordsStruct const& coords, std::vector
 
 Common::PlaceUserInputReturnStruct Field::gameWon()
 {
-    Common common;
     Print print;
     Symbols symbols;
 
     Common::PlaceUserInputReturnStruct returnStruct;
 
-    common.clearScreen();
-    print.printTitle(this->difficultyString, this->cols, this->rows, this->minesCount);
     for (int i = 1; i <= this->cols; ++i)
     {
         for (int j = 1; j <= this->rows; ++j)
@@ -750,10 +749,16 @@ Common::PlaceUserInputReturnStruct Field::gameWon()
             {
                 this->field2DVector[i][j] = symbols.symbolMine;
             }
+            Common::CoordsStruct tempCoords;
+            tempCoords.col = i;
+            tempCoords.row = j;
+            printCoords(tempCoords, false);
         }
     }
 
-    drawField();
+    gotoXY(1, getOffsetY() + getRows() * 2 + 1);
+    print.deleteLastLine(21);
+    gotoXY(1, getOffsetY() + getRows() * 2);
     print.printHasWon();
     returnStruct.hasWon = true;
     return returnStruct;
@@ -761,12 +766,9 @@ Common::PlaceUserInputReturnStruct Field::gameWon()
 
 Common::PlaceUserInputReturnStruct Field::gameLost()
 {
-    Common common;
     Print print;
     Symbols symbols;
 
-    common.clearScreen();
-    print.printTitle(this->difficultyString, this->cols, this->rows, this->minesCount);
     for (int i = 1; i <= this->cols; ++i)
     {
         for (int j = 1; j <= this->rows; ++j)
@@ -783,10 +785,16 @@ Common::PlaceUserInputReturnStruct Field::gameLost()
         for (int j = 1; j <= this->rows; ++j)
         {
             this->field2DVector[i][j] = this->mines2DVector[i][j];
+            Common::CoordsStruct tempCoords;
+            tempCoords.col = i;
+            tempCoords.row = j;
+            printCoords(tempCoords, false);
         }
     }
-    drawField();
 
+    gotoXY(1, getOffsetY() + getRows() * 2 + 1);
+    print.deleteLastLine(21);
+    gotoXY(1, getOffsetY() + getRows() * 2);
     print.printHasLost();
     Common::PlaceUserInputReturnStruct returnStruct;
     returnStruct.hasLost = true;
