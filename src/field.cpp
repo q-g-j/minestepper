@@ -160,7 +160,7 @@ void Field::fillMines(Common::CoordsStruct& userFirstInput)
 }
 
 // draw this->field2DVector[][]:
-void Field::drawField()
+void Field::drawField(bool recoverField)
 {
     Common common;
     Symbols symbols;
@@ -219,9 +219,14 @@ void Field::drawField()
             Coords.col = col;
             Coords.row = row;
 
-            //printCoords(Coords, false);
-
-            coutconv << symbols.symbolCovered;
+            if (recoverField)
+            {
+                printCoords(Coords, false);
+            }
+            else
+            {
+                coutconv << symbols.symbolCovered;
+            }
 
             for (int padding = 0; padding < (this->fieldCellWidth-1)/2; ++padding)
             {

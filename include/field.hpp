@@ -50,7 +50,7 @@ public:
     stringconv getCoordsContent(Common::CoordsStruct const&);
 
     // public methods:
-    void drawField();
+    void drawField(bool);
     void gotoXY(int const&, int const&);
     void printCoords(Common::CoordsStruct const&, bool);
     bool isFlag(Common::CoordsStruct const&);

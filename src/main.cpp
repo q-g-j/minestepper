@@ -89,7 +89,7 @@ int main()
 
         common.clearScreen();
         print.printTitle(difficultyString, cols, rows, minesTotal);
-        field.drawField();
+        field.drawField(false);
 
         int turn = 1;
         int firstrun = 1;
