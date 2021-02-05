@@ -14,7 +14,9 @@ private:
     {
         UP, DOWN, LEFT, RIGHT
     };
+
     void moveCursor(Field &field, Common::CoordsStruct&, Direction &direction);
+    void helpToggle(Field &field, Common::CoordsStruct const&);
 
 public:
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
@@ -36,7 +38,6 @@ public:
     int getDifficulty();
     Common::CoordsStruct getDimensions();
     int getMinesCount(int const&);
-
     void getEnterKey(std::string const&);
     Common::UserInputReturnStruct getUserInput(Field &field, int);
 };

@@ -18,17 +18,17 @@
 #endif
 
 // constructor
-Field::Field(int const& cols_, int const& rows_, int const& fieldOffsetX_, int const& fieldOffsetY_, int const& fieldCellWidth_, int const& minesCount_, std::string const& difficultyString_)
+Field::Field(int const& cols_, int const& rows_, int const& fieldOffsetX_, int const& fieldOffsetY_, int const& fieldCellWidth_, int const& minesTotal_, std::string const& difficultyString_)
 :
     cols(cols_),
     rows(rows_),
     fieldOffsetX(fieldOffsetX_),
     fieldOffsetY(fieldOffsetY_),
     fieldCellWidth(fieldCellWidth_),
-    minesCount(minesCount_),
+    minesTotal(minesTotal_),
     difficultyString(difficultyString_)
 {
-    this->minesLeft = minesCount_;
+    this->minesLeft = minesTotal_;
     this->countCovered = cols_ * rows_;
     this->flagsCount = 0;
     this->field2DVector = create2DVector("field");
@@ -73,7 +73,7 @@ int Field::getCovered()
 
 int Field::getMinesCount()
 {
-    return this->minesCount;
+    return this->minesTotal;
 }
 
 int Field::getMinesLeft()
@@ -90,6 +90,18 @@ stringconv Field::getCoordsContent(Common::CoordsStruct const& coords)
 {
     return this->field2DVector[coords.col][coords.row];
 }
+
+#if DEBUG == 1
+    void Field::debugPrintCountCovered(Common::CoordsStruct const& coordsOld)
+    {
+        Common common;
+        Common::CoordsStruct tempCoords;
+        tempCoords = common.coordsToCursorPosition(coordsOld, this->fieldOffsetX, this->fieldOffsetY, this->fieldCellWidth);
+        gotoXY(getOffsetX() - 1 + 17, getOffsetY() - 2);
+        std::cout << "Covered left: " << getCovered() <<  "     " << std::flush;
+        gotoXY(tempCoords.col, tempCoords.row);
+    }
+#endif
 
 // use 2D vectors for the game field:
 std::vector<std::vector<stringconv>> Field::create2DVector(std::string const& vectorType)
@@ -116,44 +128,14 @@ std::vector<std::vector<stringconv>> Field::create2DVector(std::string const& ve
     return temp2DVector;
 }
 
-// fill this->field2DVector[][] with symbolCovered
-void Field::clearField()
-{
-    Symbols symbols;
-
-    for (int i = 0; i <= this->cols; ++i)
-    {
-        for (int j = 0; j <= this->rows; ++j)
-        {
-            this->field2DVector[i][j] = symbols.symbolCovered;
-        }
-    }
-}
-
-// fill this->mines2DVector[][] with symbolZero
-void Field::clearMines()
-{
-    Symbols symbols;
-
-    for (int i = 0; i <= this->cols; ++i)
-    {
-        for (int j = 0; j <= this->rows; ++j)
-        {
-            this->mines2DVector[i][j] = symbols.symbolZero;
-        }
-    }
-}
-
 // place mines at random positions of this->mines2DVector[][]:
 void Field::fillMines(Common::CoordsStruct& userFirstInput)
 {
     Symbols symbols;
 
     #if STATIC_FIELD == 1
-        this->mines2DVector[1][9] = symbols.symbolMine;
-        this->mines2DVector[2][9] = symbols.symbolMine;
-        this->mines2DVector[4][9] = symbols.symbolMine;
-        this->minesCount = 3;
+        this->mines2DVector[3][3] = symbols.symbolMine;
+        this->minesTotal = 1;
     #else
         Common common;
 
@@ -169,7 +151,7 @@ void Field::fillMines(Common::CoordsStruct& userFirstInput)
         }
 
         std::random_shuffle(tempVector.begin(), tempVector.end());
-        for (int i = 0; i < this->minesCount; ++i)
+        for (int i = 0; i < this->minesTotal; ++i)
         {
             coords = common.intToCoords(tempVector.at(i), this->cols);
             this->mines2DVector[coords.col][coords.row] = symbols.symbolMine;
@@ -582,7 +564,7 @@ std::vector<Common::CoordsStruct> Field::findNeighbours(std::vector<std::vector<
 {
     std::vector<Common::CoordsStruct> neighboursVector;
 
-    // up left:
+    // top left:
     if (coords.col-1 > 0 && coords.row-1 > 0)
     {
         if (temp2DVector[coords.col-1][coords.row-1] == symbol)
@@ -594,7 +576,7 @@ std::vector<Common::CoordsStruct> Field::findNeighbours(std::vector<std::vector<
         }
     }
 
-    // up middle:
+    // top middle:
     if (coords.row-1 > 0)
     {
         if (temp2DVector[coords.col][coords.row-1] == symbol)
@@ -606,7 +588,7 @@ std::vector<Common::CoordsStruct> Field::findNeighbours(std::vector<std::vector<
         }
     }
 
-    // up right:
+    // top right:
     if (coords.col+1 <= this->cols && coords.row-1 > 0)
     {
         if (temp2DVector[coords.col+1][coords.row-1] == symbol)
@@ -618,19 +600,7 @@ std::vector<Common::CoordsStruct> Field::findNeighbours(std::vector<std::vector<
         }
     }
 
-    // middle left:
-    if (coords.col-1 > 0)
-    {
-        if (temp2DVector[coords.col-1][coords.row] == symbol)
-        {
-            Common::CoordsStruct tempCoords;
-            tempCoords.col = coords.col-1;
-            tempCoords.row = coords.row;
-            neighboursVector.push_back(tempCoords);
-        }
-    }
-
-    // middle right:
+    // center right:
     if (coords.col+1 <= this->cols)
     {
         if (temp2DVector[coords.col+1][coords.row] == symbol)
@@ -642,19 +612,19 @@ std::vector<Common::CoordsStruct> Field::findNeighbours(std::vector<std::vector<
         }
     }
 
-    // down left:
-    if (coords.col-1 > 0 && coords.row+1 <= this->rows)
+    // bottom right:
+    if (coords.col+1 <= this->cols && coords.row+1 <= this->rows)
     {
-        if (temp2DVector[coords.col-1][coords.row+1] == symbol)
+        if (temp2DVector[coords.col+1][coords.row+1] == symbol)
         {
             Common::CoordsStruct tempCoords;
-            tempCoords.col = coords.col-1;
+            tempCoords.col = coords.col+1;
             tempCoords.row = coords.row+1;
             neighboursVector.push_back(tempCoords);
         }
     }
 
-    // down middle:
+    // bottom middle:
     if (coords.row+1 <= this->rows)
     {
         if (temp2DVector[coords.col][coords.row+1] == symbol)
@@ -666,14 +636,26 @@ std::vector<Common::CoordsStruct> Field::findNeighbours(std::vector<std::vector<
         }
     }
 
-    // down right:
-    if (coords.col+1 <= this->cols && coords.row+1 <= this->rows)
+    // bottom left:
+    if (coords.col-1 > 0 && coords.row+1 <= this->rows)
     {
-        if (temp2DVector[coords.col+1][coords.row+1] == symbol)
+        if (temp2DVector[coords.col-1][coords.row+1] == symbol)
         {
             Common::CoordsStruct tempCoords;
-            tempCoords.col = coords.col+1;
+            tempCoords.col = coords.col-1;
             tempCoords.row = coords.row+1;
+            neighboursVector.push_back(tempCoords);
+        }
+    }
+
+    // center left:
+    if (coords.col-1 > 0)
+    {
+        if (temp2DVector[coords.col-1][coords.row] == symbol)
+        {
+            Common::CoordsStruct tempCoords;
+            tempCoords.col = coords.col-1;
+            tempCoords.row = coords.row;
             neighboursVector.push_back(tempCoords);
         }
     }
@@ -716,15 +698,11 @@ void Field::autoUncoverRecursive(Common::CoordsStruct const& coords, std::vector
 
             #if DEBUG == 1
                 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-                    Sleep(1000);
+                    Sleep(50);
                 #else
-                    usleep(500*1000);
+                    usleep(50*1000);
                 #endif
-                Common::CoordsStruct tempCoords;
-                tempCoords = common.coordsToCursorPosition(coords, this->fieldOffsetX, this->fieldOffsetY, this->fieldCellWidth);
-                gotoXY(getOffsetX() - 1 + 17, getOffsetY() - 2);
-                std::cout << "Covered left: " << getCovered() <<  "     " << std::flush;
-                gotoXY(tempCoords.col, tempCoords.row);
+                debugPrintCountCovered(coords);
             #endif
         }
 
@@ -735,12 +713,11 @@ void Field::autoUncoverRecursive(Common::CoordsStruct const& coords, std::vector
     }
 }
 
-Common::PlaceUserInputReturnStruct Field::gameWon()
+void Field::gameWon()
 {
+    Input input;
     Print print;
     Symbols symbols;
-
-    Common::PlaceUserInputReturnStruct returnStruct;
 
     for (int i = 1; i <= this->cols; ++i)
     {
@@ -757,16 +734,24 @@ Common::PlaceUserInputReturnStruct Field::gameWon()
         }
     }
 
-    gotoXY(1, getOffsetY() + getRows() * 2 + 1);
-    print.deleteLastLine(21);
-    gotoXY(1, getOffsetY() + getRows() * 2);
-    print.printHasWon();
-    returnStruct.hasWon = true;
-    return returnStruct;
+    this->countCovered = 0;
+    this->minesLeft = 0;
+
+    #if DEBUG == 1
+        Common::CoordsStruct dummyCoords;
+        dummyCoords.col = 0;
+        dummyCoords.row = 0;
+        debugPrintCountCovered(dummyCoords);
+    #endif
+
+    print.printHasWon(*this);
+    gotoXY(this->fieldOffsetX - 1, this->rows*2 + 8);
+    input.getEnterKey("Press ENTER to get back...");
 }
 
-Common::PlaceUserInputReturnStruct Field::gameLost()
+void Field::gameLost()
 {
+    Input input;
     Print print;
     Symbols symbols;
 
@@ -793,13 +778,19 @@ Common::PlaceUserInputReturnStruct Field::gameLost()
         }
     }
 
-    gotoXY(1, getOffsetY() + getRows() * 2 + 1);
-    print.deleteLastLine(21);
-    gotoXY(1, getOffsetY() + getRows() * 2);
-    print.printHasLost();
-    Common::PlaceUserInputReturnStruct returnStruct;
-    returnStruct.hasLost = true;
-    return returnStruct;
+    this->countCovered = 0;
+    //this->minesLeft = 0;
+
+    #if DEBUG == 1
+        Common::CoordsStruct dummyCoords;
+        dummyCoords.col = 0;
+        dummyCoords.row = 0;
+        debugPrintCountCovered(dummyCoords);
+    #endif
+
+    print.printHasLost(*this);
+    gotoXY(this->fieldOffsetX - 1, this->rows*2 + 8);
+    input.getEnterKey("Press ENTER to get back...");
 }
 
 // the main method of class Field which will alter this->field2DVector.
@@ -844,7 +835,8 @@ Common::PlaceUserInputReturnStruct Field::placeUserInput(Common::UserInputReturn
         if (this->mines2DVector[userInput.Coords.col][userInput.Coords.row] == symbols.symbolMine)
         {
             this->mines2DVector[userInput.Coords.col][userInput.Coords.row] = symbols.symbolMineHit;
-            returnStruct = gameLost();
+            gameLost();
+            returnStruct.hasLost = true;
             return returnStruct;
         }
 
@@ -889,7 +881,8 @@ Common::PlaceUserInputReturnStruct Field::placeUserInput(Common::UserInputReturn
                         {
                             this->mines2DVector[flagUncoverMissedMinesVector.at(i).col][flagUncoverMissedMinesVector.at(i).row] = symbols.symbolMineHit;
                         }
-                        returnStruct = gameLost();
+                        returnStruct.hasLost = true;
+                        gameLost();
                         return returnStruct;
                     }
                     // else if all flags are placed correctly:
@@ -964,9 +957,10 @@ Common::PlaceUserInputReturnStruct Field::placeUserInput(Common::UserInputReturn
     }
 
     // check if player has won:
-    if (this->flagsCount + this->countCovered == this->minesCount)
+    if (this->flagsCount + this->countCovered == this->minesTotal)
     {
-        returnStruct = gameWon();
+        returnStruct.hasWon = true;
+        gameWon();
     }
 
     return returnStruct;

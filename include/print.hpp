@@ -19,9 +19,8 @@ public:
     void printMenu();
     void printCustomGetDimensions();
     void printCustomGetMinesCount();
-    void printHasWon();
-    void printHasLost();
-    void printHelp(Field &field, Common::CoordsStruct const&);
+    void printHasWon(Field &field);
+    void printHasLost(Field &field);
     void printExplanation();
     void deleteLastLine(size_t const&);
 };

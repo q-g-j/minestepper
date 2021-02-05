@@ -12,7 +12,7 @@ private:
     int fieldOffsetX;
     int fieldOffsetY;
     int fieldCellWidth;
-    int minesCount;
+    int minesTotal;
     int minesLeft;
     int countCovered;
     int flagsCount;
@@ -22,17 +22,19 @@ private:
     std::vector<std::vector<stringconv>> cursor2DVector;
 
     // private methods
-    void clearField();
-    void clearMines();
     std::vector<std::vector<stringconv>> create2DVector(std::string const&);
     void fillMines(Common::CoordsStruct&);
     std::vector<Common::CoordsStruct> findNeighbours(std::vector<std::vector<stringconv>> const&, Common::CoordsStruct const&, stringconv const&);
     void autoUncoverRecursive(Common::CoordsStruct const&, std::vector<unsigned int>&);
-    Common::PlaceUserInputReturnStruct gameWon();
-    Common::PlaceUserInputReturnStruct gameLost();
+    void gameWon();
+    void gameLost();
+
+    #if DEBUG == 1
+        void debugPrintCountCovered(Common::CoordsStruct const&);
+    #endif
 
 public:
-    Field(int const& cols_, int const& rows_, int const& fieldOffsetX_, int const& fieldOffsetY_, int const& fieldCellWidth_, int const& minesCount_, std::string const& difficultyString_);
+    Field(int const& cols_, int const& rows_, int const& fieldOffsetX_, int const& fieldOffsetY_, int const& fieldCellWidth_, int const& minesTotal_, std::string const& difficultyString_);
     ~Field();
 
     // getter methods:

@@ -34,28 +34,28 @@ void Common::setUnicode(bool sw)
 
 // for Windows: convert a string to wide string and vice versa:
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-std::wstring Common::stringConvert(std::string const& str)
-{
-    return strconverter.from_bytes(str);
-}
+    std::wstring Common::stringConvert(std::string const& str)
+    {
+        return strconverter.from_bytes(str);
+    }
 #else
-std::string Common::stringConvert(std::wstring const& wstr)
-{
-    return strconverter.to_bytes(wstr);
-}
+    std::string Common::stringConvert(std::wstring const& wstr)
+    {
+        return strconverter.to_bytes(wstr);
+    }
 #endif
 
 // convert an integer to string or wide string:
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-std::wstring Common::intToString(int const& num)
-{
-    return std::to_wstring(num);
-}
+    std::wstring Common::intToString(int const& num)
+    {
+        return std::to_wstring(num);
+    }
 #else
-std::string Common::intToString(int const& num)
-{
-    return std::to_string(num);
-}
+    std::string Common::intToString(int const& num)
+    {
+        return std::to_string(num);
+    }
 #endif
 
 // needed for random_shuffle() (place the mines):

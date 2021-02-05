@@ -38,7 +38,7 @@ int main()
     int fieldCellWidth = 3;
     int rows = 0, cols = 0;
     int difficulty = 0;
-    int minesCount = 0;
+    int minesTotal = 0;
     Common::CoordsStruct dimensions;
     std::string difficultyString;
 
@@ -56,21 +56,21 @@ int main()
             difficultyString = print.setDifficultyTexts(1);
             cols = Size.Small.columns;
             rows = Size.Small.rows;
-            minesCount = Size.Small.mines;
+            minesTotal = Size.Small.mines;
         }
         else if (difficulty == 2)
         {
             difficultyString = print.setDifficultyTexts(2);
             cols = Size.Medium.columns;
             rows = Size.Medium.rows;
-            minesCount = Size.Medium.mines;
+            minesTotal = Size.Medium.mines;
         }
         else if (difficulty == 3)
         {
             difficultyString = print.setDifficultyTexts(3);
             cols = Size.Large.columns;
             rows = Size.Large.rows;
-            minesCount = Size.Large.mines;
+            minesTotal = Size.Large.mines;
         }
         else
         {
@@ -81,14 +81,14 @@ int main()
             rows = dimensions.row;
             cols = dimensions.col;
             common.clearScreen();
-            minesCount = input.getMinesCount(cols * rows);
+            minesTotal = input.getMinesCount(cols * rows);
             input.showCursor(false);
         }
 
-        Field field(cols, rows, fieldOffsetX, fieldOffsetY, fieldCellWidth, minesCount, difficultyString);
+        Field field(cols, rows, fieldOffsetX, fieldOffsetY, fieldCellWidth, minesTotal, difficultyString);
 
         common.clearScreen();
-        print.printTitle(difficultyString, cols, rows, minesCount);
+        print.printTitle(difficultyString, cols, rows, minesTotal);
         field.drawField();
 
         int turn = 1;

@@ -20,13 +20,13 @@ std::string Print::setDifficultyTexts(int const& mode)
     else return "custom";
 }
 
-void Print::printTitle(std::string const& difficultyString, int const& cols, int const& rows, int const& minesCount)
+void Print::printTitle(std::string const& difficultyString, int const& cols, int const& rows, int const& minesTotal)
 {
     Colors colors;
     std::cout << colors.setTextColor(colors.fg_light_blue);
     std::cout << "MINESWEEPER";
     std::cout << colors.setTextColor(colors.fg_white);
-    std::cout << " - " << difficultyString << " (" << cols << "x" << rows << ") - " << minesCount << " mines";
+    std::cout << " - " << difficultyString << " (" << cols << "x" << rows << ") - " << minesTotal << " mines";
     std::cout << colors.setTextColor(colors.color_default);
     std::cout << newline << newline << newline;
 }
@@ -74,62 +74,30 @@ void Print::printCustomGetMinesCount()
     std::cout << "How many mines to place on the field?" << newline << newline;
 }
 
-void Print::printHasWon()
-{
-    Input input;
-
-    std::string goBackString =  "Press ENTER to go back...";
-    std::cout << newline;
-    std::cout << "Congratulation, you have won!" << newline;
-    input.getEnterKey(goBackString);
-
-}
-
-void Print::printHasLost()
-{
-    Input input;
-
-    std::string goBackString = "Press ENTER to go back...";
-    std::cout << newline;
-    std::cout << "Sry, you have lost!" << newline;
-    input.getEnterKey(goBackString);
-}
-
-void Print::printHelp(Field &field, Common::CoordsStruct const& currentArrayPosition)
+void Print::printHasWon(Field &field)
 {
     Colors colors;
-    Common common;
-    Input input;
-    Symbols symbols;
 
-    common.setUnicode(false);
-    Common::CoordsStruct currentCursorPosition;
-    common.clearScreen();
-    printExplanation();
-    input.getEnterKey("");
-    common.clearScreen();
-    printTitle(field.getDifficultyString(), field.getCols(), field.getRows(), field.getMinesCount());
-    field.drawField();
-    std::cout << newline;
+    field.gotoXY(1, 4);
+    deleteLastLine(20);
     field.gotoXY(field.getOffsetX() - 1, field.getOffsetY() - 2);
     std::cout << colors.setTextColor(colors.fg_light_red);
     std::cout << field.getMinesLeft() << minesLeftText << std::flush;
-    std::cout << colors.setTextColor(colors.color_default);
-    field.gotoXY(field.getOffsetX() - 1, field.getOffsetY() + field.getRows()*2);
+
+    field.gotoXY(field.getOffsetX() - 1, field.getRows()*2 + 7);
     std::cout << colors.setTextColor(colors.fg_white);
-    std::cout << getHelpText << newline << newline;
+    std::cout << "Congratulation, you have won!" << newline;
     std::cout << colors.setTextColor(colors.color_default);
-    currentCursorPosition = common.coordsToCursorPosition(currentArrayPosition, field.getOffsetX(), field.getOffsetY(), field.getCellWidth());
-    field.gotoXY(currentCursorPosition.col, currentCursorPosition.row);
-    common.setUnicode(true);
-    if (field.getCoordsContent(currentArrayPosition) == symbols.symbolFlag || field.isNumber(currentArrayPosition))
-    {
-        field.printCoords(currentArrayPosition, true);
-    }
-    else
-    {
-        coutconv << symbols.symbolCursor << std::flush;
-    }
+}
+
+void Print::printHasLost(Field &field)
+{
+    Colors colors;
+
+    field.gotoXY(field.getOffsetX() - 1, field.getRows()*2 + 7);
+    std::cout << colors.setTextColor(colors.fg_white);
+    std::cout << "Sorry, you have lost!" << newline;
+    std::cout << colors.setTextColor(colors.color_default);
 }
 
 void Print::printExplanation()
