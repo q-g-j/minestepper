@@ -7,8 +7,18 @@
 #include "../include/input.hpp"
 #include "../include/print.hpp"
 
+#if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+    #include <windows.h>
+#endif
+
 int main()
 {
+    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+        SetConsoleTitle("Minesweeper");
+    #else
+        std::cout << "\033]0;" << "Minesweeper" << "\007";
+    #endif
+
     Colors colors;
     Common common;
     Input input;
@@ -42,6 +52,8 @@ int main()
     Common::CoordsStruct dimensions;
     std::string difficultyString;
 
+    input.showCursor(false);
+
     while (true)
     {
         Common::UserInputReturnStruct userInput;
@@ -53,7 +65,6 @@ int main()
             common.centerWindow();
             input.showCursor(false);
         #endif
-
         difficulty = input.getDifficulty();
 
         if (difficulty == 1)
