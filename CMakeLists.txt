@@ -16,4 +16,6 @@ endif()
 
 add_executable(minesweeper src/main.cpp src/colors.cpp src/field.cpp src/common.cpp src/input.cpp src/print.cpp)
 
+include_directories(include)
+
 install(TARGETS minesweeper RUNTIME DESTINATION bin)

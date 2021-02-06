@@ -897,6 +897,7 @@ Common::PlaceUserInputReturnStruct Field::placeUserInput(Common::UserInputReturn
                         {
                             // create a pool of already uncovered cells, to avoid double checks within autoUncoverRecursive():
                             std::vector<unsigned int> poolVector;
+
                             // for each covered neighbour of userInput.Coords, print the number of surrounding mines:
                             for (size_t i = 0; i < flagUncoverNeighboursCoveredVector.size(); ++i)
                             {

@@ -384,11 +384,23 @@ void Input::helpToggle(Field &field, Common::CoordsStruct const& currentArrayPos
     Print print;
     Symbols symbols;
 
+    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+        common.resizeConsole(105, 24);
+        common.centerWindow();
+        showCursor(false);
+    #endif
+
     common.setUnicode(false);
     Common::CoordsStruct currentCursorPosition;
     common.clearScreen();
     print.printExplanation();
     getEnterKey("");
+
+    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+        common.resizeConsole(field.getOffsetX() + (field.getCols() * 4) + field.getOffsetX() - 2, field.getOffsetY() + (field.getRows() * 2) + 5);
+        common.centerWindow();
+    #endif
+
     common.clearScreen();
     print.printTitle(field.getDifficultyString(), field.getCols(), field.getRows(), field.getMinesCount());
     field.drawField(true);
@@ -401,16 +413,6 @@ void Input::helpToggle(Field &field, Common::CoordsStruct const& currentArrayPos
     std::cout << colors.setTextColor(colors.fg_white);
     std::cout << print.getHelpText << newline << newline;
     std::cout << colors.setTextColor(colors.color_default);
-//    for (int i = 1; i <= field.getCols(); ++i)
-//    {
-//        for (int j = 1; j <= field.getRows(); ++j)
-//        {
-//            Common::CoordsStruct tempCoords;
-//            tempCoords.col = i;
-//            tempCoords.row = j;
-//            field.printCoords(tempCoords, false);
-//        }
-//    }
     currentCursorPosition = common.coordsToCursorPosition(currentArrayPosition, field.getOffsetX(), field.getOffsetY(), field.getCellWidth());
     field.gotoXY(currentCursorPosition.col, currentCursorPosition.row);
     common.setUnicode(true);
@@ -424,7 +426,7 @@ void Input::helpToggle(Field &field, Common::CoordsStruct const& currentArrayPos
     }
 }
 
-// the main function to ask the user for valid coordinates:
+// the main function to get the users input during a game:
 Common::UserInputReturnStruct Input::getUserInput(Field &field, int firstrun)
 {
     Colors colors;

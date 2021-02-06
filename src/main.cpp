@@ -42,13 +42,18 @@ int main()
     Common::CoordsStruct dimensions;
     std::string difficultyString;
 
-    input.showCursor(false);
-
     while (true)
     {
         Common::UserInputReturnStruct userInput;
         Common::PlaceUserInputReturnStruct placeUserInputReturn;
         common.clearScreen();
+
+        #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+            common.resizeConsole(31, 12);
+            common.centerWindow();
+            input.showCursor(false);
+        #endif
+
         difficulty = input.getDifficulty();
 
         if (difficulty == 1)
@@ -76,11 +81,23 @@ int main()
         {
             difficultyString = print.setDifficultyTexts(4);
             common.clearScreen();
-            input.showCursor(true);
+
+            #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+                common.resizeConsole(63, 4);
+                common.centerWindow();
+                input.showCursor(true);
+            #endif
+
             dimensions = input.getDimensions();
             rows = dimensions.row;
             cols = dimensions.col;
             common.clearScreen();
+
+            #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+                common.resizeConsole(39, 4);
+                common.centerWindow();
+            #endif
+
             minesTotal = input.getMinesCount(cols * rows);
             input.showCursor(false);
         }
@@ -88,6 +105,13 @@ int main()
         Field field(cols, rows, fieldOffsetX, fieldOffsetY, fieldCellWidth, minesTotal, difficultyString);
 
         common.clearScreen();
+
+        #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+            common.resizeConsole(fieldOffsetX + (cols * 4) + fieldOffsetX - 2, fieldOffsetY + (rows * 2) + 5);
+            common.centerWindow();
+            input.showCursor(false);
+        #endif
+
         print.printTitle(difficultyString, cols, rows, minesTotal);
         field.drawField(false);
 

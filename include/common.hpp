@@ -67,6 +67,11 @@ public:
         std::string stringConvert(std::wstring const&);
     #endif
 
+    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+        void centerWindow();
+        void resizeConsole(int const&, int const&);
+    #endif
+
     void setUnicode(bool);
     void setRandomSeed();
     void clearScreen();

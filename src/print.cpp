@@ -40,8 +40,7 @@ void Print::printMenu()
     std::cout << "MINESWEEPER!";
     std::cout << colors.setTextColor(colors.color_default);
     std::cout << newline << newline << newline;
-    std::cout << "Choose the size of the field!" << newline;
-    std::cout << "(make sure, that your terminal window is large enough!)" << newline << newline;
+    std::cout << "Choose the size of the field:" << newline << newline;
     std::cout << colors.setTextColor(colors.fg_light_green);
     std::cout << "   1:  ";
     std::cout << colors.setTextColor(colors.color_default);
@@ -61,7 +60,7 @@ void Print::printMenu()
     std::cout << colors.setTextColor(colors.fg_light_red);
     std::cout << "   q:  ";
     std::cout << colors.setTextColor(colors.color_default);
-    std::cout << "quit at any time" << newline << newline;
+    std::cout << "quit at any time";
 }
 
 void Print::printCustomGetDimensions()
@@ -103,6 +102,7 @@ void Print::printHasLost(Field &field)
 void Print::printExplanation()
 {
     Colors colors;
+
     std::cout << colors.setTextColor(colors.fg_light_blue);
     coutconv << "MINESWEEPER" << newline << newline;
     std::cout << colors.setTextColor(colors.color_default);

@@ -10,12 +10,39 @@
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
     #include <fcntl.h>
     #include <io.h>
+    #include <cstdlib>
     #include <stdio.h>
     #include <windows.h>
+    #include <wingdi.h>
 #endif
 
 using convert_t = std::codecvt_utf8<wchar_t>;
 std::wstring_convert<convert_t, wchar_t> strconverter;
+
+#if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+    // Windows only: move console window to desired position:
+    void Common::centerWindow()
+    {
+        RECT rectClient, rectWindow;
+        HWND hWnd = GetConsoleWindow();
+        GetWindowRect(hWnd, &rectWindow);
+        int posx, posy;
+        posx = GetSystemMetrics(SM_CXSCREEN) / 2 - (rectWindow.right - rectWindow.left) / 2,
+        posy = GetSystemMetrics(SM_CYSCREEN) / 2 - (rectWindow.bottom - rectWindow.top) / 2,
+
+        MoveWindow(hWnd, posx, posy, rectWindow.right - rectWindow.left, rectWindow.bottom - rectWindow.top, TRUE);
+    }
+#endif
+
+#if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+    // Windows only: resize console screen to desired size:
+    void Common::resizeConsole(int const& cols, int const& rows)
+    {
+        std::string str = "MODE CON COLS=" + std::to_string(cols) + "LINES=" + std::to_string(rows);
+        char const* cstr = str.c_str();
+        system(cstr);
+    }
+#endif
 
 // enable unicode mode in Windows to be able to print the symbols:
 void Common::setUnicode(bool sw)
