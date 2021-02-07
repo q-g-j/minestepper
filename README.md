@@ -1,10 +1,10 @@
-**Minesweeper**
+# Minesweeper
 
 A console based version of Minesweeper to teach myself C++.
 
 ![](https://github.com/q-g-j/minesweeper/blob/master/images/game_small.jpg?raw=true)
 
-***Features:***
+## Features:
 - small, medium, large and custom size
 - cursor navigation with the arrow keys
 - colored numbers, flags and mines.
@@ -14,11 +14,23 @@ A console based version of Minesweeper to teach myself C++.
 - automatically resize the console window
 - Windows version only: automatically center the console window
 
-It compiles and runs in Linux and Windows but might look a bit different on both, depending on the terminal(-settings) used.
+It compiles and runs in Linux and Windows but might look a bit different on both, depending on the terminal(-settings) used.<br/>
+Not every (graphical) terminal program in Linux seems to support automatically resizing. <br/>
+If yours doesn't you might try to add the following to<br/>
+```~/.Xdefaults```<br/>
+```
+*VT100.allowWindowOps: true
+*VT100.allowTitleOps: true
+*VT100.allowFontOps: true
+```
+Then log out and log back in.
 
-To compile you need a c++ compiler (like gcc with g++ or clang) and optionally cmake. No extra libraries needed.
+## Compilation:
 
-**Example for cmake in Linux:**
+To compile you need a c++ compiler (like gcc with g++) and optionally cmake. No extra libraries needed.
+
+
+***Example for cmake in Linux:***
 
 ```
 git clone https://github.com/q-g-j/minesweeper.git
@@ -26,13 +38,4 @@ mkdir -p minesweeper/build
 cd minesweeper/build
 cmake ..
 cmake --build .
-```
-
-**Example without cmake in Linux:**
-
-```
-git clone https://github.com/q-g-j/minesweeper.git
-mkdir -p minesweeper/build
-cd minesweeper/build
-g++ ../src/*.cpp -o minesweeper
 ```
