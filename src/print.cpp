@@ -14,10 +14,10 @@
 
 std::string Print::setDifficultyTexts(int const& mode)
 {
-    if (mode == 1) return "small";
-    else if (mode == 2) return "medium";
-    else if (mode == 3) return "large";
-    else return "custom";
+    if (mode == 1) return "Small";
+    else if (mode == 2) return "Medium";
+    else if (mode == 3) return "Large";
+    else return "Custom";
 }
 
 void Print::printTitle(std::string const& difficultyString, int const& cols, int const& rows, int const& minesTotal)
@@ -26,7 +26,7 @@ void Print::printTitle(std::string const& difficultyString, int const& cols, int
     std::cout << colors.setTextColor(colors.fg_light_blue);
     std::cout << "MINESWEEPER";
     std::cout << colors.setTextColor(colors.fg_white);
-    std::cout << " - " << difficultyString << ", " << cols << "x" << rows << ", " << minesTotal << " mines";
+    std::cout << " - " << difficultyString << ": " << cols << "x" << rows << ", " << minesTotal << " mines";
     std::cout << colors.setTextColor(colors.color_default);
     std::cout << newline << newline << newline;
 }
