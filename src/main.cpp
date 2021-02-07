@@ -19,7 +19,10 @@ int main()
     Input input;
     Print print;
 
-    common.setWindowProperties();
+    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+        common.setWindowProperties();
+    #endif
+
     common.setWindowTitle("Minesweeper");
 
     Common::DifficultyStruct Size;
