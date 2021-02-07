@@ -8,21 +8,19 @@
 #include "../include/print.hpp"
 
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+//    #define _WIN32_WINNT 0x0500
     #include <windows.h>
 #endif
 
 int main()
 {
-    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-        SetConsoleTitle("Minesweeper");
-    #else
-        std::cout << "\033]0;" << "Minesweeper" << "\007";
-    #endif
-
     Colors colors;
     Common common;
     Input input;
     Print print;
+
+    common.setWindowProperties();
+    common.setWindowTitle("Minesweeper");
 
     Common::DifficultyStruct Size;
 
@@ -41,7 +39,7 @@ int main()
 
     // set X/Y position of the field
     int fieldOffsetX    = 6;
-    int fieldOffsetY    = 5;
+    int fieldOffsetY    = 7;
     /* ----------------------------*/
 
     common.setRandomSeed();
@@ -61,7 +59,7 @@ int main()
         common.clearScreen();
 
         #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-            common.resizeConsole(31, 12);
+            common.resizeConsole(33, 13);
             common.centerWindow();
             input.showCursor(false);
         #endif
@@ -94,7 +92,7 @@ int main()
             common.clearScreen();
 
             #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-                common.resizeConsole(63, 4);
+                common.resizeConsole(66, 6);
                 common.centerWindow();
                 input.showCursor(true);
             #endif
@@ -105,7 +103,7 @@ int main()
             common.clearScreen();
 
             #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-                common.resizeConsole(39, 4);
+                common.resizeConsole(42, 6);
                 common.centerWindow();
             #endif
 
@@ -123,7 +121,10 @@ int main()
             input.showCursor(false);
         #endif
 
+
+        field.gotoXY(field.getOffsetX() - 1, 2);
         print.printTitle(difficultyString, cols, rows, minesTotal);
+        field.gotoXY(1, 3);
         field.drawField(false);
 
         int turn = 1;

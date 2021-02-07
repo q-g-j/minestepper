@@ -19,6 +19,28 @@
 using convert_t = std::codecvt_utf8<wchar_t>;
 std::wstring_convert<convert_t, wchar_t> strconverter;
 
+void Common::setWindowTitle(std::string const& titleText)
+{
+    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+        SetConsoleTitle(titleText.c_str());
+    #else
+        std::cout << "\033]0;" << titleText << "\007";
+    #endif
+}
+
+#if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+    void Common::setWindowProperties()
+    {
+        // disable maximizing of the console window:
+        HWND hwnd = GetConsoleWindow();
+        DWORD style = GetWindowLong(hwnd, GWL_STYLE);
+        style &= ~WS_MAXIMIZEBOX;
+    //        style &= ~WS_CAPTION;
+        SetWindowLong(hwnd, GWL_STYLE, style);
+        SetWindowPos(hwnd, NULL, 0, 0, 0, 0, SWP_NOSIZE|SWP_NOMOVE|SWP_FRAMECHANGED);
+    }
+#endif
+
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
     // Windows only: resize console screen to desired size:
     void Common::resizeConsole(int const& cols, int const& rows)
@@ -44,10 +66,10 @@ std::wstring_convert<convert_t, wchar_t> strconverter;
     }
 #endif
 
-// enable unicode mode in Windows to be able to print the symbols:
-void Common::setUnicode(bool sw)
-{
-    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+#if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+    // enable unicode mode in Windows to be able to print the symbols:
+    void Common::setUnicode(bool sw)
+    {
         if (sw)
         {
             _setmode(_fileno(stdout), 0x00020000);
@@ -56,8 +78,8 @@ void Common::setUnicode(bool sw)
         {
             _setmode(_fileno(stdout), _O_TEXT);
         }
-    #endif
-}
+    }
+#endif
 
 // for Windows: convert a string to wide string and vice versa:
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)

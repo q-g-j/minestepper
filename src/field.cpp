@@ -165,7 +165,9 @@ void Field::drawField(bool recoverField)
     Common common;
     Symbols symbols;
 
-    common.setUnicode(true);
+    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+        common.setUnicode(true);
+    #endif
 
     for (int i = 0; i < this->fieldOffsetY - 4; ++i)
     {
@@ -289,7 +291,10 @@ void Field::drawField(bool recoverField)
         std::wcout << L"\n";
     }
     coutconv << std::flush;
-    common.setUnicode(false);
+
+    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+        common.setUnicode(false);
+    #endif
 }
 
 void Field::gotoXY(int const& x, int const& y)
@@ -750,7 +755,7 @@ void Field::gameWon()
     #endif
 
     print.printHasWon(*this);
-    gotoXY(this->fieldOffsetX - 1, this->rows*2 + 8);
+    gotoXY(this->fieldOffsetX - 1, this->fieldOffsetY + this->rows*2 + 3);
     input.getEnterKey("Press ENTER to get back...");
 }
 
@@ -794,7 +799,7 @@ void Field::gameLost()
     #endif
 
     print.printHasLost(*this);
-    gotoXY(this->fieldOffsetX - 1, this->rows*2 + 8);
+    gotoXY(this->fieldOffsetX - 1, this->fieldOffsetY + this->rows*2 + 3);
     input.getEnterKey("Press ENTER to get back...");
 }
 

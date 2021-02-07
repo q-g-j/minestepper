@@ -295,7 +295,7 @@ Common::CoordsStruct Input::getDimensions()
             {
                 isValidInput = false;
             }
-            if (beforeX < 5 || afterX < 5 || beforeX > 26 || afterX > 20)
+            if (beforeX < 8 || afterX < 8 || beforeX > 26 || afterX > 20)
             {
                 isValidInput = false;
             }
@@ -385,12 +385,15 @@ void Input::helpToggle(Field &field, Common::CoordsStruct const& currentArrayPos
     Symbols symbols;
 
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-        common.resizeConsole(105, 24);
+        common.resizeConsole(107, 24);
         common.centerWindow();
         showCursor(false);
     #endif
 
-    common.setUnicode(false);
+    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+        common.setUnicode(false);
+    #endif
+
     Common::CoordsStruct currentCursorPosition;
     common.clearScreen();
     print.printExplanation();
@@ -402,7 +405,9 @@ void Input::helpToggle(Field &field, Common::CoordsStruct const& currentArrayPos
     #endif
 
     common.clearScreen();
+    field.gotoXY(field.getOffsetX() - 1, 2);
     print.printTitle(field.getDifficultyString(), field.getCols(), field.getRows(), field.getMinesCount());
+    field.gotoXY(1, 3);
     field.drawField(true);
     std::cout << newline;
     field.gotoXY(field.getOffsetX() - 1, field.getOffsetY() - 2);
@@ -415,7 +420,11 @@ void Input::helpToggle(Field &field, Common::CoordsStruct const& currentArrayPos
     std::cout << colors.setTextColor(colors.color_default);
     currentCursorPosition = common.coordsToCursorPosition(currentArrayPosition, field.getOffsetX(), field.getOffsetY(), field.getCellWidth());
     field.gotoXY(currentCursorPosition.col, currentCursorPosition.row);
-    common.setUnicode(true);
+
+    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+        common.setUnicode(false);
+    #endif
+
     if (field.getCoordsContent(currentArrayPosition) == symbols.symbolFlag || field.isNumber(currentArrayPosition))
     {
         field.printCoords(currentArrayPosition, true);
@@ -564,7 +573,10 @@ Common::UserInputReturnStruct Input::getUserInput(Field &field, int firstrun)
                 continue;
             }
         }
+
+    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         common.setUnicode(false);
+    #endif
 
     #else
         if (field.getCoordsContent(currentArrayPosition) == symbols.symbolFlag || field.isNumber(currentArrayPosition))

@@ -26,7 +26,7 @@ void Print::printTitle(std::string const& difficultyString, int const& cols, int
     std::cout << colors.setTextColor(colors.fg_light_blue);
     std::cout << "MINESWEEPER";
     std::cout << colors.setTextColor(colors.fg_white);
-    std::cout << " - " << difficultyString << " (" << cols << "x" << rows << ") - " << minesTotal << " mines";
+    std::cout << " - " << difficultyString << ", " << cols << "x" << rows << ", " << minesTotal << " mines";
     std::cout << colors.setTextColor(colors.color_default);
     std::cout << newline << newline << newline;
 }
@@ -35,13 +35,14 @@ void Print::printMenu()
 {
     Colors colors;
 
+    std::cout << newline;
     std::cout << colors.setTextColor(colors.fg_white);
-    std::cout << "Welcome to ";
+    std::cout << "  Welcome to ";
     std::cout << colors.setTextColor(colors.fg_light_blue);
     std::cout << "MINESWEEPER!";
     std::cout << colors.setTextColor(colors.color_default);
     std::cout << newline << newline << newline;
-    std::cout << "Choose the size of the field:" << newline << newline;
+    std::cout << "  Choose the size of the field:" << newline << newline;
     std::cout << colors.setTextColor(colors.fg_light_green);
     std::cout << "   1:  ";
     std::cout << colors.setTextColor(colors.color_default);
@@ -66,12 +67,14 @@ void Print::printMenu()
 
 void Print::printCustomGetDimensions()
 {
-    std::cout << "How large do you want the field to be (min. 5x5 / max. 26x20)?" << newline << newline;
+    std::cout << newline;
+    std::cout << "  How large do you want the field to be (min. 8x8 / max. 26x20)?" << newline << newline;
 }
 
 void Print::printCustomGetMinesCount()
 {
-    std::cout << "How many mines to place on the field?" << newline << newline;
+    std::cout << newline;
+    std::cout << "  How many mines to place on the field?" << newline << newline;
 }
 
 void Print::printHasWon(Field &field)
@@ -84,7 +87,7 @@ void Print::printHasWon(Field &field)
     std::cout << colors.setTextColor(colors.fg_light_red);
     std::cout << field.getMinesLeft() << minesLeftText << std::flush;
 
-    field.gotoXY(field.getOffsetX() - 1, field.getRows()*2 + 7);
+    field.gotoXY(field.getOffsetX() - 1, field.getOffsetY() + field.getRows()*2 + 2);
     std::cout << colors.setTextColor(colors.fg_white);
     std::cout << "Congratulation, you have won!" << newline;
     std::cout << colors.setTextColor(colors.color_default);
@@ -94,7 +97,7 @@ void Print::printHasLost(Field &field)
 {
     Colors colors;
 
-    field.gotoXY(field.getOffsetX() - 1, field.getRows()*2 + 7);
+    field.gotoXY(field.getOffsetX() - 1, field.getOffsetY() + field.getRows()*2 + 2);
     std::cout << colors.setTextColor(colors.fg_white);
     std::cout << "Sorry, you have lost!" << newline;
     std::cout << colors.setTextColor(colors.color_default);
@@ -104,23 +107,24 @@ void Print::printExplanation()
 {
     Colors colors;
 
+    coutconv << newline;
     std::cout << colors.setTextColor(colors.fg_light_blue);
-    coutconv << "MINESWEEPER" << newline << newline;
+    coutconv << "  MINESWEEPER" << newline << newline;
     std::cout << colors.setTextColor(colors.color_default);
-    coutconv << "In this game your task is to find all hidden mines by uncovering all safe positions." << newline << newline;
-    coutconv << "You can guess and sometimes combine where the next mine is." << newline;
-    coutconv << "The number on each uncovered square shows how many neighbors contain a mine." << newline << newline;
-    coutconv << "If you're sure that you have found a mine, place a flag on it's position by pressing SPACE." << newline;
-    coutconv << "To remove the flag, just repeat your input. You may place or remove as many flags in a row as you wish." << newline << newline;
-    coutconv << "You can reselect a numbered cell with ENTER to automatically uncover all remaining neighbors," << newline;
-    coutconv << "as long as you put all flags right! Otherwise you might lose..." << newline << newline;
-    coutconv << "Explanations:" << newline << newline;
-    coutconv << "Arrow Keys:    navigate" << newline;
-    coutconv << "ENTER:         uncover" << newline;
-    coutconv << "SPACE:         place or remove a flag" << newline;
-    coutconv << "q or Q:        quit" << newline << newline;
+    coutconv << "  In this game your task is to find all hidden mines by uncovering all safe positions." << newline << newline;
+    coutconv << "  You can guess and sometimes combine where the next mine is." << newline;
+    coutconv << "  The number on each uncovered square shows how many neighbors contain a mine." << newline << newline;
+    coutconv << "  If you're sure that you have found a mine, place a flag on it's position by pressing SPACE." << newline;
+    coutconv << "  To remove the flag, just repeat your input. You may place or remove as many flags in a row as you wish." << newline << newline;
+    coutconv << "  You can reselect a numbered cell with ENTER to automatically uncover all remaining neighbors," << newline;
+    coutconv << "  as long as you put all flags right! Otherwise you might lose..." << newline << newline;
+    coutconv << "  Explanations:" << newline << newline;
+    coutconv << "  Arrow Keys:    navigate" << newline;
+    coutconv << "  ENTER:         uncover" << newline;
+    coutconv << "  SPACE:         place or remove a flag" << newline;
+    coutconv << "  q or Q:        quit" << newline << newline;
     std::cout << colors.setTextColor(colors.fg_white);
-    coutconv << "Press ENTER to go back...";
+    coutconv << "  Press ENTER to go back...";
     std::cout << colors.setTextColor(colors.color_default);
 
 }// erase particular lines instead of clearing the whole screen:

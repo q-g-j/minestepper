@@ -8,8 +8,8 @@ private:
 
 public:
     // public constants:
-    const std::string inputText = "Input: ";
-    const std::string wrongInputText = "Wrong input, Press ENTER...";
+    const std::string inputText = "  Input: ";
+    const std::string wrongInputText = "  Wrong input, Press ENTER...";
     const std::string getHelpText = "'h' or 'H': Help";
     const std::string minesLeftText = " Mines left...";
     const std::string debugTurnCountText = " DEBUG: Turn: ";
