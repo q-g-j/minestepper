@@ -2,7 +2,7 @@
 
 A console based version of Minesweeper to teach myself C++.
 
-![](https://github.com/q-g-j/minesweeper/blob/master/images/screenshot.jpg?raw=true)
+![](https://github.com/q-g-j/minesweeper/blob/master/images/game_small.jpg?raw=true)
 
 ***Features:***
 - small, medium, large and custom size
