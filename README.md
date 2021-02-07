@@ -16,7 +16,7 @@ A console based version of Minesweeper to teach myself C++.
 
 It compiles and runs in Linux and Windows but might look a bit different on both, depending on the terminal(-settings) used.<br/>
 Not every (graphical) terminal program in Linux seems to support automatically resizing. <br/>
-If yours doesn't you might try to add the following to<br/>
+Your terminal program needs to support control sequences. To enable them for xterm and compatible terminals edit <br/>
 ```~/.Xdefaults```<br/>
 ```
 *VT100.allowWindowOps: true
