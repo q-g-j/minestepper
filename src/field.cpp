@@ -221,14 +221,7 @@ void Field::drawField(bool recoverField)
             Coords.col = col;
             Coords.row = row;
 
-            if (recoverField)
-            {
-                printCoords(Coords, false);
-            }
-            else
-            {
-                coutconv << symbols.symbolCovered;
-            }
+            printCoords(Coords, false);
 
             for (int padding = 0; padding < (this->fieldCellWidth-1)/2; ++padding)
             {
@@ -425,6 +418,24 @@ void Field::printCoords(Common::CoordsStruct const& coords, bool isCursor)
         {
             SetConsoleTextAttribute(hConsole, colors.minehit);
         }
+        else if (getCoordsContent(coords) == symbols.symbolCovered)
+        {
+            if (isCursor)
+            {
+                SetConsoleTextAttribute(hConsole, colors.bg_covered);
+            }
+            else
+            {
+                SetConsoleTextAttribute(hConsole, colors.fg_covered);
+            }
+        }
+        else if (getCoordsContent(coords) == symbols.symbolZero)
+        {
+            if (isCursor)
+            {
+                SetConsoleTextAttribute(hConsole, colors.bg_covered);
+            }
+        }
         std::wstring coordsString = this->field2DVector[coords.col][coords.row];
         WriteConsoleW(hConsole, coordsString.c_str(), static_cast<DWORD>(coordsString.size()), nullptr, nullptr);
         SetConsoleTextAttribute(hConsole, colors.color_default);
@@ -529,6 +540,28 @@ void Field::printCoords(Common::CoordsStruct const& coords, bool isCursor)
         else if (getCoordsContent(coords) == symbols.symbolMineHit)
         {
             content = colors.minehit + symbols.symbolMineHit;
+        }
+        else if (getCoordsContent(coords) == symbols.symbolCovered)
+        {
+            if (isCursor)
+            {
+                content = colors.bg_covered + symbols.symbolCovered;
+            }
+            else
+            {
+                content = colors.fg_covered + symbols.symbolCovered;
+            }
+        }
+        else if (getCoordsContent(coords) == symbols.symbolZero)
+        {
+            if (isCursor)
+            {
+                content = colors.bg_covered + symbols.symbolCovered;
+            }
+            else
+            {
+                content = colors.bg_covered + symbols.symbolZero;
+            }
         }
         else
         {
@@ -756,7 +789,7 @@ void Field::gameWon()
 
     print.printHasWon(*this);
     gotoXY(this->fieldOffsetX - 1, this->fieldOffsetY + this->rows*2 + 3);
-    input.getEnterKey("Press ENTER to get back...");
+    input.getInputEnterKey("Press ENTER to get back...");
 }
 
 void Field::gameLost()
@@ -800,7 +833,7 @@ void Field::gameLost()
 
     print.printHasLost(*this);
     gotoXY(this->fieldOffsetX - 1, this->fieldOffsetY + this->rows*2 + 3);
-    input.getEnterKey("Press ENTER to get back...");
+    input.getInputEnterKey("Press ENTER to get back...");
 }
 
 // the main method of class Field which will alter this->field2DVector.

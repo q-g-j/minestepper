@@ -53,7 +53,7 @@ int main()
     Common::CoordsStruct dimensions;
     std::string difficultyString;
 
-    input.showCursor(false);
+    input.showBlinkingCursor(false);
 
     while (true)
     {
@@ -64,9 +64,9 @@ int main()
         #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
             common.resizeConsole(33, 13);
             common.centerWindow();
-            input.showCursor(false);
+            input.showBlinkingCursor(false);
         #endif
-        difficulty = input.getDifficulty();
+        difficulty = input.getInputDifficulty();
 
         if (difficulty == 1)
         {
@@ -97,10 +97,10 @@ int main()
             #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
                 common.resizeConsole(66, 6);
                 common.centerWindow();
-                input.showCursor(true);
+                input.showBlinkingCursor(true);
             #endif
 
-            dimensions = input.getDimensions();
+            dimensions = input.getInputDimensions();
             rows = dimensions.row;
             cols = dimensions.col;
             common.clearScreen();
@@ -110,8 +110,8 @@ int main()
                 common.centerWindow();
             #endif
 
-            minesTotal = input.getMinesCount(cols * rows);
-            input.showCursor(false);
+            minesTotal = input.getInputMinesCount(cols * rows);
+            input.showBlinkingCursor(false);
         }
 
         Field field(cols, rows, fieldOffsetX, fieldOffsetY, fieldCellWidth, minesTotal, difficultyString);
@@ -121,7 +121,7 @@ int main()
         #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
             common.resizeConsole(fieldOffsetX + (cols * 4) + fieldOffsetX - 2, fieldOffsetY + (rows * 2) + 5);
             common.centerWindow();
-            input.showCursor(false);
+            input.showBlinkingCursor(false);
         #endif
 
 
@@ -147,7 +147,7 @@ int main()
             #endif
             field.gotoXY(1, fieldOffsetY + field.getRows()*2 + 4);
 
-            input.showCursor(false);
+            input.showBlinkingCursor(false);
             userInput = input.getUserInput(field, firstrun);
             firstrun = 0;
             placeUserInputReturn = field.placeUserInput(userInput, turn);

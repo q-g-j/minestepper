@@ -44,7 +44,7 @@
 
 #endif
 
-void Input::getEnterKey(std::string const& text)
+void Input::getInputEnterKey(std::string const& text)
 {
     Colors colors;
     std::cout << colors.setTextColor(colors.fg_white);
@@ -84,7 +84,7 @@ void Input::getEnterKey(std::string const& text)
 }
 
 // disable the input cursor during game play:
-void Input::showCursor(bool show)
+void Input::showBlinkingCursor(bool show)
 {
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         HANDLE out = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -108,42 +108,8 @@ void Input::showCursor(bool show)
         std::cout << std::flush;
 }
 
-// move the players cursor in 4 directions with the arrow keys:
-void Input::moveCursor(Field &field, Common::CoordsStruct& currentArrayPosition, Direction &direction)
-{
-    Common common;
-    Symbols symbols;
-
-    Common::CoordsStruct currentCursorPosition;
-    std::wcout << L"\b";
-    field.printCoords(currentArrayPosition, false);
-    if (direction == Direction::UP)
-    {
-        --currentArrayPosition.row;
-    }
-    else if (direction == Direction::DOWN)
-    {
-        ++currentArrayPosition.row;
-    }
-    else if (direction == Direction::LEFT)
-    {
-        --currentArrayPosition.col;
-    }
-    else if (direction == Direction::RIGHT)
-    {
-        ++currentArrayPosition.col;
-    }
-    currentCursorPosition = common.coordsToCursorPosition(currentArrayPosition, field.getOffsetX(), field.getOffsetY(), field.getCellWidth());
-    field.gotoXY(currentCursorPosition.col, currentCursorPosition.row);
-    coutconv << symbols.symbolCursor << std::flush;
-    if (field.getCoordsContent(currentArrayPosition) == symbols.symbolFlag || field.isNumber(currentArrayPosition))
-    {
-        field.printCoords(currentArrayPosition, true);
-    }
-}
-
 // custom mode: ask user for the game mode (difficulty):
-int Input::getDifficulty()
+int Input::getInputDifficulty()
 {
     Common common;
     Print print;
@@ -159,7 +125,7 @@ int Input::getDifficulty()
             if ((inputKey = _getch()) == 'q' || inputKey == 'Q')
             {
                 common.clearScreen();
-                showCursor(true);
+                showBlinkingCursor(true);
                 exit (0);
             }
             else if (inputKey == '1')
@@ -195,7 +161,7 @@ int Input::getDifficulty()
             if (inputKey == 'q' || inputKey == 'Q')
             {
                 common.clearScreen();
-                showCursor(true);
+                showBlinkingCursor(true);
                 exit (0);
             }
             if (inputKey == '1')
@@ -229,7 +195,7 @@ int Input::getDifficulty()
 }
 
 // custom mode: ask user for the size of the field:
-Common::CoordsStruct Input::getDimensions()
+Common::CoordsStruct Input::getInputDimensions()
 {
     Colors colors;
     Common common;
@@ -252,7 +218,7 @@ Common::CoordsStruct Input::getDimensions()
         if (line == "q" || line == "Q")
         {
             common.clearScreen();
-            showCursor(true);
+            showBlinkingCursor(true);
             exit (0);
         }
         else if (line == "")
@@ -306,7 +272,7 @@ Common::CoordsStruct Input::getDimensions()
         }
         else
         {
-            getEnterKey(print.wrongInputText);
+            getInputEnterKey(print.wrongInputText);
             print.deleteLastLine(print.wrongInputText.length());
             print.deleteLastLine(print.inputText.length() + line.length());
         }
@@ -314,7 +280,7 @@ Common::CoordsStruct Input::getDimensions()
 }
 
 // custom mode: ask user for the number of mines:
-int Input::getMinesCount(int const& fieldSize)
+int Input::getInputMinesCount(int const& fieldSize)
 {
     Colors colors;
     Common common;
@@ -336,7 +302,7 @@ int Input::getMinesCount(int const& fieldSize)
         if (line == "q" || line == "Q")
         {
             common.clearScreen();
-            showCursor(true);
+            showBlinkingCursor(true);
             exit (0);
         }
         else if (line == "")
@@ -365,7 +331,7 @@ int Input::getMinesCount(int const& fieldSize)
         }
         else
         {
-            getEnterKey(print.wrongInputText);
+            getInputEnterKey(print.wrongInputText);
             print.deleteLastLine(print.wrongInputText.length());
             print.deleteLastLine(print.inputText.length() + line.length());
         }
@@ -382,7 +348,7 @@ void Input::helpToggle(Field &field, Common::CoordsStruct const& currentArrayPos
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         common.resizeConsole(107, 24);
         common.centerWindow();
-        showCursor(false);
+        showBlinkingCursor(false);
     #endif
 
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
@@ -392,7 +358,7 @@ void Input::helpToggle(Field &field, Common::CoordsStruct const& currentArrayPos
     Common::CoordsStruct currentCursorPosition;
     common.clearScreen();
     print.printExplanation();
-    getEnterKey("");
+    getInputEnterKey("");
 
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         common.resizeConsole(field.getOffsetX() + (field.getCols() * 4) + field.getOffsetX() - 2, field.getOffsetY() + (field.getRows() * 2) + 5);
@@ -420,14 +386,37 @@ void Input::helpToggle(Field &field, Common::CoordsStruct const& currentArrayPos
         common.setUnicode(false);
     #endif
 
-    if (field.getCoordsContent(currentArrayPosition) == symbols.symbolFlag || field.isNumber(currentArrayPosition))
+    field.printCoords(currentArrayPosition, true);
+}
+
+// move the players cursor in 4 directions with the arrow keys:
+void Input::moveCursor(Field &field, Common::CoordsStruct& currentArrayPosition, Direction &direction)
+{
+    Common common;
+    Symbols symbols;
+
+    Common::CoordsStruct currentCursorPosition;
+    std::wcout << L"\b";
+    field.printCoords(currentArrayPosition, false);
+    if (direction == Direction::UP)
     {
-        field.printCoords(currentArrayPosition, true);
+        --currentArrayPosition.row;
     }
-    else
+    else if (direction == Direction::DOWN)
     {
-        coutconv << symbols.symbolCursor << std::flush;
+        ++currentArrayPosition.row;
     }
+    else if (direction == Direction::LEFT)
+    {
+        --currentArrayPosition.col;
+    }
+    else if (direction == Direction::RIGHT)
+    {
+        ++currentArrayPosition.col;
+    }
+    currentCursorPosition = common.coordsToCursorPosition(currentArrayPosition, field.getOffsetX(), field.getOffsetY(), field.getCellWidth());
+    field.gotoXY(currentCursorPosition.col, currentCursorPosition.row);
+    field.printCoords(currentArrayPosition, true);
 }
 
 // the main function to get the users input during a game:
@@ -478,14 +467,7 @@ Common::UserInputReturnStruct Input::getUserInput(Field &field, int firstrun)
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         common.setUnicode(true);
 
-        if (field.getCoordsContent(currentArrayPosition) == symbols.symbolFlag || field.isNumber(currentArrayPosition))
-        {
-            field.printCoords(currentArrayPosition, true);
-        }
-        else
-        {
-            coutconv << symbols.symbolCursor << std::flush;
-        }
+        field.printCoords(currentArrayPosition, true);
 
         while(1)
         {
@@ -530,7 +512,7 @@ Common::UserInputReturnStruct Input::getUserInput(Field &field, int firstrun)
             else if (inputTmp == 'q' || inputTmp == 'Q')
             {
                 common.clearScreen();
-                showCursor(true);
+                showBlinkingCursor(true);
                 exit (0);
             }
             else if (inputTmp == 'h' || inputTmp == 'H')
@@ -574,20 +556,14 @@ Common::UserInputReturnStruct Input::getUserInput(Field &field, int firstrun)
     #endif
 
     #else
-        if (field.getCoordsContent(currentArrayPosition) == symbols.symbolFlag || field.isNumber(currentArrayPosition))
-        {
-            field.printCoords(currentArrayPosition, true);
-        }
-        else
-        {
-            std::cout << symbols.symbolCursor << std::flush;
-        }
+        field.printCoords(currentArrayPosition, true);
+
         while (read(STDIN_FILENO, &inputKey, 1) == 1)
         {
             if (inputKey == 'q' || inputKey == 'Q')
             {
                 common.clearScreen();
-                showCursor(true);
+                showBlinkingCursor(true);
                 exit (0);
             }
             else if (inputKey == 'h' || inputKey == 'H')

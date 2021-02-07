@@ -34,12 +34,12 @@ public:
         #define KEY_ENTER '\n'
         #define KEY_SPACE ' '
     #endif
-    void showCursor(bool);
-    int getDifficulty();
-    Common::CoordsStruct getDimensions();
-    int getMinesCount(int const&);
-    void getEnterKey(std::string const&);
+    int getInputDifficulty();
+    Common::CoordsStruct getInputDimensions();
+    int getInputMinesCount(int const&);
+    void getInputEnterKey(std::string const&);
     Common::UserInputReturnStruct getUserInput(Field &field, int);
+    void showBlinkingCursor(bool);
 };
 
 
