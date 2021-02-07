@@ -36,8 +36,8 @@ int main()
     Size.Medium.rows    = 16;
     Size.Medium.mines   = 40;
 
-    Size.Large.columns  = 26;
-    Size.Large.rows     = 18;
+    Size.Large.columns  = 30;
+    Size.Large.rows     = 16;
     Size.Large.mines    = 99;
 
     // set X/Y position of the field
