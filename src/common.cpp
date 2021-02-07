@@ -41,15 +41,18 @@ void Common::setWindowTitle(std::string const& titleText)
     }
 #endif
 
-#if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-    // Windows only: resize console screen to desired size:
-    void Common::resizeConsole(int const& cols, int const& rows)
-    {
+void Common::resizeConsole(int const& cols, int const& rows)
+{
+    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         std::string str = "MODE CON COLS=" + std::to_string(cols) + "LINES=" + std::to_string(rows);
         char const* cstr = str.c_str();
         system(cstr);
-    }
-#endif
+    #else
+        std::string x = std::to_string(cols);
+        std::string y = std::to_string(rows);
+        system(("printf '\033[8;" + y + ";" + x + "t'").c_str());
+    #endif
+}
 
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
     // Windows only: move console window to desired position:

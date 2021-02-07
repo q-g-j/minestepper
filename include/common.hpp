@@ -70,10 +70,10 @@ public:
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         void setWindowProperties();
         void centerWindow();
-        void resizeConsole(int const&, int const&);
         void setUnicode(bool);
     #endif
 
+    void resizeConsole(int const&, int const&);
     void setWindowTitle(std::string const&);
     void setRandomSeed();
     void clearScreen();
