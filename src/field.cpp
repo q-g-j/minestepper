@@ -66,10 +66,10 @@ int Field::getCellWidth()
     return this->fieldCellWidth;
 }
 
-int Field::getCovered()
-{
-    return this->countCovered;
-}
+//int Field::getCovered()
+//{
+//    return this->countCovered;
+//}
 
 int Field::getMinesCount()
 {
@@ -129,7 +129,7 @@ std::vector<std::vector<stringconv>> Field::create2DVector(std::string const& ve
 }
 
 // place mines at random positions of this->mines2DVector[][]:
-void Field::fillMines(Common::CoordsStruct& userFirstInput)
+void Field::fillMines(Common::CoordsStruct const& userFirstInput)
 {
     Symbols symbols;
 
@@ -162,10 +162,10 @@ void Field::fillMines(Common::CoordsStruct& userFirstInput)
 // draw this->field2DVector[][]:
 void Field::drawField(bool recoverField)
 {
-    Common common;
     Symbols symbols;
 
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+        Common common;
         common.setUnicode(true);
     #endif
 
@@ -318,7 +318,6 @@ void Field::printCoords(Common::CoordsStruct const& coords, bool isCursor)
     Common common;
     Symbols symbols;
 
-    std::string content;
     Common::CoordsStruct tempCoords;
 
     tempCoords = common.coordsToCursorPosition(coords, this->fieldOffsetX, this->fieldOffsetY, this->fieldCellWidth);
@@ -430,6 +429,7 @@ void Field::printCoords(Common::CoordsStruct const& coords, bool isCursor)
         WriteConsoleW(hConsole, coordsString.c_str(), static_cast<DWORD>(coordsString.size()), nullptr, nullptr);
         SetConsoleTextAttribute(hConsole, colors.color_default);
     #else
+        std::string content;
         if (isNumber(coords))
         {
             if (isCursor == false)
@@ -808,7 +808,6 @@ void Field::gameLost()
 Common::PlaceUserInputReturnStruct Field::placeUserInput(Common::UserInputReturnStruct& userInput, int& turn)
 {
     Common common;
-    Print print;
     Symbols symbols;
 
     Common::PlaceUserInputReturnStruct returnStruct;

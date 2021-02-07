@@ -82,17 +82,17 @@ void Common::setWindowTitle(std::string const& titleText)
 #endif
 
 // for Windows: convert a string to wide string and vice versa:
-#if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-    std::wstring Common::stringConvert(std::string const& str)
-    {
-        return strconverter.from_bytes(str);
-    }
-#else
-    std::string Common::stringConvert(std::wstring const& wstr)
-    {
-        return strconverter.to_bytes(wstr);
-    }
-#endif
+//#if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+//    std::wstring Common::stringConvert(std::string const& str)
+//    {
+//        return strconverter.from_bytes(str);
+//    }
+//#else
+//    std::string Common::stringConvert(std::wstring const& wstr)
+//    {
+//        return strconverter.to_bytes(wstr);
+//    }
+//#endif
 
 // convert an integer to string or wide string:
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)

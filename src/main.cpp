@@ -47,9 +47,9 @@ int main()
 
     common.setRandomSeed();
     int fieldCellWidth = 3;
-    int rows = 0, cols = 0;
-    int difficulty = 0;
-    int minesTotal = 0;
+    int rows, cols;
+    int difficulty;
+    int minesTotal;
     Common::CoordsStruct dimensions;
     std::string difficultyString;
 

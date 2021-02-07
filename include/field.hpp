@@ -23,7 +23,7 @@ private:
 
     // private methods
     std::vector<std::vector<stringconv>> create2DVector(std::string const&);
-    void fillMines(Common::CoordsStruct&);
+    void fillMines(Common::CoordsStruct const&);
     std::vector<Common::CoordsStruct> findNeighbors(std::vector<std::vector<stringconv>> const&, Common::CoordsStruct const&, stringconv const&);
     void autoUncoverRecursive(Common::CoordsStruct const&, std::vector<unsigned int>&);
     void gameWon();
@@ -42,7 +42,7 @@ public:
     int getRows();
     int getOffsetX();
     int getOffsetY();
-    int getCovered();
+//    int getCovered();
     int getMinesCount();
     int getMinesLeft();
     int getCellWidth();

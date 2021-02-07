@@ -47,8 +47,6 @@
 void Input::getEnterKey(std::string const& text)
 {
     Colors colors;
-    Print print;
-
     std::cout << colors.setTextColor(colors.fg_white);
     std::cout << text << std::flush;
     std::cout << colors.setTextColor(colors.color_default);
@@ -251,20 +249,21 @@ Common::CoordsStruct Input::getDimensions()
         std::cout << print.inputText;
         std::cout << colors.setTextColor(colors.color_default);
         getline(std::cin, line);
-        if (line == "")
-        {
-            isValidInput = false;
-        }
         if (line == "q" || line == "Q")
         {
             common.clearScreen();
             showCursor(true);
             exit (0);
         }
+        else if (line == "")
+        {
+            isValidInput = false;
+        }
         else
         {
             if(line.find("x") != std::string::npos)
             {
+                isValidInput = true;
                 try
                 {
                     beforeX = stoi(line.substr(0, line.find("x")));
@@ -279,6 +278,7 @@ Common::CoordsStruct Input::getDimensions()
                 }
                 catch (...)
                 {
+                    isValidInput = false;
                     try
                     {
                         afterX = stoi(line.substr(line.find("x")));
@@ -287,9 +287,7 @@ Common::CoordsStruct Input::getDimensions()
                     {
                         isValidInput = false;
                     }
-                    isValidInput = false;
                 }
-                isValidInput = true;
             }
             else
             {
@@ -335,18 +333,19 @@ int Input::getMinesCount(int const& fieldSize)
         std::cout << print.inputText;
         std::cout << colors.setTextColor(colors.color_default);
         getline(std::cin, line);
-        if (line == "")
-        {
-            isValidInput = false;
-        }
         if (line == "q" || line == "Q")
         {
             common.clearScreen();
             showCursor(true);
             exit (0);
         }
+        else if (line == "")
+        {
+            isValidInput = false;
+        }
         else
         {
+            isValidInput = true;
             try
             {
                 minesTotal = stoi(line);
@@ -355,11 +354,7 @@ int Input::getMinesCount(int const& fieldSize)
             {
                 isValidInput = false;
             }
-            if (minesTotal > 0 && minesTotal < fieldSize)
-            {
-                isValidInput = true;
-            }
-            else
+            if  (minesTotal <= 0 || minesTotal >= fieldSize)
             {
                 isValidInput = false;
             }
@@ -666,8 +661,6 @@ Common::UserInputReturnStruct Input::getUserInput(Field &field, int firstrun)
     #if !defined(_WIN32) && !defined(WIN32) && !defined(_WIN64) && !defined(WIN64)
         disableNonCanonicalMode();
     #endif
-
-    ++firstrun;
 
     return userInput;
 }
