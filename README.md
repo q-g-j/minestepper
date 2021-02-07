@@ -15,7 +15,7 @@ A console based version of Minesweeper to teach myself C++.
 - Windows version only: automatically center the console window
 
 It compiles and runs in Linux and Windows but might look a bit different on both, depending on the terminal(-settings) used.<br/>
-Not every (graphical) terminal program in Linux seems to support automatically resizing. <br/>
+Not every (graphical) terminal program in Linux seems to support automatic resizing. <br/>
 Your terminal program needs to support control sequences. To enable them for xterm and compatible terminals edit <br/>
 ```~/.Xdefaults```<br/>
 ```
@@ -28,7 +28,6 @@ Then log out and log back in.
 ## Compilation:
 
 To compile you need a c++ compiler (like gcc with g++) and optionally cmake. No extra libraries needed.
-
 
 ***Example for cmake in Linux:***
 
