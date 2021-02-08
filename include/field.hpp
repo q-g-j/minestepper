@@ -25,9 +25,10 @@ private:
     std::vector<std::vector<stringconv>> create2DVector(std::string const&);
     void fillMines(Common::CoordsStruct const&);
     std::vector<Common::CoordsStruct> findNeighbors(std::vector<std::vector<stringconv>> const&, Common::CoordsStruct const&, stringconv const&);
-    void autoUncoverRecursive(Common::CoordsStruct const&, std::vector<unsigned int>&);
     void gameWon();
-    void gameLost();
+    void gameLost();    
+    void autoUncoverRecursive(Common::CoordsStruct const&, std::vector<unsigned int>&);
+    void flagAutoUncover(Common::UserInputReturnStruct const&, Common::PlaceUserInputReturnStruct&);
 
     #if DEBUG == 1
         void debugPrintCountCovered(Common::CoordsStruct const&);
@@ -50,10 +51,10 @@ public:
     stringconv getCoordsContent(Common::CoordsStruct const&);
 
     // public methods:
+    bool isFlag(Common::CoordsStruct const&);
+    bool isNumber(Common::CoordsStruct const&);
     void drawField(bool);
     void gotoXY(int const&, int const&);
     void printCoords(Common::CoordsStruct const&, bool);
-    bool isFlag(Common::CoordsStruct const&);
-    bool isNumber(Common::CoordsStruct const&);
     Common::PlaceUserInputReturnStruct placeUserInput(Common::UserInputReturnStruct&, int&);
 };
