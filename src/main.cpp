@@ -58,8 +58,6 @@ int main()
 
     while (true)
     {
-        Solver solver;
-
         Common::UserInputReturnStruct userInput;
         Common::PlaceUserInputReturnStruct placeUserInputReturn;
         common.clearScreen();
@@ -155,8 +153,6 @@ int main()
             firstrun = 0;
             
             placeUserInputReturn = field.placeUserInput(userInput, turn);
-
-            solver.solveGame(field);
 
             if (placeUserInputReturn.hasLost)
             {

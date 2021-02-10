@@ -53,6 +53,7 @@ public:
     {
         CoordsStruct Coords;
         bool isFlag = false;
+        bool isAutoFlag = false;
     };
     struct PlaceUserInputReturnStruct
     {

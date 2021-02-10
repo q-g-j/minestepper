@@ -10,6 +10,7 @@
 #include "../include/field.hpp"
 #include "../include/input.hpp"
 #include "../include/print.hpp"
+#include "../include/solver.hpp"
 #include "../include/symbols.hpp"
 
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
@@ -367,7 +368,7 @@ void Input::helpToggle(Field &field, Common::CoordsStruct const& currentArrayPos
 
     common.clearScreen();
     field.gotoXY(field.getOffsetX() - 1, 2);
-    print.printTitle(field.getDifficultyString(), field.getCols(), field.getRows(), field.getMinesCount());
+    print.printTitle(field.getDifficultyString(), field.getCols(), field.getRows(), field.getMinesTotal());
     field.gotoXY(1, 3);
     field.drawField(true);
     std::cout << newline;
@@ -520,6 +521,13 @@ Common::UserInputReturnStruct Input::getUserInput(Field &field, int firstrun)
                 helpToggle(field, currentArrayPosition);
                 continue;
             }
+            else if (inputTmp == 'f' || inputTmp == 'F')
+            {
+                Solver solver;
+                solver.autoPlaceFlagsRecursive(field);
+                userInput.isAutoFlag = true;
+                break;
+            }
             else if (inputTmp == KEY_ENTER)
             {
                 coutconv << L"\b" << std::flush;
@@ -570,6 +578,13 @@ Common::UserInputReturnStruct Input::getUserInput(Field &field, int firstrun)
             {
                 helpToggle(field, currentArrayPosition);
                 continue;
+            }
+            else if (inputKey == 'f' || inputKey == 'F')
+            {
+                Solver solver;
+                solver.autoPlaceFlagsRecursive(field);
+                userInput.isAutoFlag = true;
+                break;
             }
             else if (inputKey == KEY_ENTER)
             {

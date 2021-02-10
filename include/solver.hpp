@@ -3,5 +3,5 @@
 class Solver
 {
 public:
-    void solveGame(Field &field);
+    void autoPlaceFlagsRecursive(Field &field);
 };

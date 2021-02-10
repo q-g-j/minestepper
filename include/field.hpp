@@ -15,8 +15,9 @@ private:
     int fieldOffsetX;
     int fieldOffsetY;
     int fieldCellWidth;
+    int coveredLeft;
     int minesTotal;
-    int countCovered;
+    int minesLeft;
     int flagsCount;
     std::string difficultyString;
 
@@ -38,19 +39,23 @@ public:
     std::vector<std::vector<stringconv>> mines2DVector;
     std::vector<std::vector<stringconv>> cursor2DVector;
 
-    int minesLeft;
-
     // getter methods:
     int getCols();
     int getRows();
     int getOffsetX();
     int getOffsetY();
-//    int getCovered();
-    int getMinesCount();
+    int getCoveredLeft();
+    int getMinesTotal();
     int getMinesLeft();
+    int getFlagsCount();
     int getCellWidth();
     std::string getDifficultyString();
     stringconv getCoordsContent(Common::CoordsStruct const&);
+
+    // setter methods:
+    void setCoveredLeft(int const&);
+    void setFlagsCount(int const&);
+    void setMinesLeft(int const&);
 
     // public methods:
     bool isFlag(Common::CoordsStruct const&);
