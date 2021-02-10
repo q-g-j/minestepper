@@ -15,10 +15,6 @@ private:
         UP, DOWN, LEFT, RIGHT
     };
 
-    void moveCursor(Field &field, Common::CoordsStruct&, Direction &direction);
-    void helpToggle(Field &field, Common::CoordsStruct const&);
-
-public:
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         #define KEY_UP 72
         #define KEY_DOWN 80
@@ -34,9 +30,14 @@ public:
         #define KEY_ENTER '\n'
         #define KEY_SPACE ' '
     #endif
+
+    void moveCursor(Field &field, Common::CoordsStruct&, Direction&);
+    void helpToggle(Field &field, Common::CoordsStruct const&);
+
+public:
     int getInputDifficulty();
-    Common::CoordsStruct getInputDimensions();
-    int getInputMinesCount(int const&);
+    Common::CoordsStruct getInputCustomDimensions();
+    int getInputCustomMinesCount(int const&);
     void getInputEnterKey(std::string const&);
     Common::UserInputReturnStruct getUserInput(Field &field, int);
     void showBlinkingCursor(bool);

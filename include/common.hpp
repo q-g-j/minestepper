@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 #include "../include/debug.hpp"
 
 // Windows and Linux seem to handle unicode strings differently (use wide strings for Windows):
@@ -58,6 +60,12 @@ public:
         bool hasWon = false;
         bool isTurn = false;
     };
+
+    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+        int stringToInt(std::wstring);
+    #else        
+        int stringToInt(std::string);
+    #endif
 
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         stringconv intToString(int const&);

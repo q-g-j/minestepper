@@ -8,7 +8,6 @@
 #include "../include/common.hpp"
 #include "../include/debug.hpp"
 #include "../include/field.hpp"
-#include "../include/common.hpp"
 #include "../include/input.hpp"
 #include "../include/print.hpp"
 #include "../include/symbols.hpp"
@@ -195,7 +194,7 @@ int Input::getInputDifficulty()
 }
 
 // custom mode: ask user for the size of the field:
-Common::CoordsStruct Input::getInputDimensions()
+Common::CoordsStruct Input::getInputCustomDimensions()
 {
     Colors colors;
     Common common;
@@ -259,7 +258,7 @@ Common::CoordsStruct Input::getInputDimensions()
             {
                 isValidInput = false;
             }
-            if (beforeX < 8 || afterX < 8 || beforeX > 26 || afterX > 20)
+            if (beforeX < 8 || afterX < 8 || beforeX > 30 || afterX > 20)
             {
                 isValidInput = false;
             }
@@ -280,7 +279,7 @@ Common::CoordsStruct Input::getInputDimensions()
 }
 
 // custom mode: ask user for the number of mines:
-int Input::getInputMinesCount(int const& fieldSize)
+int Input::getInputCustomMinesCount(int const& fieldSize)
 {
     Colors colors;
     Common common;

@@ -84,6 +84,20 @@ void Common::resizeConsole(int const& cols, int const& rows)
     }
 #endif
 
+#if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+    int Common::stringToInt(std::wstring wstr)
+    {
+        int num = stoi(wstr);
+        return num;
+    }
+#else
+    int Common::stringToInt(std::string str)
+    {
+        int num = stoi(str);
+        return num;
+    }
+#endif
+
 // for Windows: convert a string to wide string and vice versa:
 //#if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
 //    std::wstring Common::stringConvert(std::string const& str)

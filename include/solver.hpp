@@ -2,7 +2,6 @@
 
 class Solver
 {
-private:
-
 public:
+    void solveGame(Field &field);
 };

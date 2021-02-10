@@ -68,7 +68,7 @@ void Print::printMenu()
 void Print::printCustomGetDimensions()
 {
     std::cout << newline;
-    std::cout << "  How large do you want the field to be (min. 8x8 / max. 26x20)?" << newline << newline;
+    std::cout << "  How large do you want the field to be (min. 8x8 / max. 30x20)?" << newline << newline;
 }
 
 void Print::printCustomGetMinesCount()

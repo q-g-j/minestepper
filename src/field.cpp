@@ -26,13 +26,13 @@ Field::Field(int const& cols_, int const& rows_, int const& fieldOffsetX_, int c
     fieldOffsetY(fieldOffsetY_),
     fieldCellWidth(fieldCellWidth_),
     minesTotal(minesTotal_),
-    minesLeft(minesTotal_),
     flagsCount(0),
     difficultyString(difficultyString_),
     countCovered(cols_ * rows_),
     field2DVector(create2DVector("field")),
     mines2DVector(create2DVector("mines"))
 {
+    minesLeft = minesTotal_;
 }
 
 // deconstructor:
@@ -135,6 +135,7 @@ void Field::fillMines(Common::CoordsStruct const& userFirstInput)
 
     #if STATIC_FIELD == 1
         this->mines2DVector[3][3] = symbols.symbolMine;
+        this->mines2DVector[4][3] = symbols.symbolMine;
         this->minesTotal = 1;
     #else
         Common common;
