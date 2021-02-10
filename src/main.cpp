@@ -46,7 +46,6 @@ int main()
     int fieldOffsetY    = 7;
     /* ----------------------------*/
 
-    common.setRandomSeed();
     int fieldCellWidth = 3;
     int rows, cols;
     int difficulty;

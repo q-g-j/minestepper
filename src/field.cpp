@@ -172,7 +172,10 @@ void Field::fillMines(Common::CoordsStruct const& userFirstInput)
             }
         }
 
-        std::random_shuffle(tempVector.begin(), tempVector.end());
+        std::random_device rng;
+        std::mt19937 urng(rng());
+        std::shuffle(tempVector.begin(), tempVector.end(), urng);
+        
         for (int i = 0; i < this->minesTotal; ++i)
         {
             coords = common.intToCoords(tempVector.at(i), this->cols);

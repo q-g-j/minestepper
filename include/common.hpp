@@ -84,7 +84,6 @@ public:
 
     void resizeConsole(int const&, int const&);
     void setWindowTitle(std::string const&);
-    void setRandomSeed();
     void clearScreen();
     CoordsStruct intToCoords(int const&, int const&);
     unsigned int coordsToInt(CoordsStruct const&, int const&);

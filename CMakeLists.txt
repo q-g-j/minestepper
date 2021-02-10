@@ -13,6 +13,9 @@ endif()
 if (CMAKE_CXX_COMPILER_ID STREQUAL (!WIN32) AND (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang"))
     set(CMAKE_EXE_LINKER_FLAGS_RELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE} -s -Wl,--gc-sections")
 endif()
+if (CMAKE_CXX_COMPILER_ID STREQUAL (WIN32) AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    set(CMAKE_EXE_LINKER_FLAGS_RELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE} -s -Wl,--gc-sections")
+endif()
 
 add_executable(minesweeper src/main.cpp src/colors.cpp src/field.cpp src/common.cpp src/input.cpp src/print.cpp src/solver.cpp)
 

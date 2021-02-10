@@ -124,16 +124,6 @@ void Common::resizeConsole(int const& cols, int const& rows)
     }
 #endif
 
-// needed for random_shuffle() (place the mines):
-void Common::setRandomSeed()
-{
-    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-        srand(GetTickCount());
-    #else
-        srand(time(NULL));
-    #endif
-}
-
 // clear the whole screen. Used rarely to avoid screen blinking / slow refresh during the game:
 void Common::clearScreen()
 {
