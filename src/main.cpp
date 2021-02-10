@@ -6,6 +6,7 @@
 #include "../include/field.hpp"
 #include "../include/input.hpp"
 #include "../include/print.hpp"
+#include "../include/solver.hpp"
 
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
 //    #define _WIN32_WINNT 0x0500
@@ -100,7 +101,7 @@ int main()
                 input.showBlinkingCursor(true);
             #endif
 
-            dimensions = input.getInputDimensions();
+            dimensions = input.getInputCustomDimensions();
             rows = dimensions.row;
             cols = dimensions.col;
             common.clearScreen();
@@ -110,7 +111,7 @@ int main()
                 common.centerWindow();
             #endif
 
-            minesTotal = input.getInputMinesCount(cols * rows);
+            minesTotal = input.getInputCustomMinesCount(cols * rows);
             input.showBlinkingCursor(false);
         }
 
@@ -150,7 +151,9 @@ int main()
             input.showBlinkingCursor(false);
             userInput = input.getUserInput(field, firstrun);
             firstrun = 0;
+            
             placeUserInputReturn = field.placeUserInput(userInput, turn);
+
             if (placeUserInputReturn.hasLost)
             {
                 break;

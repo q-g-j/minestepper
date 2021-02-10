@@ -27,9 +27,9 @@ Field::Field(int const& cols_, int const& rows_, int const& fieldOffsetX_, int c
     fieldCellWidth(fieldCellWidth_),
     minesTotal(minesTotal_),
     minesLeft(minesTotal_),
+    coveredLeft(cols_ * rows_),
     flagsCount(0),
     difficultyString(difficultyString_),
-    countCovered(cols_ * rows_),
     field2DVector(create2DVector("field")),
     mines2DVector(create2DVector("mines"))
 {
@@ -66,12 +66,12 @@ int Field::getCellWidth()
     return this->fieldCellWidth;
 }
 
-//int Field::getCovered()
-//{
-//    return this->countCovered;
-//}
+int Field::getCoveredLeft()
+{
+    return this->coveredLeft;
+}
 
-int Field::getMinesCount()
+int Field::getMinesTotal()
 {
     return this->minesTotal;
 }
@@ -79,6 +79,11 @@ int Field::getMinesCount()
 int Field::getMinesLeft()
 {
     return this->minesLeft;
+}
+
+int Field::getFlagsCount()
+{
+    return this->flagsCount;
 }
 
 std::string Field::getDifficultyString()
@@ -89,6 +94,22 @@ std::string Field::getDifficultyString()
 stringconv Field::getCoordsContent(Common::CoordsStruct const& coords)
 {
     return this->field2DVector[coords.col][coords.row];
+}
+
+// some setters:
+void Field::setCoveredLeft(int const& num)
+{
+    this->coveredLeft = num;
+}
+
+void Field::setFlagsCount(int const& num)
+{
+    this->flagsCount = num;
+}
+
+void Field::setMinesLeft(int const& num)
+{
+    this->minesLeft = num;
 }
 
 #if DEBUG == 1
@@ -135,6 +156,7 @@ void Field::fillMines(Common::CoordsStruct const& userFirstInput)
 
     #if STATIC_FIELD == 1
         this->mines2DVector[3][3] = symbols.symbolMine;
+        this->mines2DVector[4][3] = symbols.symbolMine;
         this->minesTotal = 1;
     #else
         Common common;
@@ -726,7 +748,7 @@ void Field::gameWon()
         }
     }
 
-    this->countCovered = 0;
+    this->coveredLeft = 0;
     this->minesLeft = 0;
 
     #if DEBUG == 1
@@ -770,7 +792,7 @@ void Field::gameLost()
         }
     }
 
-    this->countCovered = 0;
+    this->coveredLeft = 0;
     //this->minesLeft = 0;
 
     #if DEBUG == 1
@@ -817,7 +839,7 @@ void Field::autoUncoverRecursive(Common::CoordsStruct const& coords, std::vector
             }
             poolVector.push_back(common.coordsToInt(neighborsCoveredVector.at(i), this->cols));
             printCoords(neighborsCoveredVector.at(i), false);
-            --this->countCovered;
+            --this->coveredLeft;
 
             #if DEBUG == 1
                 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
@@ -904,7 +926,7 @@ void Field::flagAutoUncover(Common::UserInputReturnStruct const& userInput, Comm
                                 this->field2DVector[tempCoords.col][tempCoords.row] = symbols.symbolZero;
                                 printCoords(tempCoords, false);
                                 poolVector.push_back(common.coordsToInt(tempCoords, this->cols));
-                                --this->countCovered;
+                                --this->coveredLeft;
                                 autoUncoverRecursive(tempCoords, poolVector);
                             }
                         }
@@ -915,7 +937,7 @@ void Field::flagAutoUncover(Common::UserInputReturnStruct const& userInput, Comm
                                 this->field2DVector[tempCoords.col][tempCoords.row] = common.intToString(static_cast<int>(flagUncoverNeighborsCoveredMinesVector.size()));
                                 printCoords(tempCoords, false);
                                 poolVector.push_back(common.coordsToInt(tempCoords, this->cols));
-                                --this->countCovered;
+                                --this->coveredLeft;
                             }
                         }
                     }
@@ -943,7 +965,7 @@ Common::PlaceUserInputReturnStruct Field::placeUserInput(Common::UserInputReturn
             printCoords(userInput.Coords, false);
             --this->flagsCount;
             ++this->minesLeft;
-            ++this->countCovered;
+            ++this->coveredLeft;
         }
         else
         {
@@ -951,10 +973,10 @@ Common::PlaceUserInputReturnStruct Field::placeUserInput(Common::UserInputReturn
             printCoords(userInput.Coords, false);
             ++this->flagsCount;
             --this->minesLeft;
-            --this->countCovered;
+            --this->coveredLeft;
         }
     }
-    else
+    else if (! userInput.isAutoFlag)
     {
         // fill the Field with random mines AFTER the player has placed his first guess:
         if (turn == 1)
@@ -996,7 +1018,7 @@ Common::PlaceUserInputReturnStruct Field::placeUserInput(Common::UserInputReturn
             }
             printCoords(userInput.Coords, false);
             returnStruct.isTurn = true;
-            --this->countCovered;
+            --this->coveredLeft;
 
             // Call recursive method autoUncoverRecursive() to automatically uncover all connected cells, as long as
             // they have no neighbor mines:
@@ -1011,7 +1033,7 @@ Common::PlaceUserInputReturnStruct Field::placeUserInput(Common::UserInputReturn
     }
 
     // check if player has won:
-    if (this->flagsCount + this->countCovered == this->minesTotal)
+    if (this->flagsCount + this->coveredLeft == this->minesTotal)
     {
         returnStruct.hasWon = true;
         gameWon();

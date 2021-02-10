@@ -68,7 +68,7 @@ void Print::printMenu()
 void Print::printCustomGetDimensions()
 {
     std::cout << newline;
-    std::cout << "  How large do you want the field to be (min. 8x8 / max. 26x20)?" << newline << newline;
+    std::cout << "  How large do you want the field to be (min. 8x8 / max. 30x20)?" << newline << newline;
 }
 
 void Print::printCustomGetMinesCount()
@@ -118,11 +118,14 @@ void Print::printExplanation()
     coutconv << "  To remove the flag, just repeat your input. You may place or remove as many flags in a row as you wish." << newline << newline;
     coutconv << "  You can reselect a numbered cell with ENTER to automatically uncover all remaining neighbors," << newline;
     coutconv << "  as long as you put all flags right! Otherwise you might lose..." << newline << newline;
+    std::cout << colors.setTextColor(colors.fg_white);
     coutconv << "  Explanations:" << newline << newline;
-    coutconv << "  Arrow Keys:    navigate" << newline;
-    coutconv << "  ENTER:         uncover" << newline;
-    coutconv << "  SPACE:         place or remove a flag" << newline;
-    coutconv << "  q or Q:        quit" << newline << newline;
+    std::cout << colors.setTextColor(colors.color_default);
+    coutconv << "    Arrow Keys:    navigate" << newline;
+    coutconv << "    ENTER:         uncover" << newline;
+    coutconv << "    SPACE:         place or remove a flag" << newline;
+    coutconv << "    f or F:        let the computer place all the flags for you!" << newline;
+    coutconv << "    q or Q:        quit" << newline << newline;
     std::cout << colors.setTextColor(colors.fg_white);
     coutconv << "  Press ENTER to go back...";
     std::cout << colors.setTextColor(colors.color_default);
