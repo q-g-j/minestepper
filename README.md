@@ -13,10 +13,10 @@ A console based version of Minesweeper to teach myself C++.
 - press ENTER on a number to auto-reveal safe cells similar to the Windows-version (if flags are placed right)
 - automatically resize the console window
 - Windows version only: automatically center the console window
+- SOON: an "A.I." driven game solver (see branch "solver" for current state)
 
-It compiles and runs in Linux and Windows but might look a bit different on both, depending on the terminal(-settings) used.<br/>
-Not every (graphical) terminal program in Linux seems to support automatic resizing. <br/>
-Your terminal program needs to support control sequences. To enable them for xterm and compatible terminals edit <br/>
+It compiles and runs in Linux and Windows but might look a bit different on both, depending on the terminal(-settings) used.<br/><br/>
+Not every (graphical) terminal program in Linux seems to support automatic resizing. Your terminal program needs to support control sequences. To enable them for xterm and compatible terminals edit <br/>
 ```~/.Xdefaults```<br/>
 ```
 *VT100.allowWindowOps: true
