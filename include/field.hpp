@@ -52,10 +52,28 @@ public:
     std::string getDifficultyString();
     stringconv getCoordsContent(Common::CoordsStruct const&);
 
-    // setter methods:
-    void setCoveredLeft(int const&);
-    void setFlagsCount(int const&);
-    void setMinesLeft(int const&);
+    // setter methods to increment / decrement:
+    struct setFlagsCount
+    {
+        Field &field_;
+        setFlagsCount(Field &field) : field_(field) { }
+        void operator--();
+        void operator++();
+    };
+    struct setMinesLeft
+    {
+        Field &field_;
+        setMinesLeft(Field &field) : field_(field) { }
+        void operator--();
+        void operator++();
+    };
+    struct setCoveredLeft
+    {
+        Field &field_;
+        setCoveredLeft(Field &field) : field_(field) { }
+        void operator--();
+        void operator++();
+    };
 
     // public methods:
     bool isFlag(Common::CoordsStruct const&);

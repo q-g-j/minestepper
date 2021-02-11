@@ -96,20 +96,31 @@ stringconv Field::getCoordsContent(Common::CoordsStruct const& coords)
     return this->field2DVector[coords.col][coords.row];
 }
 
-// some setters:
-void Field::setCoveredLeft(int const& num)
+void Field::setCoveredLeft::operator--()
 {
-    this->coveredLeft = num;
+    --field_.coveredLeft;
+}
+void Field::setCoveredLeft::operator++()
+{
+    ++field_.coveredLeft;
 }
 
-void Field::setFlagsCount(int const& num)
+void Field::setFlagsCount::operator--()
 {
-    this->flagsCount = num;
+    --field_.flagsCount;
+}
+void Field::setFlagsCount::operator++()
+{
+    ++field_.flagsCount;
 }
 
-void Field::setMinesLeft(int const& num)
+void Field::setMinesLeft::operator--()
 {
-    this->minesLeft = num;
+    --field_.minesLeft;
+}
+void Field::setMinesLeft::operator++()
+{
+    ++field_.minesLeft;
 }
 
 #if DEBUG == 1

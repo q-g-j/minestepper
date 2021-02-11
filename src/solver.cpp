@@ -56,11 +56,14 @@ void Solver::autoPlaceFlagsRecursive(Field& field)
         for (size_t i = 0; i < poolCoveredVector.size(); ++i)
         {
             Common::CoordsStruct tempCoords;
+            Field::setCoveredLeft coveredLeft(field);
+            Field::setMinesLeft minesLeft(field);
+            Field::setFlagsCount flagsCount(field);
             tempCoords = common.intToCoords(poolCoveredVector.at(i), field.getCols());
             field.field2DVector[tempCoords.col][tempCoords.row] = symbols.symbolFlag;
-            field.setCoveredLeft(field.getCoveredLeft() - 1);
-            field.setMinesLeft(field.getMinesLeft() - 1);
-            field.setFlagsCount(field.getFlagsCount() + 1);
+            --coveredLeft;
+            --minesLeft;
+            ++flagsCount;
             field.printCoords(tempCoords, false);
         }
     }
