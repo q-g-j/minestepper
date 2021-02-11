@@ -26,13 +26,13 @@ Field::Field(int const& cols_, int const& rows_, int const& fieldOffsetX_, int c
     fieldOffsetY(fieldOffsetY_),
     fieldCellWidth(fieldCellWidth_),
     minesTotal(minesTotal_),
-    minesLeft(minesTotal_),
-    coveredLeft(cols_ * rows_),
-    flagsCount(0),
-    difficultyString(difficultyString_),
-    field2DVector(create2DVector("field")),
-    mines2DVector(create2DVector("mines"))
+    difficultyString(difficultyString_)
 {
+    flagsCount = 0;
+    minesLeft = minesTotal_;
+    coveredLeft = cols_ * rows_;
+    field2DVector = create2DVector("field");
+    mines2DVector = create2DVector("mines");
 }
 
 // deconstructor:
@@ -196,7 +196,7 @@ void Field::fillMines(Common::CoordsStruct const& userFirstInput)
 }
 
 // draw the game board:
-void Field::drawField(bool recoverField)
+void Field::drawField()
 {
     Symbols symbols;
 

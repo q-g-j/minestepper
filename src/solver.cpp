@@ -34,7 +34,7 @@ void Solver::autoPlaceFlagsRecursive(Field& field)
 
                 // if the number of covered neighbors plus the number of neighbor flags matches the current cells number,
                 // add the covered cells to poolCoveredVector:
-                if ((flagsVector.size() + coveredVector.size()) == common.stringToInt(field.getCoordsContent(tempCoords)))
+                if ((flagsVector.size() + coveredVector.size()) == static_cast<size_t>(common.stringToInt(field.getCoordsContent(tempCoords))))
                 {
                     for (size_t k = 0; k < coveredVector.size(); ++k)
                     {
@@ -87,7 +87,7 @@ void Solver::autoPlaceFlagsRecursive(Field& field)
                 neighborsFlagsVector = field.findNeighbors(field.field2DVector, tempNumberCoords, symbols.symbolFlag);
                 neighborsCoveredVector = field.findNeighbors(field.field2DVector, tempNumberCoords, symbols.symbolCovered);
 
-                if (neighborsFlagsVector.size() == common.stringToInt(field.field2DVector[col][row]) && neighborsCoveredVector.size() != 0)
+                if (neighborsFlagsVector.size() == static_cast<size_t>(common.stringToInt(field.field2DVector[col][row])) && neighborsCoveredVector.size() != 0)
                 {
                     Common::UserInputReturnStruct tempUserInputReturnStruct;
                     Common::PlaceUserInputReturnStruct tempPlaceUserInputReturnStruct;

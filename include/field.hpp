@@ -79,7 +79,7 @@ public:
     // public methods:
     bool isFlag(Common::CoordsStruct const&);
     bool isNumber(Common::CoordsStruct const&);
-    void drawField(bool);
+    void drawField();
     void gotoXY(int const&, int const&);
     void printCoords(Common::CoordsStruct const&, bool);
     std::vector<Common::CoordsStruct> findNeighbors(std::vector<std::vector<stringconv>> const&, Common::CoordsStruct const&, stringconv const&);

@@ -370,7 +370,7 @@ void Input::helpToggle(Field &field, Common::CoordsStruct const& currentArrayPos
     field.gotoXY(field.getOffsetX() - 1, 1);
     print.printTitle(field.getDifficultyString(), field.getCols(), field.getRows(), field.getMinesTotal());
     field.gotoXY(1, 3);
-    field.drawField(true);
+    field.drawField();
     std::cout << newline;
     field.gotoXY(field.getOffsetX() - 1, field.getOffsetY() - 2);
     std::cout << colors.setTextColor(colors.fg_light_red);

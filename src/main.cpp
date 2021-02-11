@@ -128,7 +128,7 @@ int main()
         field.gotoXY(field.getOffsetX() - 1, 1);
         print.printTitle(difficultyString, cols, rows, minesTotal);
         field.gotoXY(1, 3);
-        field.drawField(false);
+        field.drawField();
 
         int turn = 1;
         int firstrun = 1;
