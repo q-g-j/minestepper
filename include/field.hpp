@@ -1,5 +1,6 @@
 #pragma once
 
+#include <random>
 #include <string>
 #include <vector>
 
@@ -20,6 +21,10 @@ private:
     int minesLeft;
     int flagsCount;
     std::string difficultyString;
+
+    // random number generator:
+    std::random_device rng;
+    std::mt19937 urng;
 
     // private methods
     std::vector<std::vector<stringconv>> create2DVector(std::string const&);

@@ -1,6 +1,5 @@
 #include <algorithm>
 #include <iostream>
-#include <random>
 #include <vector>
 
 #include "../include/colors.hpp"
@@ -26,7 +25,8 @@ Field::Field(int const& cols_, int const& rows_, int const& fieldOffsetX_, int c
     fieldOffsetY(fieldOffsetY_),
     fieldCellWidth(fieldCellWidth_),
     minesTotal(minesTotal_),
-    difficultyString(difficultyString_)
+    difficultyString(difficultyString_),
+    urng(rng())
 {
     flagsCount = 0;
     minesLeft = minesTotal_;
@@ -183,8 +183,6 @@ void Field::fillMines(Common::CoordsStruct const& userFirstInput)
             }
         }
 
-        std::random_device rng;
-        std::mt19937 urng(rng());
         std::shuffle(tempVector.begin(), tempVector.end(), urng);
         
         for (int i = 0; i < this->minesTotal; ++i)
