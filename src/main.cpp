@@ -53,6 +53,8 @@ int main()
     Common::CoordsStruct dimensions;
     std::string difficultyString;
 
+    std::cout << colors.setTextColor(colors.color_default);
+
     input.showBlinkingCursor(false);
 
     while (true)
@@ -123,7 +125,6 @@ int main()
             common.centerWindow();
             input.showBlinkingCursor(false);
         #endif
-
 
         field.gotoXY(field.getOffsetX() - 1, 1);
         print.printTitle(difficultyString, cols, rows, minesTotal);

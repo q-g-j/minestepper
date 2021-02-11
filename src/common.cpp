@@ -16,13 +16,13 @@
     #include <wingdi.h>
 #endif
 
-using convert_t = std::codecvt_utf8<wchar_t>;
-std::wstring_convert<convert_t, wchar_t> strconverter;
+// using convert_t = std::codecvt_utf8<wchar_t>;
+// std::wstring_convert<convert_t, wchar_t> strconverter;
 
 void Common::setWindowTitle(std::string const& titleText)
 {
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-        SetConsoleTitle(titleText.c_str());
+        SetConsoleTitle(static_cast<LPCSTR>(titleText.c_str()));
     #else
         std::cout << "\033]0;" << titleText << "\007";
     #endif
@@ -99,17 +99,17 @@ void Common::resizeConsole(int const& cols, int const& rows)
 #endif
 
 // for Windows: convert a string to wide string and vice versa:
-//#if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+// #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
 //    std::wstring Common::stringConvert(std::string const& str)
 //    {
 //        return strconverter.from_bytes(str);
 //    }
-//#else
+// #else
 //    std::string Common::stringConvert(std::wstring const& wstr)
 //    {
 //        return strconverter.to_bytes(wstr);
 //    }
-//#endif
+// #endif
 
 // convert an integer to string or wide string:
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
