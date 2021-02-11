@@ -32,7 +32,7 @@ void Solver::autoPlaceFlagsRecursive(Field& field)
                 coveredVector = field.findNeighbors(field.field2DVector, tempCoords, symbols.symbolCovered);
                 flagsVector = field.findNeighbors(field.field2DVector, tempCoords, symbols.symbolFlag);
 
-                // if the number of covered neighbos plus the number of flag neighbors matches the current cells number,
+                // if the number of covered neighbors plus the number of neighbor flags matches the current cells number,
                 // add the covered cells to poolCoveredVector:
                 if ((flagsVector.size() + coveredVector.size()) == common.stringToInt(field.getCoordsContent(tempCoords)))
                 {
@@ -50,7 +50,7 @@ void Solver::autoPlaceFlagsRecursive(Field& field)
         }
     }
 
-    // set a flag, if it makes sense:
+    // place a flag at the coords of each element of poolCoveredVector:
     if (poolCoveredVector.size() != 0)
     {
         for (size_t i = 0; i < poolCoveredVector.size(); ++i)

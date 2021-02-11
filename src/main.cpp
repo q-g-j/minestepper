@@ -42,8 +42,8 @@ int main()
     Size.Large.mines    = 99;
 
     // set X/Y position of the field
-    int fieldOffsetX    = 6;
-    int fieldOffsetY    = 7;
+    int fieldOffsetX    = 5;
+    int fieldOffsetY    = 6;
     /* ----------------------------*/
 
     int fieldCellWidth = 3;
@@ -117,7 +117,7 @@ int main()
         Field field(cols, rows, fieldOffsetX, fieldOffsetY, fieldCellWidth, minesTotal, difficultyString);
 
         common.clearScreen();
-        common.resizeConsole(fieldOffsetX + (cols * 4) + fieldOffsetX - 2, fieldOffsetY + (rows * 2) + 5);
+        common.resizeConsole(fieldOffsetX + (cols * 4) + fieldOffsetX - 3, fieldOffsetY + (rows * 2) + 5);
 
         #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
             common.centerWindow();
@@ -125,7 +125,7 @@ int main()
         #endif
 
 
-        field.gotoXY(field.getOffsetX() - 1, 2);
+        field.gotoXY(field.getOffsetX() - 1, 1);
         print.printTitle(difficultyString, cols, rows, minesTotal);
         field.gotoXY(1, 3);
         field.drawField(false);

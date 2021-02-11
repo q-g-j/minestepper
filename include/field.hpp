@@ -52,7 +52,8 @@ public:
     std::string getDifficultyString();
     stringconv getCoordsContent(Common::CoordsStruct const&);
 
-    // setter methods to increment / decrement:
+    // setter methods to increment / decrement using operator overloading
+    // (just for learning purposes):
     struct setFlagsCount
     {
         Field &field_;
