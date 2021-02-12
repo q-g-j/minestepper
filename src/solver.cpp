@@ -89,10 +89,8 @@ void Solver::autoPlaceFlagsRecursive(Field& field)
 
                 if (neighborsFlagsVector.size() == static_cast<size_t>(common.stringToInt(field.field2DVector[col][row])) && neighborsCoveredVector.size() != 0)
                 {
-                    Common::UserInputReturnStruct tempUserInputReturnStruct;
                     Common::PlaceUserInputReturnStruct tempPlaceUserInputReturnStruct;
-                    tempUserInputReturnStruct.Coords = tempNumberCoords;
-                    field.flagAutoUncover(tempUserInputReturnStruct, tempPlaceUserInputReturnStruct);
+                    field.flagAutoUncover(tempNumberCoords, tempPlaceUserInputReturnStruct);
                     ranFlagAutoUncover = true;
                 }
             }

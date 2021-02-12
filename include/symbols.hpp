@@ -1,13 +1,9 @@
 #pragma once
 
-#include "../include/colors.hpp"
-#include "../include/common.hpp"
 #include "../include/debug.hpp"
 
 class Symbols
 {
-private:
-    Colors colors;
 public:
     // define frame and cell symbol constants:
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)

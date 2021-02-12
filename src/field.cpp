@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <iostream>
+#include <random>
 #include <vector>
 
 #include "../include/colors.hpp"
@@ -870,22 +871,22 @@ void Field::autoUncoverRecursive(Common::CoordsStruct const& coords, std::vector
     }
 }
 
-void Field::flagAutoUncover(Common::UserInputReturnStruct const& userInput, Common::PlaceUserInputReturnStruct &returnStruct)
+void Field::flagAutoUncover(Common::CoordsStruct const& Coords, Common::PlaceUserInputReturnStruct &returnStruct)
 {
     Common common;
     Symbols symbols;
 
     // create a new vector of surrounding mines:
     std::vector<Common::CoordsStruct> flagUncoverNeighborsMinesVector;
-    flagUncoverNeighborsMinesVector = findNeighbors(this->mines2DVector, userInput.Coords, symbols.symbolMine);
+    flagUncoverNeighborsMinesVector = findNeighbors(this->mines2DVector, Coords, symbols.symbolMine);
 
     // create a new vector of surrounding flags:
     std::vector<Common::CoordsStruct> flagUncoverNeighborsFlagsVector;
-    flagUncoverNeighborsFlagsVector = findNeighbors(this->field2DVector, userInput.Coords, symbols.symbolFlag);
+    flagUncoverNeighborsFlagsVector = findNeighbors(this->field2DVector, Coords, symbols.symbolFlag);
 
     // create a new vector of surrounding covered squares:
     std::vector<Common::CoordsStruct> flagUncoverNeighborsCoveredVector;
-    flagUncoverNeighborsCoveredVector = findNeighbors(this->field2DVector, userInput.Coords, symbols.symbolCovered);
+    flagUncoverNeighborsCoveredVector = findNeighbors(this->field2DVector, Coords, symbols.symbolCovered);
 
     // create a new empty vector for missed mines:
     std::vector<Common::CoordsStruct> flagUncoverMissedMinesVector;
@@ -1009,7 +1010,7 @@ Common::PlaceUserInputReturnStruct Field::placeUserInput(Common::UserInputReturn
         // uncover all surrounding safe positions:
         if (isNumber(userInput.Coords))
         {
-            flagAutoUncover(userInput, returnStruct);
+            flagAutoUncover(userInput.Coords, returnStruct);
             if (returnStruct.hasLost == true)
             {
                 gameLost();

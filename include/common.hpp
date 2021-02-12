@@ -1,7 +1,5 @@
 #pragma once
 
-#include <string>
-
 #include "../include/debug.hpp"
 
 // Windows and Linux seem to handle unicode strings differently (use wide strings for Windows):
