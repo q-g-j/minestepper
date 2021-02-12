@@ -13,7 +13,8 @@ A console based version of Minesweeper to teach myself C++.
 - press ENTER on a number to auto-reveal safe cells similar to the Windows-version (if flags are placed right)
 - automatically resize the console window
 - Windows version only: automatically center the console window
-- for the lazy: press "f" within a game to let the computer place all the flags for you
+- for the lazy: press "f" or "F" during a game to have the computer place all the flags for you (could win the game instantly)
+- press "b" or "B" during a game to toggle cursor jump on or off (when cursor reaches one edge, jump to opposite edge - this can be useful on large game fields)
 - TODO: add a demo mode (kind of "A.I.")
 
 It compiles and runs in Linux and Windows but might look a bit different on both, depending on the terminal(-settings) used.<br/><br/>

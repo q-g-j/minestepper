@@ -31,7 +31,7 @@ private:
         #define KEY_SPACE ' '
     #endif
 
-    void moveCursor(Field &field, Common::CoordsStruct&, Direction&);
+    void moveCursor(Field &field, Common::CoordsStruct&, Direction&, bool);
     void helpToggle(Field &field, Common::CoordsStruct const&);
 
 public:

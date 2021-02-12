@@ -345,15 +345,12 @@ void Input::helpToggle(Field &field, Common::CoordsStruct const& currentArrayPos
     Print print;
     Symbols symbols;
 
-    common.resizeConsole(107, 24);
+    common.resizeConsole(107, 26);
 
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         common.centerWindow();
-        showBlinkingCursor(false);
-    #endif
-
-    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         common.setUnicode(false);
+        showBlinkingCursor(false);
     #endif
 
     Common::CoordsStruct currentCursorPosition;
@@ -391,29 +388,76 @@ void Input::helpToggle(Field &field, Common::CoordsStruct const& currentArrayPos
 }
 
 // move the players cursor in 4 directions with the arrow keys:
-void Input::moveCursor(Field &field, Common::CoordsStruct& currentArrayPosition, Direction &direction)
+void Input::moveCursor(Field &field, Common::CoordsStruct& currentArrayPosition, Direction &direction, bool toggleEdgeJump)
 {
     Common common;
     Symbols symbols;
 
     Common::CoordsStruct currentCursorPosition;
     std::wcout << L"\b";
-    field.printCoords(currentArrayPosition, false);
     if (direction == Direction::UP)
     {
-        --currentArrayPosition.row;
+        if (currentArrayPosition.row == 1)
+        {
+            if (toggleEdgeJump)
+            {
+                field.printCoords(currentArrayPosition, false);
+                currentArrayPosition.row = field.getRows();
+            }
+        }
+        else
+        {
+            field.printCoords(currentArrayPosition, false);
+            --currentArrayPosition.row;
+        }
     }
     else if (direction == Direction::DOWN)
     {
-        ++currentArrayPosition.row;
+        if (currentArrayPosition.row == field.getRows())
+        {
+            if (toggleEdgeJump)
+            {
+                field.printCoords(currentArrayPosition, false);
+                currentArrayPosition.row = 1;
+            }
+        }
+        else
+        {
+            field.printCoords(currentArrayPosition, false);
+            ++currentArrayPosition.row;
+        }
     }
     else if (direction == Direction::LEFT)
     {
-        --currentArrayPosition.col;
+        if (currentArrayPosition.col == 1)
+        {
+            if (toggleEdgeJump)
+            {
+                field.printCoords(currentArrayPosition, false);
+                currentArrayPosition.col = field.getCols();
+            }
+        }
+        else
+        {
+            field.printCoords(currentArrayPosition, false);
+            --currentArrayPosition.col;
+        }
     }
     else if (direction == Direction::RIGHT)
     {
-        ++currentArrayPosition.col;
+        if (currentArrayPosition.col == field.getCols())
+        {
+            if (toggleEdgeJump)
+            {
+                field.printCoords(currentArrayPosition, false);
+                currentArrayPosition.col = 1;
+            }
+        }
+        else
+        {
+            field.printCoords(currentArrayPosition, false);
+            ++currentArrayPosition.col;
+        }
     }
     currentCursorPosition = common.coordsToCursorPosition(currentArrayPosition, field.getOffsetX(), field.getOffsetY(), field.getCellWidth());
     field.gotoXY(currentCursorPosition.col, currentCursorPosition.row);
@@ -432,6 +476,7 @@ Common::UserInputReturnStruct Input::getUserInput(Field &field, int firstrun)
     static Common::CoordsStruct currentArrayPosition;
     Common::CoordsStruct currentCursorPosition;
     Common::UserInputReturnStruct userInput;
+    static bool toggleEdgeJump = false;
 
     #if !defined(_WIN32) && !defined(WIN32) && !defined(_WIN64) && !defined(WIN64)
         enableNonCanonicalMode();
@@ -479,35 +524,23 @@ Common::UserInputReturnStruct Input::getUserInput(Field &field, int firstrun)
                 inputKey = _getch();
                 if (inputKey == KEY_UP)
                 {
-                    if (currentArrayPosition.row > 1)
-                    {
-                        Direction direction = Direction::UP;
-                        moveCursor(field, currentArrayPosition, direction);
-                    }
+                    Direction direction = Direction::UP;
+                    moveCursor(field, currentArrayPosition, direction, toggleEdgeJump);
                 }
                 else if (inputKey == KEY_DOWN)
                 {
-                    if (currentArrayPosition.row < field.getRows())
-                    {
-                        Direction direction = Direction::DOWN;
-                        moveCursor(field, currentArrayPosition, direction);
-                    }
+                    Direction direction = Direction::DOWN;
+                    moveCursor(field, currentArrayPosition, direction, toggleEdgeJump);
                 }
                 else if (inputKey == KEY_LEFT)
                 {
-                    if (currentArrayPosition.col > 1)
-                    {
-                        Direction direction = Direction::LEFT;
-                        moveCursor(field, currentArrayPosition, direction);
-                    }
+                    Direction direction = Direction::LEFT;
+                    moveCursor(field, currentArrayPosition, direction, toggleEdgeJump);
                 }
                 else if (inputKey == KEY_RIGHT)
                 {
-                    if (currentArrayPosition.col < field.getCols())
-                    {
-                        Direction direction = Direction::RIGHT;
-                        moveCursor(field, currentArrayPosition, direction);
-                    }
+                    Direction direction = Direction::RIGHT;
+                    moveCursor(field, currentArrayPosition, direction, toggleEdgeJump);
                 }
             }
             else if (inputTmp == 'q' || inputTmp == 'Q')
@@ -527,6 +560,10 @@ Common::UserInputReturnStruct Input::getUserInput(Field &field, int firstrun)
                 solver.autoPlaceFlagsRecursive(field);
                 userInput.isAutoFlag = true;
                 break;
+            }
+            else if (inputTmp == 'b' || inputTmp == 'B')
+            {                
+                toggleEdgeJump == true ? toggleEdgeJump = false : toggleEdgeJump = true;
             }
             else if (inputTmp == KEY_ENTER)
             {

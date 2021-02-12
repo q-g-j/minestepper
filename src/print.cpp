@@ -125,6 +125,7 @@ void Print::printExplanation()
     coutconv << "    ENTER:         uncover" << newline;
     coutconv << "    SPACE:         place or remove a flag" << newline;
     coutconv << "    f or F:        let the computer place all the flags for you!" << newline;
+    coutconv << "    b or B:        toggle cursor jump to opposite edge on or off" << newline << newline;
     coutconv << "    q or Q:        quit" << newline << newline;
     std::cout << colors.setTextColor(colors.fg_white);
     coutconv << "  Press ENTER to go back...";
