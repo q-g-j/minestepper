@@ -28,14 +28,14 @@ Then log out and log back in.
 
 ## Compilation:
 
-To compile you need a c++ compiler (like gcc with g++) and optionally cmake. No extra libraries needed.
+To compile you need a c++ compiler (like clang or gcc with g++) and optionally cmake (with e.g. make or ninja). No extra libraries needed.
 
-***Example for cmake in Linux:***
+***Example for cmake and ninja in Linux:***
 
 ```
 git clone https://github.com/q-g-j/minesweeper.git
 mkdir -p minesweeper/build
 cd minesweeper/build
-cmake ..
+cmake -G "Ninja" ..
 cmake --build .
 ```
