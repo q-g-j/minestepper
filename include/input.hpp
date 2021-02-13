@@ -31,7 +31,7 @@ private:
         const char KEY_SPACE = ' ';
     #endif
 
-    void moveCursor(Field&, Common::CoordsStruct&, Direction&, bool);
+    void moveCursor(Field&, Common::CoordsStruct&, Direction&, bool*);
     void helpToggle(Field&, Common::CoordsStruct const&);
 
 public:

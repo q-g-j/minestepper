@@ -15,7 +15,6 @@
 
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
     #include <conio.h>
-    #include <stdio.h>
     #include <windows.h>
 #else
     #include <termios.h>
@@ -388,7 +387,7 @@ void Input::helpToggle(Field &field, Common::CoordsStruct const& currentArrayPos
 }
 
 // move the players cursor in 4 directions with the arrow keys:
-void Input::moveCursor(Field &field, Common::CoordsStruct& currentArrayPosition, Direction &direction, bool toggleEdgeJump)
+void Input::moveCursor(Field &field, Common::CoordsStruct& currentArrayPosition, Direction &direction, bool *toggleEdgeJump)
 {
     Common common;
     Symbols symbols;
@@ -399,7 +398,7 @@ void Input::moveCursor(Field &field, Common::CoordsStruct& currentArrayPosition,
     {
         if (currentArrayPosition.row == 1)
         {
-            if (toggleEdgeJump)
+            if (*toggleEdgeJump)
             {
                 field.printCoords(currentArrayPosition, false);
                 currentArrayPosition.row = field.getRows();
@@ -415,7 +414,7 @@ void Input::moveCursor(Field &field, Common::CoordsStruct& currentArrayPosition,
     {
         if (currentArrayPosition.row == field.getRows())
         {
-            if (toggleEdgeJump)
+            if (*toggleEdgeJump)
             {
                 field.printCoords(currentArrayPosition, false);
                 currentArrayPosition.row = 1;
@@ -431,7 +430,7 @@ void Input::moveCursor(Field &field, Common::CoordsStruct& currentArrayPosition,
     {
         if (currentArrayPosition.col == 1)
         {
-            if (toggleEdgeJump)
+            if (*toggleEdgeJump)
             {
                 field.printCoords(currentArrayPosition, false);
                 currentArrayPosition.col = field.getCols();
@@ -447,7 +446,7 @@ void Input::moveCursor(Field &field, Common::CoordsStruct& currentArrayPosition,
     {
         if (currentArrayPosition.col == field.getCols())
         {
-            if (toggleEdgeJump)
+            if (*toggleEdgeJump)
             {
                 field.printCoords(currentArrayPosition, false);
                 currentArrayPosition.col = 1;
@@ -475,7 +474,9 @@ Common::UserInputReturnStruct Input::getUserInput(Field &field, int firstrun)
     static Common::CoordsStruct currentArrayPosition;
     Common::CoordsStruct currentCursorPosition;
     Common::UserInputReturnStruct userInput;
-    static bool toggleEdgeJump = false;
+    bool toggleEdgeJump = false;
+    bool *toogleEdgeJumpP;
+    toogleEdgeJumpP = &toggleEdgeJump;
 
     field.gotoXY(field.getOffsetX() - 1, field.getOffsetY() + field.getRows() * 2);
     std::cout << colors.setTextColor(colors.fg_white);
@@ -520,22 +521,22 @@ Common::UserInputReturnStruct Input::getUserInput(Field &field, int firstrun)
                 if (inputKeyB == KEY_UP)
                 {
                     Direction direction = Direction::UP;
-                    moveCursor(field, currentArrayPosition, direction, toggleEdgeJump);
+                    moveCursor(field, currentArrayPosition, direction, toogleEdgeJumpP);
                 }
                 else if (inputKeyB == KEY_DOWN)
                 {
                     Direction direction = Direction::DOWN;
-                    moveCursor(field, currentArrayPosition, direction, toggleEdgeJump);
+                    moveCursor(field, currentArrayPosition, direction, toogleEdgeJumpP);
                 }
                 else if (inputKeyB == KEY_LEFT)
                 {
                     Direction direction = Direction::LEFT;
-                    moveCursor(field, currentArrayPosition, direction, toggleEdgeJump);
+                    moveCursor(field, currentArrayPosition, direction, toogleEdgeJumpP);
                 }
                 else if (inputKeyB == KEY_RIGHT)
                 {
                     Direction direction = Direction::RIGHT;
-                    moveCursor(field, currentArrayPosition, direction, toggleEdgeJump);
+                    moveCursor(field, currentArrayPosition, direction, toogleEdgeJumpP);
                 }
             }
             else if (inputKeyA == 'q' || inputKeyA == 'Q')
@@ -556,7 +557,7 @@ Common::UserInputReturnStruct Input::getUserInput(Field &field, int firstrun)
                 userInput.isAutoFlag = true;
                 break;
             }
-            else if (inputKeyA == 'e' || inputKeyA == 'E')
+            else if (inputKeyA == 'c' || inputKeyA == 'C')
             {                
                 toggleEdgeJump == true ? toggleEdgeJump = false : toggleEdgeJump = true;
             }
@@ -596,33 +597,65 @@ Common::UserInputReturnStruct Input::getUserInput(Field &field, int firstrun)
         enableNonCanonicalMode();
         field.printCoords(currentArrayPosition, true);
 
-        char inputKey;
+        char inputKeyA;
+        char inputKeyB;
+        char inputKeyC;
 
         while (true)
         {
-            read(STDIN_FILENO, &inputKey, 1);
-            
-            if (inputKey == KEY_UP)
+            inputKeyA = getchar();            
+            if (inputKeyA == 27)
             {
-                Direction direction = Direction::UP;
-                moveCursor(field, currentArrayPosition, direction, toggleEdgeJump);
+                inputKeyB == getchar();
+                inputKeyC = getchar();
+                if (inputKeyC == KEY_UP)
+                {
+                    Direction direction = Direction::UP;
+                    moveCursor(field, currentArrayPosition, direction, toogleEdgeJumpP);
+                }
+                else if (inputKeyC == KEY_DOWN)
+                {
+                    Direction direction = Direction::DOWN;
+                    moveCursor(field, currentArrayPosition, direction, toogleEdgeJumpP);
+                }
+                else if (inputKeyC == KEY_LEFT)
+                {
+                    Direction direction = Direction::LEFT;
+                    moveCursor(field, currentArrayPosition, direction, toogleEdgeJumpP);
+                }
+                else if (inputKeyC == KEY_RIGHT)
+                {
+                    Direction direction = Direction::RIGHT;
+                    moveCursor(field, currentArrayPosition, direction, toogleEdgeJumpP);
+                }
             }
-            else if (inputKey == KEY_DOWN)
+            else if (inputKeyA == 'q' || inputKeyA == 'Q')
             {
-                Direction direction = Direction::DOWN;
-                moveCursor(field, currentArrayPosition, direction, toggleEdgeJump);
+                common.clearScreen();
+                showBlinkingCursor(true);
+                exit (0);
             }
-            else if (inputKey == KEY_LEFT)
+            else if (inputKeyA == 'h' || inputKeyA == 'H')
             {
-                Direction direction = Direction::LEFT;
-                moveCursor(field, currentArrayPosition, direction, toggleEdgeJump);
+                helpToggle(field, currentArrayPosition);
+                continue;
             }
-            else if (inputKey == KEY_RIGHT)
+            else if (inputKeyA == 'f' || inputKeyA == 'F')
             {
-                Direction direction = Direction::RIGHT;
-                moveCursor(field, currentArrayPosition, direction, toggleEdgeJump);
+                Solver solver;
+                solver.autoPlaceFlagsRecursive(field);
+                userInput.isAutoFlag = true;
+                break;
             }
-            else if (inputKey == KEY_ENTER)
+            else if (inputKeyA == 'e' || inputKeyA == 'E')
+            {                
+                toggleEdgeJump == true ? toggleEdgeJump = false : toggleEdgeJump = true;
+            }
+            else if (inputKeyA == 'c' || inputKeyA == 'C')
+            {                
+                toggleEdgeJump == true ? toggleEdgeJump = false : toggleEdgeJump = true;
+            }
+            else if (inputKeyA == KEY_ENTER)
             {
                 std::cout << "\b" << std::flush;
                 if (field.getCoordsContent(currentArrayPosition) == symbols.symbolFlag)
@@ -634,7 +667,7 @@ Common::UserInputReturnStruct Input::getUserInput(Field &field, int firstrun)
                     break;
                 }
             }
-            else if (inputKey == KEY_SPACE)
+            else if (inputKeyA == KEY_SPACE)
             {
                 std::cout << "\b" << std::flush;
                 if (field.isNumber(currentArrayPosition) || field.getCoordsContent(currentArrayPosition) == " ")
@@ -646,28 +679,6 @@ Common::UserInputReturnStruct Input::getUserInput(Field &field, int firstrun)
                     userInput.isFlag = true;
                     break;
                 }
-            }
-            else if (inputKey == 'q' || inputKey == 'Q')
-            {
-                common.clearScreen();
-                showBlinkingCursor(true);
-                exit (0);
-            }
-            else if (inputKey == 'h' || inputKey == 'H')
-            {
-                helpToggle(field, currentArrayPosition);
-                continue;
-            }
-            else if (inputKey == 'f' || inputKey == 'F')
-            {
-                Solver solver;
-                solver.autoPlaceFlagsRecursive(field);
-                userInput.isAutoFlag = true;
-                break;
-            }
-            else if (inputKey == 'e' || inputKey == 'E')
-            {                
-                toggleEdgeJump == true ? toggleEdgeJump = false : toggleEdgeJump = true;
             }
             else
             {
