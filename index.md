@@ -17,31 +17,6 @@ A console based version of Minesweeper to teach myself C++.
 - press "b" or "B" during a game to toggle cursor jump on or off (when cursor reaches one edge, jump to opposite edge - this can be useful on large game fields)
 - TODO: add a demo mode (kind of "A.I.")
 
-It compiles and runs in Linux and Windows but might look a bit different on both, depending on the terminal(-settings) used.<br/><br/>
-Not every (graphical) terminal program in Linux seems to support automatic resizing. Your terminal program needs to support control sequences. To enable them for xterm and compatible terminals edit <br/>
-```~/.Xdefaults```<br/>
-```
-*VT100.allowWindowOps: true
-*VT100.allowTitleOps: true
-*VT100.allowFontOps: true
-```
-Then log out and log back in.
-
-## Compilation:
-
-To compile you need a c++ compiler (like clang or gcc with g++) and optionally cmake (with e.g. make or ninja). No extra libraries needed.
-
-***Example for cmake and ninja in Linux:***
-
-```
-git clone https://github.com/q-g-j/minesweeper.git
-mkdir -p minesweeper/build
-cd minesweeper/build
-cmake -G "Ninja" ..
-cmake --build .
-```
-
-
 <!-- ## Welcome to GitHub Pages
 
 You can use the [editor on GitHub](https://github.com/q-g-j/minesweeper/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
