@@ -38,11 +38,9 @@ void Solver::autoPlaceFlagsRecursive(Field& field)
                 {
                     for (size_t k = 0; k < coveredVector.size(); ++k)
                     {
+                        if (std::find(poolCoveredVector.begin(), poolCoveredVector.end(), common.coordsToInt(coveredVector.at(0), field.getCols())) == poolCoveredVector.end())
                         {
-                            if (std::find(poolCoveredVector.begin(), poolCoveredVector.end(), common.coordsToInt(coveredVector.at(0), field.getCols())) == poolCoveredVector.end())
-                            {
-                                poolCoveredVector.push_back(common.coordsToInt(coveredVector.at(k), field.getCols()));
-                            }
+                            poolCoveredVector.push_back(common.coordsToInt(coveredVector.at(k), field.getCols()));
                         }
                     }
                 }
@@ -71,7 +69,7 @@ void Solver::autoPlaceFlagsRecursive(Field& field)
     // For each number on the game field, create a vector holding the neighbor flags and
     // a vector of covered neighbors.
     // Then, if the number of found flags matches the number inside the current cell and
-    // if there are any covered neighbors, run field.flagAutoUncover on the current cell:
+    // if there are any covered neighbors, run field.flagAutoUncover() on the current cell:
     bool ranFlagAutoUncover = false;
     for (int col = 1; col <= field.getCols(); ++col)
     {
