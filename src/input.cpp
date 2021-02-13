@@ -603,30 +603,33 @@ Common::UserInputReturnStruct Input::getUserInput(Field &field, int firstrun)
 
         while (true)
         {
-            inputKeyA = getchar();            
+            inputKeyA = getchar();
             if (inputKeyA == 27)
             {
-                inputKeyB == getchar();
+                inputKeyB = getchar();
                 inputKeyC = getchar();
-                if (inputKeyC == KEY_UP)
+                if (inputKeyB == 91)
                 {
-                    Direction direction = Direction::UP;
-                    moveCursor(field, currentArrayPosition, direction, toogleEdgeJumpP);
-                }
-                else if (inputKeyC == KEY_DOWN)
-                {
-                    Direction direction = Direction::DOWN;
-                    moveCursor(field, currentArrayPosition, direction, toogleEdgeJumpP);
-                }
-                else if (inputKeyC == KEY_LEFT)
-                {
-                    Direction direction = Direction::LEFT;
-                    moveCursor(field, currentArrayPosition, direction, toogleEdgeJumpP);
-                }
-                else if (inputKeyC == KEY_RIGHT)
-                {
-                    Direction direction = Direction::RIGHT;
-                    moveCursor(field, currentArrayPosition, direction, toogleEdgeJumpP);
+                    if (inputKeyC == KEY_UP)
+                    {
+                        Direction direction = Direction::UP;
+                        moveCursor(field, currentArrayPosition, direction, toogleEdgeJumpP);
+                    }
+                    else if (inputKeyC == KEY_DOWN)
+                    {
+                        Direction direction = Direction::DOWN;
+                        moveCursor(field, currentArrayPosition, direction, toogleEdgeJumpP);
+                    }
+                    else if (inputKeyC == KEY_LEFT)
+                    {
+                        Direction direction = Direction::LEFT;
+                        moveCursor(field, currentArrayPosition, direction, toogleEdgeJumpP);
+                    }
+                    else if (inputKeyC == KEY_RIGHT)
+                    {
+                        Direction direction = Direction::RIGHT;
+                        moveCursor(field, currentArrayPosition, direction, toogleEdgeJumpP);
+                    }
                 }
             }
             else if (inputKeyA == 'q' || inputKeyA == 'Q')
@@ -646,10 +649,6 @@ Common::UserInputReturnStruct Input::getUserInput(Field &field, int firstrun)
                 solver.autoPlaceFlagsRecursive(field);
                 userInput.isAutoFlag = true;
                 break;
-            }
-            else if (inputKeyA == 'e' || inputKeyA == 'E')
-            {                
-                toggleEdgeJump == true ? toggleEdgeJump = false : toggleEdgeJump = true;
             }
             else if (inputKeyA == 'c' || inputKeyA == 'C')
             {                

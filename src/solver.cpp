@@ -68,8 +68,8 @@ void Solver::autoPlaceFlagsRecursive(Field& field)
 
     // For each number on the game field, create a vector holding the neighbor flags and
     // a vector of covered neighbors.
-    // Then, if the number of found flags matches the number inside the current cell and
-    // if there are any covered neighbors, run field.flagAutoUncover() on the current cell:
+    // Then, if there are any covered neighbors and if the number of flags matches the 
+    // number inside the current cell run field.flagAutoUncover() on the current cell:
     bool ranFlagAutoUncover = false;
     for (int col = 1; col <= field.getCols(); ++col)
     {
@@ -80,16 +80,18 @@ void Solver::autoPlaceFlagsRecursive(Field& field)
             tempNumberCoords.row = row;
             if (field.isNumber(tempNumberCoords))
             {
-                std::vector<Common::CoordsStruct> neighborsFlagsVector;
                 std::vector<Common::CoordsStruct> neighborsCoveredVector;
-                neighborsFlagsVector = field.findNeighbors(field.field2DVector, tempNumberCoords, symbols.symbolFlag);
                 neighborsCoveredVector = field.findNeighbors(field.field2DVector, tempNumberCoords, symbols.symbolCovered);
-
-                if (neighborsFlagsVector.size() == static_cast<size_t>(common.stringToInt(field.field2DVector[col][row])) && neighborsCoveredVector.size() != 0)
+                if (neighborsCoveredVector.size() != 0)
                 {
-                    Common::PlaceUserInputReturnStruct tempPlaceUserInputReturnStruct;
-                    field.flagAutoUncover(tempNumberCoords, tempPlaceUserInputReturnStruct);
-                    ranFlagAutoUncover = true;
+                    std::vector<Common::CoordsStruct> neighborsFlagsVector;
+                    neighborsFlagsVector = field.findNeighbors(field.field2DVector, tempNumberCoords, symbols.symbolFlag);
+                    if (neighborsFlagsVector.size() == static_cast<size_t>(common.stringToInt(field.field2DVector[col][row])))
+                    {
+                        Common::PlaceUserInputReturnStruct tempPlaceUserInputReturnStruct;
+                        field.flagAutoUncover(tempNumberCoords, tempPlaceUserInputReturnStruct);
+                        ranFlagAutoUncover = true;
+                    }
                 }
             }
         }
