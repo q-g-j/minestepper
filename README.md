@@ -12,7 +12,6 @@ A console based version of Minesweeper to teach myself C++.
 - press ENTER on a number to auto-reveal connected safe cells similar to the Windows-version (if flags are placed right)
 - for the lazy: press "f" or "F" during a game to have the computer place all the flags for you
 - press "c" or "C" during a game to toggle cursor jump on or off (when cursor reaches one edge, jump to opposite edge)
-- TODO: add a demo mode (kind of "A.I.")
 - automatically resize the console window
 - Windows version only: automatically center the console window
 
