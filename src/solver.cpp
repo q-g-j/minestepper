@@ -1,15 +1,34 @@
+#ifdef _DEBUG
+    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+        #define _CRTDBG_MAP_ALLOC
+        #include <stdlib.h>
+        #include <crtdbg.h>
+        #define new new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
+        // Replace _NORMAL_BLOCK with _CLIENT_BLOCK if you want the
+        // allocations to be of _CLIENT_BLOCK type
+    #endif
+#endif
+
 #include <algorithm>
+#include <memory>
 #include <vector>
 
 #include "../include/field.hpp"
 #include "../include/solver.hpp"
 #include "../include/symbols.hpp"
 
+Solver::Solver()
+{
+    common = std::make_unique<Common>();
+    symbols = std::make_unique<Symbols>();
+}
+
+Solver::~Solver()
+{
+}
+
 void Solver::autoPlaceFlagsRecursive(Field& field)
 {
-    Common common;
-    Symbols symbols;
-
     std::vector<int> poolCoveredVector;
 
     // for each cell in field2DVector:
@@ -29,18 +48,18 @@ void Solver::autoPlaceFlagsRecursive(Field& field)
                 // one for neighbor flags
                 std::vector<Common::CoordsStruct> coveredVector;
                 std::vector<Common::CoordsStruct> flagsVector;
-                coveredVector = field.findNeighbors(field.field2DVector, tempCoords, symbols.symbolCovered);
-                flagsVector = field.findNeighbors(field.field2DVector, tempCoords, symbols.symbolFlag);
+                coveredVector = field.findNeighbors(field.field2DVector, tempCoords, symbols->symbolCovered);
+                flagsVector = field.findNeighbors(field.field2DVector, tempCoords, symbols->symbolFlag);
 
                 // if the number of covered neighbors plus the number of neighbor flags matches the current cells number,
                 // add the covered cells to poolCoveredVector:
-                if ((flagsVector.size() + coveredVector.size()) == static_cast<size_t>(common.stringToInt(field.getCoordsContent(tempCoords))))
+                if ((flagsVector.size() + coveredVector.size()) == static_cast<size_t>(common->stringToInt(field.getCoordsContent(tempCoords))))
                 {
                     for (size_t k = 0; k < coveredVector.size(); ++k)
                     {
-                        if (std::find(poolCoveredVector.begin(), poolCoveredVector.end(), common.coordsToInt(coveredVector.at(0), field.getCols())) == poolCoveredVector.end())
+                        if (std::find(poolCoveredVector.begin(), poolCoveredVector.end(), common->coordsToInt(coveredVector.at(0), field.getCols())) == poolCoveredVector.end())
                         {
-                            poolCoveredVector.push_back(common.coordsToInt(coveredVector.at(k), field.getCols()));
+                            poolCoveredVector.push_back(common->coordsToInt(coveredVector.at(k), field.getCols()));
                         }
                     }
                 }
@@ -57,8 +76,8 @@ void Solver::autoPlaceFlagsRecursive(Field& field)
             Field::setCoveredLeft coveredLeft(field);
             Field::setMinesLeft minesLeft(field);
             Field::setFlagsCount flagsCount(field);
-            tempCoords = common.intToCoords(poolCoveredVector.at(i), field.getCols());
-            field.field2DVector[tempCoords.col][tempCoords.row] = symbols.symbolFlag;
+            tempCoords = common->intToCoords(poolCoveredVector.at(i), field.getCols());
+            field.field2DVector[tempCoords.col][tempCoords.row] = symbols->symbolFlag;
             --coveredLeft;
             --minesLeft;
             ++flagsCount;
@@ -81,12 +100,12 @@ void Solver::autoPlaceFlagsRecursive(Field& field)
             if (field.isNumber(tempNumberCoords))
             {
                 std::vector<Common::CoordsStruct> neighborsCoveredVector;
-                neighborsCoveredVector = field.findNeighbors(field.field2DVector, tempNumberCoords, symbols.symbolCovered);
+                neighborsCoveredVector = field.findNeighbors(field.field2DVector, tempNumberCoords, symbols->symbolCovered);
                 if (neighborsCoveredVector.size() != 0)
                 {
                     std::vector<Common::CoordsStruct> neighborsFlagsVector;
-                    neighborsFlagsVector = field.findNeighbors(field.field2DVector, tempNumberCoords, symbols.symbolFlag);
-                    if (neighborsFlagsVector.size() == static_cast<size_t>(common.stringToInt(field.field2DVector[col][row])))
+                    neighborsFlagsVector = field.findNeighbors(field.field2DVector, tempNumberCoords, symbols->symbolFlag);
+                    if (neighborsFlagsVector.size() == static_cast<size_t>(common->stringToInt(field.field2DVector[col][row])))
                     {
                         Common::PlaceUserInputReturnStruct tempPlaceUserInputReturnStruct;
                         field.flagAutoUncover(tempNumberCoords, tempPlaceUserInputReturnStruct);

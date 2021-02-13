@@ -7,9 +7,22 @@
     void disableNonCanonicalMode();
 #endif
 
+// forward declarations of classes:
+class Colors;
+class Common;
+class Print;
+class Symbols;
+class Field;
+
 class Input
 {
 private:
+    // declare class objects as unique pointers:
+    std::unique_ptr<Colors> colors;
+    std::unique_ptr<Common> common;
+    std::unique_ptr<Print> print;
+    std::unique_ptr<Symbols> symbols;
+
     enum class Direction : int
     {
         UP, DOWN, LEFT, RIGHT
@@ -31,10 +44,15 @@ private:
         const char KEY_SPACE = ' ';
     #endif
 
+    // private methods:
     void moveCursor(Field&, Common::CoordsStruct&, Direction&, bool*);
     void helpToggle(Field&, Common::CoordsStruct const&);
 
 public:
+    Input();
+    ~Input();
+
+    // public methods:
     int getInputDifficulty();
     Common::CoordsStruct getInputCustomDimensions();
     int getInputCustomMinesCount(int const&);

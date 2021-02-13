@@ -1,4 +1,19 @@
+#ifdef _DEBUG
+    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+        #define _CRTDBG_MAP_ALLOC
+        #include <stdlib.h>
+        #include <crtdbg.h>
+        #define new new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
+        // Replace _NORMAL_BLOCK with _CLIENT_BLOCK if you want the
+        // allocations to be of _CLIENT_BLOCK type
+    #endif
+#endif
+
 #include <iostream>
+
+#if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+    #include <windows.h>
+#endif
 
 #include "../include/colors.hpp"
 #include "../include/common.hpp"
@@ -8,12 +23,14 @@
 #include "../include/print.hpp"
 #include "../include/solver.hpp"
 
-#if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-    #include <windows.h>
-#endif
-
 int main()
 {
+    #if defined(_DEBUG)
+        #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+            _CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );        
+        #endif
+    #endif
+
     Colors colors;
     Common common;
     Input input;
@@ -67,7 +84,12 @@ int main()
             common.centerWindow();
             input.showBlinkingCursor(false);
         #endif
-        difficulty = input.getInputDifficulty();
+
+        #if MEM_LEAK_TEST_LOOP == 1
+            difficulty = 1;
+        #else
+            difficulty = input.getInputDifficulty();
+        #endif
 
         if (difficulty == 1)
         {
@@ -148,7 +170,14 @@ int main()
             field.gotoXY(1, fieldOffsetY + field.getRows()*2 + 4);
 
             input.showBlinkingCursor(false);
-            userInput = input.getUserInput(field, firstrun);
+
+            #if MEM_LEAK_TEST_LOOP == 1
+                userInput.Coords.col = 3;
+                userInput.Coords.row = 3;
+            #else
+                userInput = input.getUserInput(field, firstrun);
+            #endif
+
             firstrun = 0;
             
             placeUserInputReturn = field.placeUserInput(userInput, turn);

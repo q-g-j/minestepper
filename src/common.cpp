@@ -1,11 +1,19 @@
+#ifdef _DEBUG
+    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+        #define _CRTDBG_MAP_ALLOC
+        #include <stdlib.h>
+        #include <crtdbg.h>
+        #define new new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
+        // Replace _NORMAL_BLOCK with _CLIENT_BLOCK if you want the
+        // allocations to be of _CLIENT_BLOCK type
+    #endif
+#endif
+
 #include <codecvt>
 #include <iostream>
 #include <locale>
 #include <string>
 #include "time.h"
-
-#include "../include/common.hpp"
-#include "../include/debug.hpp"
 
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
     #include <fcntl.h>
@@ -15,6 +23,9 @@
     #include <windows.h>
     #include <wingdi.h>
 #endif
+
+#include "../include/common.hpp"
+#include "../include/debug.hpp"
 
 // using convert_t = std::codecvt_utf8<wchar_t>;
 // std::wstring_convert<convert_t, wchar_t> strconverter;

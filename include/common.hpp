@@ -60,24 +60,18 @@ public:
         bool isTurn = false;
     };
 
-    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-        int stringToInt(std::wstring);
-    #else        
-        int stringToInt(std::string);
-    #endif
-
+    // public methods:
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         stringconv intToString(int const&);
         // stringconv stringConvert(std::string const&);
-    #else
-        std::string intToString(int const&);
-        // std::string stringConvert(std::wstring const&);
-    #endif
-
-    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+        int stringToInt(stringconv);
         void setWindowProperties();
         void centerWindow();
         void setUnicode(bool);
+    #else
+        stringconv intToString(int const&);
+        // stringconv stringConvert(std::wstring const&);
+        int stringToInt(stringconv);
     #endif
 
     void resizeConsole(int const&, int const&);

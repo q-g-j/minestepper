@@ -1,11 +1,19 @@
 #pragma once
 
+#include <memory>
 #include <random>
 #include <string>
 #include <vector>
 
 #include "../include/common.hpp"
 #include "../include/debug.hpp"
+
+// forward declarations of classes:
+class Colors;
+class Common;
+class Input;
+class Print;
+class Symbols;
 
 class Field
 {
@@ -22,11 +30,18 @@ private:
     int flagsCount;
     std::string difficultyString;
 
+    // declare class objects as unique pointers:
+    std::unique_ptr<Colors> colors;
+    std::unique_ptr<Common> common;
+    std::unique_ptr<Input> input;
+    std::unique_ptr<Print> print;
+    std::unique_ptr<Symbols> symbols;
+
     // random number generator:
     std::random_device rng;
     std::mt19937 urng;
 
-    // private methods
+    // private methods:
     std::vector<std::vector<stringconv>> create2DVector(std::string const&);
     void fillMines(Common::CoordsStruct const&);
     void gameWon();

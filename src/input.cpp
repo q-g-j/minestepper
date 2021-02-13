@@ -1,8 +1,28 @@
+#ifdef _DEBUG
+    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+        #define _CRTDBG_MAP_ALLOC
+        #include <stdlib.h>
+        #include <crtdbg.h>
+        #define new new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
+        // Replace _NORMAL_BLOCK with _CLIENT_BLOCK if you want the
+        // allocations to be of _CLIENT_BLOCK type
+    #endif
+#endif
+
 #include <iostream>
 #include <math.h>
+#include <memory>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string>
+
+#if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+    #include <conio.h>
+    #include <windows.h>
+#else
+    #include <termios.h>
+    #include <unistd.h>
+#endif
 
 #include "../include/colors.hpp"
 #include "../include/common.hpp"
@@ -12,14 +32,6 @@
 #include "../include/print.hpp"
 #include "../include/solver.hpp"
 #include "../include/symbols.hpp"
-
-#if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-    #include <conio.h>
-    #include <windows.h>
-#else
-    #include <termios.h>
-    #include <unistd.h>
-#endif
 
 // Linux: need to enable "non canonical mode" to make arrow keys and SPACE work (no need to press ENTER):
 #if !defined(_WIN32) && !defined(WIN32) && !defined(_WIN64) && !defined(WIN64)
@@ -43,12 +55,23 @@
 
 #endif
 
+Input::Input()
+{
+    colors = std::make_unique<Colors>();
+    common = std::make_unique<Common>();
+    print = std::make_unique<Print>();
+    symbols = std::make_unique<Symbols>();
+}
+
+Input::~Input()
+{
+}
+
 void Input::getInputEnterKey(std::string const& text)
 {
-    Colors colors;
-    std::cout << colors.setTextColor(colors.fg_white);
+    std::cout << colors->setTextColor(colors->fg_white);
     std::cout << text << std::flush;
-    std::cout << colors.setTextColor(colors.color_default);
+    std::cout << colors->setTextColor(colors->color_default);
 
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         while (true)
@@ -110,12 +133,9 @@ void Input::showBlinkingCursor(bool show)
 // custom mode: ask user for the game mode (difficulty):
 int Input::getInputDifficulty()
 {
-    Common common;
-    Print print;
-
     int difficulty = 0;
 
-    print.printMenu();
+    print->printMenu();
 
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         while (true)
@@ -123,7 +143,7 @@ int Input::getInputDifficulty()
             int inputKey = 0;
             if ((inputKey = _getch()) == 'q' || inputKey == 'Q')
             {
-                common.clearScreen();
+                common->clearScreen();
                 showBlinkingCursor(true);
                 exit (0);
             }
@@ -159,7 +179,7 @@ int Input::getInputDifficulty()
         {
             if (inputKey == 'q' || inputKey == 'Q')
             {
-                common.clearScreen();
+                common->clearScreen();
                 showBlinkingCursor(true);
                 exit (0);
             }
@@ -196,27 +216,23 @@ int Input::getInputDifficulty()
 // custom mode: ask user for the size of the field:
 Common::CoordsStruct Input::getInputCustomDimensions()
 {
-    Colors colors;
-    Common common;
-    Print print;
-
     Common::CoordsStruct dimensions;
     std::string line = "";
     int beforeX = 0;
     int afterX = 0;
     bool isValidInput = false;
 
-    print.printCustomGetDimensions();
+    print->printCustomGetDimensions();
 
     while (true)
     {
-        std::cout << colors.setTextColor(colors.fg_white);
-        std::cout << print.inputText;
-        std::cout << colors.setTextColor(colors.color_default);
+        std::cout << colors->setTextColor(colors->fg_white);
+        std::cout << print->inputText;
+        std::cout << colors->setTextColor(colors->color_default);
         getline(std::cin, line);
         if (line == "q" || line == "Q")
         {
-            common.clearScreen();
+            common->clearScreen();
             showBlinkingCursor(true);
             exit (0);
         }
@@ -271,9 +287,9 @@ Common::CoordsStruct Input::getInputCustomDimensions()
         }
         else
         {
-            getInputEnterKey(print.wrongInputText);
-            common.deleteLastLine(print.wrongInputText.length());
-            common.deleteLastLine(print.inputText.length() + line.length());
+            getInputEnterKey(print->wrongInputText);
+            common->deleteLastLine(print->wrongInputText.length());
+            common->deleteLastLine(print->inputText.length() + line.length());
         }
     }
 }
@@ -281,26 +297,22 @@ Common::CoordsStruct Input::getInputCustomDimensions()
 // custom mode: ask user for the number of mines:
 int Input::getInputCustomMinesCount(int const& fieldSize)
 {
-    Colors colors;
-    Common common;
-    Print print;
-
     std::string line = "";
     int minesTotal = 0;
     bool isValidInput = false;
 
-    common.clearScreen();
-    print.printCustomGetMinesCount();
+    common->clearScreen();
+    print->printCustomGetMinesCount();
 
     while (true)
     {
-        std::cout << colors.setTextColor(colors.fg_white);
-        std::cout << print.inputText;
-        std::cout << colors.setTextColor(colors.color_default);
+        std::cout << colors->setTextColor(colors->fg_white);
+        std::cout << print->inputText;
+        std::cout << colors->setTextColor(colors->color_default);
         getline(std::cin, line);
         if (line == "q" || line == "Q")
         {
-            common.clearScreen();
+            common->clearScreen();
             showBlinkingCursor(true);
             exit (0);
         }
@@ -330,57 +342,52 @@ int Input::getInputCustomMinesCount(int const& fieldSize)
         }
         else
         {
-            getInputEnterKey(print.wrongInputText);
-            common.deleteLastLine(print.wrongInputText.length());
-            common.deleteLastLine(print.inputText.length() + line.length());
+            getInputEnterKey(print->wrongInputText);
+            common->deleteLastLine(print->wrongInputText.length());
+            common->deleteLastLine(print->inputText.length() + line.length());
         }
     }
 }
 
 void Input::helpToggle(Field &field, Common::CoordsStruct const& currentArrayPosition)
 {
-    Colors colors;
-    Common common;
-    Print print;
-    Symbols symbols;
-
-    common.resizeConsole(107, 26);
+    common->resizeConsole(107, 26);
 
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-        common.centerWindow();
-        common.setUnicode(false);
+        common->centerWindow();
+        common->setUnicode(false);
         showBlinkingCursor(false);
     #endif
 
     Common::CoordsStruct currentCursorPosition;
-    common.clearScreen();
-    print.printExplanation();
+    common->clearScreen();
+    print->printExplanation();
     getInputEnterKey("");
-    common.resizeConsole(field.getOffsetX() + (field.getCols() * 4) + field.getOffsetX() - 3, field.getOffsetY() + (field.getRows() * 2) + 5);
+    common->resizeConsole(field.getOffsetX() + (field.getCols() * 4) + field.getOffsetX() - 3, field.getOffsetY() + (field.getRows() * 2) + 5);
 
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-        common.centerWindow();
+        common->centerWindow();
     #endif
 
-    common.clearScreen();
+    common->clearScreen();
     field.gotoXY(field.getOffsetX() - 1, 1);
-    print.printTitle(field.getDifficultyString(), field.getCols(), field.getRows(), field.getMinesTotal());
+    print->printTitle(field.getDifficultyString(), field.getCols(), field.getRows(), field.getMinesTotal());
     field.gotoXY(1, 3);
     field.drawField();
     std::cout << newline;
     field.gotoXY(field.getOffsetX() - 1, field.getOffsetY() - 2);
-    std::cout << colors.setTextColor(colors.fg_light_red);
-    std::cout << field.getMinesLeft() << print.minesLeftText << std::flush;
-    std::cout << colors.setTextColor(colors.color_default);
+    std::cout << colors->setTextColor(colors->fg_light_red);
+    std::cout << field.getMinesLeft() << print->minesLeftText << std::flush;
+    std::cout << colors->setTextColor(colors->color_default);
     field.gotoXY(field.getOffsetX() - 1, field.getOffsetY() + field.getRows()*2);
-    std::cout << colors.setTextColor(colors.fg_white);
-    std::cout << print.getHelpText << newline << newline;
-    std::cout << colors.setTextColor(colors.color_default);
-    currentCursorPosition = common.coordsToCursorPosition(currentArrayPosition, field.getOffsetX(), field.getOffsetY(), field.getCellWidth());
+    std::cout << colors->setTextColor(colors->fg_white);
+    std::cout << print->getHelpText << newline << newline;
+    std::cout << colors->setTextColor(colors->color_default);
+    currentCursorPosition = common->coordsToCursorPosition(currentArrayPosition, field.getOffsetX(), field.getOffsetY(), field.getCellWidth());
     field.gotoXY(currentCursorPosition.col, currentCursorPosition.row);
 
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-        common.setUnicode(false);
+        common->setUnicode(false);
     #endif
 
     field.printCoords(currentArrayPosition, true);
@@ -389,9 +396,6 @@ void Input::helpToggle(Field &field, Common::CoordsStruct const& currentArrayPos
 // move the players cursor in 4 directions with the arrow keys:
 void Input::moveCursor(Field &field, Common::CoordsStruct& currentArrayPosition, Direction &direction, bool *toggleEdgeJump)
 {
-    Common common;
-    Symbols symbols;
-
     Common::CoordsStruct currentCursorPosition;
     std::wcout << L"\b";
     if (direction == Direction::UP)
@@ -458,7 +462,7 @@ void Input::moveCursor(Field &field, Common::CoordsStruct& currentArrayPosition,
             ++currentArrayPosition.col;
         }
     }
-    currentCursorPosition = common.coordsToCursorPosition(currentArrayPosition, field.getOffsetX(), field.getOffsetY(), field.getCellWidth());
+    currentCursorPosition = common->coordsToCursorPosition(currentArrayPosition, field.getOffsetX(), field.getOffsetY(), field.getCellWidth());
     field.gotoXY(currentCursorPosition.col, currentCursorPosition.row);
     field.printCoords(currentArrayPosition, true);
 }
@@ -466,11 +470,6 @@ void Input::moveCursor(Field &field, Common::CoordsStruct& currentArrayPosition,
 // the main function to get the users input during a game:
 Common::UserInputReturnStruct Input::getUserInput(Field &field, int firstrun)
 {
-    Colors colors;
-    Common common;
-    Print print;
-    Symbols symbols;
-
     static Common::CoordsStruct currentArrayPosition;
     Common::CoordsStruct currentCursorPosition;
     Common::UserInputReturnStruct userInput;
@@ -479,9 +478,9 @@ Common::UserInputReturnStruct Input::getUserInput(Field &field, int firstrun)
     toogleEdgeJumpP = &toggleEdgeJump;
 
     field.gotoXY(field.getOffsetX() - 1, field.getOffsetY() + field.getRows() * 2);
-    std::cout << colors.setTextColor(colors.fg_white);
-    std::cout << print.getHelpText << newline << newline;
-    std::cout << colors.setTextColor(colors.color_default);
+    std::cout << colors->setTextColor(colors->fg_white);
+    std::cout << print->getHelpText << newline << newline;
+    std::cout << colors->setTextColor(colors->color_default);
 
     if (firstrun == 1)
     {
@@ -503,11 +502,11 @@ Common::UserInputReturnStruct Input::getUserInput(Field &field, int firstrun)
         }
     }
 
-    currentCursorPosition = common.coordsToCursorPosition(currentArrayPosition, field.getOffsetX(), field.getOffsetY(), field.getCellWidth());
+    currentCursorPosition = common->coordsToCursorPosition(currentArrayPosition, field.getOffsetX(), field.getOffsetY(), field.getCellWidth());
     field.gotoXY(currentCursorPosition.col, currentCursorPosition.row);
 
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-        common.setUnicode(true);
+        common->setUnicode(true);
         field.printCoords(currentArrayPosition, true);
 
         int inputKeyA;
@@ -541,7 +540,7 @@ Common::UserInputReturnStruct Input::getUserInput(Field &field, int firstrun)
             }
             else if (inputKeyA == 'q' || inputKeyA == 'Q')
             {
-                common.clearScreen();
+                common->clearScreen();
                 showBlinkingCursor(true);
                 exit (0);
             }
@@ -564,7 +563,7 @@ Common::UserInputReturnStruct Input::getUserInput(Field &field, int firstrun)
             else if (inputKeyA == KEY_ENTER)
             {
                 coutconv << L"\b" << std::flush;
-                if (field.getCoordsContent(currentArrayPosition) == symbols.symbolFlag)
+                if (field.getCoordsContent(currentArrayPosition) == symbols->symbolFlag)
                 {
                     continue;
                 }
@@ -591,7 +590,7 @@ Common::UserInputReturnStruct Input::getUserInput(Field &field, int firstrun)
                 continue;
             }
         }
-        common.setUnicode(false);
+        common->setUnicode(false);
 
     #else
         enableNonCanonicalMode();
@@ -634,7 +633,7 @@ Common::UserInputReturnStruct Input::getUserInput(Field &field, int firstrun)
             }
             else if (inputKeyA == 'q' || inputKeyA == 'Q')
             {
-                common.clearScreen();
+                common->clearScreen();
                 showBlinkingCursor(true);
                 exit (0);
             }
@@ -657,7 +656,7 @@ Common::UserInputReturnStruct Input::getUserInput(Field &field, int firstrun)
             else if (inputKeyA == KEY_ENTER)
             {
                 std::cout << "\b" << std::flush;
-                if (field.getCoordsContent(currentArrayPosition) == symbols.symbolFlag)
+                if (field.getCoordsContent(currentArrayPosition) == symbols->symbolFlag)
                 {
                     continue;
                 }
