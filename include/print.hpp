@@ -17,8 +17,7 @@ public:
     void printMenu();
     void printCustomGetDimensions();
     void printCustomGetMinesCount();
-    void printHasWon(Field &field);
-    void printHasLost(Field &field);
+    void printHasWon(Field&);
+    void printHasLost(Field&);
     void printExplanation();
-    void deleteLastLine(size_t const&);
 };

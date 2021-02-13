@@ -124,6 +124,42 @@ void Common::resizeConsole(int const& cols, int const& rows)
     }
 #endif
 
+// erase particular lines instead of clearing the whole screen:
+void Common::deleteLastLine(size_t const& stringLength)
+{
+    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+        CONSOLE_SCREEN_BUFFER_INFO cbsi;
+        HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
+        COORD cursorPosition;
+        cursorPosition.X = 0;
+        cursorPosition.Y = 0;
+
+        if (GetConsoleScreenBufferInfo(console, &cbsi))
+        {
+            cursorPosition = cbsi.dwCursorPosition;
+        }
+        --cursorPosition.Y;
+
+        SetConsoleCursorPosition(console, cursorPosition);
+        std::cout << "\r";
+        for (unsigned int i = 0; i < stringLength; ++i)
+        {
+            std::cout << " ";
+        }
+        std::cout << "\r";
+        std::cout << std::flush;
+    #else
+        std::cout << "\x1b[A";
+        std::cout << "\r";
+        for (unsigned int i = 0; i < stringLength; ++i)
+        {
+            std::cout << " ";
+        }
+        std::cout << "\r";
+        std::cout << std::flush;
+    #endif
+}
+
 // clear the whole screen. Used rarely to avoid screen blinking / slow refresh during the game:
 void Common::clearScreen()
 {

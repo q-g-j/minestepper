@@ -273,8 +273,8 @@ Common::CoordsStruct Input::getInputCustomDimensions()
         else
         {
             getInputEnterKey(print.wrongInputText);
-            print.deleteLastLine(print.wrongInputText.length());
-            print.deleteLastLine(print.inputText.length() + line.length());
+            common.deleteLastLine(print.wrongInputText.length());
+            common.deleteLastLine(print.inputText.length() + line.length());
         }
     }
 }
@@ -332,8 +332,8 @@ int Input::getInputCustomMinesCount(int const& fieldSize)
         else
         {
             getInputEnterKey(print.wrongInputText);
-            print.deleteLastLine(print.wrongInputText.length());
-            print.deleteLastLine(print.inputText.length() + line.length());
+            common.deleteLastLine(print.wrongInputText.length());
+            common.deleteLastLine(print.inputText.length() + line.length());
         }
     }
 }
@@ -512,7 +512,6 @@ Common::UserInputReturnStruct Input::getUserInput(Field &field, int firstrun)
 
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         common.setUnicode(true);
-
         field.printCoords(currentArrayPosition, true);
 
         while(1)
@@ -595,10 +594,7 @@ Common::UserInputReturnStruct Input::getUserInput(Field &field, int firstrun)
                 continue;
             }
         }
-
-    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         common.setUnicode(false);
-    #endif
 
     #else
         field.printCoords(currentArrayPosition, true);
@@ -651,7 +647,7 @@ Common::UserInputReturnStruct Input::getUserInput(Field &field, int firstrun)
                 if (currentArrayPosition.row > 1)
                 {
                     Direction direction = Direction::UP;
-                    moveCursor(field, currentArrayPosition, direction);
+                    moveCursor(field, currentArrayPosition, direction, toggleEdgeJump);
                 }
             }
             else if (inputKey == KEY_DOWN)
@@ -659,7 +655,7 @@ Common::UserInputReturnStruct Input::getUserInput(Field &field, int firstrun)
                 if (currentArrayPosition.row < field.getRows())
                 {
                     Direction direction = Direction::DOWN;
-                    moveCursor(field, currentArrayPosition, direction);
+                    moveCursor(field, currentArrayPosition, direction, toggleEdgeJump);
                 }
             }
             else if (inputKey == KEY_LEFT)
@@ -667,7 +663,7 @@ Common::UserInputReturnStruct Input::getUserInput(Field &field, int firstrun)
                 if (currentArrayPosition.col > 1)
                 {
                     Direction direction = Direction::LEFT;
-                    moveCursor(field, currentArrayPosition, direction);
+                    moveCursor(field, currentArrayPosition, direction, toggleEdgeJump);
                 }
             }
             else if (inputKey == KEY_RIGHT)
@@ -675,20 +671,18 @@ Common::UserInputReturnStruct Input::getUserInput(Field &field, int firstrun)
                 if (currentArrayPosition.col < field.getCols())
                 {
                     Direction direction = Direction::RIGHT;
-                    moveCursor(field, currentArrayPosition, direction);
+                    moveCursor(field, currentArrayPosition, direction, toggleEdgeJump);
                 }
             }
             else
                 continue;
         }
+        
+        disableNonCanonicalMode();
     #endif
 
     userInput.Coords.col = currentArrayPosition.col;
     userInput.Coords.row = currentArrayPosition.row;
-
-    #if !defined(_WIN32) && !defined(WIN32) && !defined(_WIN64) && !defined(WIN64)
-        disableNonCanonicalMode();
-    #endif
 
     return userInput;
 }

@@ -82,6 +82,7 @@ public:
 
     void resizeConsole(int const&, int const&);
     void setWindowTitle(std::string const&);
+    void deleteLastLine(size_t const&);
     void clearScreen();
     CoordsStruct intToCoords(int const&, int const&);
     unsigned int coordsToInt(CoordsStruct const&, int const&);

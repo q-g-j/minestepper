@@ -80,9 +80,10 @@ void Print::printCustomGetMinesCount()
 void Print::printHasWon(Field &field)
 {
     Colors colors;
+    Common common;
 
     field.gotoXY(1, 4);
-    deleteLastLine(20);
+    common.deleteLastLine(20);
     field.gotoXY(field.getOffsetX() - 1, field.getOffsetY() - 2);
     std::cout << colors.setTextColor(colors.fg_light_red);
     std::cout << field.getMinesLeft() << minesLeftText << std::flush;
@@ -131,38 +132,4 @@ void Print::printExplanation()
     coutconv << "  Press ENTER to go back...";
     std::cout << colors.setTextColor(colors.color_default);
 
-}// erase particular lines instead of clearing the whole screen:
-void Print::deleteLastLine(size_t const& stringLength)
-{
-    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-        CONSOLE_SCREEN_BUFFER_INFO cbsi;
-        HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
-        COORD cursorPosition;
-        cursorPosition.X = 0;
-        cursorPosition.Y = 0;
-
-        if (GetConsoleScreenBufferInfo(console, &cbsi))
-        {
-            cursorPosition = cbsi.dwCursorPosition;
-        }
-        --cursorPosition.Y;
-
-        SetConsoleCursorPosition(console, cursorPosition);
-        std::cout << "\r";
-        for (unsigned int i = 0; i < stringLength; ++i)
-        {
-            std::cout << " ";
-        }
-        std::cout << "\r";
-        std::cout << std::flush;
-    #else
-        std::cout << "\x1b[A";
-        std::cout << "\r";
-        for (unsigned int i = 0; i < stringLength; ++i)
-        {
-            std::cout << " ";
-        }
-        std::cout << "\r";
-        std::cout << std::flush;
-    #endif
 }
