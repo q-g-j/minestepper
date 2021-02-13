@@ -9,7 +9,6 @@
 #include "../include/solver.hpp"
 
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-//    #define _WIN32_WINNT 0x0500
     #include <windows.h>
 #endif
 
@@ -19,14 +18,14 @@ int main()
     Common common;
     Input input;
     Print print;
+    
+    Common::DifficultyStruct Size;
 
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         common.setWindowProperties();
     #endif
 
     common.setWindowTitle("Minesweeper");
-
-    Common::DifficultyStruct Size;
 
     /* these values can be changed: */
     Size.Small.columns  = 9;
