@@ -38,20 +38,19 @@ Field::Field(int const& cols_, int const& rows_, int const& fieldOffsetX_, int c
     fieldOffsetY(fieldOffsetY_),
     fieldCellWidth(fieldCellWidth_),
     minesTotal(minesTotal_),
+    flagsCount(0),
     difficultyString(difficultyString_),
-    urng(rng())
+    urng(rng()),
+    field2DVector(create2DVector("field")),
+    mines2DVector(create2DVector("mines")),
+    colors(std::make_unique<Colors>()),
+    common(std::make_unique<Common>()),
+    input(std::make_unique<Input>()),
+    print(std::make_unique<Print>()),
+    symbols(std::make_unique<Symbols>())
 {
-    colors = std::make_unique<Colors>();
-    common = std::make_unique<Common>();
-    input = std::make_unique<Input>();
-    print = std::make_unique<Print>();
-    symbols = std::make_unique<Symbols>();
-
-    flagsCount = 0;
     minesLeft = minesTotal_;
     coveredLeft = cols_ * rows_;
-    field2DVector = create2DVector("field");
-    mines2DVector = create2DVector("mines");
 }
 
 // deconstructor:

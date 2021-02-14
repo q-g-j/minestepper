@@ -143,5 +143,4 @@ void Print::printExplanation()
     std::cout << colors->setTextColor(colors->fg_white);
     coutconv << "  Press ENTER to go back...";
     std::cout << colors->setTextColor(colors->color_default);
-
 }

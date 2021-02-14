@@ -27,9 +27,6 @@
 #include "../include/common.hpp"
 #include "../include/debug.hpp"
 
-// using convert_t = std::codecvt_utf8<wchar_t>;
-// std::wstring_convert<convert_t, wchar_t> strconverter;
-
 void Common::setWindowTitle(std::string const& titleText)
 {
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
@@ -86,11 +83,13 @@ void Common::resizeConsole(int const& cols, int const& rows)
     {
         if (sw)
         {
-            _setmode(_fileno(stdout), 0x00020000);
+            int result =_setmode(_fileno(stdout), 0x00020000);
+            if (result == -1) exit(1);
         }
         else
         {
-            _setmode(_fileno(stdout), _O_TEXT);
+            int result = _setmode(_fileno(stdout), _O_TEXT);
+            if (result == -1) exit(1);
         }
     }
 #endif
@@ -110,17 +109,21 @@ void Common::resizeConsole(int const& cols, int const& rows)
 #endif
 
 // for Windows: convert a string to wide string and vice versa:
-// #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-//    std::wstring Common::stringConvert(std::string const& str)
-//    {
-//        return strconverter.from_bytes(str);
-//    }
-// #else
-//    std::string Common::stringConvert(std::wstring const& wstr)
-//    {
-//        return strconverter.to_bytes(wstr);
-//    }
-// #endif
+#if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+std::wstring Common::stringConvert(std::string const& str)
+    {
+        using convert_t = std::codecvt_utf8<wchar_t>;
+        std::wstring_convert<convert_t, wchar_t> strconverter;
+        return strconverter.from_bytes(str);
+    }
+#else
+std::string Common::stringConvert(std::wstring const& wstr)
+    {
+        using convert_t = std::codecvt_utf8<wchar_t>;
+        std::wstring_convert<convert_t, wchar_t> strconverter;
+        return strconverter.to_bytes(wstr);
+    }
+#endif
 
 // convert an integer to string or wide string:
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
