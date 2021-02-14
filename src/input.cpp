@@ -56,11 +56,13 @@
 #endif
 
 Input::Input()
+:
+    colors(std::make_unique<Colors>()),
+    common(std::make_unique<Common>()),
+    print(std::make_unique<Print>()),
+    solver(std::make_unique<Solver>()),
+    symbols(std::make_unique<Symbols>())
 {
-    colors = std::make_unique<Colors>();
-    common = std::make_unique<Common>();
-    print = std::make_unique<Print>();
-    symbols = std::make_unique<Symbols>();
 }
 
 Input::~Input()
@@ -551,8 +553,7 @@ Common::UserInputReturnStruct Input::getUserInput(Field &field, int firstrun)
             }
             else if (inputKeyA == 'f' || inputKeyA == 'F')
             {
-                Solver solver;
-                solver.autoPlaceFlagsRecursive(field);
+                solver->autoPlaceFlagsRecursive(field);
                 userInput.isAutoFlag = true;
                 break;
             }
@@ -645,7 +646,7 @@ Common::UserInputReturnStruct Input::getUserInput(Field &field, int firstrun)
             else if (inputKeyA == 'f' || inputKeyA == 'F')
             {
                 Solver solver;
-                solver.autoPlaceFlagsRecursive(field);
+                solver->autoPlaceFlagsRecursive(field);
                 userInput.isAutoFlag = true;
                 break;
             }

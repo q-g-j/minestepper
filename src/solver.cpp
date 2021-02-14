@@ -18,9 +18,10 @@
 #include "../include/symbols.hpp"
 
 Solver::Solver()
+:
+    common(std::make_unique<Common>()),
+    symbols(std::make_unique<Symbols>())
 {
-    common = std::make_unique<Common>();
-    symbols = std::make_unique<Symbols>();
 }
 
 Solver::~Solver()
@@ -52,7 +53,7 @@ void Solver::autoPlaceFlagsRecursive(Field& field)
                 {
                     std::vector<Common::CoordsStruct> flagsVector;
                     flagsVector = field.findNeighbors(field.field2DVector, tempCoords, symbols->symbolFlag);
-                    
+
                     // if the number of covered neighbors plus the number of neighbor flags matches the current cells number,
                     // add the covered cells to poolCoveredVector:
                     if ((flagsVector.size() + coveredVector.size()) == static_cast<size_t>(common->stringToInt(field.getCoordsContent(tempCoords))))
@@ -93,26 +94,29 @@ void Solver::autoPlaceFlagsRecursive(Field& field)
     // Then, if the number of flags matches the number inside the current cell, run 
     // field.flagAutoUncover() on the current cell:
     bool ranFlagAutoUncover = false;
-    for (int col = 1; col <= field.getCols(); ++col)
+    if (poolCoveredVector.size() != 0)
     {
-        for (int row = 1; row <= field.getRows(); ++row)
+        for (int col = 1; col <= field.getCols(); ++col)
         {
-            Common::CoordsStruct tempNumberCoords;
-            tempNumberCoords.col = col;
-            tempNumberCoords.row = row;
-            if (field.isNumber(tempNumberCoords))
+            for (int row = 1; row <= field.getRows(); ++row)
             {
-                std::vector<Common::CoordsStruct> neighborsCoveredVector;
-                neighborsCoveredVector = field.findNeighbors(field.field2DVector, tempNumberCoords, symbols->symbolCovered);
-                if (neighborsCoveredVector.size() != 0)
+                Common::CoordsStruct tempNumberCoords;
+                tempNumberCoords.col = col;
+                tempNumberCoords.row = row;
+                if (field.isNumber(tempNumberCoords))
                 {
-                    std::vector<Common::CoordsStruct> neighborsFlagsVector;
-                    neighborsFlagsVector = field.findNeighbors(field.field2DVector, tempNumberCoords, symbols->symbolFlag);
-                    if (neighborsFlagsVector.size() == static_cast<size_t>(common->stringToInt(field.field2DVector[col][row])))
+                    std::vector<Common::CoordsStruct> neighborsCoveredVector;
+                    neighborsCoveredVector = field.findNeighbors(field.field2DVector, tempNumberCoords, symbols->symbolCovered);
+                    if (neighborsCoveredVector.size() != 0)
                     {
-                        Common::PlaceUserInputReturnStruct tempPlaceUserInputReturnStruct;
-                        field.flagAutoUncover(tempNumberCoords, tempPlaceUserInputReturnStruct);
-                        ranFlagAutoUncover = true;
+                        std::vector<Common::CoordsStruct> neighborsFlagsVector;
+                        neighborsFlagsVector = field.findNeighbors(field.field2DVector, tempNumberCoords, symbols->symbolFlag);
+                        if (neighborsFlagsVector.size() == static_cast<size_t>(common->stringToInt(field.field2DVector[col][row])))
+                        {
+                            Common::PlaceUserInputReturnStruct tempPlaceUserInputReturnStruct;
+                            field.flagAutoUncover(tempNumberCoords, tempPlaceUserInputReturnStruct);
+                            ranFlagAutoUncover = true;
+                        }
                     }
                 }
             }
@@ -120,7 +124,7 @@ void Solver::autoPlaceFlagsRecursive(Field& field)
     }
 
     // re-run the whole function, if field.flagAutoUncover() was triggered:
-    if (ranFlagAutoUncover == true)
+    if (poolCoveredVector.size() != 0 && ranFlagAutoUncover == true)
     {
         autoPlaceFlagsRecursive(field);
     }

@@ -25,9 +25,10 @@
 #include "../include/symbols.hpp"
 
 Print::Print()
+:    
+    colors(std::make_unique<Colors>()),
+    common(std::make_unique<Common>())
 {
-    colors = std::make_unique<Colors>();
-    common = std::make_unique<Common>();
 }
 
 Print::~Print()
