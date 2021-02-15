@@ -9,7 +9,7 @@ A console based version of Minesweeper to teach myself C++.
 - SPACE: place / remove a flag
 - f or F: computer places all flags
 - r or R: force auto-reveal
-- s or S: repeat the upper 2 recursively
+- s or S: repeat the above 2 recursively
 - c or C: toggle cursor jump to opposite edge on or off
 - h or H: help
 - q or Q: quit
