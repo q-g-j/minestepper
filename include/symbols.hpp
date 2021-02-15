@@ -25,6 +25,9 @@ public:
         const stringconv symbolZero = L" ";
         const stringconv symbolCovered = L"\u2588";
         const stringconv symbolCursor = L"\u2588";
+        const stringconv symbolIsNumber = L"N";
+        const stringconv symbolNumbersArray[9] = { L"V", L"1", L"2", L"3", L"4", L"5", L"6", L"7", L"8" };
+
     #else
         const stringconv symbolCornerTopLeft = "\u250C";
         const stringconv symbolCornerTopRight = "\u2510";
@@ -44,5 +47,7 @@ public:
         const stringconv symbolZero = " ";
         const stringconv symbolCovered = "\u2588";
         const stringconv symbolCursor = "\u2588";
+        const stringconv symbolIsNumber = "N";
+        const stringconv symbolNumbersArray[9] = { "V", "1", "2", "3", "4", "5", "6", "7", "8" };
     #endif
 };

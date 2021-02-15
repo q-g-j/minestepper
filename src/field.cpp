@@ -147,7 +147,7 @@ void Field::setMinesLeft::operator++()
         Common::CoordsStruct tempCoords;
         tempCoords = common->coordsToCursorPosition(coordsOld, this->fieldOffsetX, this->fieldOffsetY, this->fieldCellWidth);
         gotoXY(getOffsetX() - 1 + 17, getOffsetY() - 2);
-        std::cout << "Covered left: " << getCovered() <<  "     " << std::flush;
+        std::cout << "Covered left: " << getCoveredLeft() <<  "     " << std::flush;
         gotoXY(tempCoords.col, tempCoords.row);
     }
 #endif
@@ -638,14 +638,27 @@ bool Field::isNumber(Common::CoordsStruct const& coords)
 }
 
 // find neighbors of a cell at "coords" that hold a given content (passed by variable symbol)
-std::vector<Common::CoordsStruct> Field::findNeighbors(std::vector<std::vector<stringconv>> const& temp2DVector, Common::CoordsStruct const& coords, stringconv const& symbol)
+std::vector<Common::CoordsStruct> Field::findNeighbors(std::vector<std::vector<stringconv>> const& temp2DVector, Common::CoordsStruct const& coords, stringconv const& symbol, bool const& isNumber)
 {
     std::vector<Common::CoordsStruct> neighborsVector;
 
     // top left:
     if (coords.col-1 > 0 && coords.row-1 > 0)
     {
-        if (temp2DVector[coords.col-1][coords.row-1] == symbol)
+        if (isNumber)
+        {
+            for (size_t i = 1; i <=8; ++i )
+            {
+                if (temp2DVector[coords.col-1][coords.row-1] == symbols->symbolNumbersArray[i])
+                {
+                    Common::CoordsStruct tempCoords;
+                    tempCoords.col = coords.col-1;
+                    tempCoords.row = coords.row-1;
+                    neighborsVector.push_back(tempCoords);
+                }
+            }
+        }
+        else if (temp2DVector[coords.col-1][coords.row-1] == symbol)
         {
             Common::CoordsStruct tempCoords;
             tempCoords.col = coords.col-1;
@@ -657,7 +670,20 @@ std::vector<Common::CoordsStruct> Field::findNeighbors(std::vector<std::vector<s
     // top middle:
     if (coords.row-1 > 0)
     {
-        if (temp2DVector[coords.col][coords.row-1] == symbol)
+        if (isNumber)
+        {
+            for (size_t i = 1; i <=8; ++i )
+            {
+                if (temp2DVector[coords.col][coords.row-1] == symbols->symbolNumbersArray[i])
+                {
+                    Common::CoordsStruct tempCoords;
+                    tempCoords.col = coords.col;
+                    tempCoords.row = coords.row-1;
+                    neighborsVector.push_back(tempCoords);
+                }
+            }
+        }
+        else if (temp2DVector[coords.col][coords.row-1] == symbol)
         {
             Common::CoordsStruct tempCoords;
             tempCoords.col = coords.col;
@@ -669,7 +695,20 @@ std::vector<Common::CoordsStruct> Field::findNeighbors(std::vector<std::vector<s
     // top right:
     if (coords.col+1 <= this->cols && coords.row-1 > 0)
     {
-        if (temp2DVector[coords.col+1][coords.row-1] == symbol)
+        if (isNumber)
+        {
+            for (size_t i = 1; i <=8; ++i )
+            {
+                if (temp2DVector[coords.col+1][coords.row-1] == symbols->symbolNumbersArray[i])
+                {
+                    Common::CoordsStruct tempCoords;
+                    tempCoords.col = coords.col+1;
+                    tempCoords.row = coords.row-1;
+                    neighborsVector.push_back(tempCoords);
+                }
+            }
+        }
+        else if (temp2DVector[coords.col+1][coords.row-1] == symbol)
         {
             Common::CoordsStruct tempCoords;
             tempCoords.col = coords.col+1;
@@ -681,7 +720,20 @@ std::vector<Common::CoordsStruct> Field::findNeighbors(std::vector<std::vector<s
     // center right:
     if (coords.col+1 <= this->cols)
     {
-        if (temp2DVector[coords.col+1][coords.row] == symbol)
+        if (isNumber)
+        {
+            for (size_t i = 1; i <=8; ++i )
+            {
+                if (temp2DVector[coords.col+1][coords.row] == symbols->symbolNumbersArray[i])
+                {
+                    Common::CoordsStruct tempCoords;
+                    tempCoords.col = coords.col+1;
+                    tempCoords.row = coords.row;
+                    neighborsVector.push_back(tempCoords);
+                }
+            }
+        }
+        else if (temp2DVector[coords.col+1][coords.row] == symbol)
         {
             Common::CoordsStruct tempCoords;
             tempCoords.col = coords.col+1;
@@ -693,7 +745,20 @@ std::vector<Common::CoordsStruct> Field::findNeighbors(std::vector<std::vector<s
     // bottom right:
     if (coords.col+1 <= this->cols && coords.row+1 <= this->rows)
     {
-        if (temp2DVector[coords.col+1][coords.row+1] == symbol)
+        if (isNumber)
+        {
+            for (size_t i = 1; i <=8; ++i )
+            {
+                if (temp2DVector[coords.col+1][coords.row+1] == symbols->symbolNumbersArray[i])
+                {
+                    Common::CoordsStruct tempCoords;
+                    tempCoords.col = coords.col+1;
+                    tempCoords.row = coords.row+1;
+                    neighborsVector.push_back(tempCoords);
+                }
+            }
+        }
+        else if (temp2DVector[coords.col+1][coords.row+1] == symbol)
         {
             Common::CoordsStruct tempCoords;
             tempCoords.col = coords.col+1;
@@ -705,7 +770,20 @@ std::vector<Common::CoordsStruct> Field::findNeighbors(std::vector<std::vector<s
     // bottom middle:
     if (coords.row+1 <= this->rows)
     {
-        if (temp2DVector[coords.col][coords.row+1] == symbol)
+        if (isNumber)
+        {
+            for (size_t i = 1; i <=8; ++i )
+            {
+                if (temp2DVector[coords.col][coords.row+1] == symbols->symbolNumbersArray[i])
+                {
+                    Common::CoordsStruct tempCoords;
+                    tempCoords.col = coords.col;
+                    tempCoords.row = coords.row+1;
+                    neighborsVector.push_back(tempCoords);
+                }
+            }
+        }
+        else if (temp2DVector[coords.col][coords.row+1] == symbol)
         {
             Common::CoordsStruct tempCoords;
             tempCoords.col = coords.col;
@@ -717,7 +795,20 @@ std::vector<Common::CoordsStruct> Field::findNeighbors(std::vector<std::vector<s
     // bottom left:
     if (coords.col-1 > 0 && coords.row+1 <= this->rows)
     {
-        if (temp2DVector[coords.col-1][coords.row+1] == symbol)
+        if (isNumber)
+        {
+            for (size_t i = 1; i <=8; ++i )
+            {
+                if (temp2DVector[coords.col-1][coords.row+1] == symbols->symbolNumbersArray[i])
+                {
+                    Common::CoordsStruct tempCoords;
+                    tempCoords.col = coords.col-1;
+                    tempCoords.row = coords.row+1;
+                    neighborsVector.push_back(tempCoords);
+                }
+            }
+        }
+        else if (temp2DVector[coords.col-1][coords.row+1] == symbol)
         {
             Common::CoordsStruct tempCoords;
             tempCoords.col = coords.col-1;
@@ -729,7 +820,20 @@ std::vector<Common::CoordsStruct> Field::findNeighbors(std::vector<std::vector<s
     // center left:
     if (coords.col-1 > 0)
     {
-        if (temp2DVector[coords.col-1][coords.row] == symbol)
+        if (isNumber)
+        {
+            for (size_t i = 1; i <=8; ++i )
+            {
+                if (temp2DVector[coords.col-1][coords.row] == symbols->symbolNumbersArray[i])
+                {
+                    Common::CoordsStruct tempCoords;
+                    tempCoords.col = coords.col-1;
+                    tempCoords.row = coords.row;
+                    neighborsVector.push_back(tempCoords);
+                }
+            }
+        }
+        else if (temp2DVector[coords.col-1][coords.row] == symbol)
         {
             Common::CoordsStruct tempCoords;
             tempCoords.col = coords.col-1;
@@ -817,12 +921,12 @@ void Field::autoUncoverRecursive(Common::CoordsStruct const& coords, std::vector
 {
     // create vector holding covered neighbors:
     std::vector<Common::CoordsStruct> neighborsCoveredVector;
-    neighborsCoveredVector = findNeighbors(this->field2DVector, coords, symbols->symbolCovered);
+    neighborsCoveredVector = findNeighbors(this->field2DVector, coords, symbols->symbolCovered, false);
 
     for (size_t i = 0; i < neighborsCoveredVector.size(); ++i)
     {
         std::vector<Common::CoordsStruct> neighborsMinesVector;
-        neighborsMinesVector = findNeighbors(this->mines2DVector, neighborsCoveredVector.at(i), symbols->symbolMine);
+        neighborsMinesVector = findNeighbors(this->mines2DVector, neighborsCoveredVector.at(i), symbols->symbolMine, false);
         if (std::find(poolVector.begin(), poolVector.end(), common->coordsToInt(neighborsCoveredVector.at(i), this->cols)) == poolVector.end())
         {
             if (neighborsMinesVector.size() == 0)
@@ -845,9 +949,9 @@ void Field::autoUncoverRecursive(Common::CoordsStruct const& coords, std::vector
 
             #if DEBUG == 1
                 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-                    Sleep(50);
+                    Sleep(100);
                 #else
-                    usleep(50*1000);
+                    usleep(100*1000);
                 #endif
                 debugPrintCountCovered(coords);
             #endif
@@ -862,27 +966,27 @@ void Field::autoUncoverRecursive(Common::CoordsStruct const& coords, std::vector
 
 void Field::flagAutoUncover(Common::CoordsStruct const& Coords, Common::PlaceUserInputReturnStruct &returnStruct)
 {
-    // create a new vector of surrounding mines:
-    std::vector<Common::CoordsStruct> flagUncoverNeighborsMinesVector;
-    flagUncoverNeighborsMinesVector = findNeighbors(this->mines2DVector, Coords, symbols->symbolMine);
-
     // create a new vector of surrounding flags:
     std::vector<Common::CoordsStruct> flagUncoverNeighborsFlagsVector;
-    flagUncoverNeighborsFlagsVector = findNeighbors(this->field2DVector, Coords, symbols->symbolFlag);
-
-    // create a new vector of surrounding covered squares:
-    std::vector<Common::CoordsStruct> flagUncoverNeighborsCoveredVector;
-    flagUncoverNeighborsCoveredVector = findNeighbors(this->field2DVector, Coords, symbols->symbolCovered);
-
-    // create a new empty vector for missed mines:
-    std::vector<Common::CoordsStruct> flagUncoverMissedMinesVector;
+    flagUncoverNeighborsFlagsVector = findNeighbors(this->field2DVector, Coords, symbols->symbolFlag, false);
 
     // if player has placed some flags around UserInput.Coords:
     if (flagUncoverNeighborsFlagsVector.size() != 0)
     {
+        // create a new vector of surrounding mines:
+        std::vector<Common::CoordsStruct> flagUncoverNeighborsMinesVector;
+        flagUncoverNeighborsMinesVector = findNeighbors(this->mines2DVector, Coords, symbols->symbolMine, false);
+
         // only proceed if the flag number matches the number of actual surrounding mines:
         if (flagUncoverNeighborsMinesVector.size() == flagUncoverNeighborsFlagsVector.size())
         {
+            // create a new vector of surrounding covered squares:
+            std::vector<Common::CoordsStruct> flagUncoverNeighborsCoveredVector;
+            flagUncoverNeighborsCoveredVector = findNeighbors(this->field2DVector, Coords, symbols->symbolCovered, false);
+
+            // create a new empty vector for missed mines:
+            std::vector<Common::CoordsStruct> flagUncoverMissedMinesVector;
+
             // for each covered neighbor of userInput.Coords check if the player has missed a mine
             // and add this mines position to flagUncoverMissedMinesVector:
             for (size_t i = 0; i < flagUncoverNeighborsCoveredVector.size(); ++i)
@@ -916,7 +1020,7 @@ void Field::flagAutoUncover(Common::CoordsStruct const& Coords, Common::PlaceUse
                         tempCoords.col = flagUncoverNeighborsCoveredVector.at(i).col;
                         tempCoords.row = flagUncoverNeighborsCoveredVector.at(i).row;
                         std::vector<Common::CoordsStruct> flagUncoverNeighborsCoveredMinesVector;
-                        flagUncoverNeighborsCoveredMinesVector = findNeighbors(this->mines2DVector, tempCoords, symbols->symbolMine);
+                        flagUncoverNeighborsCoveredMinesVector = findNeighbors(this->mines2DVector, tempCoords, symbols->symbolMine, false);
 
                         if (flagUncoverNeighborsCoveredMinesVector.size() == 0)
                         {
@@ -1003,7 +1107,7 @@ Common::PlaceUserInputReturnStruct Field::placeUserInput(Common::UserInputReturn
         else
         {
             // uncover the players choice and place the number of surrounding mines in it:
-            std::vector<Common::CoordsStruct> neighborsMinesVector = findNeighbors(this->mines2DVector, userInput.Coords, symbols->symbolMine);
+            std::vector<Common::CoordsStruct> neighborsMinesVector = findNeighbors(this->mines2DVector, userInput.Coords, symbols->symbolMine, false);
             if (neighborsMinesVector.size() == 0)
             {
                 this->field2DVector[userInput.Coords.col][userInput.Coords.row] = symbols->symbolZero;
@@ -1018,7 +1122,7 @@ Common::PlaceUserInputReturnStruct Field::placeUserInput(Common::UserInputReturn
 
             // Call recursive method autoUncoverRecursive() to automatically uncover all connected cells, as long as
             // they have no neighbor mines:
-            std::vector<Common::CoordsStruct> autoUncoverNeighborsMinesVector = findNeighbors(this->mines2DVector, userInput.Coords, symbols->symbolMine);
+            std::vector<Common::CoordsStruct> autoUncoverNeighborsMinesVector = findNeighbors(this->mines2DVector, userInput.Coords, symbols->symbolMine, false);
             if (autoUncoverNeighborsMinesVector.size() == 0)
             {
                 // create a pool of already uncovered cells, to avoid double checks within autoUncoverRecursive():

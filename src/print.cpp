@@ -127,7 +127,7 @@ void Print::printExplanation()
     std::cout << colors->setTextColor(colors->color_default);
     coutconv << "  In this game your task is to find all hidden mines by uncovering all safe positions." << newline << newline;
     coutconv << "  You can guess and sometimes combine where the next mine is." << newline;
-    coutconv << "  The number on each uncovered square shows how many neighbors contain a mine." << newline << newline;
+    coutconv << "  The number on each uncovered square shows how many neighbors contain a mine." << newline;
     coutconv << "  If you're sure that you have found a mine, place a flag on it's position by pressing SPACE." << newline;
     coutconv << "  To remove the flag, just repeat your input. You may place or remove as many flags in a row as you wish." << newline << newline;
     coutconv << "  You can reselect a numbered cell with ENTER to automatically uncover all remaining neighbors," << newline;
@@ -138,7 +138,9 @@ void Print::printExplanation()
     coutconv << "    Arrow Keys:    navigate" << newline;
     coutconv << "    ENTER:         uncover" << newline;
     coutconv << "    SPACE:         place or remove a flag" << newline;
-    coutconv << "    f or F:        let the computer place all the flags for you!" << newline;
+    coutconv << "    f or F:        let the computer place all the flags for you" << newline;
+    coutconv << "    r or R:        trigger auto revealing" << newline;
+    coutconv << "    s or S:        place all flags, auto-reveal and repeat recursively" << newline;
     coutconv << "    c or C:        toggle cursor jump to opposite edge on or off" << newline << newline;
     coutconv << "    q or Q:        quit" << newline << newline;
     std::cout << colors->setTextColor(colors->fg_white);

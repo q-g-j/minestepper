@@ -353,7 +353,7 @@ int Input::getInputCustomMinesCount(int const& fieldSize)
 
 void Input::helpToggle(Field &field, Common::CoordsStruct const& currentArrayPosition)
 {
-    common->resizeConsole(107, 26);
+    common->resizeConsole(107, 27);
 
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         common->centerWindow();
@@ -553,7 +553,19 @@ Common::UserInputReturnStruct Input::getUserInput(Field &field, int firstrun)
             }
             else if (inputKeyA == 'f' || inputKeyA == 'F')
             {
-                solver->autoPlaceFlagsRecursive(field);
+                solver->autoSolve(field, true, false, false);
+                userInput.isAutoFlag = true;
+                break;
+            }
+            else if (inputKeyA == 'r' || inputKeyA == 'R')
+            {
+                solver->autoSolve(field, false, true, false);
+                userInput.isAutoFlag = true;
+                break;
+            }
+            else if (inputKeyA == 's' || inputKeyA == 'S')
+            {
+                solver->autoSolve(field, true, true, true);
                 userInput.isAutoFlag = true;
                 break;
             }
@@ -645,13 +657,24 @@ Common::UserInputReturnStruct Input::getUserInput(Field &field, int firstrun)
             }
             else if (inputKeyA == 'f' || inputKeyA == 'F')
             {
-                Solver solver;
-                solver->autoPlaceFlagsRecursive(field);
+                solver->autoSolve(field, true, false, false);
+                userInput.isAutoFlag = true;
+                break;
+            }
+            else if (inputKeyA == 'r' || inputKeyA == 'R')
+            {
+                solver->autoSolve(field, false, true, false);
+                userInput.isAutoFlag = true;
+                break;
+            }
+            else if (inputKeyA == 's' || inputKeyA == 'S')
+            {
+                solver->autoSolve(field, true, true, true);
                 userInput.isAutoFlag = true;
                 break;
             }
             else if (inputKeyA == 'c' || inputKeyA == 'C')
-            {                
+            {
                 toggleEdgeJump == true ? toggleEdgeJump = false : toggleEdgeJump = true;
             }
             else if (inputKeyA == KEY_ENTER)

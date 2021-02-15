@@ -165,7 +165,7 @@ int main()
             std::cout << colors.setTextColor(colors.color_default);
             #if DEBUG == 1
                 field.gotoXY(field.getOffsetX() - 1 + 17, field.getOffsetY() - 2);
-                std::cout << "Covered left: " << field.getCovered() <<  "     " << std::flush;
+                std::cout << "Covered left: " << field.getCoveredLeft() <<  "     " << std::flush;
             #endif
             field.gotoXY(1, fieldOffsetY + field.getRows()*2 + 4);
 

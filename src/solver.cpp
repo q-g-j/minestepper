@@ -12,6 +12,11 @@
 #include <algorithm>
 #include <memory>
 #include <vector>
+#if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+    #include <windows.h>
+#else
+    #include <unistd.h>
+#endif
 
 #include "../include/field.hpp"
 #include "../include/solver.hpp"
@@ -28,31 +33,31 @@ Solver::~Solver()
 {
 }
 
-void Solver::autoPlaceFlagsRecursive(Field& field)
+void Solver::autoSolve(Field& field, bool doPlaceFlags, bool doFlagAutoUncover, bool doSolve)
 {
     std::vector<int> poolCoveredVector;
 
-    // for each cell in field2DVector:
-    for (int i = 1; i <= field.getCols(); ++i)
+    if (doPlaceFlags)
     {
-        for (int j = 1; j <= field.getRows(); ++j)
+        // for each cell in field2DVector:
+        for (int i = 1; i <= field.getRows(); ++i)
         {
-            Common::CoordsStruct tempCoords;
-            tempCoords.col = i;
-            tempCoords.row = j;
-
-            // if it's a number:
-            if (field.isNumber(tempCoords))
+            for (int j = 1; j <= field.getCols(); ++j)
             {
-                // create 2 vectors: 
-                // one for covered neighbors, 
-                // one for neighbor flags
-                std::vector<Common::CoordsStruct> coveredVector;
-                coveredVector = field.findNeighbors(field.field2DVector, tempCoords, symbols->symbolCovered);
-                if (coveredVector.size() != 0)
+                Common::CoordsStruct tempCoords;
+                tempCoords.row = i;
+                tempCoords.col = j;
+
+                // if it's a number:
+                if (field.isNumber(tempCoords))
                 {
+                    // create 2 vectors: 
+                    // one for covered neighbors, 
+                    // one for neighbor flags
+                    std::vector<Common::CoordsStruct> coveredVector;
+                    coveredVector = field.findNeighbors(field.field2DVector, tempCoords, symbols->symbolCovered, false);
                     std::vector<Common::CoordsStruct> flagsVector;
-                    flagsVector = field.findNeighbors(field.field2DVector, tempCoords, symbols->symbolFlag);
+                    flagsVector = field.findNeighbors(field.field2DVector, tempCoords, symbols->symbolFlag, false);
 
                     // if the number of covered neighbors plus the number of neighbor flags matches the current cells number,
                     // add the covered cells to poolCoveredVector:
@@ -60,7 +65,7 @@ void Solver::autoPlaceFlagsRecursive(Field& field)
                     {
                         for (size_t k = 0; k < coveredVector.size(); ++k)
                         {
-                            if (std::find(poolCoveredVector.begin(), poolCoveredVector.end(), common->coordsToInt(coveredVector.at(0), field.getCols())) == poolCoveredVector.end())
+                            if (std::find(poolCoveredVector.begin(), poolCoveredVector.end(), common->coordsToInt(coveredVector.at(k), field.getCols())) == poolCoveredVector.end())
                             {
                                 poolCoveredVector.push_back(common->coordsToInt(coveredVector.at(k), field.getCols()));
                             }
@@ -69,65 +74,51 @@ void Solver::autoPlaceFlagsRecursive(Field& field)
                 }
             }
         }
-    }
 
-    // place a flag at the coords of each element of poolCoveredVector:
-    if (poolCoveredVector.size() != 0)
-    {
-        for (size_t i = 0; i < poolCoveredVector.size(); ++i)
+        // place a flag at the coords of each element of poolCoveredVector:
+        if (poolCoveredVector.size() != 0)
         {
-            Common::CoordsStruct tempCoords;
-            Field::setCoveredLeft coveredLeft(field);
-            Field::setMinesLeft minesLeft(field);
-            Field::setFlagsCount flagsCount(field);
-            tempCoords = common->intToCoords(poolCoveredVector.at(i), field.getCols());
-            field.field2DVector[tempCoords.col][tempCoords.row] = symbols->symbolFlag;
-            --coveredLeft;
-            --minesLeft;
-            ++flagsCount;
-            field.printCoords(tempCoords, false);
-        }
-    }
-
-    // for each number on the game field, create a vector holding covered neighbors.
-    // If there are any covered neighbors, create a vector holding neighbor flags.
-    // Then, if the number of flags matches the number inside the current cell, run 
-    // field.flagAutoUncover() on the current cell:
-    bool ranFlagAutoUncover = false;
-    if (poolCoveredVector.size() != 0)
-    {
-        for (int col = 1; col <= field.getCols(); ++col)
-        {
-            for (int row = 1; row <= field.getRows(); ++row)
+            for (size_t i = 0; i < poolCoveredVector.size(); ++i)
             {
-                Common::CoordsStruct tempNumberCoords;
-                tempNumberCoords.col = col;
-                tempNumberCoords.row = row;
-                if (field.isNumber(tempNumberCoords))
-                {
-                    std::vector<Common::CoordsStruct> neighborsCoveredVector;
-                    neighborsCoveredVector = field.findNeighbors(field.field2DVector, tempNumberCoords, symbols->symbolCovered);
-                    if (neighborsCoveredVector.size() != 0)
-                    {
-                        std::vector<Common::CoordsStruct> neighborsFlagsVector;
-                        neighborsFlagsVector = field.findNeighbors(field.field2DVector, tempNumberCoords, symbols->symbolFlag);
-                        if (neighborsFlagsVector.size() == static_cast<size_t>(common->stringToInt(field.field2DVector[col][row])))
-                        {
-                            Common::PlaceUserInputReturnStruct tempPlaceUserInputReturnStruct;
-                            field.flagAutoUncover(tempNumberCoords, tempPlaceUserInputReturnStruct);
-                            ranFlagAutoUncover = true;
-                        }
-                    }
-                }
+                Common::CoordsStruct tempCoords;
+                Field::setCoveredLeft coveredLeft(field);
+                Field::setMinesLeft minesLeft(field);
+                Field::setFlagsCount flagsCount(field);
+                tempCoords = common->intToCoords(poolCoveredVector.at(i), field.getCols());
+                field.field2DVector[tempCoords.col][tempCoords.row] = symbols->symbolFlag;
+                --coveredLeft;
+                --minesLeft;
+                ++flagsCount;
+                #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+                    Sleep(100);
+                #else
+                    usleep(100*1000);
+                #endif
+                field.printCoords(tempCoords, false);
             }
         }
     }
 
-    // re-run the whole function, if field.flagAutoUncover() was triggered:
-    if (poolCoveredVector.size() != 0 && ranFlagAutoUncover == true)
+    // run field.flagAutoUncover() on all cells:
+    if (doFlagAutoUncover)
     {
-        autoPlaceFlagsRecursive(field);
+        for (int i = 1; i <= field.getRows(); ++i)
+        {
+            for (int j = 1; j <= field.getCols(); ++j)
+            {
+                Common::CoordsStruct tempCoords;
+                Common::PlaceUserInputReturnStruct tempPlaceUserInputStruct;
+                tempCoords.row = i;
+                tempCoords.col = j;
+                field.flagAutoUncover(tempCoords, tempPlaceUserInputStruct);
+            }
+        }
+    }
+
+    // re-run the whole function, if there are cells in poolCoveredVector or
+    // if its the first run of this function when "s" or "S" (= "solve") was hit:
+    if (poolCoveredVector.size() != 0 || doSolve == true)
+    {
+        autoSolve(field, doPlaceFlags, doFlagAutoUncover, false);
     }
 }
-
-

@@ -15,5 +15,5 @@ public:
     ~Solver();
 
     // public methods:
-    void autoPlaceFlagsRecursive(Field&);
+    void autoSolve(Field&, bool, bool, bool);
 };
