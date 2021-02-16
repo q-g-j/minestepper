@@ -360,119 +360,44 @@ void Field::printCoords(Common::CoordsStruct const& coords, bool isCursor)
         {
             if (isCursor == false)
             {
-                if (getCoordsContent(coords) == L"1")
-                {
-                    SetConsoleTextAttribute(hConsole, colors->fg_number_1);
-                }
-                else if (getCoordsContent(coords) == L"2")
-                {
-                    SetConsoleTextAttribute(hConsole, colors->fg_number_2);
-                }
-                else if (getCoordsContent(coords) == L"3")
-                {
-                    SetConsoleTextAttribute(hConsole, colors->fg_number_3);
-                }
-                else if (getCoordsContent(coords) == L"4")
-                {
-                    SetConsoleTextAttribute(hConsole, colors->fg_number_4);
-                }
-                else if (getCoordsContent(coords) == L"5")
-                {
-                    SetConsoleTextAttribute(hConsole, colors->fg_number_5);
-                }
-                else if (getCoordsContent(coords) == L"6")
-                {
-                    SetConsoleTextAttribute(hConsole, colors->fg_number_6);
-                }
-                else if (getCoordsContent(coords) == L"7")
-                {
-                    SetConsoleTextAttribute(hConsole, colors->fg_number_7);
-                }
-                else if (getCoordsContent(coords) == L"8")
-                {
-                    SetConsoleTextAttribute(hConsole, colors->fg_number_8);
-                }
-                else
-                {
-                    SetConsoleTextAttribute(hConsole, colors->color_default);
-                }
+                if      (getCoordsContent(coords) == L"1") SetConsoleTextAttribute(hConsole, colors->fg_number_1);
+                else if (getCoordsContent(coords) == L"2") SetConsoleTextAttribute(hConsole, colors->fg_number_2);
+                else if (getCoordsContent(coords) == L"3") SetConsoleTextAttribute(hConsole, colors->fg_number_3);
+                else if (getCoordsContent(coords) == L"4") SetConsoleTextAttribute(hConsole, colors->fg_number_4);
+                else if (getCoordsContent(coords) == L"5") SetConsoleTextAttribute(hConsole, colors->fg_number_5);
+                else if (getCoordsContent(coords) == L"6") SetConsoleTextAttribute(hConsole, colors->fg_number_6);
+                else if (getCoordsContent(coords) == L"7") SetConsoleTextAttribute(hConsole, colors->fg_number_7);
+                else if (getCoordsContent(coords) == L"8") SetConsoleTextAttribute(hConsole, colors->fg_number_8);
+                else SetConsoleTextAttribute(hConsole, colors->color_default);
             }
             else
             {
-                if (getCoordsContent(coords) == L"1")
-                {
-                    SetConsoleTextAttribute(hConsole, colors->bg_number_1);
-                }
-                else if (getCoordsContent(coords) == L"2")
-                {
-                    SetConsoleTextAttribute(hConsole, colors->bg_number_2);
-                }
-                else if (getCoordsContent(coords) == L"3")
-                {
-                    SetConsoleTextAttribute(hConsole, colors->bg_number_3);
-                }
-                else if (getCoordsContent(coords) == L"4")
-                {
-                    SetConsoleTextAttribute(hConsole, colors->bg_number_4);
-                }
-                else if (getCoordsContent(coords) == L"5")
-                {
-                    SetConsoleTextAttribute(hConsole, colors->bg_number_5);
-                }
-                else if (getCoordsContent(coords) == L"6")
-                {
-                    SetConsoleTextAttribute(hConsole, colors->bg_number_6);
-                }
-                else if (getCoordsContent(coords) == L"7")
-                {
-                    SetConsoleTextAttribute(hConsole, colors->bg_number_7);
-                }
-                else if (getCoordsContent(coords) == L"8")
-                {
-                    SetConsoleTextAttribute(hConsole, colors->bg_number_8);
-                }
-                else
-                {
-                    SetConsoleTextAttribute(hConsole, colors->color_default);
-                }
+                if      (getCoordsContent(coords) == L"1") SetConsoleTextAttribute(hConsole, colors->bg_number_1);
+                else if (getCoordsContent(coords) == L"2") SetConsoleTextAttribute(hConsole, colors->bg_number_2);
+                else if (getCoordsContent(coords) == L"3") SetConsoleTextAttribute(hConsole, colors->bg_number_3);
+                else if (getCoordsContent(coords) == L"4") SetConsoleTextAttribute(hConsole, colors->bg_number_4);
+                else if (getCoordsContent(coords) == L"5") SetConsoleTextAttribute(hConsole, colors->bg_number_5);
+                else if (getCoordsContent(coords) == L"6") SetConsoleTextAttribute(hConsole, colors->bg_number_6);
+                else if (getCoordsContent(coords) == L"7") SetConsoleTextAttribute(hConsole, colors->bg_number_7);
+                else if (getCoordsContent(coords) == L"8") SetConsoleTextAttribute(hConsole, colors->bg_number_8);
+                else SetConsoleTextAttribute(hConsole, colors->color_default);
             }
         }
         else if (getCoordsContent(coords) == symbols->symbolFlag)
         {
-            if (isCursor)
-            {
-                SetConsoleTextAttribute(hConsole, colors->bg_flag);
-            }
-            else
-            {
-                SetConsoleTextAttribute(hConsole, colors->fg_flag);
-            }
+            if (isCursor) SetConsoleTextAttribute(hConsole, colors->bg_flag);
+            else SetConsoleTextAttribute(hConsole, colors->fg_flag);
         }
-        else if (getCoordsContent(coords) == symbols->symbolMine)
-        {
-            SetConsoleTextAttribute(hConsole, colors->mine);
-        }
-        else if (getCoordsContent(coords) == symbols->symbolMineHit)
-        {
-            SetConsoleTextAttribute(hConsole, colors->minehit);
-        }
+        else if (getCoordsContent(coords) == symbols->symbolMine) SetConsoleTextAttribute(hConsole, colors->mine);
+        else if (getCoordsContent(coords) == symbols->symbolMineHit) SetConsoleTextAttribute(hConsole, colors->minehit);
         else if (getCoordsContent(coords) == symbols->symbolCovered)
         {
-            if (isCursor)
-            {
-                SetConsoleTextAttribute(hConsole, colors->bg_covered);
-            }
-            else
-            {
-                SetConsoleTextAttribute(hConsole, colors->fg_covered);
-            }
+            if (isCursor) SetConsoleTextAttribute(hConsole, colors->bg_covered);
+            else SetConsoleTextAttribute(hConsole, colors->fg_covered);
         }
         else if (getCoordsContent(coords) == symbols->symbolZero)
         {
-            if (isCursor)
-            {
-                SetConsoleTextAttribute(hConsole, colors->bg_covered);
-            }
+            if (isCursor) SetConsoleTextAttribute(hConsole, colors->bg_covered);
         }
         std::wstring coordsString = this->field2DVector[coords.col][coords.row];
         WriteConsoleW(hConsole, coordsString.c_str(), static_cast<DWORD>(coordsString.size()), nullptr, nullptr);
@@ -483,128 +408,47 @@ void Field::printCoords(Common::CoordsStruct const& coords, bool isCursor)
         {
             if (isCursor == false)
             {
-                if (getCoordsContent(coords) == "1")
-                {
-                    content = colors->fg_number_1 + "1";
-                }
-                else if (getCoordsContent(coords) == "2")
-                {
-                    content = colors->fg_number_2 + "2";
-                }
-                else if (getCoordsContent(coords) == "3")
-                {
-                    content = colors->fg_number_3 + "3";
-                }
-                else if (getCoordsContent(coords) == "4")
-                {
-                    content = colors->fg_number_4 + "4";
-                }
-                else if (getCoordsContent(coords) == "5")
-                {
-                    content = colors->fg_number_5 + "5";
-                }
-                else if (getCoordsContent(coords) == "6")
-                {
-                    content = colors->fg_number_6 + "6";
-                }
-                else if (getCoordsContent(coords) == "7")
-                {
-                    content = colors->fg_number_7 + "7";
-                }
-                else if (getCoordsContent(coords) == "8")
-                {
-                    content = colors->fg_number_8 + "8";
-                }
-                else
-                {
-                    content = colors->color_default + (this->field2DVector[coords.col][coords.row]);
-                }
+                if      (getCoordsContent(coords) == "1") content = colors->fg_number_1 + "1";
+                else if (getCoordsContent(coords) == "2") content = colors->fg_number_2 + "2";
+                else if (getCoordsContent(coords) == "3") content = colors->fg_number_3 + "3";
+                else if (getCoordsContent(coords) == "4") content = colors->fg_number_4 + "4";
+                else if (getCoordsContent(coords) == "5") content = colors->fg_number_5 + "5";
+                else if (getCoordsContent(coords) == "6") content = colors->fg_number_6 + "6";
+                else if (getCoordsContent(coords) == "7") content = colors->fg_number_7 + "7";
+                else if (getCoordsContent(coords) == "8") content = colors->fg_number_8 + "8";
+                else content = colors->color_default + (this->field2DVector[coords.col][coords.row]);
             }
             else
             {
-                if (getCoordsContent(coords) == "1")
-                {
-                    content = colors->bg_number_1 + "1";
-                }
-                else if (getCoordsContent(coords) == "2")
-                {
-                    content = colors->bg_number_2 + "2";
-                }
-                else if (getCoordsContent(coords) == "3")
-                {
-                    content = colors->bg_number_3 + "3";
-                }
-                else if (getCoordsContent(coords) == "4")
-                {
-                    content = colors->bg_number_4 + "4";
-                }
-                else if (getCoordsContent(coords) == "5")
-                {
-                    content = colors->bg_number_5 + "5";
-                }
-                else if (getCoordsContent(coords) == "6")
-                {
-                    content = colors->bg_number_6 + "6";
-                }
-                else if (getCoordsContent(coords) == "7")
-                {
-                    content = colors->bg_number_7 + "7";
-                }
-                else if (getCoordsContent(coords) == "8")
-                {
-                    content = colors->bg_number_8 + "8";
-                }
-                else
-                {
-                    content = colors->color_default + (this->field2DVector[coords.col][coords.row]);
-                }
+                if      (getCoordsContent(coords) == "1") content = colors->bg_number_1 + "1";
+                else if (getCoordsContent(coords) == "2") content = colors->bg_number_2 + "2";
+                else if (getCoordsContent(coords) == "3") content = colors->bg_number_3 + "3";
+                else if (getCoordsContent(coords) == "4") content = colors->bg_number_4 + "4";
+                else if (getCoordsContent(coords) == "5") content = colors->bg_number_5 + "5";
+                else if (getCoordsContent(coords) == "6") content = colors->bg_number_6 + "6";
+                else if (getCoordsContent(coords) == "7") content = colors->bg_number_7 + "7";
+                else if (getCoordsContent(coords) == "8") content = colors->bg_number_8 + "8";
+                else content = colors->color_default + (this->field2DVector[coords.col][coords.row]);
             }
         }
         else if (getCoordsContent(coords) == symbols->symbolFlag)
         {
-            if (isCursor)
-            {
-                content = colors->bg_flag + symbols->symbolFlag;
-            }
-            else
-            {
-                content = colors->fg_flag + symbols->symbolFlag;
-            }
+            if (isCursor) content = colors->bg_flag + symbols->symbolFlag;
+            else content = colors->fg_flag + symbols->symbolFlag;
         }
-        else if (getCoordsContent(coords) == symbols->symbolMine)
-        {
-            content = colors->mine + symbols->symbolMine;
-        }
-        else if (getCoordsContent(coords) == symbols->symbolMineHit)
-        {
-            content = colors->minehit + symbols->symbolMineHit;
-        }
+        else if (getCoordsContent(coords) == symbols->symbolMine) content = colors->mine + symbols->symbolMine;
+        else if (getCoordsContent(coords) == symbols->symbolMineHit) content = colors->minehit + symbols->symbolMineHit;
         else if (getCoordsContent(coords) == symbols->symbolCovered)
         {
-            if (isCursor)
-            {
-                content = colors->bg_covered + symbols->symbolCovered;
-            }
-            else
-            {
-                content = colors->fg_covered + symbols->symbolCovered;
-            }
+            if (isCursor) content = colors->bg_covered + symbols->symbolCovered;
+            else content = colors->fg_covered + symbols->symbolCovered;
         }
         else if (getCoordsContent(coords) == symbols->symbolZero)
         {
-            if (isCursor)
-            {
-                content = colors->bg_covered + symbols->symbolCovered;
-            }
-            else
-            {
-                content = colors->bg_covered + symbols->symbolZero;
-            }
+            if (isCursor) content = colors->bg_covered + symbols->symbolCovered;
+            else content = colors->bg_covered + symbols->symbolZero;
         }
-        else
-        {
-            content = colors->color_default + (this->field2DVector[coords.col][coords.row]);
-        }
+        else content = colors->color_default + (this->field2DVector[coords.col][coords.row]);
 
         coutconv << content;
         coutconv << colors->color_default << std::flush;
@@ -641,204 +485,46 @@ bool Field::isNumber(Common::CoordsStruct const& coords)
 std::vector<Common::CoordsStruct> Field::findNeighbors(std::vector<std::vector<stringconv>> const& temp2DVector, Common::CoordsStruct const& coords, stringconv const& symbol, bool const& isNumber)
 {
     std::vector<Common::CoordsStruct> neighborsVector;
+    const int pos[8][2] = {
+        { -1, -1 },
+        {  0, -1 },
+        {  1, -1 },
+        {  1,  0 },
+        {  1,  1 },
+        {  0,  1 },
+        { -1,  1 },
+        { -1,  0 },
+     };
 
-    // top left:
-    if (coords.col-1 > 0 && coords.row-1 > 0)
+    for (size_t x = 0; x < sizeof(pos) / sizeof(pos[0]); ++x)
     {
-        if (isNumber)
+        if (
+            !(coords.col == 1 && pos[x][0] == -1) &&
+            !(coords.row == 1 && pos[x][1] == -1) &&
+            !(coords.col == this->cols && pos[x][0] == 1) &&
+            !(coords.row == this->rows && pos[x][1] == 1)
+            )
         {
-            for (size_t i = 1; i <=8; ++i )
+            if (isNumber)
             {
-                if (temp2DVector[coords.col-1][coords.row-1] == symbols->symbolNumbersArray[i])
+                for (size_t i = 1; i < 8; ++i)
                 {
-                    Common::CoordsStruct tempCoords;
-                    tempCoords.col = coords.col-1;
-                    tempCoords.row = coords.row-1;
-                    neighborsVector.push_back(tempCoords);
+                    if (temp2DVector[coords.col + pos[x][0]][coords.row + pos[x][1]] == symbols->symbolNumbersArray[i])
+                    {
+                        Common::CoordsStruct tempCoords;
+                        tempCoords.col = coords.col + pos[x][0];
+                        tempCoords.row = coords.row + pos[x][1];
+                        neighborsVector.push_back(tempCoords);
+                    }
                 }
             }
-        }
-        else if (temp2DVector[coords.col-1][coords.row-1] == symbol)
-        {
-            Common::CoordsStruct tempCoords;
-            tempCoords.col = coords.col-1;
-            tempCoords.row = coords.row-1;
-            neighborsVector.push_back(tempCoords);
-        }
-    }
-
-    // top middle:
-    if (coords.row-1 > 0)
-    {
-        if (isNumber)
-        {
-            for (size_t i = 1; i <=8; ++i )
+            else if (temp2DVector[coords.col + pos[x][0]][coords.row + pos[x][1]] == symbol)
             {
-                if (temp2DVector[coords.col][coords.row-1] == symbols->symbolNumbersArray[i])
-                {
-                    Common::CoordsStruct tempCoords;
-                    tempCoords.col = coords.col;
-                    tempCoords.row = coords.row-1;
-                    neighborsVector.push_back(tempCoords);
-                }
+                Common::CoordsStruct tempCoords;
+                tempCoords.col = coords.col + pos[x][0];
+                tempCoords.row = coords.row + pos[x][1];
+                neighborsVector.push_back(tempCoords);
             }
-        }
-        else if (temp2DVector[coords.col][coords.row-1] == symbol)
-        {
-            Common::CoordsStruct tempCoords;
-            tempCoords.col = coords.col;
-            tempCoords.row = coords.row-1;
-            neighborsVector.push_back(tempCoords);
-        }
-    }
-
-    // top right:
-    if (coords.col+1 <= this->cols && coords.row-1 > 0)
-    {
-        if (isNumber)
-        {
-            for (size_t i = 1; i <=8; ++i )
-            {
-                if (temp2DVector[coords.col+1][coords.row-1] == symbols->symbolNumbersArray[i])
-                {
-                    Common::CoordsStruct tempCoords;
-                    tempCoords.col = coords.col+1;
-                    tempCoords.row = coords.row-1;
-                    neighborsVector.push_back(tempCoords);
-                }
-            }
-        }
-        else if (temp2DVector[coords.col+1][coords.row-1] == symbol)
-        {
-            Common::CoordsStruct tempCoords;
-            tempCoords.col = coords.col+1;
-            tempCoords.row = coords.row-1;
-            neighborsVector.push_back(tempCoords);
-        }
-    }
-
-    // center right:
-    if (coords.col+1 <= this->cols)
-    {
-        if (isNumber)
-        {
-            for (size_t i = 1; i <=8; ++i )
-            {
-                if (temp2DVector[coords.col+1][coords.row] == symbols->symbolNumbersArray[i])
-                {
-                    Common::CoordsStruct tempCoords;
-                    tempCoords.col = coords.col+1;
-                    tempCoords.row = coords.row;
-                    neighborsVector.push_back(tempCoords);
-                }
-            }
-        }
-        else if (temp2DVector[coords.col+1][coords.row] == symbol)
-        {
-            Common::CoordsStruct tempCoords;
-            tempCoords.col = coords.col+1;
-            tempCoords.row = coords.row;
-            neighborsVector.push_back(tempCoords);
-        }
-    }
-
-    // bottom right:
-    if (coords.col+1 <= this->cols && coords.row+1 <= this->rows)
-    {
-        if (isNumber)
-        {
-            for (size_t i = 1; i <=8; ++i )
-            {
-                if (temp2DVector[coords.col+1][coords.row+1] == symbols->symbolNumbersArray[i])
-                {
-                    Common::CoordsStruct tempCoords;
-                    tempCoords.col = coords.col+1;
-                    tempCoords.row = coords.row+1;
-                    neighborsVector.push_back(tempCoords);
-                }
-            }
-        }
-        else if (temp2DVector[coords.col+1][coords.row+1] == symbol)
-        {
-            Common::CoordsStruct tempCoords;
-            tempCoords.col = coords.col+1;
-            tempCoords.row = coords.row+1;
-            neighborsVector.push_back(tempCoords);
-        }
-    }
-
-    // bottom middle:
-    if (coords.row+1 <= this->rows)
-    {
-        if (isNumber)
-        {
-            for (size_t i = 1; i <=8; ++i )
-            {
-                if (temp2DVector[coords.col][coords.row+1] == symbols->symbolNumbersArray[i])
-                {
-                    Common::CoordsStruct tempCoords;
-                    tempCoords.col = coords.col;
-                    tempCoords.row = coords.row+1;
-                    neighborsVector.push_back(tempCoords);
-                }
-            }
-        }
-        else if (temp2DVector[coords.col][coords.row+1] == symbol)
-        {
-            Common::CoordsStruct tempCoords;
-            tempCoords.col = coords.col;
-            tempCoords.row = coords.row+1;
-            neighborsVector.push_back(tempCoords);
-        }
-    }
-
-    // bottom left:
-    if (coords.col-1 > 0 && coords.row+1 <= this->rows)
-    {
-        if (isNumber)
-        {
-            for (size_t i = 1; i <=8; ++i )
-            {
-                if (temp2DVector[coords.col-1][coords.row+1] == symbols->symbolNumbersArray[i])
-                {
-                    Common::CoordsStruct tempCoords;
-                    tempCoords.col = coords.col-1;
-                    tempCoords.row = coords.row+1;
-                    neighborsVector.push_back(tempCoords);
-                }
-            }
-        }
-        else if (temp2DVector[coords.col-1][coords.row+1] == symbol)
-        {
-            Common::CoordsStruct tempCoords;
-            tempCoords.col = coords.col-1;
-            tempCoords.row = coords.row+1;
-            neighborsVector.push_back(tempCoords);
-        }
-    }
-
-    // center left:
-    if (coords.col-1 > 0)
-    {
-        if (isNumber)
-        {
-            for (size_t i = 1; i <=8; ++i )
-            {
-                if (temp2DVector[coords.col-1][coords.row] == symbols->symbolNumbersArray[i])
-                {
-                    Common::CoordsStruct tempCoords;
-                    tempCoords.col = coords.col-1;
-                    tempCoords.row = coords.row;
-                    neighborsVector.push_back(tempCoords);
-                }
-            }
-        }
-        else if (temp2DVector[coords.col-1][coords.row] == symbol)
-        {
-            Common::CoordsStruct tempCoords;
-            tempCoords.col = coords.col-1;
-            tempCoords.row = coords.row;
-            neighborsVector.push_back(tempCoords);
         }
     }
     return neighborsVector;

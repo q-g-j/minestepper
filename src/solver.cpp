@@ -116,7 +116,7 @@ void Solver::autoSolve(Field& field, bool doPlaceFlags, bool doFlagAutoUncover, 
     }
 
     // re-run the whole function, if there are cells in poolCoveredVector or
-    // if its the first run of this function when "s" or "S" (= "solve") was hit:
+    // if it's the first run of this function when "s" or "S" (= "solve") was hit:
     if (poolCoveredVector.size() != 0 || doSolve == true)
     {
         autoSolve(field, doPlaceFlags, doFlagAutoUncover, false);

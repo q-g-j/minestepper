@@ -138,9 +138,9 @@ void Print::printExplanation()
     coutconv << "    Arrow Keys:    navigate" << newline;
     coutconv << "    ENTER:         uncover" << newline;
     coutconv << "    SPACE:         place or remove a flag" << newline;
-    coutconv << "    f or F:        let the computer place all the flags for you" << newline;
-    coutconv << "    r or R:        trigger auto revealing" << newline;
-    coutconv << "    s or S:        place all flags, auto-reveal and repeat recursively" << newline;
+    coutconv << "    f or F:        let the computer place the flags for you" << newline;
+    coutconv << "    r or R:        trigger auto revealing (after placing flags)" << newline;
+    coutconv << "    s or S:        automatically place flags, auto-reveal and repeat recursively" << newline;
     coutconv << "    c or C:        toggle cursor jump to opposite edge on or off" << newline << newline;
     coutconv << "    q or Q:        quit" << newline << newline;
     std::cout << colors->setTextColor(colors->fg_white);

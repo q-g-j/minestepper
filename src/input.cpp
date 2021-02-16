@@ -52,7 +52,6 @@
     {
         tcsetattr(STDIN_FILENO, TCSAFLUSH, &orig_termios);
     }
-
 #endif
 
 Input::Input()
