@@ -1,12 +1,14 @@
 #pragma once
 
+// system headers:
 #include <memory>
 #include <random>
 #include <string>
 #include <vector>
 
-#include "../include/common.hpp"
-#include "../include/debug.hpp"
+// project headers:
+#include <common.hpp>
+#include <debug.hpp>
 
 // forward declarations of classes:
 class Colors;

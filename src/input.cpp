@@ -9,9 +9,9 @@
     #endif
 #endif
 
+// system headers:
 #include <iostream>
 #include <math.h>
-#include <memory>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string>
@@ -24,14 +24,14 @@
     #include <unistd.h>
 #endif
 
-#include "../include/colors.hpp"
-#include "../include/common.hpp"
-#include "../include/debug.hpp"
-#include "../include/field.hpp"
-#include "../include/input.hpp"
-#include "../include/print.hpp"
-#include "../include/solver.hpp"
-#include "../include/symbols.hpp"
+// project headers:
+#include <colors.hpp>
+#include <common.hpp>
+#include <field.hpp>
+#include <input.hpp>
+#include <print.hpp>
+#include <solver.hpp>
+#include <symbols.hpp>
 
 // Linux: need to enable "non canonical mode" to make arrow keys and SPACE work (no need to press ENTER):
 #if !defined(_WIN32) && !defined(WIN32) && !defined(_WIN64) && !defined(WIN64)

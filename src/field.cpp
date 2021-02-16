@@ -9,9 +9,9 @@
     #endif
 #endif
 
+// system headers:
 #include <algorithm>
 #include <iostream>
-#include <memory>
 #include <random>
 #include <vector>
 
@@ -21,13 +21,13 @@
     #include <unistd.h>
 #endif
 
-#include "../include/colors.hpp"
-#include "../include/common.hpp"
-#include "../include/debug.hpp"
-#include "../include/field.hpp"
-#include "../include/input.hpp"
-#include "../include/print.hpp"
-#include "../include/symbols.hpp"
+// project headers:
+#include <colors.hpp>
+#include <common.hpp>
+#include <field.hpp>
+#include <input.hpp>
+#include <print.hpp>
+#include <symbols.hpp>
 
 // constructor
 Field::Field(int const& cols_, int const& rows_, int const& fieldOffsetX_, int const& fieldOffsetY_, int const& fieldCellWidth_, int const& minesTotal_, std::string const& difficultyString_)

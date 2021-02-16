@@ -1,6 +1,7 @@
 #pragma once
 
-#include "../include/debug.hpp"
+// project headers:
+#include <debug.hpp>
 
 // Windows and Linux seem to handle unicode strings differently (use wide strings for Windows):
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
@@ -18,34 +19,16 @@ const char newline = '\n';
 class Common
 {
 public:
-    struct SmallStruct
-    {
-        int columns;
-        int rows;
-        int mines;
-    };
-    struct MediumStruct
-    {
-        int columns;
-        int rows;
-        int mines;
-    };
-    struct LargeStruct
-    {
-        int columns;
-        int rows;
-        int mines;
-    };
-    struct DifficultyStruct
-    {
-        SmallStruct Small;
-        MediumStruct Medium;
-        LargeStruct Large;
-    };
     struct CoordsStruct
     {
         int col = 0;
         int row = 0;
+    };
+    struct GameModeReturnStruct
+    {
+        int cols;
+        int rows;
+        int mines;
     };
     struct UserInputReturnStruct
     {

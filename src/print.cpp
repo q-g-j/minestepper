@@ -9,20 +9,20 @@
     #endif
 #endif
 
+// system headers:
 #include <iostream>
-#include <memory>
 
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
     #include <windows.h>
 #endif
 
-#include "../include/colors.hpp"
-#include "../include/common.hpp"
-#include "../include/debug.hpp"
-#include "../include/field.hpp"
-#include "../include/input.hpp"
-#include "../include/print.hpp"
-#include "../include/symbols.hpp"
+// project headers:
+#include <colors.hpp>
+#include <common.hpp>
+#include <field.hpp>
+#include <input.hpp>
+#include <print.hpp>
+#include <symbols.hpp>
 
 Print::Print()
 :    

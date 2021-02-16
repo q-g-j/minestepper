@@ -9,15 +9,15 @@
     #endif
 #endif
 
+// system headers:
 #include <iostream>
 
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
     #include <windows.h>
 #endif
 
-#include "../include/colors.hpp"
-#include "../include/debug.hpp"
-
+// project headers:
+#include <colors.hpp>
 
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
     std::string Colors::setTextColor(int const& colorCodeWindows)

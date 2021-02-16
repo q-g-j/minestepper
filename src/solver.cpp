@@ -9,8 +9,8 @@
     #endif
 #endif
 
+// system headers:
 #include <algorithm>
-#include <memory>
 #include <vector>
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
     #include <windows.h>
@@ -18,9 +18,10 @@
     #include <unistd.h>
 #endif
 
-#include "../include/field.hpp"
-#include "../include/solver.hpp"
-#include "../include/symbols.hpp"
+// project headers:
+#include <field.hpp>
+#include <solver.hpp>
+#include <symbols.hpp>
 
 Solver::Solver()
 :

@@ -1,6 +1,7 @@
 #pragma once
 
-#include "../include/debug.hpp"
+// project headers:
+#include <debug.hpp>
 
 class Symbols
 {

@@ -9,6 +9,7 @@
     #endif
 #endif
 
+// system headers:
 #include <codecvt>
 #include <iostream>
 #include <locale>
@@ -24,8 +25,8 @@
     #include <wingdi.h>
 #endif
 
-#include "../include/common.hpp"
-#include "../include/debug.hpp"
+// project headers:
+#include <common.hpp>
 
 void Common::setWindowTitle(std::string const& titleText)
 {
