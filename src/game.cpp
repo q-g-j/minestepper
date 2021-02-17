@@ -108,7 +108,7 @@ void Game::startGame()
     common->clearScreen();
 
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-        common->resizeConsole(fieldOffsetX + (gameMode.cols * 4) + fieldOffsetX - 3, fieldOffsetY + (gameMode.rows * 2) + 5);
+        common->resizeConsole(fieldOffsetX + (gameMode.cols * ((field.getCellWidth() - 1) / 2) * 2 + 2) + fieldOffsetX - 3, fieldOffsetY + (gameMode.rows * 2) + 5);
         common->centerWindow();
         input->showBlinkingCursor(false);
     #endif

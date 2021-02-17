@@ -145,7 +145,6 @@ int Input::getInputDifficulty()
             if ((inputKey = _getch()) == 'q' || inputKey == 'Q')
             {
                 common->clearScreen();
-                showBlinkingCursor(true);
                 common->exitProgram(0);
             }
             else if (inputKey == '1')
@@ -181,7 +180,6 @@ int Input::getInputDifficulty()
             if (inputKey == 'q' || inputKey == 'Q')
             {
                 common->clearScreen();
-                showBlinkingCursor(true);
                 common->exitProgram(0);
             }
             if (inputKey == '1')
@@ -234,7 +232,6 @@ Common::CoordsStruct Input::getInputCustomDimensions()
         if (line == "q" || line == "Q")
         {
             common->clearScreen();
-            showBlinkingCursor(true);
             common->exitProgram(0);
         }
         else if (line == "")
@@ -275,7 +272,7 @@ Common::CoordsStruct Input::getInputCustomDimensions()
             {
                 isValidInput = false;
             }
-            if (beforeX < 8 || afterX < 8 || beforeX > 30 || afterX > 20)
+            if (beforeX < 8 || afterX < 8 || beforeX > 60 || afterX > 20)
             {
                 isValidInput = false;
             }
@@ -314,7 +311,6 @@ int Input::getInputCustomMinesCount(int const& fieldSize)
         if (line == "q" || line == "Q")
         {
             common->clearScreen();
-            showBlinkingCursor(true);
             common->exitProgram(0);
         }
         else if (line == "")
@@ -365,7 +361,7 @@ void Input::helpToggle(Field &field, Common::CoordsStruct const& currentArrayPos
     getInputEnterKey("");
 
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-        common->resizeConsole(field.getOffsetX() + (field.getCols() * 4) + field.getOffsetX() - 3, field.getOffsetY() + (field.getRows() * 2) + 5);
+        common->resizeConsole(fieldOffsetX + (gameMode.cols * ((field.getCellWidth() - 1) / 2) * 2 + 2) + fieldOffsetX - 3, fieldOffsetY + (gameMode.rows * 2) + 5);
         common->centerWindow();
     #endif
 
@@ -541,7 +537,6 @@ Common::UserInputReturnStruct Input::getUserInput(Field &field, int firstrun)
             else if (inputKeyA == 'q' || inputKeyA == 'Q')
             {
                 common->clearScreen();
-                showBlinkingCursor(true);
                 common->exitProgram(0);
             }
             else if (inputKeyA == 'h' || inputKeyA == 'H')
@@ -645,7 +640,6 @@ Common::UserInputReturnStruct Input::getUserInput(Field &field, int firstrun)
             else if (inputKeyA == 'q' || inputKeyA == 'Q')
             {
                 common->clearScreen();
-                showBlinkingCursor(true);
                 common->exitProgram(0);
             }
             else if (inputKeyA == 'h' || inputKeyA == 'H')

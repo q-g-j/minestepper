@@ -27,6 +27,15 @@
 
 // project headers:
 #include <common.hpp>
+#include <input.hpp>
+
+Common::Common()  
+{
+}
+
+Common::~Common()
+{
+}
 
 void Common::setWindowTitle(std::string const& titleText)
 {
@@ -253,5 +262,12 @@ Common::CoordsStruct Common::coordsToCursorPosition(CoordsStruct const& coords, 
 
 void Common::exitProgram(int const& errorCode)
 {
+    Input input;
+    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+        setUnicode(false);
+    #else
+        enableNonCanonicalMode();
+    #endif
+    input.showBlinkingCursor(true);
     exit (errorCode);
 }
