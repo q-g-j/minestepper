@@ -75,9 +75,9 @@ Common::GameModeReturnStruct Game::choseGamemode()
     {
         difficultyString = print->setDifficultyTexts(4);
         common->clearScreen();
-        common->resizeConsole(66, 6);
 
         #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+            common->resizeConsole(66, 6);
             common->centerWindow();
             input->showBlinkingCursor(true);
         #endif
