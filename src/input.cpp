@@ -146,7 +146,7 @@ int Input::getInputDifficulty()
             {
                 common->clearScreen();
                 showBlinkingCursor(true);
-                exit (0);
+                common->exitProgram(0);
             }
             else if (inputKey == '1')
             {
@@ -182,7 +182,7 @@ int Input::getInputDifficulty()
             {
                 common->clearScreen();
                 showBlinkingCursor(true);
-                exit (0);
+                common->exitProgram(0);
             }
             if (inputKey == '1')
             {
@@ -235,7 +235,7 @@ Common::CoordsStruct Input::getInputCustomDimensions()
         {
             common->clearScreen();
             showBlinkingCursor(true);
-            exit (0);
+            common->exitProgram(0);
         }
         else if (line == "")
         {
@@ -315,7 +315,7 @@ int Input::getInputCustomMinesCount(int const& fieldSize)
         {
             common->clearScreen();
             showBlinkingCursor(true);
-            exit (0);
+            common->exitProgram(0);
         }
         else if (line == "")
         {
@@ -542,7 +542,7 @@ Common::UserInputReturnStruct Input::getUserInput(Field &field, int firstrun)
             {
                 common->clearScreen();
                 showBlinkingCursor(true);
-                exit (0);
+                common->exitProgram(0);
             }
             else if (inputKeyA == 'h' || inputKeyA == 'H')
             {
@@ -646,7 +646,7 @@ Common::UserInputReturnStruct Input::getUserInput(Field &field, int firstrun)
             {
                 common->clearScreen();
                 showBlinkingCursor(true);
-                exit (0);
+                common->exitProgram(0);
             }
             else if (inputKeyA == 'h' || inputKeyA == 'H')
             {

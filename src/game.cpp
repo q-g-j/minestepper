@@ -101,6 +101,7 @@ Common::GameModeReturnStruct Game::choseGamemode()
 
 void Game::startGame()
 {
+    if (fieldCellWidth % 2 == 0) common->exitProgram(1);
     Common::GameModeReturnStruct gameMode = choseGamemode();
     Field field(gameMode.cols, gameMode.rows, fieldOffsetX, fieldOffsetY, fieldCellWidth, gameMode.mines, difficultyString);
 

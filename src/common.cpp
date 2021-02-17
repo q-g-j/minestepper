@@ -85,12 +85,12 @@ void Common::resizeConsole(int const& cols, int const& rows)
         if (sw)
         {
             int result =_setmode(_fileno(stdout), 0x00020000);
-            if (result == -1) exit(1);
+            if (result == -1) common->exitProgram(1);
         }
         else
         {
             int result = _setmode(_fileno(stdout), _O_TEXT);
-            if (result == -1) exit(1);
+            if (result == -1) common->exitProgram(1);
         }
     }
 #endif
@@ -179,7 +179,7 @@ void Common::deleteLastLine(size_t const& stringLength)
 void Common::clearScreen()
 {
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-        if (system("cls") != 0) exit(1);
+        if (system("cls") != 0) common->exitProgram(1);
     #else
         try
         {
@@ -234,10 +234,13 @@ unsigned int Common::coordsToInt(CoordsStruct const& coords, int const& cols)
 Common::CoordsStruct Common::coordsToCursorPosition(CoordsStruct const& coords, int const& offsetX, int const& offsetY, int const& cellWidth)
 {
     CoordsStruct cursorPosition;
-    cursorPosition.col = offsetX;
-    for (int i = 1; i < coords.col; ++i)
+    cursorPosition.col = offsetX + (cellWidth-1)/2 - 1;
+    if (cursorPosition.col > 1)
     {
-        cursorPosition.col = cursorPosition.col + (cellWidth + 1);
+    for (int i = 1; i < coords.col; ++i)
+        {
+            cursorPosition.col = cursorPosition.col + (cellWidth-1)/2 + 1 + (cellWidth-1)/2 + 1;
+        }
     }
 
     cursorPosition.row = offsetY;
@@ -246,4 +249,9 @@ Common::CoordsStruct Common::coordsToCursorPosition(CoordsStruct const& coords, 
         cursorPosition.row = cursorPosition.row + 2;
     }
     return cursorPosition;
+}
+
+void Common::exitProgram(int const& errorCode)
+{
+    exit (errorCode);
 }
