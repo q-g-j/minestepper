@@ -1,4 +1,0 @@
-{
-    "cmake.buildDirectory": "${workspaceFolder}/build/${buildKit}/${buildType}",
-    "terminal.external.linuxExec": "konsole"
-}
