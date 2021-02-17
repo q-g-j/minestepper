@@ -54,5 +54,5 @@ public:
     ~Game();
 
     Common::GameModeReturnStruct choseGamemode();
-    void startGame(Common::GameModeReturnStruct&);
+    void startGame();
 };

@@ -56,9 +56,9 @@ void Solver::autoSolve(Field& field, bool doPlaceFlags, bool doFlagAutoUncover, 
                     // one for covered neighbors, 
                     // one for neighbor flags
                     std::vector<Common::CoordsStruct> coveredVector;
-                    coveredVector = field.findNeighbors(field.field2DVector, tempCoords, symbols->symbolCovered, false);
+                    coveredVector = field.findNeighbors(field.field2DVector, tempCoords, symbols->symbolCovered);
                     std::vector<Common::CoordsStruct> flagsVector;
-                    flagsVector = field.findNeighbors(field.field2DVector, tempCoords, symbols->symbolFlag, false);
+                    flagsVector = field.findNeighbors(field.field2DVector, tempCoords, symbols->symbolFlag);
 
                     // if the number of covered neighbors plus the number of neighbor flags matches the current cells number,
                     // add the covered cells to poolCoveredVector:

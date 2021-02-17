@@ -352,9 +352,8 @@ int Input::getInputCustomMinesCount(int const& fieldSize)
 
 void Input::helpToggle(Field &field, Common::CoordsStruct const& currentArrayPosition)
 {
-    common->resizeConsole(107, 27);
-
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+    common->resizeConsole(107, 27);
         common->centerWindow();
         common->setUnicode(false);
         showBlinkingCursor(false);
@@ -364,9 +363,9 @@ void Input::helpToggle(Field &field, Common::CoordsStruct const& currentArrayPos
     common->clearScreen();
     print->printExplanation();
     getInputEnterKey("");
-    common->resizeConsole(field.getOffsetX() + (field.getCols() * 4) + field.getOffsetX() - 3, field.getOffsetY() + (field.getRows() * 2) + 5);
 
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+        common->resizeConsole(field.getOffsetX() + (field.getCols() * 4) + field.getOffsetX() - 3, field.getOffsetY() + (field.getRows() * 2) + 5);
         common->centerWindow();
     #endif
 

@@ -31,13 +31,13 @@ Common::GameModeReturnStruct Game::choseGamemode()
 {
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         common->setWindowProperties();
+        common->resizeConsole(33, 13);
     #endif
 
     std::cout << colors->setTextColor(colors->color_default);
     common->setWindowTitle("Minesweeper");
     input->showBlinkingCursor(false);
     common->clearScreen();
-    common->resizeConsole(33, 13);
 
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         common->centerWindow();
@@ -87,9 +87,9 @@ Common::GameModeReturnStruct Game::choseGamemode()
         GameModeReturn->rows = Dimensions->row;
 
         common->clearScreen();
-        common->resizeConsole(42, 6);
 
         #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+            common->resizeConsole(42, 6);
             common->centerWindow();
         #endif
 
@@ -99,14 +99,15 @@ Common::GameModeReturnStruct Game::choseGamemode()
     return *GameModeReturn;
 }
 
-void Game::startGame(Common::GameModeReturnStruct& gameMode)
+void Game::startGame()
 {
+    Common::GameModeReturnStruct gameMode = choseGamemode();
     Field field(gameMode.cols, gameMode.rows, fieldOffsetX, fieldOffsetY, fieldCellWidth, gameMode.mines, difficultyString);
 
     common->clearScreen();
-    common->resizeConsole(fieldOffsetX + (gameMode.cols * 4) + fieldOffsetX - 3, fieldOffsetY + (gameMode.rows * 2) + 5);
 
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+        common->resizeConsole(fieldOffsetX + (gameMode.cols * 4) + fieldOffsetX - 3, fieldOffsetY + (gameMode.rows * 2) + 5);
         common->centerWindow();
         input->showBlinkingCursor(false);
     #endif

@@ -104,7 +104,7 @@ public:
     void drawField();
     void gotoXY(int const&, int const&);
     void printCoords(Common::CoordsStruct const&, bool);
-    std::vector<Common::CoordsStruct> findNeighbors(std::vector<std::vector<stringconv>> const&, Common::CoordsStruct const&, stringconv const&, bool const&);
+    std::vector<Common::CoordsStruct> findNeighbors(std::vector<std::vector<stringconv>> const&, Common::CoordsStruct const&, stringconv const&);
     // std::vector<Common::CoordsStruct> findNeighborNumbers(std::vector<std::vector<stringconv>> const&, Common::CoordsStruct const&, stringconv const&);
     void autoUncoverRecursive(Common::CoordsStruct const&, std::vector<unsigned int>&);
     void flagAutoUncover(Common::CoordsStruct const&, Common::PlaceUserInputReturnStruct&);

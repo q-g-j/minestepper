@@ -14,7 +14,7 @@
 #include <iostream>
 #include <locale>
 #include <string>
-#include "time.h"
+#include <time.h>
 
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
     #include <fcntl.h>
@@ -59,7 +59,7 @@ void Common::resizeConsole(int const& cols, int const& rows)
     #else
         std::string x = std::to_string(cols);
         std::string y = std::to_string(rows);
-        printf(("\033[8;" + y + ";" + x + "t").c_str());
+        std::cout << "\033[8;" + y + ";" + x + "t";
     #endif
 }
 

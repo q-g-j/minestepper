@@ -30,8 +30,7 @@ int main()
     while (true)
     {
         Game game;
-        Common::GameModeReturnStruct gameMode = game.choseGamemode();
-        game.startGame(gameMode);
+        game.startGame();
     }
 
     return 0;
