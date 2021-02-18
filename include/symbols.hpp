@@ -26,7 +26,7 @@ public:
         const stringconv symbolZero = L" ";
         const stringconv symbolCovered = L"\u2588";
         const stringconv symbolCursor = L"\u2588";
-        const stringconv symbolIsNumber = L"N";
+        const stringconv symbolNumber = L"N";
         const stringconv symbolNumbersArray[9] = { L"V", L"1", L"2", L"3", L"4", L"5", L"6", L"7", L"8" };
 
     #else

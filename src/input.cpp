@@ -361,7 +361,7 @@ void Input::helpToggle(Field &field, Common::CoordsStruct const& currentArrayPos
     getInputEnterKey("");
 
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-        common->resizeConsole(fieldOffsetX + (gameMode.cols * ((field.getCellWidth() - 1) / 2) * 2 + 2) + fieldOffsetX - 3, fieldOffsetY + (gameMode.rows * 2) + 5);
+        common->resizeConsole(field.getOffsetX() + (field.getCols() * (((field.getCellWidth() - 1) / 2) * 2 + 2)) + field.getOffsetX() - 3, field.getOffsetY() + (field.getRows() * 2) + 5);
         common->centerWindow();
     #endif
 

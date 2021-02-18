@@ -94,12 +94,12 @@ void Common::resizeConsole(int const& cols, int const& rows)
         if (sw)
         {
             int result =_setmode(_fileno(stdout), 0x00020000);
-            if (result == -1) common->exitProgram(1);
+            if (result == -1) exitProgram(1);
         }
         else
         {
             int result = _setmode(_fileno(stdout), _O_TEXT);
-            if (result == -1) common->exitProgram(1);
+            if (result == -1) exitProgram(1);
         }
     }
 #endif
@@ -188,7 +188,7 @@ void Common::deleteLastLine(size_t const& stringLength)
 void Common::clearScreen()
 {
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-        if (system("cls") != 0) common->exitProgram(1);
+        if (system("cls") != 0) exitProgram(1);
     #else
         try
         {
