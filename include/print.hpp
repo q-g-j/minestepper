@@ -31,7 +31,8 @@ public:
     void printTitle(std::string const&, int const&, int const&, int const&);
     std::string setDifficultyTexts(int const&);
     void printMenu();
-    void printCustomGetDimensions();
+    void printCustomGetCellWidth();
+    void printCustomGetDimensions(int const&);
     void printCustomGetMinesCount();
     void printHasWon(Field&);
     void printHasLost(Field&);

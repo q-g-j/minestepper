@@ -91,9 +91,9 @@ void Solver::autoSolve(Field& field, bool doPlaceFlags, bool doFlagAutoUncover, 
                 --minesLeft;
                 ++flagsCount;
                 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-                    Sleep(100);
+                    Sleep(50);
                 #else
-                    usleep(100*1000);
+                    usleep(50*1000);
                 #endif
                 field.printCoords(tempCoords, false);
             }

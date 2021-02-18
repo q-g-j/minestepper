@@ -29,6 +29,7 @@ public:
         int cols;
         int rows;
         int mines;
+        int cellWidth;
     };
     struct UserInputReturnStruct
     {

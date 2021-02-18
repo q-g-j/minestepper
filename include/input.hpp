@@ -60,7 +60,8 @@ public:
 
     // public methods:
     int getInputDifficulty();
-    Common::CoordsStruct getInputCustomDimensions();
+    int getInputCustomCellWidth();
+    Common::CoordsStruct getInputCustomDimensions(int const&);
     int getInputCustomMinesCount(int const&);
     void getInputEnterKey(std::string const&);
     Common::UserInputReturnStruct getUserInput(Field&, int);

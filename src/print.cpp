@@ -85,10 +85,25 @@ void Print::printMenu()
     std::cout << "quit at any time" << std::flush;
 }
 
-void Print::printCustomGetDimensions()
+void Print::printCustomGetCellWidth()
 {
     std::cout << newline;
-    std::cout << "  How large do you want the field to be (min. 8x8 / max. 30x20)?" << newline << newline;
+    std::cout << "  How wide do you want a cell to be?" << newline;
+    std::cout << "  Valid input: 1 or 3." << newline << newline;
+}
+
+void Print::printCustomGetDimensions(int const& cellWidth)
+{
+    std::cout << newline;
+    std::cout << "  How large do you want the field to be?" << newline;
+    if (cellWidth == 1)
+    {
+        std::cout << "  (min. 8x8 / max. 80x20)" << newline << newline;
+    }
+    else
+    {
+        std::cout << "  (min. 8x8 / max. 40x20)" << newline << newline;
+    }
 }
 
 void Print::printCustomGetMinesCount()

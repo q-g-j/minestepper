@@ -56,6 +56,7 @@ Common::GameModeReturnStruct Game::choseGamemode()
         GameModeReturn->cols = smallCols;
         GameModeReturn->rows = smallRows;
         GameModeReturn->mines = smallMines;
+        GameModeReturn->cellWidth = 3;
     }
     else if (difficulty == 2)
     {
@@ -63,6 +64,7 @@ Common::GameModeReturnStruct Game::choseGamemode()
         GameModeReturn->cols = mediumCols;
         GameModeReturn->rows = mediumRows;
         GameModeReturn->mines = mediumMines;
+        GameModeReturn->cellWidth = 3;
     }
     else if (difficulty == 3)
     {
@@ -70,32 +72,42 @@ Common::GameModeReturnStruct Game::choseGamemode()
         GameModeReturn->cols = largeCols;
         GameModeReturn->rows = largeRows;
         GameModeReturn->mines = largeMines;
+        GameModeReturn->cellWidth = 3;
     }
     else
     {
         difficultyString = print->setDifficultyTexts(4);
         common->clearScreen();
+        input->showBlinkingCursor(true);
 
         #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-            common->resizeConsole(66, 6);
+            common->resizeConsole(38, 7);
             common->centerWindow();
-            input->showBlinkingCursor(true);
         #endif
 
-        *Dimensions = input->getInputCustomDimensions();
+        GameModeReturn->cellWidth = input->getInputCustomCellWidth();
+
+        #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+            common->resizeConsole(42, 7);
+            common->centerWindow();
+        #endif
+
+        *Dimensions = input->getInputCustomDimensions(GameModeReturn->cellWidth);
         GameModeReturn->cols = Dimensions->col;
         GameModeReturn->rows = Dimensions->row;
 
         common->clearScreen();
 
         #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-            common->resizeConsole(42, 6);
+            common->resizeConsole(41, 6);
             common->centerWindow();
         #endif
 
         GameModeReturn->mines = input->getInputCustomMinesCount(GameModeReturn->cols * GameModeReturn->rows);
+
         input->showBlinkingCursor(false);
     }
+    
     return *GameModeReturn;
 }
 
@@ -103,7 +115,7 @@ void Game::startGame()
 {
     if (fieldCellWidth % 2 == 0) common->exitProgram(1);
     Common::GameModeReturnStruct gameMode = choseGamemode();
-    Field field(gameMode.cols, gameMode.rows, fieldOffsetX, fieldOffsetY, fieldCellWidth, gameMode.mines, difficultyString);
+    Field field(gameMode.cols, gameMode.rows, fieldOffsetX, fieldOffsetY, gameMode.cellWidth, gameMode.mines, difficultyString);
 
     common->clearScreen();
 

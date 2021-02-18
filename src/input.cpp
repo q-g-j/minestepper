@@ -212,8 +212,61 @@ int Input::getInputDifficulty()
     return difficulty;
 }
 
+int Input::getInputCustomCellWidth()
+{
+    std::string line = "";
+    int cellWidth = 3;
+    bool isValidInput = false;
+
+    common->clearScreen();
+    print->printCustomGetCellWidth();
+
+    while (true)
+    {
+        std::cout << colors->setTextColor(colors->fg_white);
+        std::cout << print->inputText;
+        std::cout << colors->setTextColor(colors->color_default);
+        getline(std::cin, line);
+        if (line == "q" || line == "Q")
+        {
+            common->clearScreen();
+            common->exitProgram(0);
+        }
+        else if (line == "")
+        {
+            isValidInput = false;
+        }
+        else
+        {
+            isValidInput = true;
+            try
+            {
+                cellWidth = stoi(line);
+            }
+            catch (...)
+            {
+                isValidInput = false;
+            }
+            if  (cellWidth <= 0 || cellWidth > 3 || cellWidth % 2 == 0)
+            {
+                isValidInput = false;
+            }
+        }
+        if (isValidInput == true)
+        {
+            return cellWidth;
+        }
+        else
+        {
+            getInputEnterKey(print->wrongInputText);
+            common->deleteLastLine(print->wrongInputText.length());
+            common->deleteLastLine(print->inputText.length() + line.length());
+        }
+    }    
+}
+
 // custom mode: ask user for the size of the field:
-Common::CoordsStruct Input::getInputCustomDimensions()
+Common::CoordsStruct Input::getInputCustomDimensions(int const& fieldCellWidth)
 {
     Common::CoordsStruct dimensions;
     std::string line = "";
@@ -221,7 +274,8 @@ Common::CoordsStruct Input::getInputCustomDimensions()
     int afterX = 0;
     bool isValidInput = false;
 
-    print->printCustomGetDimensions();
+    common->clearScreen();
+    print->printCustomGetDimensions(fieldCellWidth);
 
     while (true)
     {
@@ -272,9 +326,19 @@ Common::CoordsStruct Input::getInputCustomDimensions()
             {
                 isValidInput = false;
             }
-            if (beforeX < 8 || afterX < 8 || beforeX > 60 || afterX > 20)
+            if (fieldCellWidth == 1)
             {
-                isValidInput = false;
+                if (beforeX < 8 || afterX < 8 || beforeX > 80 || afterX > 20)
+                {
+                    isValidInput = false;
+                }
+            }
+            else
+            {
+                if (beforeX < 8 || afterX < 8 || beforeX > 40 || afterX > 20)
+                {
+                    isValidInput = false;
+                }
             }
         }
         if (isValidInput == true)
