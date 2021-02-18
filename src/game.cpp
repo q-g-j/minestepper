@@ -27,7 +27,7 @@ Game::~Game()
 {
 }
 
-Common::GameModeReturnStruct Game::choseGamemode()
+Common::GameModeReturnStruct Game::chooseGamemode()
 {
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         common->setWindowProperties();
@@ -107,14 +107,14 @@ Common::GameModeReturnStruct Game::choseGamemode()
 
         input->showBlinkingCursor(false);
     }
-    
+
     return *GameModeReturn;
 }
 
 void Game::startGame()
 {
     if (fieldCellWidth % 2 == 0) common->exitProgram(1);
-    Common::GameModeReturnStruct gameMode = choseGamemode();
+    Common::GameModeReturnStruct gameMode = chooseGamemode();
     Field field(gameMode.cols, gameMode.rows, fieldOffsetX, fieldOffsetY, gameMode.cellWidth, gameMode.mines, difficultyString);
 
     common->clearScreen();
