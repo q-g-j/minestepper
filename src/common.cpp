@@ -192,7 +192,7 @@ void Common::clearScreen()
     #else
         try
         {
-            system("clear");
+            if (system("clear") != 0) exitProgram(1);
         }
         catch (...)
         {
