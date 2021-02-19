@@ -22,11 +22,6 @@ private:
     std::unique_ptr<Input> input;
     std::unique_ptr<Print> print;
 
-    std::unique_ptr<Common::CoordsStruct> Dimensions;
-    std::unique_ptr<Common::GameModeReturnStruct> GameModeReturn;
-    std::unique_ptr<Common::UserInputReturnStruct> UserInput;
-    std::unique_ptr<Common::PlaceUserInputReturnStruct> PlaceUserInputReturn;
-
     // define the 3 main game modes:
     const int smallCols       = 9;
     const int smallRows       = 9;

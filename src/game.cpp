@@ -14,12 +14,7 @@ Game::Game()
     colors(std::make_unique<Colors>()),
     common(std::make_unique<Common>()),
     input(std::make_unique<Input>()),
-    print(std::make_unique<Print>()),
-
-    Dimensions(std::make_unique<Common::CoordsStruct>()),
-    GameModeReturn(std::make_unique<Common::GameModeReturnStruct>()),
-    UserInput(std::make_unique<Common::UserInputReturnStruct>()),
-    PlaceUserInputReturn(std::make_unique<Common::PlaceUserInputReturnStruct>())
+    print(std::make_unique<Print>())
 {
 }
 
@@ -29,6 +24,10 @@ Game::~Game()
 
 Common::GameModeReturnStruct Game::chooseGamemode()
 {
+    Common::UserInputReturnStruct userInput;
+    Common::CoordsStruct dimensions;
+    Common::GameModeReturnStruct returnStruct;
+
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         common->setWindowProperties();
         common->resizeConsole(33, 13);
@@ -53,26 +52,26 @@ Common::GameModeReturnStruct Game::chooseGamemode()
     if (difficulty == 1)
     {
         difficultyString = print->setDifficultyTexts(1);
-        GameModeReturn->cols = smallCols;
-        GameModeReturn->rows = smallRows;
-        GameModeReturn->mines = smallMines;
-        GameModeReturn->cellWidth = 3;
+        returnStruct.cols = smallCols;
+        returnStruct.rows = smallRows;
+        returnStruct.mines = smallMines;
+        returnStruct.cellWidth = 3;
     }
     else if (difficulty == 2)
     {
         difficultyString = print->setDifficultyTexts(2);
-        GameModeReturn->cols = mediumCols;
-        GameModeReturn->rows = mediumRows;
-        GameModeReturn->mines = mediumMines;
-        GameModeReturn->cellWidth = 3;
+        returnStruct.cols = mediumCols;
+        returnStruct.rows = mediumRows;
+        returnStruct.mines = mediumMines;
+        returnStruct.cellWidth = 3;
     }
     else if (difficulty == 3)
     {
         difficultyString = print->setDifficultyTexts(3);
-        GameModeReturn->cols = largeCols;
-        GameModeReturn->rows = largeRows;
-        GameModeReturn->mines = largeMines;
-        GameModeReturn->cellWidth = 3;
+        returnStruct.cols = largeCols;
+        returnStruct.rows = largeRows;
+        returnStruct.mines = largeMines;
+        returnStruct.cellWidth = 3;
     }
     else
     {
@@ -85,16 +84,16 @@ Common::GameModeReturnStruct Game::chooseGamemode()
             common->centerWindow();
         #endif
 
-        GameModeReturn->cellWidth = input->getInputCustomCellWidth();
+        returnStruct.cellWidth = input->getInputCustomCellWidth();
 
         #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
             common->resizeConsole(42, 7);
             common->centerWindow();
         #endif
 
-        *Dimensions = input->getInputCustomDimensions(GameModeReturn->cellWidth);
-        GameModeReturn->cols = Dimensions->col;
-        GameModeReturn->rows = Dimensions->row;
+        dimensions = input->getInputCustomDimensions(returnStruct.cellWidth);
+        returnStruct.cols = dimensions.col;
+        returnStruct.rows = dimensions.row;
 
         common->clearScreen();
 
@@ -103,17 +102,19 @@ Common::GameModeReturnStruct Game::chooseGamemode()
             common->centerWindow();
         #endif
 
-        GameModeReturn->mines = input->getInputCustomMinesCount(GameModeReturn->cols * GameModeReturn->rows);
+        returnStruct.mines = input->getInputCustomMinesCount(returnStruct.cols * returnStruct.rows);
 
         input->showBlinkingCursor(false);
     }
 
-    return *GameModeReturn;
+    return returnStruct;
 }
 
 void Game::startGame()
 {
     if (fieldCellWidth % 2 == 0) common->exitProgram(1);
+    Common::UserInputReturnStruct userInput;
+    Common::PlaceUserInputReturnStruct placeUserInputReturn;
     Common::GameModeReturnStruct gameMode = chooseGamemode();
     Field field(gameMode.cols, gameMode.rows, fieldOffsetX, fieldOffsetY, gameMode.cellWidth, gameMode.mines, difficultyString);
 
@@ -153,24 +154,24 @@ void Game::startGame()
             UserInput->Coords.col = 3;
             UserInput->Coords.row = 3;
         #else
-            *UserInput = input->getUserInput(field, firstrun);
+            userInput = input->getUserInput(field, firstrun);
         #endif
 
         firstrun = 0;
         
-        *PlaceUserInputReturn = field.placeUserInput(*UserInput, turn);
+        placeUserInputReturn = field.placeUserInput(userInput, turn);
 
-        if (PlaceUserInputReturn->hasLost)
+        if (placeUserInputReturn.hasLost)
         {
             break;
         }
-        else if (PlaceUserInputReturn->hasWon)
+        else if (placeUserInputReturn.hasWon)
         {
             break;
         }
         else
         {
-            if (PlaceUserInputReturn->isTurn)
+            if (placeUserInputReturn.isTurn)
             {
                 ++turn;
             }

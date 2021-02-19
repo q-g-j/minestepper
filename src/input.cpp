@@ -532,7 +532,7 @@ Common::UserInputReturnStruct Input::getUserInput(Field &field, int firstrun)
 {
     static Common::CoordsStruct currentArrayPosition;
     Common::CoordsStruct currentCursorPosition;
-    Common::UserInputReturnStruct userInput;
+    Common::UserInputReturnStruct returnStruct;
     bool toggleEdgeJump = false;
     bool *toogleEdgeJumpP;
     toogleEdgeJumpP = &toggleEdgeJump;
@@ -611,19 +611,19 @@ Common::UserInputReturnStruct Input::getUserInput(Field &field, int firstrun)
             else if (inputKeyA == 'f' || inputKeyA == 'F')
             {
                 solver->autoSolve(field, true, false, false);
-                userInput.isAutoFlag = true;
+                returnStruct.isAutoFlag = true;
                 break;
             }
             else if (inputKeyA == 'r' || inputKeyA == 'R')
             {
                 solver->autoSolve(field, false, true, false);
-                userInput.isAutoFlag = true;
+                returnStruct.isAutoFlag = true;
                 break;
             }
             else if (inputKeyA == 's' || inputKeyA == 'S')
             {
                 solver->autoSolve(field, true, true, true);
-                userInput.isAutoFlag = true;
+                returnStruct.isAutoFlag = true;
                 break;
             }
             else if (inputKeyA == 'c' || inputKeyA == 'C')
@@ -651,7 +651,7 @@ Common::UserInputReturnStruct Input::getUserInput(Field &field, int firstrun)
                 }
                 else
                 {
-                    userInput.isFlag = true;
+                    returnStruct.isFlag = true;
                 }
                 break;
             }
@@ -714,19 +714,19 @@ Common::UserInputReturnStruct Input::getUserInput(Field &field, int firstrun)
             else if (inputKeyA == 'f' || inputKeyA == 'F')
             {
                 solver->autoSolve(field, true, false, false);
-                userInput.isAutoFlag = true;
+                returnStruct.isAutoFlag = true;
                 break;
             }
             else if (inputKeyA == 'r' || inputKeyA == 'R')
             {
                 solver->autoSolve(field, false, true, false);
-                userInput.isAutoFlag = true;
+                returnStruct.isAutoFlag = true;
                 break;
             }
             else if (inputKeyA == 's' || inputKeyA == 'S')
             {
                 solver->autoSolve(field, true, true, true);
-                userInput.isAutoFlag = true;
+                returnStruct.isAutoFlag = true;
                 break;
             }
             else if (inputKeyA == 'c' || inputKeyA == 'C')
@@ -754,7 +754,7 @@ Common::UserInputReturnStruct Input::getUserInput(Field &field, int firstrun)
                 }
                 else
                 {
-                    userInput.isFlag = true;
+                    returnStruct.isFlag = true;
                     break;
                 }
             }
@@ -767,8 +767,8 @@ Common::UserInputReturnStruct Input::getUserInput(Field &field, int firstrun)
         disableNonCanonicalMode();
     #endif
 
-    userInput.Coords.col = currentArrayPosition.col;
-    userInput.Coords.row = currentArrayPosition.row;
+    returnStruct.Coords.col = currentArrayPosition.col;
+    returnStruct.Coords.row = currentArrayPosition.row;
 
-    return userInput;
+    return returnStruct;
 }
