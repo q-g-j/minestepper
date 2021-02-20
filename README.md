@@ -5,15 +5,15 @@ A console based version of Minesweeper to teach myself C++.
 ![](https://github.com/q-g-j/minesweeper/blob/master/images/game_small.jpg?raw=true)
 
 ## Controls:
-- arrow keys: navigate
-- ENTER: uncover
-- SPACE: place / remove a flag
-- f or F: computer places all flags
-- r or R: force auto-reveal
-- s or S: repeat the above 2 recursively
-- c or C: toggle cursor jump to opposite edge on or off
-- h or H: help
-- q or Q: quit
+- Arrow keys:    navigate
+- ENTER:         uncover
+- SPACE:         place or remove a flag
+- 'f' or 'F':    let the computer place the flags for you
+- 'r' or 'R':    trigger auto revealing (after placing flags)
+- 's' or 'S':    automatically place flags, auto-reveal and repeat recursively
+- 'c' or 'C':    toggle cursor jump to opposite edge on or off
+- 'q' or 'Q':    quit
+
 ## Features:
 - small, medium, large and custom size
 - colored numbers, flags and mines.

@@ -30,9 +30,9 @@ Common::GameModeReturnStruct Game::chooseGamemode()
 
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         common->setWindowProperties();
-        common->resizeConsole(33, 13);
     #endif
 
+    common->resizeConsole(33, 13);
     std::cout << colors->setTextColor(colors->color_default);
     common->setWindowTitle("Minesweeper");
     print->showBlinkingCursor(false);
@@ -77,17 +77,18 @@ Common::GameModeReturnStruct Game::chooseGamemode()
     {
         difficultyString = print->setDifficultyTexts(4);
         common->clearScreen();
-        print->showBlinkingCursor(true);
+        common->resizeConsole(38, 7);
 
         #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-            common->resizeConsole(38, 7);
             common->centerWindow();
         #endif
 
+        print->showBlinkingCursor(true);
         returnStruct.cellWidth = input->getInputCustomCellWidth();
 
+        common->resizeConsole(42, 7);
+
         #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-            common->resizeConsole(42, 7);
             common->centerWindow();
         #endif
 
@@ -96,9 +97,9 @@ Common::GameModeReturnStruct Game::chooseGamemode()
         returnStruct.rows = dimensions.row;
 
         common->clearScreen();
+        common->resizeConsole(41, 6);
 
         #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-            common->resizeConsole(41, 6);
             common->centerWindow();
         #endif
 
@@ -119,9 +120,9 @@ void Game::startGame()
     Field field(gameMode.cols, gameMode.rows, fieldOffsetX, fieldOffsetY, gameMode.cellWidth, gameMode.mines, difficultyString);
 
     common->clearScreen();
+    common->resizeConsole(fieldOffsetX + (gameMode.cols * (((field.getCellWidth() - 1) / 2) * 2 + 2)) + fieldOffsetX - 3, fieldOffsetY + (gameMode.rows * 2) + 5);
 
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-        common->resizeConsole(fieldOffsetX + (gameMode.cols * (((field.getCellWidth() - 1) / 2) * 2 + 2)) + fieldOffsetX - 3, fieldOffsetY + (gameMode.rows * 2) + 5);
         common->centerWindow();
         print->showBlinkingCursor(false);
     #endif
