@@ -11,6 +11,7 @@
 
 // system headers:
 #include <algorithm>
+#include <iostream>
 #include <vector>
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
     #include <windows.h>
@@ -20,12 +21,14 @@
 
 // project headers:
 #include <field.hpp>
+#include <print.hpp>
 #include <solver.hpp>
 #include <symbols.hpp>
 
 Solver::Solver()
 :
     common(std::make_unique<Common>()),
+    print(std::make_unique<Print>()),
     symbols(std::make_unique<Symbols>())
 {
 }
@@ -95,11 +98,17 @@ void Solver::autoSolve(Field& field, bool doPlaceFlags, bool doFlagAutoUncover, 
                 #else
                     usleep(50*1000);
                 #endif
+                
+                print->printMinesLeft(field);
+
+                #if DEBUG == 1
+                    print->printDebugCoveredLeft(field);
+                #endif
+
                 field.printCoords(tempCoords, false);
             }
         }
     }
-
     // run field.flagAutoUncover() on all cells:
     if (doFlagAutoUncover)
     {

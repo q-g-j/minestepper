@@ -65,7 +65,6 @@ public:
     int getInputCustomMinesCount(int const&);
     void getInputEnterKey(std::string const&);
     Common::UserInputReturnStruct getUserInput(Field&, int);
-    void showBlinkingCursor(bool);
 };
 
 

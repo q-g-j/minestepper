@@ -28,8 +28,9 @@
 // project headers:
 #include <common.hpp>
 #include <input.hpp>
+#include <print.hpp>
 
-Common::Common()  
+Common::Common()
 {
 }
 
@@ -148,40 +149,18 @@ std::string Common::stringConvert(std::wstring const& wstr)
     }
 #endif
 
-// erase particular lines instead of clearing the whole screen:
-void Common::deleteLastLine(size_t const& stringLength)
+void Common::gotoXY(int const& x, int const& y)
 {
-    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-        CONSOLE_SCREEN_BUFFER_INFO cbsi;
-        HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
-        COORD cursorPosition;
-        cursorPosition.X = 0;
-        cursorPosition.Y = 0;
+#if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    COORD coordsNew;
 
-        if (GetConsoleScreenBufferInfo(console, &cbsi))
-        {
-            cursorPosition = cbsi.dwCursorPosition;
-        }
-        --cursorPosition.Y;
-
-        SetConsoleCursorPosition(console, cursorPosition);
-        std::cout << "\r";
-        for (unsigned int i = 0; i < stringLength; ++i)
-        {
-            std::cout << " ";
-        }
-        std::cout << "\r";
-        std::cout << std::flush;
-    #else
-        std::cout << "\x1b[A";
-        std::cout << "\r";
-        for (unsigned int i = 0; i < stringLength; ++i)
-        {
-            std::cout << " ";
-        }
-        std::cout << "\r";
-        std::cout << std::flush;
-    #endif
+    coordsNew.X = x;
+    coordsNew.Y = y;
+    SetConsoleCursorPosition(hConsole, coordsNew);
+#else
+    printf("%c[%d;%df", 0x1B, y + 1, x + 1);
+#endif
 }
 
 // clear the whole screen. Used rarely to avoid screen blinking / slow refresh during the game:
@@ -262,12 +241,12 @@ Common::CoordsStruct Common::coordsToCursorPosition(CoordsStruct const& coords, 
 
 void Common::exitProgram(int const& errorCode)
 {
-    Input input;
+    Print print;
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         setUnicode(false);
     #else
         enableNonCanonicalMode();
     #endif
-    input.showBlinkingCursor(true);
+    print.showBlinkingCursor(true);
     exit (errorCode);
 }

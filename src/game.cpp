@@ -35,12 +35,12 @@ Common::GameModeReturnStruct Game::chooseGamemode()
 
     std::cout << colors->setTextColor(colors->color_default);
     common->setWindowTitle("Minesweeper");
-    input->showBlinkingCursor(false);
+    print->showBlinkingCursor(false);
     common->clearScreen();
 
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         common->centerWindow();
-        input->showBlinkingCursor(false);
+        print->showBlinkingCursor(false);
     #endif
 
     #if MEM_LEAK_TEST_LOOP == 1
@@ -77,7 +77,7 @@ Common::GameModeReturnStruct Game::chooseGamemode()
     {
         difficultyString = print->setDifficultyTexts(4);
         common->clearScreen();
-        input->showBlinkingCursor(true);
+        print->showBlinkingCursor(true);
 
         #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
             common->resizeConsole(38, 7);
@@ -104,7 +104,7 @@ Common::GameModeReturnStruct Game::chooseGamemode()
 
         returnStruct.mines = input->getInputCustomMinesCount(returnStruct.cols * returnStruct.rows);
 
-        input->showBlinkingCursor(false);
+        print->showBlinkingCursor(false);
     }
 
     return returnStruct;
@@ -123,12 +123,12 @@ void Game::startGame()
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         common->resizeConsole(fieldOffsetX + (gameMode.cols * (((field.getCellWidth() - 1) / 2) * 2 + 2)) + fieldOffsetX - 3, fieldOffsetY + (gameMode.rows * 2) + 5);
         common->centerWindow();
-        input->showBlinkingCursor(false);
+        print->showBlinkingCursor(false);
     #endif
 
-    field.gotoXY(field.getOffsetX() - 1, 1);
+    common->gotoXY(field.getOffsetX() - 1, 1);
     print->printTitle(difficultyString, gameMode.cols, gameMode.rows, gameMode.mines);
-    field.gotoXY(1, 3);
+    common->gotoXY(1, 3);
     field.drawField();
 
     int turn = 1;
@@ -136,19 +136,14 @@ void Game::startGame()
 
     while (true)
     {
-        field.gotoXY(1, 4);
-        common->deleteLastLine(20);
-        field.gotoXY(field.getOffsetX() - 1, field.getOffsetY() - 2);
-        std::cout << colors->setTextColor(colors->fg_light_red);
-        std::cout << field.getMinesLeft() << print->minesLeftText << std::flush;
-        std::cout << colors->setTextColor(colors->color_default);
-        #if DEBUG == 1
-            field.gotoXY(field.getOffsetX() - 1 + 17, field.getOffsetY() - 2);
-            std::cout << "Covered left: " << field.getCoveredLeft() <<  "     " << std::flush;
-        #endif
-        field.gotoXY(1, fieldOffsetY + field.getRows()*2 + 4);
+        print->printMinesLeft(field);
 
-        input->showBlinkingCursor(false);
+        #if DEBUG == 1
+            print->printDebugCoveredLeft(field);
+        #endif
+
+        common->gotoXY(1, fieldOffsetY + field.getRows()*2 + 4);
+        print->showBlinkingCursor(false);
 
         #if MEM_LEAK_TEST_LOOP == 1
             UserInput->Coords.col = 3;

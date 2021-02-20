@@ -1,5 +1,8 @@
 #pragma once
 
+// system headers:
+#include <memory>
+
 // project headers:
 #include <debug.hpp>
 
@@ -18,6 +21,8 @@ const char newline = '\n';
 
 class Common
 {
+private:
+
 public:
     struct CoordsStruct
     {
@@ -63,8 +68,8 @@ public:
 
     void resizeConsole(int const&, int const&);
     void setWindowTitle(std::string const&);
-    void deleteLastLine(size_t const&);
     void clearScreen();
+    void gotoXY(int const&, int const&);
     CoordsStruct intToCoords(int const&, int const&);
     unsigned int coordsToInt(CoordsStruct const&, int const&);
     CoordsStruct coordsToCursorPosition(CoordsStruct const&, int const&, int const&, int const&);

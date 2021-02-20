@@ -106,31 +106,6 @@ void Input::getInputEnterKey(std::string const& text)
     std::cout << newline;
 }
 
-// disable the input cursor during game play:
-void Input::showBlinkingCursor(bool show)
-{
-    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-        HANDLE out = GetStdHandle(STD_OUTPUT_HANDLE);
-
-        CONSOLE_CURSOR_INFO cursorInfo;
-        cursorInfo.dwSize = 1;
-
-        GetConsoleCursorInfo(out, &cursorInfo);
-        cursorInfo.bVisible = show; // set the cursor visibility
-        SetConsoleCursorInfo(out, &cursorInfo);
-    #else
-        if (show == true)
-        {
-            coutconv << "\e[?25h";
-        }
-        else
-        {
-            coutconv << "\e[?25l";
-        }
-    #endif
-        std::cout << std::flush;
-}
-
 // custom mode: ask user for the game mode (difficulty):
 int Input::getInputDifficulty()
 {
@@ -259,8 +234,8 @@ int Input::getInputCustomCellWidth()
         else
         {
             getInputEnterKey(print->wrongInputText);
-            common->deleteLastLine(print->wrongInputText.length());
-            common->deleteLastLine(print->inputText.length() + line.length());
+            print->deleteLastLine(print->wrongInputText.length());
+            print->deleteLastLine(print->inputText.length() + line.length());
         }
     }    
 }
@@ -350,8 +325,8 @@ Common::CoordsStruct Input::getInputCustomDimensions(int const& fieldCellWidth)
         else
         {
             getInputEnterKey(print->wrongInputText);
-            common->deleteLastLine(print->wrongInputText.length());
-            common->deleteLastLine(print->inputText.length() + line.length());
+            print->deleteLastLine(print->wrongInputText.length());
+            print->deleteLastLine(print->inputText.length() + line.length());
         }
     }
 }
@@ -404,8 +379,8 @@ int Input::getInputCustomMinesCount(int const& fieldSize)
         else
         {
             getInputEnterKey(print->wrongInputText);
-            common->deleteLastLine(print->wrongInputText.length());
-            common->deleteLastLine(print->inputText.length() + line.length());
+            print->deleteLastLine(print->wrongInputText.length());
+            print->deleteLastLine(print->inputText.length() + line.length());
         }
     }
 }
@@ -413,10 +388,9 @@ int Input::getInputCustomMinesCount(int const& fieldSize)
 void Input::helpToggle(Field &field, Common::CoordsStruct const& currentArrayPosition)
 {
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-    common->resizeConsole(107, 27);
+        common->resizeConsole(107, 27);
         common->centerWindow();
-        common->setUnicode(false);
-        showBlinkingCursor(false);
+        print->showBlinkingCursor(false);
     #endif
 
     Common::CoordsStruct currentCursorPosition;
@@ -430,25 +404,23 @@ void Input::helpToggle(Field &field, Common::CoordsStruct const& currentArrayPos
     #endif
 
     common->clearScreen();
-    field.gotoXY(field.getOffsetX() - 1, 1);
+    common->gotoXY(field.getOffsetX() - 1, 1);
     print->printTitle(field.getDifficultyString(), field.getCols(), field.getRows(), field.getMinesTotal());
-    field.gotoXY(1, 3);
+    common->gotoXY(1, 3);
     field.drawField();
     std::cout << newline;
-    field.gotoXY(field.getOffsetX() - 1, field.getOffsetY() - 2);
-    std::cout << colors->setTextColor(colors->fg_light_red);
-    std::cout << field.getMinesLeft() << print->minesLeftText << std::flush;
-    std::cout << colors->setTextColor(colors->color_default);
-    field.gotoXY(field.getOffsetX() - 1, field.getOffsetY() + field.getRows()*2);
+    print->printMinesLeft(field);
+
+    #if DEBUG == 1
+        print->printDebugCoveredLeft(field);
+    #endif
+
+    common->gotoXY(field.getOffsetX() - 1, field.getOffsetY() + field.getRows()*2);
     std::cout << colors->setTextColor(colors->fg_white);
     std::cout << print->getHelpText << newline << newline;
     std::cout << colors->setTextColor(colors->color_default);
     currentCursorPosition = common->coordsToCursorPosition(currentArrayPosition, field.getOffsetX(), field.getOffsetY(), field.getCellWidth());
-    field.gotoXY(currentCursorPosition.col, currentCursorPosition.row);
-
-    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-        common->setUnicode(false);
-    #endif
+    common->gotoXY(currentCursorPosition.col, currentCursorPosition.row);
 
     field.printCoords(currentArrayPosition, true);
 }
@@ -523,7 +495,7 @@ void Input::moveCursor(Field &field, Common::CoordsStruct& currentArrayPosition,
         }
     }
     currentCursorPosition = common->coordsToCursorPosition(currentArrayPosition, field.getOffsetX(), field.getOffsetY(), field.getCellWidth());
-    field.gotoXY(currentCursorPosition.col, currentCursorPosition.row);
+    common->gotoXY(currentCursorPosition.col, currentCursorPosition.row);
     field.printCoords(currentArrayPosition, true);
 }
 
@@ -537,7 +509,7 @@ Common::UserInputReturnStruct Input::getUserInput(Field &field, int firstrun)
     bool *toogleEdgeJumpP;
     toogleEdgeJumpP = &toggleEdgeJump;
 
-    field.gotoXY(field.getOffsetX() - 1, field.getOffsetY() + field.getRows() * 2);
+    common->gotoXY(field.getOffsetX() - 1, field.getOffsetY() + field.getRows() * 2);
     std::cout << colors->setTextColor(colors->fg_white);
     std::cout << print->getHelpText << newline << newline;
     std::cout << colors->setTextColor(colors->color_default);
@@ -563,10 +535,9 @@ Common::UserInputReturnStruct Input::getUserInput(Field &field, int firstrun)
     }
 
     currentCursorPosition = common->coordsToCursorPosition(currentArrayPosition, field.getOffsetX(), field.getOffsetY(), field.getCellWidth());
-    field.gotoXY(currentCursorPosition.col, currentCursorPosition.row);
+    common->gotoXY(currentCursorPosition.col, currentCursorPosition.row);
 
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-        common->setUnicode(true);
         field.printCoords(currentArrayPosition, true);
 
         int inputKeyA;
@@ -660,7 +631,6 @@ Common::UserInputReturnStruct Input::getUserInput(Field &field, int firstrun)
                 continue;
             }
         }
-        common->setUnicode(false);
 
     #else
         enableNonCanonicalMode();

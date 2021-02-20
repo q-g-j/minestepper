@@ -35,6 +35,67 @@ Print::~Print()
 {
 }
 
+// disable the input cursor during game play:
+void Print::showBlinkingCursor(bool show)
+{
+#if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+    HANDLE out = GetStdHandle(STD_OUTPUT_HANDLE);
+
+    CONSOLE_CURSOR_INFO cursorInfo;
+    cursorInfo.dwSize = 1;
+
+    GetConsoleCursorInfo(out, &cursorInfo);
+    cursorInfo.bVisible = show; // set the cursor visibility
+    SetConsoleCursorInfo(out, &cursorInfo);
+#else
+    if (show == true)
+    {
+        coutconv << "\e[?25h";
+    }
+    else
+    {
+        coutconv << "\e[?25l";
+    }
+#endif
+    std::cout << std::flush;
+}
+
+// erase particular lines instead of clearing the whole screen:
+void Print::deleteLastLine(size_t const& stringLength)
+{
+#if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+    CONSOLE_SCREEN_BUFFER_INFO cbsi;
+    HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
+    COORD cursorPosition;
+    cursorPosition.X = 0;
+    cursorPosition.Y = 0;
+
+    if (GetConsoleScreenBufferInfo(console, &cbsi))
+    {
+        cursorPosition = cbsi.dwCursorPosition;
+    }
+    --cursorPosition.Y;
+
+    SetConsoleCursorPosition(console, cursorPosition);
+    std::cout << "\r";
+    for (size_t i = 0; i < stringLength; ++i)
+    {
+        std::cout << " ";
+    }
+    std::cout << "\r";
+    std::cout << std::flush;
+#else
+    std::cout << "\x1b[A";
+    std::cout << "\r";
+    for (unsigned int i = 0; i < stringLength; ++i)
+    {
+        std::cout << " ";
+    }
+    std::cout << "\r";
+    std::cout << std::flush;
+#endif
+}
+
 std::string Print::setDifficultyTexts(int const& mode)
 {
     if (mode == 1) return "Small";
@@ -52,6 +113,26 @@ void Print::printTitle(std::string const& difficultyString, int const& cols, int
     std::cout << colors->setTextColor(colors->color_default);
     std::cout << newline << newline << newline;
 }
+
+void Print::printMinesLeft(Field &field)
+{
+    common->gotoXY(field.getOffsetX() - 1, field.getOffsetY() - 2);
+    deleteLastLine(20);
+    common->gotoXY(field.getOffsetX() - 1, field.getOffsetY() - 2);
+    std::cout << colors->setTextColor(colors->fg_light_red);
+    std::cout << field.getMinesLeft() << minesLeftText << std::flush;
+    std::cout << colors->setTextColor(colors->color_default);
+}
+
+#if DEBUG == 1
+    void Print::printDebugCoveredLeft(Field &field)
+    {
+        #if DEBUG == 1
+            common->gotoXY(field.getOffsetX() - 1 + 17, field.getOffsetY() - 2);
+            std::cout << "Covered left: " << field.getCoveredLeft() << "     " << std::flush;
+        #endif
+    }
+#endif
 
 void Print::printMenu()
 {
@@ -114,13 +195,13 @@ void Print::printCustomGetMinesCount()
 
 void Print::printHasWon(Field &field)
 {
-    field.gotoXY(1, 4);
-    common->deleteLastLine(20);
-    field.gotoXY(field.getOffsetX() - 1, field.getOffsetY() - 2);
+    common->gotoXY(1, 4);
+    deleteLastLine(20);
+    common->gotoXY(field.getOffsetX() - 1, field.getOffsetY() - 2);
     std::cout << colors->setTextColor(colors->fg_light_red);
     std::cout << field.getMinesLeft() << minesLeftText << std::flush;
 
-    field.gotoXY(field.getOffsetX() - 1, field.getOffsetY() + field.getRows()*2 + 2);
+    common->gotoXY(field.getOffsetX() - 1, field.getOffsetY() + field.getRows()*2 + 2);
     std::cout << colors->setTextColor(colors->fg_white);
     std::cout << "Congratulation, you have won!" << newline;
     std::cout << colors->setTextColor(colors->color_default);
@@ -128,7 +209,7 @@ void Print::printHasWon(Field &field)
 
 void Print::printHasLost(Field &field)
 {
-    field.gotoXY(field.getOffsetX() - 1, field.getOffsetY() + field.getRows()*2 + 2);
+    common->gotoXY(field.getOffsetX() - 1, field.getOffsetY() + field.getRows()*2 + 2);
     std::cout << colors->setTextColor(colors->fg_white);
     std::cout << "Sorry, you have lost!" << newline;
     std::cout << colors->setTextColor(colors->color_default);

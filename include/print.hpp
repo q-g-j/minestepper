@@ -9,6 +9,7 @@
 // forward declarations of classes:
 class Colors;
 class Common;
+class Field;
 
 class Print
 {
@@ -28,7 +29,15 @@ public:
     const std::string debugTurnCountText = " DEBUG: Turn: ";
 
     // public methods:
+    void deleteLastLine(size_t const&);
+    void showBlinkingCursor(bool);
     void printTitle(std::string const&, int const&, int const&, int const&);
+    void printMinesLeft(Field&);
+
+    #if DEBUG == 1
+        void printDebugCoveredLeft(Field&);
+    #endif
+
     std::string setDifficultyTexts(int const&);
     void printMenu();
     void printCustomGetCellWidth();

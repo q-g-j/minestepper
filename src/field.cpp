@@ -146,9 +146,9 @@ void Field::setMinesLeft::operator++()
     {
         Common::CoordsStruct tempCoords;
         tempCoords = common->coordsToCursorPosition(coordsOld, this->fieldOffsetX, this->fieldOffsetY, this->fieldCellWidth);
-        gotoXY(getOffsetX() - 1 + 17, getOffsetY() - 2);
+        common->gotoXY(getOffsetX() - 1 + 17, getOffsetY() - 2);
         std::cout << "Covered left: " << getCoveredLeft() <<  "     " << std::flush;
-        gotoXY(tempCoords.col, tempCoords.row);
+        common->gotoXY(tempCoords.col, tempCoords.row);
     }
 #endif
 
@@ -265,6 +265,10 @@ void Field::drawField()
 
             printCoords(coords, false);
 
+            #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+                common->setUnicode(true);
+            #endif
+
             for (int padding = 0; padding < (this->fieldCellWidth-1)/2; ++padding)
             {
                 std::wcout << L" ";
@@ -332,29 +336,16 @@ void Field::drawField()
     #endif
 }
 
-void Field::gotoXY(int const& x, int const& y)
-{
-    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-        HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-        COORD coordsNew;
-
-        coordsNew.X = x;
-        coordsNew.Y = y;
-        SetConsoleCursorPosition(hConsole, coordsNew);
-    #else
-        printf("%c[%d;%df",0x1B,y + 1,x + 1);
-    #endif
-}
-
 // print the content of one particular cell at "coords":
 void Field::printCoords(Common::CoordsStruct const& coords, bool isCursor)
 {
     Common::CoordsStruct tempCoords;
 
     tempCoords = common->coordsToCursorPosition(coords, this->fieldOffsetX, this->fieldOffsetY, this->fieldCellWidth);
-    gotoXY(tempCoords.col, tempCoords.row);
+    common->gotoXY(tempCoords.col, tempCoords.row);
 
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+        common->setUnicode(true);
         HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
         if (isNumber(coords))
         {
@@ -402,6 +393,7 @@ void Field::printCoords(Common::CoordsStruct const& coords, bool isCursor)
         std::wstring coordsString = this->field2DVector[coords.col][coords.row];
         WriteConsoleW(hConsole, coordsString.c_str(), static_cast<DWORD>(coordsString.size()), nullptr, nullptr);
         SetConsoleTextAttribute(hConsole, colors->color_default);
+        common->setUnicode(false);
     #else
         std::string content;
         if (isNumber(coords))
@@ -496,7 +488,7 @@ std::vector<Common::CoordsStruct> Field::findNeighbors(std::vector<std::vector<s
         { -1,  0 },
      };
 
-    for (size_t x = 0; x < sizeof(pos) / sizeof(pos[0]); ++x)
+    for (int x = 0; x < sizeof(pos) / sizeof(pos[0]); ++x)
     {
         if (
             !(coords.col == 1 && pos[x][0] == -1) &&
@@ -507,7 +499,7 @@ std::vector<Common::CoordsStruct> Field::findNeighbors(std::vector<std::vector<s
         {
             if (symbol == symbols->symbolNumber)
             {
-                for (size_t i = 1; i < 8; ++i)
+                for (int i = 1; i < 8; ++i)
                 {
                     if (temp2DVector[coords.col + pos[x][0]][coords.row + pos[x][1]] == symbols->symbolNumbersArray[i])
                     {
@@ -558,7 +550,7 @@ void Field::gameWon()
     #endif
 
     print->printHasWon(*this);
-    gotoXY(this->fieldOffsetX - 1, this->fieldOffsetY + this->rows*2 + 3);
+    common->gotoXY(this->fieldOffsetX - 1, this->fieldOffsetY + this->rows*2 + 3);
     input->getInputEnterKey("Press ENTER to get back...");
 }
 
@@ -598,7 +590,7 @@ void Field::gameLost()
     #endif
 
     print->printHasLost(*this);
-    gotoXY(this->fieldOffsetX - 1, this->fieldOffsetY + this->rows*2 + 3);
+    common->gotoXY(this->fieldOffsetX - 1, this->fieldOffsetY + this->rows*2 + 3);
     input->getInputEnterKey("Press ENTER to get back...");
 }
 
@@ -626,7 +618,7 @@ void Field::autoUncoverRecursive(Common::CoordsStruct const& coords, std::vector
             {
                 if (this->mines2DVector[neighborsCoveredVector.at(i).col][neighborsCoveredVector.at(i).row] != symbols->symbolMine)
                 {
-                    this->field2DVector[neighborsCoveredVector.at(i).col][neighborsCoveredVector.at(i).row] = common->intToString(neighborsMinesVector.size());
+                    this->field2DVector[neighborsCoveredVector.at(i).col][neighborsCoveredVector.at(i).row] = common->intToString(static_cast<int>(neighborsMinesVector.size()));
                 }
             }
             poolVector.push_back(common->coordsToInt(neighborsCoveredVector.at(i), this->cols));
@@ -635,9 +627,9 @@ void Field::autoUncoverRecursive(Common::CoordsStruct const& coords, std::vector
 
             #if DEBUG == 1
                 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-                    Sleep(50);
+                    Sleep(20);
                 #else
-                    usleep(50*1000);
+                    usleep(20*1000);
                 #endif
                 debugPrintCountCovered(coords);
             #endif

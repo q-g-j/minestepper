@@ -42,7 +42,7 @@ private:
     // set width of each cell (must be an odd number!):
     const int fieldCellWidth  = 3;
 
-    int difficulty;
+    int difficulty = 1;
     std::string difficultyString;
 public:
     Game();
