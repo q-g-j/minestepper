@@ -146,8 +146,8 @@ void Game::startGame()
         print->showBlinkingCursor(false);
 
         #if MEM_LEAK_TEST_LOOP == 1
-            UserInput->Coords.col = 3;
-            UserInput->Coords.row = 3;
+            userInput.Coords.col = 3;
+            userInput.Coords.row = 3;
         #else
             userInput = input->getUserInput(field, firstrun);
         #endif
