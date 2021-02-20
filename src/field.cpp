@@ -141,17 +141,6 @@ void Field::setMinesLeft::operator++()
     ++field_.minesLeft;
 }
 
-#if DEBUG == 1
-    void Field::debugPrintCountCovered(Common::CoordsStruct const& coordsOld)
-    {
-        Common::CoordsStruct tempCoords;
-        tempCoords = common->coordsToCursorPosition(coordsOld, this->fieldOffsetX, this->fieldOffsetY, this->fieldCellWidth);
-        common->gotoXY(getOffsetX() - 1 + 17, getOffsetY() - 2);
-        std::cout << "Covered left: " << getCoveredLeft() <<  "     " << std::flush;
-        common->gotoXY(tempCoords.col, tempCoords.row);
-    }
-#endif
-
 // use 2D vectors for the visible game board and the internal mines field:
 std::vector<std::vector<stringconv>> Field::create2DVector(std::string const& vectorType)
 {
@@ -543,10 +532,7 @@ void Field::gameWon()
     this->minesLeft = 0;
 
     #if DEBUG == 1
-        Common::CoordsStruct dummyCoords;
-        dummyCoords.col = 0;
-        dummyCoords.row = 0;
-        debugPrintCountCovered(dummyCoords);
+        print->printDebugCoveredLeft(*this);
     #endif
 
     print->printHasWon(*this);
@@ -583,10 +569,7 @@ void Field::gameLost()
     //this->minesLeft = 0;
 
     #if DEBUG == 1
-        Common::CoordsStruct dummyCoords;
-        dummyCoords.col = 0;
-        dummyCoords.row = 0;
-        debugPrintCountCovered(dummyCoords);
+        print->printDebugCoveredLeft(*this);
     #endif
 
     print->printHasLost(*this);
@@ -631,7 +614,7 @@ void Field::autoUncoverRecursive(Common::CoordsStruct const& coords, std::vector
                 #else
                     usleep(20*1000);
                 #endif
-                debugPrintCountCovered(coords);
+                print->printDebugCoveredLeft(*this);
             #endif
         }
 

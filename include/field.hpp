@@ -49,10 +49,6 @@ private:
     void gameWon();
     void gameLost();
 
-    #if DEBUG == 1
-        void debugPrintCountCovered(Common::CoordsStruct const&);
-    #endif
-
 public:
     Field(int const& cols_, int const& rows_, int const& fieldOffsetX_, int const& fieldOffsetY_, int const& fieldCellWidth_, int const& minesTotal_, std::string const& difficultyString_);
     ~Field();
