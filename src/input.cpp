@@ -605,7 +605,7 @@ Common::UserInputReturnStruct Input::getUserInput(Field &field, int firstrun)
             else if (inputKeyA == KEY_ENTER)
             {
                 coutconv << L"\b" << std::flush;
-                if (field.getCoordsContent(currentArrayPosition) == symbols->symbolFlag)
+                if (field.getCoordsContent(currentArrayPosition) == symbols->symbolFlag || field.getCoordsContent(currentArrayPosition) == symbols->symbolZero)
                 {
                     continue;
                 }
@@ -707,7 +707,7 @@ Common::UserInputReturnStruct Input::getUserInput(Field &field, int firstrun)
             else if (inputKeyA == KEY_ENTER)
             {
                 std::cout << "\b" << std::flush;
-                if (field.getCoordsContent(currentArrayPosition) == symbols->symbolFlag)
+                if (field.getCoordsContent(currentArrayPosition) == symbols->symbolFlag || field.getCoordsContent(currentArrayPosition) == symbols->symbolZero)
                 {
                     continue;
                 }

@@ -169,14 +169,16 @@ void Common::clearScreen()
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         if (system("cls") != 0) exitProgram(1);
     #else
-        try
-        {
-            if (system("clear") != 0) exitProgram(1);
-        }
-        catch (...)
-        {
-            std::cout << "\x1B[2J\x1B[H";
-        }
+//        try
+//        {
+//            system("clear");
+//        }
+//        catch (...)
+//        {
+//            std::cout << "\x1B[2J\x1B[H";
+//        }
+    system("clear");
+    std::cout << "\x1B[2J\x1B[H";
     #endif
 }
 
@@ -245,7 +247,7 @@ void Common::exitProgram(int const& errorCode)
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         setUnicode(false);
     #else
-        enableNonCanonicalMode();
+        disableNonCanonicalMode();
     #endif
     print.showBlinkingCursor(true);
     exit (errorCode);

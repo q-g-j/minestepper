@@ -76,8 +76,8 @@ Common::GameModeReturnStruct Game::chooseGamemode()
     else
     {
         difficultyString = print->setDifficultyTexts(4);
-        common->clearScreen();
         common->resizeConsole(38, 7);
+        common->clearScreen();
 
         #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
             common->centerWindow();
@@ -96,8 +96,8 @@ Common::GameModeReturnStruct Game::chooseGamemode()
         returnStruct.cols = dimensions.col;
         returnStruct.rows = dimensions.row;
 
-        common->clearScreen();
         common->resizeConsole(41, 6);
+        common->clearScreen();
 
         #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
             common->centerWindow();
@@ -119,8 +119,8 @@ void Game::startGame()
     Common::GameModeReturnStruct gameMode = chooseGamemode();
     Field field(gameMode.cols, gameMode.rows, fieldOffsetX, fieldOffsetY, gameMode.cellWidth, gameMode.mines, difficultyString);
 
-    common->clearScreen();
     common->resizeConsole(fieldOffsetX + (gameMode.cols * (((field.getCellWidth() - 1) / 2) * 2 + 2)) + fieldOffsetX - 3, fieldOffsetY + (gameMode.rows * 2) + 5);
+    common->clearScreen();
 
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         common->centerWindow();
