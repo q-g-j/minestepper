@@ -3,6 +3,13 @@
 // system headers:
 #include <memory>
 
+#if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+    #include <windows.h>
+#else
+    #include <sys/ioctl.h>
+    #include <unistd.h>
+#endif
+
 // project headers:
 #include <common.hpp>
 #include <debug.hpp>
@@ -16,6 +23,12 @@ class Print;
 class Game
 {
 private:
+    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+        void saveScreenSize();
+    #else
+        void saveScreenSize();
+    #endif
+    
     // declare class objects as unique pointers:
     std::unique_ptr<Colors> colors;
     std::unique_ptr<Common> common;

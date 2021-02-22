@@ -4,13 +4,6 @@
 #include <iostream>
 #include <memory>
 
-#if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-    #include <windows.h>
-#else
-    #include <sys/ioctl.h>
-    #include <unistd.h>
-#endif
-
 // project headers:
 #include <debug.hpp>
 
@@ -26,12 +19,6 @@
 #endif
 
 const char newline = '\n';
-
-#if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-    CONSOLE_SCREEN_BUFFER_INFO saveScreenSize();
-#else
-    struct winsize saveScreenSize();
-#endif
 
 class Common
 {

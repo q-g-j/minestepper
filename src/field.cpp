@@ -477,7 +477,7 @@ std::vector<Common::CoordsStruct> Field::findNeighbors(std::vector<std::vector<s
         { -1,  0 },
      };
 
-    for (int x = 0; x < sizeof(pos) / sizeof(pos[0]); ++x)
+    for (size_t x = 0; x < sizeof(pos) / sizeof(pos[0]); ++x)
     {
         if (
             !(coords.col == 1 && pos[x][0] == -1) &&

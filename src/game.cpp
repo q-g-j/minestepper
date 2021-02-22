@@ -9,6 +9,12 @@
 #include <input.hpp>
 #include <print.hpp>
 
+#if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+    CONSOLE_SCREEN_BUFFER_INFO origScreenSize;
+#else
+    struct winsize origScreenSize;
+#endif
+
 Game::Game()
 :
     colors(std::make_unique<Colors>()),
@@ -16,11 +22,39 @@ Game::Game()
     input(std::make_unique<Input>()),
     print(std::make_unique<Print>())
 {
+    saveScreenSize();
+    atexit(disableNonCanonicalMode);
 }
 
 Game::~Game()
 {
 }
+
+// return original console screen size to be used in a global variable:
+#if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+    extern CONSOLE_SCREEN_BUFFER_INFO origScreenSize;
+
+    void Game::saveScreenSize()
+    {
+        CONSOLE_SCREEN_BUFFER_INFO csbi;
+        int columns, rows;
+
+        GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
+        columns = csbi.srWindow.Right - csbi.srWindow.Left + 1;
+        rows = csbi.srWindow.Bottom - csbi.srWindow.Top + 1;
+
+        origScreenSize = csbi;
+    }
+#else
+    extern struct winsize origScreenSize;
+
+    void Game::saveScreenSize()
+    {
+        struct winsize osize;
+        ioctl(STDOUT_FILENO, TIOCGWINSZ, &osize);
+        origScreenSize = osize;
+    }
+#endif
 
 Common::GameModeReturnStruct Game::chooseGamemode()
 {

@@ -40,7 +40,6 @@
     void enableNonCanonicalMode()
     {
         tcgetattr(STDIN_FILENO, &orig_termios);
-        atexit(disableNonCanonicalMode);
 
         struct termios raw = orig_termios;
         raw.c_lflag &= ~(ECHO | ICANON);

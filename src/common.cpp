@@ -27,34 +27,9 @@
 // project headers:
 #include <colors.hpp>
 #include <common.hpp>
+#include <game.hpp>
 #include <input.hpp>
 #include <print.hpp>
-
-// return original console screen size to be used in a global variable (main.cpp):
-#if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-    extern CONSOLE_SCREEN_BUFFER_INFO origScreenSize;
-
-    CONSOLE_SCREEN_BUFFER_INFO saveScreenSize()
-    {
-        CONSOLE_SCREEN_BUFFER_INFO csbi;
-        int columns, rows;
-
-        GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
-        columns = csbi.srWindow.Right - csbi.srWindow.Left + 1;
-        rows = csbi.srWindow.Bottom - csbi.srWindow.Top + 1;
-
-        return csbi;
-    }
-#else
-    extern struct winsize origScreenSize;
-
-    struct winsize saveScreenSize()
-    {
-        struct winsize osize;
-        ioctl(STDOUT_FILENO, TIOCGWINSZ, &osize);
-        return osize;
-    }
-#endif
 
 Common::Common()
 {
@@ -275,6 +250,12 @@ void Common::exitProgram(int const& errorCode)
 {
     Colors colors;
     Print print;
+
+    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+        extern CONSOLE_SCREEN_BUFFER_INFO origScreenSize;
+    #else
+        extern struct winsize origScreenSize;
+    #endif
 
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         int columns = origScreenSize.srWindow.Right - origScreenSize.srWindow.Left + 1;
