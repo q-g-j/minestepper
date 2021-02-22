@@ -23,7 +23,9 @@ Game::Game()
     print(std::make_unique<Print>())
 {
     saveScreenSize();
-    atexit(disableNonCanonicalMode);
+    #if !defined(_WIN32) && !defined(WIN32) && !defined(_WIN64) && !defined(WIN64)
+        atexit(disableNonCanonicalMode);
+    #endif
 }
 
 Game::~Game()
