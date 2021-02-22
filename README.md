@@ -26,7 +26,7 @@ It compiles and runs in Linux and Windows but might look a bit different on both
 
 ## Compilation:
 
-To build from source you need cmake and a C++ compiler (like clang or g++) that supports at least C++-14. No extra libraries needed.
+To build from source you need cmake and a C++ compiler (like clang or g++) that supports at least C++-14.
 
 ***Example for cmake and ninja in Linux:***
 
