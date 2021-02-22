@@ -19,7 +19,7 @@ A console based version of Minesweeper to teach myself C++.
 - colored numbers, flags and mines.
 - auto-revealing of connected safe cells when a "zero" (no neighbor mines) is hit
 - press ENTER on a number to auto-reveal connected safe cells similar to the Windows-version (if flags are placed right)
-- Linux version only (for now): show a timer while playing
+- show a timer while playing (using threads)
 - Windows version only: automatically resize and center the console window
 
 It compiles and runs in Linux and Windows but might look a bit different on both, depending on the terminal(-settings) used.
