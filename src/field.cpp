@@ -586,6 +586,8 @@ void Field::gameLost()
 // automatically uncover all connected cells, as long as they have no neighbor mines:
 void Field::autoUncoverRecursive(Common::CoordsStruct const& coords, std::vector<unsigned int> &poolVector)
 {
+    extern bool pauseTimer;
+    pauseTimer = true;
     // create vector holding covered neighbors:
     std::vector<Common::CoordsStruct> neighborsCoveredVector;
     neighborsCoveredVector = findNeighbors(this->field2DVector, coords, symbols->symbolCovered);
@@ -629,10 +631,13 @@ void Field::autoUncoverRecursive(Common::CoordsStruct const& coords, std::vector
             autoUncoverRecursive(neighborsCoveredVector.at(i), poolVector);
         }
     }
+    pauseTimer = false;
 }
 
 void Field::flagAutoUncover(Common::CoordsStruct const& coords, Common::PlaceUserInputReturnStruct &returnStruct)
 {
+    extern bool pauseTimer;
+    pauseTimer = true;
     // create a new vector of surrounding flags:
     std::vector<Common::CoordsStruct> flagUncoverNeighborsFlagsVector;
     flagUncoverNeighborsFlagsVector = findNeighbors(this->field2DVector, coords, symbols->symbolFlag);
@@ -715,6 +720,7 @@ void Field::flagAutoUncover(Common::CoordsStruct const& coords, Common::PlaceUse
             }
         }
     }
+    pauseTimer = false;
 }
 
 // the main method of class Field which will alter this->field2DVector.

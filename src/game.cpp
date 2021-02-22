@@ -20,7 +20,7 @@
 #endif
 
 bool gameRunning;
-bool helpToggled;
+bool pauseTimer;
 
 Game::Game()
 :
@@ -228,33 +228,40 @@ Common::GameModeReturnStruct Game::chooseGamemode()
 
         int timer = 0;
 
-        while (gameRunning == true && timer < 999 * 10)
+        while (true)
         {
-            if (! helpToggled)
+            if (gameRunning == true && timer < 999 * 10)
             {
-                if (timer / 10 < 10)
-                    common.gotoXY(field->getOffsetX() + (field->getCols() * (((field->getCellWidth() - 1) / 2) * 2 + 2)) - 5, field->getOffsetY() - 2);
-                else if (timer / 10 < 100)
-                    common.gotoXY(field->getOffsetX() + (field->getCols() * (((field->getCellWidth() - 1) / 2) * 2 + 2)) - 6, field->getOffsetY() - 2);
+                if (! pauseTimer)
+                {
+                    if (timer / 10 < 10)
+                        common.gotoXY(field->getOffsetX() + (field->getCols() * (((field->getCellWidth() - 1) / 2) * 2 + 2)) - 5, field->getOffsetY() - 2);
+                    else if (timer / 10 < 100)
+                        common.gotoXY(field->getOffsetX() + (field->getCols() * (((field->getCellWidth() - 1) / 2) * 2 + 2)) - 6, field->getOffsetY() - 2);
+                    else
+                        common.gotoXY(field->getOffsetX() + (field->getCols() * (((field->getCellWidth() - 1) / 2) * 2 + 2)) - 7, field->getOffsetY() - 2);
+                    std::cout << colors.setTextColor(colors.fg_light_red);
+                    if (timer % 10 == 0)
+                        std::cout << timer / 10 << std::flush << " s" << std::flush;
+                    std::cout << colors.setTextColor(colors.color_default);
+                    timer = timer + 1;
+                    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+                        Sleep(100);
+                    #else
+                        usleep(100 * 1000);
+                    #endif
+                }
                 else
-                    common.gotoXY(field->getOffsetX() + (field->getCols() * (((field->getCellWidth() - 1) / 2) * 2 + 2)) - 7, field->getOffsetY() - 2);
-                std::cout << colors.setTextColor(colors.fg_light_red);
-                if (timer % 10 == 0)
-                    std::cout << timer / 10 << std::flush << " s" << std::flush;
-                std::cout << colors.setTextColor(colors.color_default);
-                timer = timer + 1;
-                #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-                    Sleep(100);
-                #else
-                    usleep(100 * 1000);
-                #endif
+                    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+                        Sleep(50);
+                    #else
+                        usleep(50 * 1000);
+                    #endif
             }
-            else
-                #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-                    Sleep(50);
-                #else
-                    usleep(50 * 1000);
-                #endif
+            else if (gameRunning == false)
+            {
+                break;
+            }
         }
         #if !defined(_WIN32) && !defined(WIN32) && !defined(_WIN64) && !defined(WIN64)
             return NULL;
