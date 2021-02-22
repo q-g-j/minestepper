@@ -1,6 +1,10 @@
 // system headers:
 #include <iostream>
 
+#if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+    #include <process.h>
+#endif
+
 // project headers:
 #include <colors.hpp>
 #include <common.hpp>
@@ -15,10 +19,8 @@
     struct winsize origScreenSize;
 #endif
 
-#if !defined(_WIN32) && !defined(WIN32) && !defined(_WIN64) && !defined(WIN64)
-    bool gameRunning;
-    bool helpToggled;
-#endif
+bool gameRunning;
+bool helpToggled;
 
 Game::Game()
 :
@@ -152,86 +154,23 @@ Common::GameModeReturnStruct Game::chooseGamemode()
 }
 
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-    void Game::startGame()
-    {
-        if (fieldCellWidth % 2 == 0) common->exitProgram(1);
-        Common::UserInputReturnStruct userInput;
-        Common::PlaceUserInputReturnStruct placeUserInputReturn;
-        Common::GameModeReturnStruct gameMode = chooseGamemode();
-        Field field(gameMode.cols, gameMode.rows, fieldOffsetX, fieldOffsetY, gameMode.cellWidth, gameMode.mines, difficultyString);
-
-        common->resizeConsole(fieldOffsetX + (gameMode.cols * (((field.getCellWidth() - 1) / 2) * 2 + 2)) + fieldOffsetX - 3, fieldOffsetY + (gameMode.rows * 2) + 5);
-        common->clearScreen();
-
-        #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-            common->centerWindow();
-            print->showBlinkingCursor(false);
-        #endif
-
-        common->gotoXY(field.getOffsetX() - 1, 1);
-        print->printTitle(difficultyString, gameMode.cols, gameMode.rows, gameMode.mines);
-        common->gotoXY(1, 3);
-        field.drawField();
-
-        int turn = 1;
-        int firstrun = 1;
-
-        while (true)
-        {
-            print->printMinesLeft(field);
-
-            #if DEBUG == 1
-                print->printDebugCoveredLeft(field);
-            #endif
-
-            common->gotoXY(1, fieldOffsetY + field.getRows()*2 + 4);
-            print->showBlinkingCursor(false);
-
-            #if MEM_LEAK_TEST_LOOP == 1
-                userInput.Coords.col = 3;
-                userInput.Coords.row = 3;
-            #else
-                userInput = input->getUserInput(field, firstrun);
-            #endif
-
-            firstrun = 0;
-            
-            placeUserInputReturn = field.placeUserInput(userInput, turn);
-
-            if (placeUserInputReturn.hasLost)
-            {
-                break;
-            }
-            else if (placeUserInputReturn.hasWon)
-            {
-                break;
-            }
-            else
-            {
-                if (placeUserInputReturn.isTurn)
-                {
-                    ++turn;
-                }
-            }
-        }
-    }
-
+    void Game::gameThread(void* field_)
 #else
-    void *Game::gameThread(void *field_)
+    void *Game::gameThread(void* field_)
+#endif
     {
         Common common;
         Input input;
         Print print;
+        Field* field = (Field*)field_;
 
-        gameRunning = true;
+        Common::UserInputReturnStruct userInput;
+        Common::PlaceUserInputReturnStruct placeUserInputReturn;
 
         int turn = 1;
         int firstrun = 1;
 
-        Field *field = (Field*)field_;
-
-        Common::UserInputReturnStruct userInput;
-        Common::PlaceUserInputReturnStruct placeUserInputReturn;
+        gameRunning = true;
 
         while (true)
         {
@@ -241,7 +180,7 @@ Common::GameModeReturnStruct Game::chooseGamemode()
                 print->printDebugCoveredLeft(field);
             #endif
 
-            common.gotoXY(1, field->getOffsetX() + field->getRows()*2 + 4);
+            common.gotoXY(1, field->getOffsetX() + field->getRows() * 2 + 4);
             print.showBlinkingCursor(false);
 
             #if MEM_LEAK_TEST_LOOP == 1
@@ -252,7 +191,7 @@ Common::GameModeReturnStruct Game::chooseGamemode()
             #endif
 
             firstrun = 0;
-            
+
             placeUserInputReturn = field->placeUserInput(userInput, turn);
 
             if (placeUserInputReturn.hasLost)
@@ -271,17 +210,24 @@ Common::GameModeReturnStruct Game::chooseGamemode()
                 }
             }
         }
-        return NULL;
+        #if !defined(_WIN32) && !defined(WIN32) && !defined(_WIN64) && !defined(WIN64)
+            return NULL;
+        #endif
     }
 
-    void* Game::timerThread(void* field_)
+#if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+    void Game::timerThread(void* field_)
+#else
+    void *Game::timerThread(void* field_)
+#endif
     {
         Colors colors;
         Common common;
 
-        Field *field = (Field*)field_;
+        Field* field = (Field*)field_;
 
         int timer = 0;
+
         while (gameRunning == true && timer < 999 * 10)
         {
             if (! helpToggled)
@@ -297,34 +243,54 @@ Common::GameModeReturnStruct Game::chooseGamemode()
                     std::cout << timer / 10 << std::flush << " s" << std::flush;
                 std::cout << colors.setTextColor(colors.color_default);
                 timer = timer + 1;
-                usleep(100 * 1000);
+                #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+                    Sleep(100);
+                #else
+                    usleep(100 * 1000);
+                #endif
             }
             else
-                usleep(50 * 1000);
+                #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+                    Sleep(50);
+                #else
+                    usleep(50 * 1000);
+                #endif
         }
-        return NULL;
+        #if !defined(_WIN32) && !defined(WIN32) && !defined(_WIN64) && !defined(WIN64)
+            return NULL;
+        #endif
     }
 
-    void Game::startGame()
-    {
-        if (fieldCellWidth % 2 == 0) common->exitProgram(1);
-        Common::GameModeReturnStruct gameMode = chooseGamemode();
-        Field field(gameMode.cols, gameMode.rows, fieldOffsetX, fieldOffsetY, gameMode.cellWidth, gameMode.mines, difficultyString);
+void Game::startGame()
+{
+    Common::GameModeReturnStruct gameMode = chooseGamemode();
+    Field field(gameMode.cols, gameMode.rows, fieldOffsetX, fieldOffsetY, gameMode.cellWidth, gameMode.mines, difficultyString);
 
-        common->resizeConsole(fieldOffsetX + (gameMode.cols * (((field.getCellWidth() - 1) / 2) * 2 + 2)) + fieldOffsetX - 3, fieldOffsetY + (gameMode.rows * 2) + 5);
-        common->clearScreen();
+    common->resizeConsole(fieldOffsetX + (gameMode.cols * (((field.getCellWidth() - 1) / 2) * 2 + 2)) + fieldOffsetX - 3, fieldOffsetY + (gameMode.rows * 2) + 5);
+    common->clearScreen();
 
-        #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-            common->centerWindow();
-            print->showBlinkingCursor(false);
-        #endif
+    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+        common->centerWindow();
+        print->showBlinkingCursor(false);
+    #endif
 
-        common->gotoXY(field.getOffsetX() - 1, 1);
-        print->printTitle(difficultyString, gameMode.cols, gameMode.rows, gameMode.mines);
-        common->gotoXY(1, 3);
-        field.drawField();
+    common->gotoXY(field.getOffsetX() - 1, 1);
+    print->printTitle(difficultyString, gameMode.cols, gameMode.rows, gameMode.mines);
+    common->gotoXY(1, 3);
+    field.drawField();
 
-        Field* fieldP = &field;
+    Field* fieldP = &field;
+
+    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+        HANDLE handleThread1, handleThread2;
+
+        handleThread1 = (HANDLE)_beginthread(&gameThread, 0, fieldP);
+        Sleep(10);
+        handleThread2 = (HANDLE)_beginthread(&timerThread, 0, fieldP);
+
+        WaitForSingleObject(handleThread1, INFINITE);
+        WaitForSingleObject(handleThread2, INFINITE);
+    #else
         pthread_t threads[2];
 
         pthread_create(&threads[0], NULL, &gameThread, fieldP);
@@ -333,5 +299,5 @@ Common::GameModeReturnStruct Game::chooseGamemode()
 
         pthread_join(threads[0], NULL);
         pthread_join(threads[1], NULL);
-    }
-#endif
+    #endif
+}
