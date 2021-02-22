@@ -280,7 +280,7 @@ Common::GameModeReturnStruct Game::chooseGamemode()
 
         Field *field = (Field*)field_;
 
-        int timer = 1;
+        int timer = 0;
         while (gameRunning && timer < 999)
         {
             if (! helpToggled)
