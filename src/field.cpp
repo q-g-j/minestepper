@@ -514,11 +514,8 @@ std::vector<Common::CoordsStruct> Field::findNeighbors(std::vector<std::vector<s
 
 void Field::gameWon()
 {
-    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-    #else
-        extern bool gameRunning;
-        gameRunning = false;
-    #endif
+    extern bool gameRunning;
+    gameRunning = false;
 
     for (int i = 1; i <= this->cols; ++i)
     {
@@ -549,11 +546,8 @@ void Field::gameWon()
 
 void Field::gameLost()
 {
-    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-    #else
-        extern bool gameRunning;
-        gameRunning = false;
-    #endif
+    extern bool gameRunning;
+    gameRunning = false;
 
     for (int i = 1; i <= this->cols; ++i)
     {
