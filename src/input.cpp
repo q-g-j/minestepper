@@ -154,7 +154,6 @@ int Input::getInputDifficulty()
         {
             if (inputKey == 'q' || inputKey == 'Q')
             {
-                common->clearScreen();
                 common->exitProgram(0);
             }
             if (inputKey == '1')
@@ -204,7 +203,6 @@ int Input::getInputCustomCellWidth()
         getline(std::cin, line);
         if (line == "q" || line == "Q")
         {
-            common->clearScreen();
             common->exitProgram(0);
         }
         else if (line == "")
@@ -260,7 +258,6 @@ Common::CoordsStruct Input::getInputCustomDimensions(int const& fieldCellWidth)
         getline(std::cin, line);
         if (line == "q" || line == "Q")
         {
-            common->clearScreen();
             common->exitProgram(0);
         }
         else if (line == "")
@@ -349,7 +346,6 @@ int Input::getInputCustomMinesCount(int const& fieldSize)
         getline(std::cin, line);
         if (line == "q" || line == "Q")
         {
-            common->clearScreen();
             common->exitProgram(0);
         }
         else if (line == "")
@@ -674,7 +670,6 @@ Common::UserInputReturnStruct Input::getUserInput(Field &field, int firstrun)
             }
             else if (inputKeyA == 'q' || inputKeyA == 'Q')
             {
-                common->clearScreen();
                 common->exitProgram(0);
             }
             else if (inputKeyA == 'h' || inputKeyA == 'H')

@@ -9,14 +9,20 @@
     #endif
 #endif
 
-// system headers:
-#include <iostream>
-
 // project headers:
+#include <common.hpp>
 #include <game.hpp>
+
+#if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+    CONSOLE_SCREEN_BUFFER_INFO origScreenSize;
+#else
+    struct winsize origScreenSize;
+#endif
 
 int main()
 {
+    origScreenSize = saveScreenSize();
+
     #if defined(_DEBUG)
         #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
             _CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );        

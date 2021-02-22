@@ -26,9 +26,36 @@
 #endif
 
 // project headers:
+#include <colors.hpp>
 #include <common.hpp>
 #include <input.hpp>
 #include <print.hpp>
+
+// return original console screen size to be used in a global variable (main.cpp):
+#if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+    extern CONSOLE_SCREEN_BUFFER_INFO origScreenSize;
+
+    CONSOLE_SCREEN_BUFFER_INFO saveScreenSize()
+    {
+        CONSOLE_SCREEN_BUFFER_INFO csbi;
+        int columns, rows;
+
+        GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
+        columns = csbi.srWindow.Right - csbi.srWindow.Left + 1;
+        rows = csbi.srWindow.Bottom - csbi.srWindow.Top + 1;
+
+        return csbi;
+    }
+#else
+    extern struct winsize origScreenSize;
+
+    struct winsize saveScreenSize()
+    {
+        struct winsize osize;
+        ioctl(STDOUT_FILENO, TIOCGWINSZ, &osize);
+        return osize;
+    }
+#endif
 
 Common::Common()
 {
@@ -47,10 +74,10 @@ void Common::setWindowTitle(std::string const& titleText)
     #endif
 }
 
+// Windows only: disable maximizing of the console window:
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
     void Common::setWindowProperties()
     {
-        // disable maximizing of the console window:
         HWND hwnd = GetConsoleWindow();
         DWORD style = GetWindowLong(hwnd, GWL_STYLE);
         style &= ~WS_MAXIMIZEBOX;
@@ -60,6 +87,8 @@ void Common::setWindowTitle(std::string const& titleText)
     }
 #endif
 
+// Resize console window to desired size
+// (Linux: needs a terminal that supports control sequences):
 void Common::resizeConsole(int const& cols, int const& rows)
 {
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
@@ -73,8 +102,8 @@ void Common::resizeConsole(int const& cols, int const& rows)
     #endif
 }
 
+// Windows only: move console window to desired position:
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-    // Windows only: move console window to desired position:
     void Common::centerWindow()
     {
         RECT rectWindow;
@@ -88,8 +117,8 @@ void Common::resizeConsole(int const& cols, int const& rows)
     }
 #endif
 
+// enable unicode mode in Windows to be able to print the symbols:
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-    // enable unicode mode in Windows to be able to print the symbols:
     void Common::setUnicode(bool sw)
     {
         if (sw)
@@ -119,7 +148,7 @@ void Common::resizeConsole(int const& cols, int const& rows)
     }
 #endif
 
-// for Windows: convert a string to wide string and vice versa:
+// convert a string to wide string and vice versa:
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
 std::wstring Common::stringConvert(std::string const& str)
     {
@@ -149,6 +178,7 @@ std::string Common::stringConvert(std::wstring const& wstr)
     }
 #endif
 
+// go to position on screen (x = column, y = row):
 void Common::gotoXY(int const& x, int const& y)
 {
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
@@ -177,7 +207,7 @@ void Common::clearScreen()
 //        {
 //            std::cout << "\x1B[2J\x1B[H";
 //        }
-    system("clear");
+    if (system("clear")) {};
     std::cout << "\x1B[2J\x1B[H";
     #endif
 }
@@ -220,7 +250,7 @@ unsigned int Common::coordsToInt(CoordsStruct const& coords, int const& cols)
     }
 }
 
-// can't use raw coordinates when placing the players cursor, due to the drawn lines and the cell width:
+// convert field coordinates to cursor coordinates:
 Common::CoordsStruct Common::coordsToCursorPosition(CoordsStruct const& coords, int const& offsetX, int const& offsetY, int const& cellWidth)
 {
     CoordsStruct cursorPosition;
@@ -241,14 +271,26 @@ Common::CoordsStruct Common::coordsToCursorPosition(CoordsStruct const& coords, 
     return cursorPosition;
 }
 
+// restore screen size, font color and cursor visibility at program exit:
 void Common::exitProgram(int const& errorCode)
 {
+    Colors colors;
     Print print;
+
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+        int columns = origScreenSize.srWindow.Right - origScreenSize.srWindow.Left + 1;
+        int rows = origScreenSize.srWindow.Bottom - origScreenSize.srWindow.Top + 1;
+        resizeConsole(columns, rows);
+        centerWindow();
         setUnicode(false);
     #else
+        resizeConsole(origScreenSize.ws_col, origScreenSize.ws_row);
         disableNonCanonicalMode();
     #endif
+
     print.showBlinkingCursor(true);
+    colors.setTextColor(colors.color_default);
+
+    clearScreen();
     exit (errorCode);
 }

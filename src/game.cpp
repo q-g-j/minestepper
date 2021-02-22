@@ -24,7 +24,6 @@ Game::~Game()
 
 Common::GameModeReturnStruct Game::chooseGamemode()
 {
-    Common::UserInputReturnStruct userInput;
     Common::CoordsStruct dimensions;
     Common::GameModeReturnStruct returnStruct;
 

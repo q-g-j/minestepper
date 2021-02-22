@@ -26,11 +26,15 @@ private:
     int fieldOffsetX;
     int fieldOffsetY;
     int fieldCellWidth;
-    int coveredLeft;
     int minesTotal;
     int minesLeft;
+    int coveredLeft;
     int flagsCount;
     std::string difficultyString;
+
+    // random number generator:
+    std::random_device rng;
+    std::mt19937 urng;
 
     // declare class objects as unique pointers:
     std::unique_ptr<Colors> colors;
@@ -38,10 +42,6 @@ private:
     std::unique_ptr<Input> input;
     std::unique_ptr<Print> print;
     std::unique_ptr<Symbols> symbols;
-
-    // random number generator:
-    std::random_device rng;
-    std::mt19937 urng;
 
     // private methods:
     std::vector<std::vector<stringconv>> create2DVector(std::string const&);
