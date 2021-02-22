@@ -224,6 +224,7 @@ Common::GameModeReturnStruct Game::chooseGamemode()
         Print print;
 
         gameRunning = true;
+
         int turn = 1;
         int firstrun = 1;
 
@@ -270,7 +271,7 @@ Common::GameModeReturnStruct Game::chooseGamemode()
                 }
             }
         }
-        pthread_exit(NULL);
+        return NULL;
     }
 
     void* Game::timerThread(void* field_)
@@ -281,7 +282,7 @@ Common::GameModeReturnStruct Game::chooseGamemode()
         Field *field = (Field*)field_;
 
         int timer = 0;
-        while (gameRunning && timer < 999)
+        while (gameRunning == true && timer < 999 * 10)
         {
             if (! helpToggled)
             {
@@ -299,9 +300,9 @@ Common::GameModeReturnStruct Game::chooseGamemode()
                 usleep(100 * 1000);
             }
             else
-                usleep(100 * 1000);
+                usleep(50 * 1000);
         }
-        pthread_exit(NULL);
+        return NULL;
     }
 
     void Game::startGame()
@@ -325,18 +326,12 @@ Common::GameModeReturnStruct Game::chooseGamemode()
 
         Field* fieldP = &field;
         pthread_t threads[2];
-        pthread_attr_t attr;
-        void *status;
 
-        pthread_attr_init(&attr);
-        pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
+        pthread_create(&threads[0], NULL, &gameThread, fieldP);
+        usleep(10 * 1000);
+        pthread_create(&threads[1], NULL, &timerThread, fieldP);
 
-        pthread_create(&threads[0], &attr, &gameThread, fieldP);
-        pthread_create(&threads[1], &attr, &timerThread, fieldP);
-
-        pthread_attr_destroy(&attr);
-
-        pthread_join(threads[0], &status);
-        pthread_join(threads[1], &status);
+        pthread_join(threads[0], NULL);
+        pthread_join(threads[1], NULL);
     }
 #endif
