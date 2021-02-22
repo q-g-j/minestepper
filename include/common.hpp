@@ -1,6 +1,7 @@
 #pragma once
 
 // system headers:
+#include <iostream>
 #include <memory>
 
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
