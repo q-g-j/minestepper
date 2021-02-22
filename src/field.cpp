@@ -25,6 +25,7 @@
 #include <colors.hpp>
 #include <common.hpp>
 #include <field.hpp>
+#include <game.hpp>
 #include <input.hpp>
 #include <print.hpp>
 #include <symbols.hpp>
@@ -513,6 +514,12 @@ std::vector<Common::CoordsStruct> Field::findNeighbors(std::vector<std::vector<s
 
 void Field::gameWon()
 {
+    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+    #else
+        extern bool gameRunning;
+        gameRunning = false;
+    #endif
+
     for (int i = 1; i <= this->cols; ++i)
     {
         for (int j = 1; j <= this->rows; ++j)
@@ -542,6 +549,12 @@ void Field::gameWon()
 
 void Field::gameLost()
 {
+    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+    #else
+        extern bool gameRunning;
+        gameRunning = false;
+    #endif
+
     for (int i = 1; i <= this->cols; ++i)
     {
         for (int j = 1; j <= this->rows; ++j)
@@ -566,7 +579,6 @@ void Field::gameLost()
     }
 
     this->coveredLeft = 0;
-    //this->minesLeft = 0;
 
     #if DEBUG == 1
         print->printDebugCoveredLeft(*this);

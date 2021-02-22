@@ -57,10 +57,17 @@ private:
 
     int difficulty = 1;
     std::string difficultyString;
+
+    Common::GameModeReturnStruct chooseGamemode();
+    
+    #if !defined(_WIN32) && !defined(WIN32) && !defined(_WIN64) && !defined(WIN64)
+        static void* gameThread(void*);
+        static void* timerThread(void*);
+    #endif
+    
 public:
     Game();
     ~Game();
 
-    Common::GameModeReturnStruct chooseGamemode();
     void startGame();
 };
