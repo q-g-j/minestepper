@@ -285,20 +285,21 @@ Common::GameModeReturnStruct Game::chooseGamemode()
         {
             if (! helpToggled)
             {
-                if (timer < 10)
+                if (timer / 10 < 10)
                     common.gotoXY(field->getOffsetX() + (field->getCols() * (((field->getCellWidth() - 1) / 2) * 2 + 2)) - 5, field->getOffsetY() - 2);
-                else if (timer < 100)
+                else if (timer / 10 < 100)
                     common.gotoXY(field->getOffsetX() + (field->getCols() * (((field->getCellWidth() - 1) / 2) * 2 + 2)) - 6, field->getOffsetY() - 2);
                 else
                     common.gotoXY(field->getOffsetX() + (field->getCols() * (((field->getCellWidth() - 1) / 2) * 2 + 2)) - 7, field->getOffsetY() - 2);
                 std::cout << colors.setTextColor(colors.fg_light_red);
-                std::cout << timer << std::flush << " s" << std::flush;
+                if (timer % 10 == 0)
+                    std::cout << timer / 10 << std::flush << " s" << std::flush;
                 std::cout << colors.setTextColor(colors.color_default);
-                ++timer;
-                usleep(1000 * 1000);
+                timer = timer + 1;
+                usleep(100 * 1000);
             }
             else
-                usleep(50 * 1000);
+                usleep(100 * 1000);
         }
         pthread_exit(NULL);
     }
