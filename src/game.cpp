@@ -263,7 +263,7 @@ Common::GameModeReturnStruct Game::chooseGamemode()
                         usleep(50 * 1000);
                     #endif
             }
-            else if (isGameRunning == false)
+            else
             {
                 break;
             }

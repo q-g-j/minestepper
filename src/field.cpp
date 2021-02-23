@@ -453,7 +453,7 @@ bool Field::isFlag(Common::CoordsStruct const& coords)
 // test coords if they contain a number:
 bool Field::isNumber(Common::CoordsStruct const& coords)
 {
-    for (int i = 1; i < 8; ++i)
+    for (int i = 1; i <= 8; ++i)
     {
         if (this->field2DVector[coords.col][coords.row] == common->intToString(i))
         {
