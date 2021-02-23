@@ -25,7 +25,7 @@ public:
     const std::string inputText = "  Input: ";
     const std::string wrongInputText = "  Wrong input, Press ENTER...";
     const std::string getHelpText = "'h' or 'H': Help";
-    const std::string minesLeftText = " Mines left...";
+    const std::string minesLeftText = " mines left  ";
     const std::string debugTurnCountText = " DEBUG: Turn: ";
 
     // public methods:
