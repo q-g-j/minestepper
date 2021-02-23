@@ -35,7 +35,7 @@
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
     extern CONSOLE_SCREEN_BUFFER_INFO origScreenSize;
 
-    void Game::saveScreenSize()
+    void saveScreenSize()
     {
         CONSOLE_SCREEN_BUFFER_INFO csbi;
         int columns, rows;
