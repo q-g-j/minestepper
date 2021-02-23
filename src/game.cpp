@@ -19,8 +19,8 @@
     struct winsize origScreenSize;
 #endif
 
-bool gameRunning;
-bool pauseTimer;
+bool gameRunning = false;
+bool pauseTimer = false;
 
 Game::Game()
 :
@@ -234,16 +234,18 @@ Common::GameModeReturnStruct Game::chooseGamemode()
             {
                 if (! pauseTimer)
                 {
-                    if (timer / 10 < 10)
-                        common.gotoXY(field->getOffsetX() + (field->getCols() * (((field->getCellWidth() - 1) / 2) * 2 + 2)) - 5, field->getOffsetY() - 2);
-                    else if (timer / 10 < 100)
-                        common.gotoXY(field->getOffsetX() + (field->getCols() * (((field->getCellWidth() - 1) / 2) * 2 + 2)) - 6, field->getOffsetY() - 2);
-                    else
-                        common.gotoXY(field->getOffsetX() + (field->getCols() * (((field->getCellWidth() - 1) / 2) * 2 + 2)) - 7, field->getOffsetY() - 2);
-                    std::cout << colors.setTextColor(colors.fg_light_red);
                     if (timer % 10 == 0)
+                    {
+                        if (timer / 10 < 10)
+                            common.gotoXY(field->getOffsetX() + (field->getCols() * (((field->getCellWidth() - 1) / 2) * 2 + 2)) - 5, field->getOffsetY() - 2);
+                        else if (timer / 10 < 100)
+                            common.gotoXY(field->getOffsetX() + (field->getCols() * (((field->getCellWidth() - 1) / 2) * 2 + 2)) - 6, field->getOffsetY() - 2);
+                        else
+                            common.gotoXY(field->getOffsetX() + (field->getCols() * (((field->getCellWidth() - 1) / 2) * 2 + 2)) - 7, field->getOffsetY() - 2);
+                        std::cout << colors.setTextColor(colors.fg_light_red);
                         std::cout << timer / 10 << std::flush << " s" << std::flush;
-                    std::cout << colors.setTextColor(colors.color_default);
+                        std::cout << colors.setTextColor(colors.color_default);
+                    }
                     timer = timer + 1;
                     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
                         Sleep(100);

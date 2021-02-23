@@ -41,6 +41,7 @@ void Solver::autoSolve(Field& field, bool doPlaceFlags, bool doFlagAutoUncover, 
 {
     extern bool pauseTimer;
     pauseTimer = true;
+    
     std::vector<int> poolCoveredVector;
 
     if (doPlaceFlags)
