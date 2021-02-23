@@ -294,14 +294,14 @@ void Game::startGame()
     Field* fieldP = &field;
 
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-        HANDLE handleThread1, handleThread2;
+        HANDLE threads[2];
 
-        handleThread1 = (HANDLE)_beginthread(&gameThread, 0, fieldP);
+        threads[0] = (HANDLE)_beginthread(&gameThread, 0, fieldP);
         Sleep(10);
-        handleThread2 = (HANDLE)_beginthread(&timerThread, 0, fieldP);
+        threads[1] = (HANDLE)_beginthread(&timerThread, 0, fieldP);
 
-        WaitForSingleObject(handleThread1, INFINITE);
-        WaitForSingleObject(handleThread2, INFINITE);
+        WaitForSingleObject(threads[0], INFINITE);
+        WaitForSingleObject(threads[1], INFINITE);
     #else
         pthread_t threads[2];
 
