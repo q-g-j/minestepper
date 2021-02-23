@@ -430,7 +430,11 @@ void Input::helpToggle(Field &field, Common::CoordsStruct const& currentArrayPos
 void Input::moveCursor(Field &field, Common::CoordsStruct& currentArrayPosition, Direction &direction, bool *toggleEdgeJump)
 {
     extern bool isTimerPrinting;
-    while (isTimerPrinting) Sleep(5);
+    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+        while (isTimerPrinting) Sleep(5);
+    #else
+        while (isTimerPrinting) usleep(5 * 1000);
+    #endif
 
     Common::CoordsStruct currentCursorPosition;
     std::wcout << L"\b";
