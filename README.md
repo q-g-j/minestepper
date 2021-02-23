@@ -43,7 +43,7 @@ XTerm*faceName: Hack
 XTerm*faceSize: 10
 ```
 
-Finally type in terminal:
+Finally type in a terminal (and re-open xterm):
 ```
 xrdb ~/.Xdefaults
 ```
