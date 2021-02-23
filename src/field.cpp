@@ -637,9 +637,10 @@ void Field::autoUncoverRecursive(Common::CoordsStruct const& coords, std::vector
     if (wasPaused != true) doPauseTimer = false;
 }
 
-void Field::flagAutoUncover(Common::CoordsStruct const& coords, Common::PlaceUserInputReturnStruct &returnStruct)
+void Field::flagAutoUncover(Common::CoordsStruct const& coords, Common::PlaceUserInputReturnStruct &returnStruct, bool hasCheated_)
 {
     extern bool doPauseTimer;
+    extern bool hasCheated;
     bool wasPaused = false;
     if (doPauseTimer == false) doPauseTimer = true;
     else wasPaused = true;
@@ -709,6 +710,7 @@ void Field::flagAutoUncover(Common::CoordsStruct const& coords, Common::PlaceUse
                                 poolVector.push_back(common->coordsToInt(tempCoords, this->cols));
                                 --this->coveredLeft;
                                 autoUncoverRecursive(tempCoords, poolVector);
+                                if (hasCheated_) hasCheated = true;
                             }
                         }
                         else
@@ -719,6 +721,7 @@ void Field::flagAutoUncover(Common::CoordsStruct const& coords, Common::PlaceUse
                                 printCoords(tempCoords, false);
                                 poolVector.push_back(common->coordsToInt(tempCoords, this->cols));
                                 --this->coveredLeft;
+                                if (hasCheated_) hasCheated = true;
                             }
                         }
                     }
@@ -776,7 +779,7 @@ Common::PlaceUserInputReturnStruct Field::placeUserInput(Common::UserInputReturn
         // uncover all surrounding safe positions:
         if (isNumber(userInput.Coords))
         {
-            flagAutoUncover(userInput.Coords, returnStruct);
+            flagAutoUncover(userInput.Coords, returnStruct, false);
             if (returnStruct.hasLost == true)
             {
                 gameLost();
