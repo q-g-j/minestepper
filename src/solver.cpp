@@ -39,7 +39,6 @@ Solver::~Solver()
 
 void Solver::autoSolve(Field& field, bool doPlaceFlags, bool doFlagAutoUncover, bool doSolve)
 {
-    extern bool doPauseTimer;
     extern bool hasCheated;
     
     std::vector<int> poolCoveredVector;
@@ -85,9 +84,9 @@ void Solver::autoSolve(Field& field, bool doPlaceFlags, bool doFlagAutoUncover, 
         // place a flag at the coords of each element of poolCoveredVector:
         if (poolCoveredVector.size() != 0)
         {
+            if (hasCheated != true) hasCheated = true;
             for (size_t i = 0; i < poolCoveredVector.size(); ++i)
             {
-                doPauseTimer = true;
                 Common::CoordsStruct tempCoords;
                 Field::setCoveredLeft coveredLeft(field);
                 Field::setMinesLeft minesLeft(field);
@@ -110,8 +109,6 @@ void Solver::autoSolve(Field& field, bool doPlaceFlags, bool doFlagAutoUncover, 
                 #endif
 
                 field.printCoords(tempCoords, false);
-                doPauseTimer = false;
-                hasCheated = true;
             }
         }
     }

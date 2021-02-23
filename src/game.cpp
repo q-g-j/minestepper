@@ -24,6 +24,7 @@ bool isTimerPrinting = false;
 bool doPauseTimer = false;
 bool doPrintTimer = false;
 bool hasCheated = false;
+bool isCheatedPrinted = false;
 
 Game::Game()
 :
@@ -37,8 +38,10 @@ Game::Game()
     doPauseTimer = false;
     doPrintTimer = false;
     hasCheated = false;
+    isCheatedPrinted = false;
 
     saveScreenSize();
+
     #if !defined(_WIN32) && !defined(WIN32) && !defined(_WIN64) && !defined(WIN64)
         atexit(disableNonCanonicalMode);
     #endif
@@ -239,11 +242,11 @@ Common::GameModeReturnStruct Game::chooseGamemode()
 
         while (isGameRunning)
         {
-            if (! doPauseTimer)
+            if (hasCheated == false)
             {
-                isTimerPrinting = true;
-                if (hasCheated == false)
+                if (doPauseTimer == false)
                 {
+                    isTimerPrinting = true;
                     if (timer % 10 == 0 || doPrintTimer == true)
                     {
                         if (timer / 10 < 10)
@@ -255,33 +258,36 @@ Common::GameModeReturnStruct Game::chooseGamemode()
                         std::cout << colors.setTextColor(colors.fg_light_red);
                         std::cout << timer / 10 << std::flush << " s" << std::flush;
                         std::cout << colors.setTextColor(colors.color_default);
+                        doPrintTimer = false;
                     }
-                    if (timer < 999 * 10) ++timer;
                     if (doPrintTimer == true) doPrintTimer = false;
+                    if (timer < 999 * 10) ++timer;
+                    isTimerPrinting = false;
+                    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+                        Sleep(100);
+                    #else
+                        usleep(100 * 1000);
+                    #endif
                 }
-                else
-                {
-                    common.gotoXY(field->getOffsetX() + (field->getCols() * (((field->getCellWidth() - 1) / 2) * 2 + 2)) - 9, field->getOffsetY() - 2);
-                    std::cout << colors.setTextColor(colors.fg_light_red);
-                    std::cout << "cheated!" << std::flush;
-                    std::cout << colors.setTextColor(colors.color_default);
-                }
-                isTimerPrinting = false;
-                #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-                    Sleep(100);
-                #else
-                    usleep(100 * 1000);
-                #endif
             }
-            else
+            else if (hasCheated == true && (isCheatedPrinted == false || doPrintTimer == true))
             {
-                #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-                    Sleep(50);
-                #else
-                    usleep(50 * 1000);
-                #endif
+                isTimerPrinting = true;
+                common.gotoXY(field->getOffsetX() + (field->getCols() * (((field->getCellWidth() - 1) / 2) * 2 + 2)) - 9, field->getOffsetY() - 2);
+                std::cout << colors.setTextColor(colors.fg_light_red);
+                std::cout << "cheated!" << std::flush;
+                std::cout << colors.setTextColor(colors.color_default);
+                doPrintTimer = false;
+                isTimerPrinting = false;
+                isCheatedPrinted = true;
             }
+            #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+                Sleep(50);
+            #else
+                usleep(50 * 1000);
+            #endif
         }
+
         #if !defined(_WIN32) && !defined(WIN32) && !defined(_WIN64) && !defined(WIN64)
             return NULL;
         #endif

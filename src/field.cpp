@@ -588,8 +588,7 @@ void Field::autoUncoverRecursive(Common::CoordsStruct const& coords, std::vector
 {
     extern bool doPauseTimer;
     bool wasPaused = false;
-    if (doPauseTimer == false) doPauseTimer = true;
-    else wasPaused = true;
+    (doPauseTimer == false) ? doPauseTimer = true : wasPaused = true;
 
     // create vector holding covered neighbors:
     std::vector<Common::CoordsStruct> neighborsCoveredVector;
@@ -642,8 +641,7 @@ void Field::flagAutoUncover(Common::CoordsStruct const& coords, Common::PlaceUse
     extern bool doPauseTimer;
     extern bool hasCheated;
     bool wasPaused = false;
-    if (doPauseTimer == false) doPauseTimer = true;
-    else wasPaused = true;
+    (doPauseTimer == false) ? doPauseTimer = true : wasPaused = true;
 
     // create a new vector of surrounding flags:
     std::vector<Common::CoordsStruct> flagUncoverNeighborsFlagsVector;
@@ -689,6 +687,7 @@ void Field::flagAutoUncover(Common::CoordsStruct const& coords, Common::PlaceUse
             {
                 if (flagUncoverNeighborsMinesVector.size() == flagUncoverNeighborsFlagsVector.size())
                 {
+                    if (hasCheated_) hasCheated = true;
                     // create a pool of already uncovered cells, to avoid double checks within autoUncoverRecursive():
                     std::vector<unsigned int> poolVector;
 
@@ -710,7 +709,6 @@ void Field::flagAutoUncover(Common::CoordsStruct const& coords, Common::PlaceUse
                                 poolVector.push_back(common->coordsToInt(tempCoords, this->cols));
                                 --this->coveredLeft;
                                 autoUncoverRecursive(tempCoords, poolVector);
-                                if (hasCheated_) hasCheated = true;
                             }
                         }
                         else
@@ -721,7 +719,6 @@ void Field::flagAutoUncover(Common::CoordsStruct const& coords, Common::PlaceUse
                                 printCoords(tempCoords, false);
                                 poolVector.push_back(common->coordsToInt(tempCoords, this->cols));
                                 --this->coveredLeft;
-                                if (hasCheated_) hasCheated = true;
                             }
                         }
                     }
