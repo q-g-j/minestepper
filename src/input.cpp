@@ -383,6 +383,7 @@ int Input::getInputCustomMinesCount(int const& fieldSize)
 void Input::helpToggle(Field &field, Common::CoordsStruct const& currentArrayPosition)
 {
     extern bool doPauseTimer;
+    extern bool doPrintTimer;
     doPauseTimer = true;
 
     common->resizeConsole(107, 27);
@@ -424,6 +425,7 @@ void Input::helpToggle(Field &field, Common::CoordsStruct const& currentArrayPos
     field.printCoords(currentArrayPosition, true);
 
     doPauseTimer = false;
+    doPrintTimer = true;
 }
 
 // move the players cursor in 4 directions with the arrow keys:

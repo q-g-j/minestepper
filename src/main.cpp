@@ -20,10 +20,9 @@ int main()
         #endif
     #endif
 
-    Game game;
-
     while (true)
     {
+        Game game;
         game.startGame();
     }
 

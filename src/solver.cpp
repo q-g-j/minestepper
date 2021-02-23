@@ -39,8 +39,7 @@ Solver::~Solver()
 
 void Solver::autoSolve(Field& field, bool doPlaceFlags, bool doFlagAutoUncover, bool doSolve)
 {
-    extern bool doPauseTimer;
-    doPauseTimer = true;
+    extern bool hasCheated;
     
     std::vector<int> poolCoveredVector;
 
@@ -109,6 +108,7 @@ void Solver::autoSolve(Field& field, bool doPlaceFlags, bool doFlagAutoUncover, 
                 #endif
 
                 field.printCoords(tempCoords, false);
+                hasCheated = true;
             }
         }
     }
@@ -124,6 +124,7 @@ void Solver::autoSolve(Field& field, bool doPlaceFlags, bool doFlagAutoUncover, 
                 tempCoords.row = i;
                 tempCoords.col = j;
                 field.flagAutoUncover(tempCoords, tempPlaceUserInputStruct);
+                hasCheated = true;
             }
         }
     }
@@ -134,5 +135,4 @@ void Solver::autoSolve(Field& field, bool doPlaceFlags, bool doFlagAutoUncover, 
     {
         autoSolve(field, doPlaceFlags, doFlagAutoUncover, false);
     }
-    doPauseTimer = false;
 }
