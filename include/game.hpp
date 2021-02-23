@@ -22,13 +22,7 @@ class Print;
 
 class Game
 {
-private:
-    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-        void saveScreenSize();
-    #else
-        void saveScreenSize();
-    #endif
-    
+private:    
     // declare class objects as unique pointers:
     std::unique_ptr<Colors> colors;
     std::unique_ptr<Common> common;

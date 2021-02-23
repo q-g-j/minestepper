@@ -40,8 +40,6 @@ Game::Game()
     hasCheated = false;
     isCheatedPrinted = false;
 
-    saveScreenSize();
-
     #if !defined(_WIN32) && !defined(WIN32) && !defined(_WIN64) && !defined(WIN64)
         atexit(disableNonCanonicalMode);
     #endif
@@ -50,32 +48,6 @@ Game::Game()
 Game::~Game()
 {
 }
-
-// return original console screen size to be used in a global variable:
-#if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-    extern CONSOLE_SCREEN_BUFFER_INFO origScreenSize;
-
-    void Game::saveScreenSize()
-    {
-        CONSOLE_SCREEN_BUFFER_INFO csbi;
-        int columns, rows;
-
-        GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
-        columns = csbi.srWindow.Right - csbi.srWindow.Left + 1;
-        rows = csbi.srWindow.Bottom - csbi.srWindow.Top + 1;
-
-        origScreenSize = csbi;
-    }
-#else
-    extern struct winsize origScreenSize;
-
-    void Game::saveScreenSize()
-    {
-        struct winsize osize;
-        ioctl(STDOUT_FILENO, TIOCGWINSZ, &osize);
-        origScreenSize = osize;
-    }
-#endif
 
 Common::GameModeReturnStruct Game::chooseGamemode()
 {
