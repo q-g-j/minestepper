@@ -19,8 +19,9 @@
     struct winsize origScreenSize;
 #endif
 
-bool gameRunning = false;
-bool pauseTimer = false;
+bool isGameRunning = false;
+bool doPauseTimer = false;
+bool isTimerPrinting = false;
 
 Game::Game()
 :
@@ -170,7 +171,7 @@ Common::GameModeReturnStruct Game::chooseGamemode()
         int turn = 1;
         int firstrun = 1;
 
-        gameRunning = true;
+        isGameRunning = true;
 
         while (true)
         {
@@ -230,10 +231,11 @@ Common::GameModeReturnStruct Game::chooseGamemode()
 
         while (true)
         {
-            if (gameRunning == true && timer < 999 * 10)
+            if (isGameRunning == true && timer < 999 * 10)
             {
-                if (! pauseTimer)
+                if (! doPauseTimer)
                 {
+                    isTimerPrinting = true;
                     if (timer % 10 == 0)
                     {
                         if (timer / 10 < 10)
@@ -246,6 +248,7 @@ Common::GameModeReturnStruct Game::chooseGamemode()
                         std::cout << timer / 10 << std::flush << " s" << std::flush;
                         std::cout << colors.setTextColor(colors.color_default);
                     }
+                    isTimerPrinting = false;
                     timer = timer + 1;
                     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
                         Sleep(100);
@@ -260,7 +263,7 @@ Common::GameModeReturnStruct Game::chooseGamemode()
                         usleep(50 * 1000);
                     #endif
             }
-            else if (gameRunning == false)
+            else if (isGameRunning == false)
             {
                 break;
             }

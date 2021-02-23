@@ -514,8 +514,8 @@ std::vector<Common::CoordsStruct> Field::findNeighbors(std::vector<std::vector<s
 
 void Field::gameWon()
 {
-    extern bool gameRunning;
-    gameRunning = false;
+    extern bool isGameRunning;
+    isGameRunning = false;
 
     for (int i = 1; i <= this->cols; ++i)
     {
@@ -546,8 +546,8 @@ void Field::gameWon()
 
 void Field::gameLost()
 {
-    extern bool gameRunning;
-    gameRunning = false;
+    extern bool isGameRunning;
+    isGameRunning = false;
 
     for (int i = 1; i <= this->cols; ++i)
     {
@@ -586,9 +586,9 @@ void Field::gameLost()
 // automatically uncover all connected cells, as long as they have no neighbor mines:
 void Field::autoUncoverRecursive(Common::CoordsStruct const& coords, std::vector<unsigned int> &poolVector)
 {
-    extern bool pauseTimer;
+    extern bool doPauseTimer;
     bool wasPaused = false;
-    if (pauseTimer == false) pauseTimer = true;
+    if (doPauseTimer == false) doPauseTimer = true;
     else wasPaused = true;
 
     // create vector holding covered neighbors:
@@ -634,14 +634,14 @@ void Field::autoUncoverRecursive(Common::CoordsStruct const& coords, std::vector
             autoUncoverRecursive(neighborsCoveredVector.at(i), poolVector);
         }
     }
-    if (wasPaused != true) pauseTimer = false;
+    if (wasPaused != true) doPauseTimer = false;
 }
 
 void Field::flagAutoUncover(Common::CoordsStruct const& coords, Common::PlaceUserInputReturnStruct &returnStruct)
 {
-    extern bool pauseTimer;
+    extern bool doPauseTimer;
     bool wasPaused = false;
-    if (pauseTimer == false) pauseTimer = true;
+    if (doPauseTimer == false) doPauseTimer = true;
     else wasPaused = true;
 
     // create a new vector of surrounding flags:
@@ -726,7 +726,7 @@ void Field::flagAutoUncover(Common::CoordsStruct const& coords, Common::PlaceUse
             }
         }
     }
-    if (wasPaused != true) pauseTimer = false;
+    if (wasPaused != true) doPauseTimer = false;
 }
 
 // the main method of class Field which will alter this->field2DVector.
