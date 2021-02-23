@@ -128,8 +128,8 @@ void Print::printMinesLeft(Field &field)
     void Print::printDebugCoveredLeft(Field &field)
     {
         #if DEBUG == 1
-            common->gotoXY(field.getOffsetX() - 1 + 17, field.getOffsetY() - 2);
-            std::cout << "Covered left: " << field.getCoveredLeft() << "     " << std::flush;
+            common->gotoXY(field.getOffsetX() - 1 + 15, field.getOffsetY() - 2);
+            std::cout << "Covered: " << field.getCoveredLeft() << "    " << std::flush;
         #endif
     }
 #endif

@@ -182,14 +182,16 @@ Common::GameModeReturnStruct Game::chooseGamemode()
         int turn = 1;
         int firstrun = 1;
 
-        isGameRunning = true;
+        #if MEM_LEAK_TEST_LOOP != 1
+            isGameRunning = true;
+        #endif
 
         while (true)
         {
             print.printMinesLeft(*field);
 
             #if DEBUG == 1
-                print->printDebugCoveredLeft(field);
+                print.printDebugCoveredLeft(*field);
             #endif
 
             common.gotoXY(1, field->getOffsetX() + field->getRows() * 2 + 4);
