@@ -238,11 +238,6 @@ Common::GameModeReturnStruct Game::chooseGamemode()
                     }
                     if (timer < 999 * 20) ++timer;
                     isTimerPrinting = false;
-                    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-                        Sleep(50);
-                    #else
-                        usleep(50 * 1000);
-                    #endif
                 }
             }
             else if (hasCheated == true && (isCheatedPrinted == false || doPrintTimer == true))
@@ -255,20 +250,12 @@ Common::GameModeReturnStruct Game::chooseGamemode()
                 doPrintTimer = false;
                 isTimerPrinting = false;
                 isCheatedPrinted = true;
-                #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-                    Sleep(50);
-                #else
-                    usleep(50 * 1000);
-                #endif
             }
-            else
-            {
-                #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-                    Sleep(50);
-                #else
-                    usleep(50 * 1000);
-                #endif
-            }
+            #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+                Sleep(50);
+            #else
+                usleep(50 * 1000);
+            #endif
         }
 
         #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
