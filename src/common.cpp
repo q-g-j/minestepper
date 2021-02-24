@@ -31,7 +31,7 @@
 #include <input.hpp>
 #include <print.hpp>
 
-// return original console screen size to be used in a global variable:
+// save original console screen size in a global variable:
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
     extern CONSOLE_SCREEN_BUFFER_INFO origScreenSize;
 

@@ -146,7 +146,7 @@ Common::GameModeReturnStruct Game::chooseGamemode()
         Common common;
         Input input;
         Print print;
-        Field* field = (Field*)field_;
+        Field* field = reinterpret_cast<Field*>(field_);
 
         Common::UserInputReturnStruct userInput;
         Common::PlaceUserInputReturnStruct placeUserInputReturn;
@@ -210,7 +210,7 @@ Common::GameModeReturnStruct Game::chooseGamemode()
         Colors colors;
         Common common;
 
-        Field* field = (Field*)field_;
+        Field* field = reinterpret_cast<Field*>(field_);
 
         int timer = 0;
 
