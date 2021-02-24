@@ -21,10 +21,7 @@ int main()
         #endif
     #endif
 
-    #if !defined(_WIN32) && !defined(WIN32) && !defined(_WIN64) && !defined(WIN64)
-        atexit(exitProgram);
-    #endif
-    
+    atexit(cleanUp);
     saveScreenSize();
 
     while (true)

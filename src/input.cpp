@@ -117,8 +117,7 @@ int Input::getInputDifficulty()
             int inputKey = 0;
             if ((inputKey = _getch()) == 'q' || inputKey == 'Q')
             {
-                common->clearScreen();
-                exitProgram();
+                exit(0);
             }
             else if (inputKey == '1')
             {
@@ -152,7 +151,7 @@ int Input::getInputDifficulty()
         {
             if (inputKey == 'q' || inputKey == 'Q')
             {
-                exitProgram();
+                exit(0);
             }
             if (inputKey == '1')
             {
@@ -201,7 +200,7 @@ int Input::getInputCustomCellWidth()
         getline(std::cin, line);
         if (line == "q" || line == "Q")
         {
-            exitProgram();
+            exit(0);
         }
         else if (line == "")
         {
@@ -256,7 +255,7 @@ Common::CoordsStruct Input::getInputCustomDimensions(int const& fieldCellWidth)
         getline(std::cin, line);
         if (line == "q" || line == "Q")
         {
-            exitProgram();
+            exit(0);
         }
         else if (line == "")
         {
@@ -344,7 +343,7 @@ int Input::getInputCustomMinesCount(int const& fieldSize)
         getline(std::cin, line);
         if (line == "q" || line == "Q")
         {
-            exitProgram();
+            exit(0);
         }
         else if (line == "")
         {
@@ -577,8 +576,7 @@ Common::UserInputReturnStruct Input::getInputGameplay(Field &field, int firstrun
             }
             else if (inputKeyA == 'q' || inputKeyA == 'Q')
             {
-                common->clearScreen();
-                exitProgram();
+                exit(0);
             }
             else if (inputKeyA == 'h' || inputKeyA == 'H')
             {
@@ -679,7 +677,7 @@ Common::UserInputReturnStruct Input::getInputGameplay(Field &field, int firstrun
             }
             else if (inputKeyA == 'q' || inputKeyA == 'Q')
             {
-                exitProgram();
+                exit(0);
             }
             else if (inputKeyA == 'h' || inputKeyA == 'H')
             {

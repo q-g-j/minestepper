@@ -58,7 +58,7 @@
 #endif
 
 // restore screen size, font color and cursor visibility at program exit:
-void exitProgram()
+void cleanUp()
 {
     Common common;
     Colors colors;
@@ -85,7 +85,6 @@ void exitProgram()
     colors.setTextColor(colors.color_default);
 
     common.clearScreen();
-    exit (0);
 }
 
 Common::Common() { }
@@ -151,12 +150,12 @@ void Common::resizeConsole(int const& cols, int const& rows)
         if (sw)
         {
             int result =_setmode(_fileno(stdout), 0x00020000);
-            if (result == -1) exitProgram();
+            if (result == -1) exit(1);
         }
         else
         {
             int result = _setmode(_fileno(stdout), _O_TEXT);
-            if (result == -1) exitProgram();
+            if (result == -1) exit(1);
         }
     }
 #endif
@@ -224,7 +223,7 @@ void Common::gotoXY(int const& x, int const& y)
 void Common::clearScreen()
 {
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-        if (system("cls") != 0) exitProgram();
+        if (system("cls") != 0) exit(1);
     #else
 //        try
 //        {

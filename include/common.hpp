@@ -18,15 +18,15 @@
     #define tostringconv std::to_string
 #endif
 
+const char newline = '\n';
+
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
     void saveScreenSize();
 #else
     void saveScreenSize();
 #endif
 
-void exitProgram();
-
-const char newline = '\n';
+void cleanUp();
 
 class Common
 {
