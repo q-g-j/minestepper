@@ -380,8 +380,8 @@ int Input::getInputCustomMinesCount(int const& fieldSize)
 
 void Input::toggleHelp(Field &field, Common::CoordsStruct const& currentArrayPosition)
 {
-    extern bool doPauseTimer;
-    extern bool doPrintTimer;
+    extern std::atomic_bool doPauseTimer;
+    extern std::atomic_bool doPrintTimer;
     doPauseTimer = true;
 
     common->resizeConsole(107, 27);
@@ -429,7 +429,7 @@ void Input::toggleHelp(Field &field, Common::CoordsStruct const& currentArrayPos
 // move the players cursor in 4 directions with the arrow keys:
 void Input::moveCursor(Field &field, Common::CoordsStruct& currentArrayPosition, Direction &direction, bool *toggleEdgeJump)
 {
-    extern bool isTimerPrinting;
+    extern std::atomic_bool isTimerPrinting;
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         while (isTimerPrinting) Sleep(5);
     #else

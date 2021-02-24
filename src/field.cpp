@@ -449,7 +449,7 @@ std::vector<Common::CoordsStruct> Field::findNeighbors(std::vector<std::vector<s
 
 void Field::gameWon()
 {
-    extern bool isGameRunning;
+    extern std::atomic_bool isGameRunning;
     isGameRunning = false;
 
     for (int i = 1; i <= this->cols; ++i)
@@ -481,7 +481,7 @@ void Field::gameWon()
 
 void Field::gameLost()
 {
-    extern bool isGameRunning;
+    extern std::atomic_bool isGameRunning;
     isGameRunning = false;
 
     for (int i = 1; i <= this->cols; ++i)
@@ -521,7 +521,7 @@ void Field::gameLost()
 // automatically uncover all connected cells, as long as they have no neighbor mines:
 void Field::autoUncoverRecursive(Common::CoordsStruct const& coords, std::vector<unsigned int> &poolVector)
 {
-    extern bool doPauseTimer;
+    extern std::atomic_bool doPauseTimer;
     bool wasPaused = false;
     (doPauseTimer == false) ? doPauseTimer = true : wasPaused = true;
 
@@ -573,8 +573,8 @@ void Field::autoUncoverRecursive(Common::CoordsStruct const& coords, std::vector
 
 void Field::flagAutoUncover(Common::CoordsStruct const& coords, Common::PlaceUserInputReturnStruct &returnStruct, bool hasCheated_)
 {
-    extern bool doPauseTimer;
-    extern bool hasCheated;
+    extern std::atomic_bool doPauseTimer;
+    extern std::atomic_bool hasCheated;
     bool wasPaused = false;
     (doPauseTimer == false) ? doPauseTimer = true : wasPaused = true;
 

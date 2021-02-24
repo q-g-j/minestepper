@@ -19,12 +19,12 @@
     struct winsize origScreenSize;
 #endif
 
-bool isGameRunning;
-bool isTimerPrinting;
-bool doPauseTimer;
-bool doPrintTimer;
-bool hasCheated;
-bool isCheatedPrinted;
+std::atomic_bool isGameRunning;
+std::atomic_bool isTimerPrinting;
+std::atomic_bool doPauseTimer;
+std::atomic_bool doPrintTimer;
+std::atomic_bool hasCheated;
+std::atomic_bool isCheatedPrinted;
 
 Game::Game()
 :
