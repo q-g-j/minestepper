@@ -1,9 +1,11 @@
 // system headers:
+#include <atomic>
 #include <iostream>
 
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
     #include <process.h>
 #endif
+
 
 // project headers:
 #include <colors.hpp>
@@ -19,12 +21,12 @@
     struct winsize origScreenSize;
 #endif
 
-std::atomic_bool isGameRunning;
-std::atomic_bool isTimerPrinting;
-std::atomic_bool doPauseTimer;
-std::atomic_bool doPrintTimer;
-std::atomic_bool hasCheated;
-std::atomic_bool isCheatedPrinted;
+std::atomic<bool> isGameRunning;
+std::atomic<bool> isTimerPrinting;
+std::atomic<bool> doPauseTimer;
+std::atomic<bool> doPrintTimer;
+std::atomic<bool> hasCheated;
+std::atomic<bool> isCheatedPrinted;
 
 Game::Game()
 :
