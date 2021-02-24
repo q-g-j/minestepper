@@ -138,7 +138,7 @@ Common::GameModeReturnStruct Game::chooseGamemode()
 }
 
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-    void Game::gameThread(void* field_)
+    unsigned __stdcall Game::gameThread(void* field_)
 #else
     void *Game::gameThread(void* field_)
 #endif
@@ -197,14 +197,15 @@ Common::GameModeReturnStruct Game::chooseGamemode()
             }
         }
         #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-            _endthread();
+            _endthreadex(0);
+            return 0;
         #else
             return NULL;
         #endif
     }
 
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-    void Game::timerThread(void* field_)
+    unsigned __stdcall Game::timerThread(void* field_)
 #else
     void *Game::timerThread(void* field_)
 #endif
@@ -259,7 +260,8 @@ Common::GameModeReturnStruct Game::chooseGamemode()
         }
 
         #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-            _endthread();
+            _endthreadex(0);
+            return 0;
         #else
             return NULL;
         #endif
@@ -288,11 +290,14 @@ void Game::startGame()
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         HANDLE hThreads[2];
 
-        hThreads[0] = reinterpret_cast<HANDLE>(_beginthread(&gameThread, 0, fieldP));
+        hThreads[0] = reinterpret_cast<HANDLE>(_beginthreadex(NULL, 0, &gameThread, fieldP, 0, 0));
         Sleep(10);
-        hThreads[1] = reinterpret_cast<HANDLE>(_beginthread(&timerThread, 0, fieldP));
+        hThreads[1] = reinterpret_cast<HANDLE>(_beginthreadex(NULL, 0, &timerThread, fieldP, 0, 0));
 
         WaitForMultipleObjects(2, hThreads, TRUE, INFINITE);
+
+        if (hThreads[0] != nullptr) CloseHandle(hThreads[0]);
+        if (hThreads[1] != nullptr) CloseHandle(hThreads[1]);
     #else
         pthread_t threads[2];
 
