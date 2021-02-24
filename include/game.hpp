@@ -56,7 +56,7 @@ private:
     
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         static void gameThread(void*);
-        static void timerThread(void*);        
+        static void timerThread(void*);
     #else
         static void* gameThread(void*);
         static void* timerThread(void*);

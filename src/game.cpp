@@ -196,7 +196,9 @@ Common::GameModeReturnStruct Game::chooseGamemode()
                 }
             }
         }
-        #if !defined(_WIN32) && !defined(WIN32) && !defined(_WIN64) && !defined(WIN64)
+        #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+            _endthread();
+        #else
             return NULL;
         #endif
     }
@@ -221,26 +223,25 @@ Common::GameModeReturnStruct Game::chooseGamemode()
                 if (doPauseTimer == false)
                 {
                     isTimerPrinting = true;
-                    if (timer % 10 == 0 || doPrintTimer == true)
+                    if (timer % 20 == 0 || doPrintTimer == true)
                     {
-                        if (timer / 10 < 10)
+                        if ((timer / 20) < 10)
                             common.gotoXY(field->getOffsetX() + (field->getCols() * (((field->getCellWidth() - 1) / 2) * 2 + 2)) - 5, field->getOffsetY() - 2);
-                        else if (timer / 10 < 100)
+                        else if ((timer / 20) < 100)
                             common.gotoXY(field->getOffsetX() + (field->getCols() * (((field->getCellWidth() - 1) / 2) * 2 + 2)) - 6, field->getOffsetY() - 2);
                         else
                             common.gotoXY(field->getOffsetX() + (field->getCols() * (((field->getCellWidth() - 1) / 2) * 2 + 2)) - 7, field->getOffsetY() - 2);
                         std::cout << colors.setTextColor(colors.fg_light_red);
-                        std::cout << timer / 10 << std::flush << " s" << std::flush;
+                        std::cout << timer / 20 << std::flush << " s" << std::flush;
                         std::cout << colors.setTextColor(colors.color_default);
                         doPrintTimer = false;
                     }
-                    if (doPrintTimer == true) doPrintTimer = false;
-                    if (timer < 999 * 10) ++timer;
+                    if (timer < 999 * 20) ++timer;
                     isTimerPrinting = false;
                     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-                        Sleep(100);
+                        Sleep(50);
                     #else
-                        usleep(100 * 1000);
+                        usleep(50 * 1000);
                     #endif
                 }
             }
@@ -254,15 +255,25 @@ Common::GameModeReturnStruct Game::chooseGamemode()
                 doPrintTimer = false;
                 isTimerPrinting = false;
                 isCheatedPrinted = true;
+                #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+                    Sleep(50);
+                #else
+                    usleep(50 * 1000);
+                #endif
             }
-            #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-                Sleep(50);
-            #else
-                usleep(50 * 1000);
-            #endif
+            else
+            {
+                #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+                    Sleep(50);
+                #else
+                    usleep(50 * 1000);
+                #endif
+            }
         }
 
-        #if !defined(_WIN32) && !defined(WIN32) && !defined(_WIN64) && !defined(WIN64)
+        #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+            _endthread();
+        #else
             return NULL;
         #endif
     }
@@ -288,14 +299,13 @@ void Game::startGame()
     Field* fieldP = &field;
 
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-        HANDLE threads[2];
+        HANDLE hThreads[2];
 
-        threads[0] = (HANDLE)_beginthread(&gameThread, 0, fieldP);
+        hThreads[0] = (HANDLE)_beginthread(&gameThread, 0, fieldP);
         Sleep(10);
-        threads[1] = (HANDLE)_beginthread(&timerThread, 0, fieldP);
+        hThreads[1] = (HANDLE)_beginthread(&timerThread, 0, fieldP);
 
-        WaitForSingleObject(threads[0], INFINITE);
-        WaitForSingleObject(threads[1], INFINITE);
+        WaitForMultipleObjects(2, hThreads, TRUE, INFINITE);
     #else
         pthread_t threads[2];
 
