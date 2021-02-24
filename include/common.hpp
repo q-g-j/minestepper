@@ -82,4 +82,5 @@ public:
     CoordsStruct intToCoords(int const&, int const&);
     unsigned int coordsToInt(CoordsStruct const&, int const&);
     CoordsStruct coordsToCursorPosition(CoordsStruct const&, int const&, int const&, int const&);
+    void preciseSleep(double);
 };

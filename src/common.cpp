@@ -10,8 +10,10 @@
 #endif
 
 // system headers:
+#include <chrono>
 #include <codecvt>
 #include <locale>
+#include <math.h>
 #include <string>
 #include <time.h>
 
@@ -22,6 +24,12 @@
     #include <stdio.h>
     #include <windows.h>
     #include <wingdi.h>
+#endif
+
+#if defined(__MINGW32__)
+    #include <mingw.thread.h>
+#else
+    #include <thread>
 #endif
 
 // project headers:
@@ -295,4 +303,34 @@ Common::CoordsStruct Common::coordsToCursorPosition(CoordsStruct const& coords, 
         cursorPosition.row = cursorPosition.row + 2;
     }
     return cursorPosition;
+}
+
+// replacement for Sleep() and usleep() for a more precise sleep:
+// (code snippet from https://blat-blatnik.github.io/computerBear/making-accurate-sleep-function/)
+void Common::preciseSleep(double seconds)
+{
+    static double estimate = 5e-3;
+    static double mean = 5e-3;
+    static double m2 = 0;
+    static int64_t count = 1;
+
+    while (seconds > estimate) {
+        auto start = std::chrono::high_resolution_clock::now();
+        std::this_thread::sleep_for(std::chrono::milliseconds(1));
+        auto end = std::chrono::high_resolution_clock::now();
+
+        double observed = (end - start).count() / 1e9;
+        seconds -= observed;
+
+        ++count;
+        double delta = observed - mean;
+        mean += delta / count;
+        m2 += delta * (observed - mean);
+        double stddev = sqrt(m2 / (count - 1));
+        estimate = mean + stddev;
+    }
+
+    // spin lock
+    auto start = std::chrono::high_resolution_clock::now();
+    while ((std::chrono::high_resolution_clock::now() - start).count() / 1e9 < seconds);
 }

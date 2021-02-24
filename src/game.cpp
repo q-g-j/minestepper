@@ -4,6 +4,7 @@
 
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
     #include <process.h>
+    #include <thread>
 #endif
 
 
@@ -222,9 +223,9 @@ Common::GameModeReturnStruct Game::chooseGamemode()
                     isTimerPrinting = true;
                     if (timer % 20 == 0 || doPrintTimer == true)
                     {
-                        if ((timer / 20) < 10)
+                        if (timer / 20 < 10)
                             common.gotoXY(field->getOffsetX() + (field->getCols() * (((field->getCellWidth() - 1) / 2) * 2 + 2)) - 5, field->getOffsetY() - 2);
-                        else if ((timer / 20) < 100)
+                        else if (timer / 20 < 100)
                             common.gotoXY(field->getOffsetX() + (field->getCols() * (((field->getCellWidth() - 1) / 2) * 2 + 2)) - 6, field->getOffsetY() - 2);
                         else
                             common.gotoXY(field->getOffsetX() + (field->getCols() * (((field->getCellWidth() - 1) / 2) * 2 + 2)) - 7, field->getOffsetY() - 2);
@@ -233,7 +234,7 @@ Common::GameModeReturnStruct Game::chooseGamemode()
                         std::cout << colors.setTextColor(colors.color_default);
                         doPrintTimer = false;
                     }
-                    if (timer < 999 * 20) ++timer;
+                    if (timer < 999 * 20) timer = timer + 1;
                     isTimerPrinting = false;
                 }
             }
@@ -248,11 +249,7 @@ Common::GameModeReturnStruct Game::chooseGamemode()
                 isTimerPrinting = false;
                 isCheatedPrinted = true;
             }
-            #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-                Sleep(50);
-            #else
-                usleep(50 * 1000);
-            #endif
+            common.preciseSleep(0.05);
         }
 
         #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
