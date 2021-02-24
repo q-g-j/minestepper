@@ -288,9 +288,9 @@ void Game::startGame()
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         HANDLE hThreads[2];
 
-        hThreads[0] = (HANDLE)_beginthread(&gameThread, 0, fieldP);
+        hThreads[0] = reinterpret_cast<HANDLE>(_beginthread(&gameThread, 0, fieldP));
         Sleep(10);
-        hThreads[1] = (HANDLE)_beginthread(&timerThread, 0, fieldP);
+        hThreads[1] = reinterpret_cast<HANDLE>(_beginthread(&timerThread, 0, fieldP));
 
         WaitForMultipleObjects(2, hThreads, TRUE, INFINITE);
     #else
