@@ -55,6 +55,8 @@
 
 Input::Input()
 :
+    toggleEdgeJump(false),
+    toogleEdgeJumpP(&toggleEdgeJump),
     colors(std::make_unique<Colors>()),
     common(std::make_unique<Common>()),
     print(std::make_unique<Print>()),
@@ -515,9 +517,6 @@ Common::UserInputReturnStruct Input::getUserInput(Field &field, int firstrun)
     static Common::CoordsStruct currentArrayPosition;
     Common::CoordsStruct currentCursorPosition;
     Common::UserInputReturnStruct returnStruct;
-    bool toggleEdgeJump = false;
-    bool *toogleEdgeJumpP;
-    toogleEdgeJumpP = &toggleEdgeJump;
 
     common->gotoXY(field.getOffsetX() - 1, field.getOffsetY() + field.getRows() * 2);
     std::cout << colors->setTextColor(colors->fg_white);
