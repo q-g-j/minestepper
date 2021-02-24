@@ -179,7 +179,7 @@ void Print::printCustomGetDimensions(int const& cellWidth)
     std::cout << "  How large do you want the field to be?" << newline;
     if (cellWidth == 1)
     {
-        std::cout << "  (min. 8x8 / max. 80x20)" << newline << newline;
+        std::cout << "  (min. 20x8 / max. 80x20)" << newline << newline;
     }
     else
     {

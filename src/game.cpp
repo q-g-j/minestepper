@@ -19,12 +19,12 @@
     struct winsize origScreenSize;
 #endif
 
-bool isGameRunning = false;
-bool isTimerPrinting = false;
-bool doPauseTimer = false;
-bool doPrintTimer = false;
-bool hasCheated = false;
-bool isCheatedPrinted = false;
+bool isGameRunning;
+bool isTimerPrinting;
+bool doPauseTimer;
+bool doPrintTimer;
+bool hasCheated;
+bool isCheatedPrinted;
 
 Game::Game()
 :
@@ -247,7 +247,7 @@ Common::GameModeReturnStruct Game::chooseGamemode()
             else if (hasCheated == true && (isCheatedPrinted == false || doPrintTimer == true))
             {
                 isTimerPrinting = true;
-                common.gotoXY(field->getOffsetX() + (field->getCols() * (((field->getCellWidth() - 1) / 2) * 2 + 2)) - 9, field->getOffsetY() - 2);
+                common.gotoXY(field->getOffsetX() + (field->getCols() * (((field->getCellWidth() - 1) / 2) * 2 + 2)) - 10, field->getOffsetY() - 2);
                 std::cout << colors.setTextColor(colors.fg_light_red);
                 std::cout << "cheated!" << std::flush;
                 std::cout << colors.setTextColor(colors.color_default);
