@@ -39,15 +39,9 @@ Game::Game()
     doPrintTimer = false;
     hasCheated = false;
     isCheatedPrinted = false;
-
-    #if !defined(_WIN32) && !defined(WIN32) && !defined(_WIN64) && !defined(WIN64)
-        atexit(disableNonCanonicalMode);
-    #endif
 }
 
-Game::~Game()
-{
-}
+Game::~Game() { }
 
 Common::GameModeReturnStruct Game::chooseGamemode()
 {
@@ -173,7 +167,7 @@ Common::GameModeReturnStruct Game::chooseGamemode()
                 userInput.Coords.col = 3;
                 userInput.Coords.row = 3;
             #else
-                userInput = input.getUserInput(*field, firstrun);
+                userInput = input.getInputGameplay(*field, firstrun);
             #endif
 
             firstrun = 0;

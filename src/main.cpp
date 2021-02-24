@@ -10,6 +10,7 @@
 #endif
 
 // project headers:
+#include <common.hpp>
 #include <game.hpp>
 
 int main()
@@ -18,6 +19,10 @@ int main()
         #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
             _CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );        
         #endif
+    #endif
+
+    #if !defined(_WIN32) && !defined(WIN32) && !defined(_WIN64) && !defined(WIN64)
+        atexit(exitProgram);
     #endif
     
     saveScreenSize();

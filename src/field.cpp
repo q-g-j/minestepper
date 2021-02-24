@@ -51,96 +51,31 @@ Field::Field(int const& cols_, int const& rows_, int const& fieldOffsetX_, int c
     symbols(std::make_unique<Symbols>()),
     field2DVector(create2DVector("field")),
     mines2DVector(create2DVector("mines"))
-{
-}
+{ }
 
 // deconstructor:
-Field::~Field()
-{
-}
+Field::~Field() { }
 
 // some getters:
-int Field::getCols()
-{
-    return this->cols;
-}
+int Field::getCols() { return this->cols; }
+int Field::getRows() { return this->rows; }
+int Field::getOffsetX() { return this->fieldOffsetX; }
+int Field::getOffsetY() { return this->fieldOffsetY; }
+int Field::getCellWidth() { return this->fieldCellWidth; }
+int Field::getCoveredLeft() { return this->coveredLeft; }
+int Field::getMinesTotal() { return this->minesTotal; }
+int Field::getMinesLeft() { return this->minesLeft; }
+int Field::getFlagsCount() { return this->flagsCount; }
+std::string Field::getDifficultyString() { return this->difficultyString; }
+stringconv Field::getCoordsContent(Common::CoordsStruct const& coords) { return this->field2DVector[coords.col][coords.row]; }
 
-int Field::getRows()
-{
-    return this->rows;
-}
-
-int Field::getOffsetX()
-{
-    return this->fieldOffsetX;
-}
-
-int Field::getOffsetY()
-{
-    return this->fieldOffsetY;
-}
-
-int Field::getCellWidth()
-{
-    return this->fieldCellWidth;
-}
-
-int Field::getCoveredLeft()
-{
-    return this->coveredLeft;
-}
-
-int Field::getMinesTotal()
-{
-    return this->minesTotal;
-}
-
-int Field::getMinesLeft()
-{
-    return this->minesLeft;
-}
-
-int Field::getFlagsCount()
-{
-    return this->flagsCount;
-}
-
-std::string Field::getDifficultyString()
-{
-    return this->difficultyString;
-}
-
-stringconv Field::getCoordsContent(Common::CoordsStruct const& coords)
-{
-    return this->field2DVector[coords.col][coords.row];
-}
-
-void Field::setCoveredLeft::operator--()
-{
-    --field_.coveredLeft;
-}
-void Field::setCoveredLeft::operator++()
-{
-    ++field_.coveredLeft;
-}
-
-void Field::setFlagsCount::operator--()
-{
-    --field_.flagsCount;
-}
-void Field::setFlagsCount::operator++()
-{
-    ++field_.flagsCount;
-}
-
-void Field::setMinesLeft::operator--()
-{
-    --field_.minesLeft;
-}
-void Field::setMinesLeft::operator++()
-{
-    ++field_.minesLeft;
-}
+// setters:
+void Field::setCoveredLeft::operator--() { --field_.coveredLeft; }
+void Field::setCoveredLeft::operator++() { ++field_.coveredLeft; }
+void Field::setFlagsCount::operator--() { --field_.flagsCount; }
+void Field::setFlagsCount::operator++() { ++field_.flagsCount; }
+void Field::setMinesLeft::operator--() { --field_.minesLeft; }
+void Field::setMinesLeft::operator++() { ++field_.minesLeft; }
 
 // use 2D vectors for the visible game board and the internal mines field:
 std::vector<std::vector<stringconv>> Field::create2DVector(std::string const& vectorType)

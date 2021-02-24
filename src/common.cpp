@@ -57,13 +57,40 @@
     }
 #endif
 
-Common::Common()
+// restore screen size, font color and cursor visibility at program exit:
+void exitProgram()
 {
+    Common common;
+    Colors colors;
+    Print print;
+
+    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+        extern CONSOLE_SCREEN_BUFFER_INFO origScreenSize;
+    #else
+        extern struct winsize origScreenSize;
+    #endif
+
+    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+        int columns = origScreenSize.srWindow.Right - origScreenSize.srWindow.Left + 1;
+        int rows = origScreenSize.srWindow.Bottom - origScreenSize.srWindow.Top + 1;
+        common.resizeConsole(columns, rows);
+        common.centerWindow();
+        common.setUnicode(false);
+    #else
+        common.resizeConsole(origScreenSize.ws_col, origScreenSize.ws_row);
+        disableNonCanonicalMode();
+    #endif
+
+    print.showBlinkingCursor(true);
+    colors.setTextColor(colors.color_default);
+
+    common.clearScreen();
+    exit (0);
 }
 
-Common::~Common()
-{
-}
+Common::Common() { }
+
+Common::~Common() { }
 
 void Common::setWindowTitle(std::string const& titleText)
 {
@@ -124,12 +151,12 @@ void Common::resizeConsole(int const& cols, int const& rows)
         if (sw)
         {
             int result =_setmode(_fileno(stdout), 0x00020000);
-            if (result == -1) exitProgram(1);
+            if (result == -1) exitProgram();
         }
         else
         {
             int result = _setmode(_fileno(stdout), _O_TEXT);
-            if (result == -1) exitProgram(1);
+            if (result == -1) exitProgram();
         }
     }
 #endif
@@ -197,7 +224,7 @@ void Common::gotoXY(int const& x, int const& y)
 void Common::clearScreen()
 {
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-        if (system("cls") != 0) exitProgram(1);
+        if (system("cls") != 0) exitProgram();
     #else
 //        try
 //        {
@@ -269,34 +296,4 @@ Common::CoordsStruct Common::coordsToCursorPosition(CoordsStruct const& coords, 
         cursorPosition.row = cursorPosition.row + 2;
     }
     return cursorPosition;
-}
-
-// restore screen size, font color and cursor visibility at program exit:
-void Common::exitProgram(int const& errorCode)
-{
-    Colors colors;
-    Print print;
-
-    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-        extern CONSOLE_SCREEN_BUFFER_INFO origScreenSize;
-    #else
-        extern struct winsize origScreenSize;
-    #endif
-
-    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-        int columns = origScreenSize.srWindow.Right - origScreenSize.srWindow.Left + 1;
-        int rows = origScreenSize.srWindow.Bottom - origScreenSize.srWindow.Top + 1;
-        resizeConsole(columns, rows);
-        centerWindow();
-        setUnicode(false);
-    #else
-        resizeConsole(origScreenSize.ws_col, origScreenSize.ws_row);
-        disableNonCanonicalMode();
-    #endif
-
-    print.showBlinkingCursor(true);
-    colors.setTextColor(colors.color_default);
-
-    clearScreen();
-    exit (errorCode);
 }

@@ -55,7 +55,7 @@ private:
 
     // private methods:
     void moveCursor(Field&, Common::CoordsStruct&, Direction&, bool*);
-    void helpToggle(Field&, Common::CoordsStruct const&);
+    void toggleHelp(Field&, Common::CoordsStruct const&);
 
 public:
     Input();
@@ -67,7 +67,7 @@ public:
     Common::CoordsStruct getInputCustomDimensions(int const&);
     int getInputCustomMinesCount(int const&);
     void getInputEnterKey(std::string const&);
-    Common::UserInputReturnStruct getUserInput(Field&, int);
+    Common::UserInputReturnStruct getInputGameplay(Field&, int);
 };
 
 

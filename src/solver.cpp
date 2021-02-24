@@ -30,12 +30,9 @@ Solver::Solver()
     common(std::make_unique<Common>()),
     print(std::make_unique<Print>()),
     symbols(std::make_unique<Symbols>())
-{
-}
+{ }
 
-Solver::~Solver()
-{
-}
+Solver::~Solver() { }
 
 void Solver::autoSolve(Field& field, bool doPlaceFlags, bool doFlagAutoUncover, bool doSolve)
 {

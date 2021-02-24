@@ -28,12 +28,9 @@ Print::Print()
 :    
     colors(std::make_unique<Colors>()),
     common(std::make_unique<Common>())
-{
-}
+{ }
 
-Print::~Print()
-{
-}
+Print::~Print() { }
 
 // disable the input cursor during game play:
 void Print::showBlinkingCursor(bool show)

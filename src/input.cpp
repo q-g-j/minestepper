@@ -62,12 +62,9 @@ Input::Input()
     print(std::make_unique<Print>()),
     solver(std::make_unique<Solver>()),
     symbols(std::make_unique<Symbols>())
-{
-}
+{ }
 
-Input::~Input()
-{
-}
+Input::~Input() { }
 
 void Input::getInputEnterKey(std::string const& text)
 {
@@ -121,7 +118,7 @@ int Input::getInputDifficulty()
             if ((inputKey = _getch()) == 'q' || inputKey == 'Q')
             {
                 common->clearScreen();
-                common->exitProgram(0);
+                exitProgram();
             }
             else if (inputKey == '1')
             {
@@ -155,7 +152,7 @@ int Input::getInputDifficulty()
         {
             if (inputKey == 'q' || inputKey == 'Q')
             {
-                common->exitProgram(0);
+                exitProgram();
             }
             if (inputKey == '1')
             {
@@ -204,7 +201,7 @@ int Input::getInputCustomCellWidth()
         getline(std::cin, line);
         if (line == "q" || line == "Q")
         {
-            common->exitProgram(0);
+            exitProgram();
         }
         else if (line == "")
         {
@@ -259,7 +256,7 @@ Common::CoordsStruct Input::getInputCustomDimensions(int const& fieldCellWidth)
         getline(std::cin, line);
         if (line == "q" || line == "Q")
         {
-            common->exitProgram(0);
+            exitProgram();
         }
         else if (line == "")
         {
@@ -347,7 +344,7 @@ int Input::getInputCustomMinesCount(int const& fieldSize)
         getline(std::cin, line);
         if (line == "q" || line == "Q")
         {
-            common->exitProgram(0);
+            exitProgram();
         }
         else if (line == "")
         {
@@ -382,7 +379,7 @@ int Input::getInputCustomMinesCount(int const& fieldSize)
     }
 }
 
-void Input::helpToggle(Field &field, Common::CoordsStruct const& currentArrayPosition)
+void Input::toggleHelp(Field &field, Common::CoordsStruct const& currentArrayPosition)
 {
     extern bool doPauseTimer;
     extern bool doPrintTimer;
@@ -512,7 +509,7 @@ void Input::moveCursor(Field &field, Common::CoordsStruct& currentArrayPosition,
 }
 
 // the main function to get the users input during a game:
-Common::UserInputReturnStruct Input::getUserInput(Field &field, int firstrun)
+Common::UserInputReturnStruct Input::getInputGameplay(Field &field, int firstrun)
 {
     static Common::CoordsStruct currentArrayPosition;
     Common::CoordsStruct currentCursorPosition;
@@ -581,11 +578,11 @@ Common::UserInputReturnStruct Input::getUserInput(Field &field, int firstrun)
             else if (inputKeyA == 'q' || inputKeyA == 'Q')
             {
                 common->clearScreen();
-                common->exitProgram(0);
+                exitProgram();
             }
             else if (inputKeyA == 'h' || inputKeyA == 'H')
             {
-                helpToggle(field, currentArrayPosition);
+                toggleHelp(field, currentArrayPosition);
                 continue;
             }
             else if (inputKeyA == 'f' || inputKeyA == 'F')
@@ -682,11 +679,11 @@ Common::UserInputReturnStruct Input::getUserInput(Field &field, int firstrun)
             }
             else if (inputKeyA == 'q' || inputKeyA == 'Q')
             {
-                common->exitProgram(0);
+                exitProgram();
             }
             else if (inputKeyA == 'h' || inputKeyA == 'H')
             {
-                helpToggle(field, currentArrayPosition);
+                toggleHelp(field, currentArrayPosition);
                 continue;
             }
             else if (inputKeyA == 'f' || inputKeyA == 'F')
