@@ -11,6 +11,7 @@
 
 // system headers:
 #include <algorithm>
+#include <atomic>
 #include <iostream>
 #include <vector>
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
@@ -36,7 +37,7 @@ Solver::~Solver() { }
 
 void Solver::autoSolve(Field& field, bool doPlaceFlags, bool doFlagAutoUncover, bool doSolve)
 {
-    extern std::atomic_bool hasCheated;
+    extern std::atomic<bool> hasCheated;
     
     std::vector<int> poolCoveredVector;
 

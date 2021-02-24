@@ -11,6 +11,7 @@
 
 // system headers:
 #include <algorithm>
+#include <atomic>
 #include <iostream>
 #include <random>
 #include <vector>
@@ -449,7 +450,7 @@ std::vector<Common::CoordsStruct> Field::findNeighbors(std::vector<std::vector<s
 
 void Field::gameWon()
 {
-    extern std::atomic_bool isGameRunning;
+    extern std::atomic<bool> isGameRunning;
     isGameRunning = false;
 
     for (int i = 1; i <= this->cols; ++i)
@@ -481,7 +482,7 @@ void Field::gameWon()
 
 void Field::gameLost()
 {
-    extern std::atomic_bool isGameRunning;
+    extern std::atomic<bool> isGameRunning;
     isGameRunning = false;
 
     for (int i = 1; i <= this->cols; ++i)
@@ -521,7 +522,7 @@ void Field::gameLost()
 // automatically uncover all connected cells, as long as they have no neighbor mines:
 void Field::autoUncoverRecursive(Common::CoordsStruct const& coords, std::vector<unsigned int> &poolVector)
 {
-    extern std::atomic_bool doPauseTimer;
+    extern std::atomic<bool> doPauseTimer;
     bool wasPaused = false;
     (doPauseTimer == false) ? doPauseTimer = true : wasPaused = true;
 
@@ -573,8 +574,8 @@ void Field::autoUncoverRecursive(Common::CoordsStruct const& coords, std::vector
 
 void Field::flagAutoUncover(Common::CoordsStruct const& coords, Common::PlaceUserInputReturnStruct &returnStruct, bool hasCheated_)
 {
-    extern std::atomic_bool doPauseTimer;
-    extern std::atomic_bool hasCheated;
+    extern std::atomic<bool> doPauseTimer;
+    extern std::atomic<bool> hasCheated;
     bool wasPaused = false;
     (doPauseTimer == false) ? doPauseTimer = true : wasPaused = true;
 

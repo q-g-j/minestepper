@@ -10,6 +10,7 @@
 #endif
 
 // system headers:
+#include <atomic>
 #include <iostream>
 #include <math.h>
 #include <stdio.h>
@@ -380,8 +381,8 @@ int Input::getInputCustomMinesCount(int const& fieldSize)
 
 void Input::toggleHelp(Field &field, Common::CoordsStruct const& currentArrayPosition)
 {
-    extern std::atomic_bool doPauseTimer;
-    extern std::atomic_bool doPrintTimer;
+    extern std::atomic<bool> doPauseTimer;
+    extern std::atomic<bool> doPrintTimer;
     doPauseTimer = true;
 
     common->resizeConsole(107, 27);
@@ -429,7 +430,7 @@ void Input::toggleHelp(Field &field, Common::CoordsStruct const& currentArrayPos
 // move the players cursor in 4 directions with the arrow keys:
 void Input::moveCursor(Field &field, Common::CoordsStruct& currentArrayPosition, Direction &direction, bool *toggleEdgeJump)
 {
-    extern std::atomic_bool isTimerPrinting;
+    extern std::atomic<bool> isTimerPrinting;
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         while (isTimerPrinting) Sleep(5);
     #else
