@@ -40,6 +40,7 @@ public:
     };
     struct GameModeReturnStruct
     {
+        std::string mode;
         int cols;
         int rows;
         int mines;

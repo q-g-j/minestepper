@@ -76,31 +76,18 @@ void Input::getInputEnterKey(std::string const& text)
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         while (true)
         {
-            int inputKey = 0;
-            if ((inputKey = _getch()) == KEY_ENTER)
-            {
-                break;
-            }
-            else
-            {
-                continue;
-            }
+            int inputKey;
+            if ((inputKey = _getch()) == KEY_ENTER) break;
+            else continue;
         }
     #else
-        enableNonCanonicalMode();
-        char inputKey = ' ';
-        while (read(STDIN_FILENO, &inputKey, 1) == 1)
+        char inputKeyA;
+        while (true)
         {
-            if (inputKey == KEY_ENTER)
-            {
-                break;
-            }
-            else
-            {
-                continue;
-            }
+            inputKeyA = getchar();
+            if (inputKeyA == KEY_ENTER) break;
+            else continue;
         }
-        disableNonCanonicalMode();
     #endif
     std::cout << newline;
 }
@@ -393,31 +380,13 @@ void Input::toggleHelp(Field &field, Common::CoordsStruct const& currentArrayPos
     #endif
 
     Common::CoordsStruct currentCursorPosition;
+
     common->clearScreen();
     print->printExplanation();
     getInputEnterKey("");
-    common->resizeConsole(field.getOffsetX() + (field.getCols() * (((field.getCellWidth() - 1) / 2) * 2 + 2)) + field.getOffsetX() - 3, field.getOffsetY() + (field.getRows() * 2) + 5);
 
-    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-        common->centerWindow();
-    #endif
+    field.printAll();
 
-    common->clearScreen();
-    common->gotoXY(field.getOffsetX() - 1, 1);
-    print->printTitle(field.getDifficultyString(), field.getCols(), field.getRows(), field.getMinesTotal());
-    common->gotoXY(1, 3);
-    field.drawField();
-    std::cout << newline;
-    print->printMinesLeft(field);
-
-    #if DEBUG == 1
-        print->printDebugCoveredLeft(field);
-    #endif
-
-    common->gotoXY(field.getOffsetX() - 1, field.getOffsetY() + field.getRows()*2);
-    std::cout << colors->setTextColor(colors->fg_white);
-    std::cout << print->getHelpText << newline << newline;
-    std::cout << colors->setTextColor(colors->color_default);
     currentCursorPosition = common->coordsToCursorPosition(currentArrayPosition, field.getOffsetX(), field.getOffsetY(), field.getCellWidth());
     common->gotoXY(currentCursorPosition.col, currentCursorPosition.row);
 
@@ -514,11 +483,6 @@ Common::UserInputReturnStruct Input::getInputGameplay(Field &field, int firstrun
     static Common::CoordsStruct currentArrayPosition;
     Common::CoordsStruct currentCursorPosition;
     Common::UserInputReturnStruct returnStruct;
-
-    common->gotoXY(field.getOffsetX() - 1, field.getOffsetY() + field.getRows() * 2);
-    std::cout << colors->setTextColor(colors->fg_white);
-    std::cout << print->getHelpText << newline << newline;
-    std::cout << colors->setTextColor(colors->color_default);
 
     if (firstrun == 1)
     {
@@ -641,9 +605,7 @@ Common::UserInputReturnStruct Input::getInputGameplay(Field &field, int firstrun
         enableNonCanonicalMode();
         field.printCoords(currentArrayPosition, true);
 
-        char inputKeyA;
-        char inputKeyB;
-        char inputKeyC;
+        char inputKeyA, inputKeyB, inputKeyC;
 
         while (true)
         {

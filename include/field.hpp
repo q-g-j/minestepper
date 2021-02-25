@@ -98,6 +98,7 @@ public:
     bool isFlag(Common::CoordsStruct const&);
     bool isNumber(Common::CoordsStruct const&);
     void drawField();
+    void printAll();
     void printCoords(Common::CoordsStruct const&, bool);
     std::vector<Common::CoordsStruct> findNeighbors(std::vector<std::vector<stringconv>> const&, Common::CoordsStruct const&, stringconv const&);
     void autoUncoverRecursive(Common::CoordsStruct const&, std::vector<unsigned int>&);

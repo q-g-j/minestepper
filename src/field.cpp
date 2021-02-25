@@ -262,6 +262,33 @@ void Field::drawField()
     #endif
 }
 
+void Field::printAll()
+{
+    common->resizeConsole(this->fieldOffsetX + (this->cols * (((this->fieldCellWidth - 1) / 2) * 2 + 2)) + this->fieldOffsetX - 3, this->fieldOffsetY + (this->rows * 2) + 5);
+    common->clearScreen();
+
+    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+        common->centerWindow();
+        print->showBlinkingCursor(false);
+    #endif
+
+    common->gotoXY(this->fieldOffsetX - 1, 1);
+    print->printTitle(this->difficultyString, this->cols, this->rows, this->minesTotal);
+    common->gotoXY(1, 3);
+    this->drawField();
+
+    common->gotoXY(this->fieldOffsetX - 1, this->fieldOffsetY + this->rows * 2);
+    std::cout << colors->setTextColor(colors->fg_white);
+    std::cout << print->getHelpText << newline << newline;
+    std::cout << colors->setTextColor(colors->color_default);
+    
+    print->printMinesLeft(*this);
+
+    #if DEBUG == 1
+        print->printDebugCoveredLeft(*this);
+    #endif
+}
+
 // print the content of one particular cell at "coords":
 void Field::printCoords(Common::CoordsStruct const& coords, bool isCursor)
 {

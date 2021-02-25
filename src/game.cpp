@@ -101,15 +101,18 @@ Common::GameModeReturnStruct Game::chooseGamemode()
         difficultyString = print->setDifficultyTexts(4);
         common->resizeConsole(38, 7);
         common->clearScreen();
+        print->showBlinkingCursor(true);
 
         #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
             common->centerWindow();
+        #else
+            disableNonCanonicalMode();
         #endif
 
-        print->showBlinkingCursor(true);
         returnStruct.cellWidth = input->getInputCustomCellWidth();
 
         common->resizeConsole(42, 7);
+        common->clearScreen();
 
         #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
             common->centerWindow();
@@ -140,6 +143,7 @@ Common::GameModeReturnStruct Game::chooseGamemode()
     void *Game::gameThread(void* field_)
 #endif
     {
+        Colors colors;
         Common common;
         Input input;
         Print print;
@@ -151,9 +155,7 @@ Common::GameModeReturnStruct Game::chooseGamemode()
         int turn = 1;
         int firstrun = 1;
 
-        #if MEM_LEAK_TEST_LOOP != 1
-            isGameRunning = true;
-        #endif
+        field->printAll();
 
         while (true)
         {
@@ -170,6 +172,7 @@ Common::GameModeReturnStruct Game::chooseGamemode()
                 userInput.Coords.col = 3;
                 userInput.Coords.row = 3;
             #else
+                isGameRunning = true;
                 userInput = input.getInputGameplay(*field, firstrun);
             #endif
 
@@ -177,21 +180,9 @@ Common::GameModeReturnStruct Game::chooseGamemode()
 
             placeUserInputReturn = field->placeUserInput(userInput, turn);
 
-            if (placeUserInputReturn.hasLost)
-            {
-                break;
-            }
-            else if (placeUserInputReturn.hasWon)
-            {
-                break;
-            }
-            else
-            {
-                if (placeUserInputReturn.isTurn)
-                {
-                    ++turn;
-                }
-            }
+            if (placeUserInputReturn.hasLost) { break; }
+            else if (placeUserInputReturn.hasWon) { break; }
+            else if (placeUserInputReturn.isTurn) { ++turn; }
         }
         #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
             _endthreadex(0);
@@ -216,29 +207,26 @@ Common::GameModeReturnStruct Game::chooseGamemode()
 
         while (isGameRunning)
         {
-            if (hasCheated == false)
+            if (hasCheated == false && doPauseTimer == false)
             {
-                if (doPauseTimer == false)
+                isTimerPrinting = true;
+                if (timer % 20 == 0 || timer == 0 || doPrintTimer == true)
                 {
-                    isTimerPrinting = true;
-                    if (timer % 20 == 0 || doPrintTimer == true)
-                    {
-                        if (timer / 20 < 10)
-                            common.gotoXY(field->getOffsetX() + (field->getCols() * (((field->getCellWidth() - 1) / 2) * 2 + 2)) - 5, field->getOffsetY() - 2);
-                        else if (timer / 20 < 100)
-                            common.gotoXY(field->getOffsetX() + (field->getCols() * (((field->getCellWidth() - 1) / 2) * 2 + 2)) - 6, field->getOffsetY() - 2);
-                        else
-                            common.gotoXY(field->getOffsetX() + (field->getCols() * (((field->getCellWidth() - 1) / 2) * 2 + 2)) - 7, field->getOffsetY() - 2);
-                        std::cout << colors.setTextColor(colors.fg_light_red);
-                        std::cout << timer / 20 << std::flush << " s" << std::flush;
-                        std::cout << colors.setTextColor(colors.color_default);
-                        doPrintTimer = false;
-                    }
-                    if (timer < 999 * 20) timer = timer + 1;
-                    isTimerPrinting = false;
+                    if (timer / 20 < 10)
+                        common.gotoXY(field->getOffsetX() + (field->getCols() * (((field->getCellWidth() - 1) / 2) * 2 + 2)) - 5, field->getOffsetY() - 2);
+                    else if (timer / 20 < 100)
+                        common.gotoXY(field->getOffsetX() + (field->getCols() * (((field->getCellWidth() - 1) / 2) * 2 + 2)) - 6, field->getOffsetY() - 2);
+                    else
+                        common.gotoXY(field->getOffsetX() + (field->getCols() * (((field->getCellWidth() - 1) / 2) * 2 + 2)) - 7, field->getOffsetY() - 2);
+                    std::cout << colors.setTextColor(colors.fg_light_red);
+                    std::cout << timer / 20 << std::flush << " s" << std::flush;
+                    std::cout << colors.setTextColor(colors.color_default);
+                    doPrintTimer = false;
                 }
+                if (timer < 999 * 20) ++timer;
+                isTimerPrinting = false;
             }
-            else if (hasCheated == true && (isCheatedPrinted == false || doPrintTimer == true))
+            else if (hasCheated == true && doPauseTimer == false && (isCheatedPrinted == false || doPrintTimer == true))
             {
                 isTimerPrinting = true;
                 common.gotoXY(field->getOffsetX() + (field->getCols() * (((field->getCellWidth() - 1) / 2) * 2 + 2)) - 10, field->getOffsetY() - 2);
@@ -262,29 +250,16 @@ Common::GameModeReturnStruct Game::chooseGamemode()
 
 void Game::startGame()
 {
+    Common common;
     Common::GameModeReturnStruct gameMode = chooseGamemode();
     Field field(gameMode.cols, gameMode.rows, fieldOffsetX, fieldOffsetY, gameMode.cellWidth, gameMode.mines, difficultyString);
-
-    common->resizeConsole(fieldOffsetX + (gameMode.cols * (((field.getCellWidth() - 1) / 2) * 2 + 2)) + fieldOffsetX - 3, fieldOffsetY + (gameMode.rows * 2) + 5);
-    common->clearScreen();
-
-    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-        common->centerWindow();
-        print->showBlinkingCursor(false);
-    #endif
-
-    common->gotoXY(field.getOffsetX() - 1, 1);
-    print->printTitle(difficultyString, gameMode.cols, gameMode.rows, gameMode.mines);
-    common->gotoXY(1, 3);
-    field.drawField();
-
     Field* fieldP = &field;
 
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         HANDLE hThreads[2];
 
         hThreads[0] = reinterpret_cast<HANDLE>(_beginthreadex(NULL, 0, &gameThread, fieldP, 0, 0));
-        Sleep(10);
+        while (isGameRunning == false) Sleep(1);
         hThreads[1] = reinterpret_cast<HANDLE>(_beginthreadex(NULL, 0, &timerThread, fieldP, 0, 0));
 
         WaitForMultipleObjects(2, hThreads, TRUE, INFINITE);
@@ -295,10 +270,11 @@ void Game::startGame()
         pthread_t threads[2];
 
         pthread_create(&threads[0], NULL, &gameThread, fieldP);
-        usleep(10 * 1000);
+        while (isGameRunning == false) usleep(1000);
         pthread_create(&threads[1], NULL, &timerThread, fieldP);
 
         pthread_join(threads[0], NULL);
         pthread_join(threads[1], NULL);
     #endif
+
 }
