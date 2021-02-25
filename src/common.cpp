@@ -334,3 +334,45 @@ void Common::preciseSleep(double seconds)
     auto start = std::chrono::high_resolution_clock::now();
     while ((std::chrono::high_resolution_clock::now() - start).count() / 1e9 < seconds);
 }
+
+Common::TimeStruct Common::secondsToTimeStruct(int seconds)
+{
+    TimeStruct time;
+    if (seconds < 60)
+    {
+        time.minutes = "00";
+        if (seconds < 10)
+        {
+            time.seconds = "0" + std::to_string(seconds);
+        }
+        else
+        {
+            time.seconds = std::to_string(seconds);
+        }
+        return time;
+    }
+    else
+    {
+        if (seconds < 600)
+        {
+            time.minutes = "0" + std::to_string(seconds / 60);
+        }
+        else
+        {
+            time.minutes = std::to_string(seconds / 60);
+        }
+        if (seconds % 60 == 0)
+        {
+            time.seconds = "00";
+        }
+        else if (seconds % 60 < 10)
+        {
+            time.seconds = "0" + std::to_string(seconds % 60);
+        }
+        else
+        {
+            time.seconds = std::to_string(seconds % 60);
+        }
+        return time;
+    }
+}

@@ -60,6 +60,11 @@ public:
         bool hasWon = false;
         bool isTurn = false;
     };
+    struct TimeStruct
+    {
+        std::string minutes;
+        std::string seconds;
+    };
 
     // public methods:
     Common();
@@ -86,4 +91,5 @@ public:
     unsigned int coordsToInt(CoordsStruct const&, int const&);
     CoordsStruct coordsToCursorPosition(CoordsStruct const&, int const&, int const&, int const&);
     void preciseSleep(double);
+    TimeStruct secondsToTimeStruct(int);
 };

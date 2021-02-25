@@ -212,20 +212,17 @@ Common::GameModeReturnStruct Game::chooseGamemode()
             if (hasCheated == false && doPauseTimer == false)
             {
                 isTimerPrinting = true;
-                if (timer % 20 == 0 || timer == 0 || doPrintTimer == true)
+                Common::TimeStruct time;
+                time = common.secondsToTimeStruct(timer / 10);
+                if (timer % 10 == 0 || timer == 0 || doPrintTimer == true)
                 {
-                    if (timer / 20 < 10)
-                        common.gotoXY(field->getOffsetX() + (field->getCols() * (((field->getCellWidth() - 1) / 2) * 2 + 2)) - 5, field->getOffsetY() - 2);
-                    else if (timer / 20 < 100)
-                        common.gotoXY(field->getOffsetX() + (field->getCols() * (((field->getCellWidth() - 1) / 2) * 2 + 2)) - 6, field->getOffsetY() - 2);
-                    else
-                        common.gotoXY(field->getOffsetX() + (field->getCols() * (((field->getCellWidth() - 1) / 2) * 2 + 2)) - 7, field->getOffsetY() - 2);
+                    common.gotoXY(field->getOffsetX() + (field->getCols() * (((field->getCellWidth() - 1) / 2) * 2 + 2)) - 7, field->getOffsetY() - 2);
                     std::cout << colors.setTextColor(colors.fg_light_red);
-                    std::cout << timer / 20 << std::flush << " s" << std::flush;
+                    std::cout << time.minutes + ":" + time.seconds << std::flush;
                     std::cout << colors.setTextColor(colors.color_default);
                     doPrintTimer = false;
                 }
-                if (timer < 999 * 20) ++timer;
+                if (! (std::stoi(time.minutes) >= 99 && std::stoi(time.seconds) >= 59)) ++timer;
                 isTimerPrinting = false;
             }
             else if (hasCheated == true && doPauseTimer == false && (isCheatedPrinted == false || doPrintTimer == true))
@@ -239,7 +236,7 @@ Common::GameModeReturnStruct Game::chooseGamemode()
                 isTimerPrinting = false;
                 isCheatedPrinted = true;
             }
-            common.preciseSleep(0.05);
+            common.preciseSleep(0.1);
         }
 
         #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
