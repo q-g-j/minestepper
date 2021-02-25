@@ -27,7 +27,7 @@
 #endif
 
 #if defined(__MINGW32__)
-    #include <mingw.thread.h>
+    #include <mingw.thread.h> // needed for std::this_thread (https://github.com/meganz/mingw-std-threads)
 #else
     #include <thread>
 #endif
@@ -201,12 +201,12 @@ std::string Common::stringConvert(std::wstring const& wstr)
 
 // convert an integer to string or wide string:
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-    std::wstring Common::intToString(int const& num)
+    std::wstring Common::intToStringConv(int const& num)
     {
         return std::to_wstring(num);
     }
 #else
-    std::string Common::intToString(int const& num)
+    std::string Common::intToStringConv(int const& num)
     {
         return std::to_string(num);
     }

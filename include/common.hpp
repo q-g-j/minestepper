@@ -71,14 +71,14 @@ public:
     ~Common();
 
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-        std::wstring intToString(int const&);
+        std::wstring intToStringConv(int const&);
         std::wstring stringConvert(std::string const&);
         int stringToInt(std::wstring);
         void setWindowProperties();
         void centerWindow();
         void setUnicode(bool);
     #else
-        std::string intToString(int const&);
+        std::string intToStringConv(int const&);
         std::string stringConvert(std::wstring const&);
         int stringToInt(std::string);
     #endif

@@ -418,7 +418,7 @@ bool Field::isNumber(Common::CoordsStruct const& coords)
 {
     for (int i = 1; i <= 8; ++i)
     {
-        if (this->field2DVector[coords.col][coords.row] == common->intToString(i))
+        if (this->field2DVector[coords.col][coords.row] == common->intToStringConv(i))
         {
             return true;
         }
@@ -574,7 +574,7 @@ void Field::autoUncoverRecursive(Common::CoordsStruct const& coords, std::vector
             {
                 if (this->mines2DVector[neighborsCoveredVector.at(i).col][neighborsCoveredVector.at(i).row] != symbols->symbolMine)
                 {
-                    this->field2DVector[neighborsCoveredVector.at(i).col][neighborsCoveredVector.at(i).row] = common->intToString(static_cast<int>(neighborsMinesVector.size()));
+                    this->field2DVector[neighborsCoveredVector.at(i).col][neighborsCoveredVector.at(i).row] = common->intToStringConv(static_cast<int>(neighborsMinesVector.size()));
                 }
             }
             poolVector.push_back(common->coordsToInt(neighborsCoveredVector.at(i), this->cols));
@@ -678,7 +678,7 @@ void Field::flagAutoUncover(Common::CoordsStruct const& coords, Common::PlaceUse
                         {
                             if (std::find(poolVector.begin(), poolVector.end(), common->coordsToInt(tempCoords, this->cols)) == poolVector.end())
                             {
-                                this->field2DVector[tempCoords.col][tempCoords.row] = common->intToString(static_cast<int>(flagUncoverNeighborsCoveredMinesVector.size()));
+                                this->field2DVector[tempCoords.col][tempCoords.row] = common->intToStringConv(static_cast<int>(flagUncoverNeighborsCoveredMinesVector.size()));
                                 printCoords(tempCoords, false);
                                 poolVector.push_back(common->coordsToInt(tempCoords, this->cols));
                                 --this->coveredLeft;
@@ -756,7 +756,7 @@ Common::PlaceUserInputReturnStruct Field::placeUserInput(Common::UserInputReturn
             }
             else
             {
-                this->field2DVector[userInput.Coords.col][userInput.Coords.row] = common->intToString(static_cast<int>(neighborsMinesVector.size()));
+                this->field2DVector[userInput.Coords.col][userInput.Coords.row] = common->intToStringConv(static_cast<int>(neighborsMinesVector.size()));
             }
             printCoords(userInput.Coords, false);
             returnStruct.isTurn = true;
