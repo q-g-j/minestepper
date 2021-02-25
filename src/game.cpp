@@ -1,3 +1,14 @@
+#ifdef _DEBUG
+    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+        #define _CRTDBG_MAP_ALLOC
+        #include <stdlib.h>
+        #include <crtdbg.h>
+        #define new new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
+        // Replace _NORMAL_BLOCK with _CLIENT_BLOCK if you want the
+        // allocations to be of _CLIENT_BLOCK type
+    #endif
+#endif
+
 // system headers:
 #include <atomic>
 #include <iostream>
@@ -6,7 +17,6 @@
     #include <process.h>
     #include <thread>
 #endif
-
 
 // project headers:
 #include <colors.hpp>
@@ -187,7 +197,6 @@ Common::GameModeReturnStruct Game::chooseGamemode()
             else if (placeUserInputReturn.isTurn) { ++turn; }
         }
         #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-            _endthreadex(0);
             return 0;
         #else
             return NULL;
@@ -240,7 +249,6 @@ Common::GameModeReturnStruct Game::chooseGamemode()
         }
 
         #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-            _endthreadex(0);
             return 0;
         #else
             return NULL;
@@ -257,7 +265,9 @@ void Game::startGame()
         HANDLE hThreads[2];
 
         hThreads[0] = reinterpret_cast<HANDLE>(_beginthreadex(NULL, 0, &gameThread, fieldP, 0, 0));
-        while (isGameRunning == false) Sleep(1);
+        #if MEM_LEAK_TEST_LOOP == 0
+            while (isGameRunning == false) Sleep(1);
+        #endif
         hThreads[1] = reinterpret_cast<HANDLE>(_beginthreadex(NULL, 0, &timerThread, fieldP, 0, 0));
 
         WaitForMultipleObjects(2, hThreads, TRUE, INFINITE);
@@ -268,11 +278,12 @@ void Game::startGame()
         pthread_t threads[2];
 
         pthread_create(&threads[0], NULL, &gameThread, fieldP);
-        while (isGameRunning == false) usleep(1000);
+        #if MEM_LEAK_TEST_LOOP == 0
+            while (isGameRunning == false) usleep(1000);
+        #endif
         pthread_create(&threads[1], NULL, &timerThread, fieldP);
 
         pthread_join(threads[0], NULL);
         pthread_join(threads[1], NULL);
     #endif
-
 }
