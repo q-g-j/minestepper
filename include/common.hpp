@@ -40,11 +40,13 @@ public:
     };
     struct GameModeReturnStruct
     {
-        std::string mode;
+        std::string difficultyString;
         int cols;
         int rows;
         int mines;
         int cellWidth;
+        int offsetX;
+        int offsetY;
     };
     struct UserInputReturnStruct
     {

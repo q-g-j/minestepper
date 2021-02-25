@@ -32,18 +32,18 @@
 #include <symbols.hpp>
 
 // constructor
-Field::Field(int const& cols_, int const& rows_, int const& fieldOffsetX_, int const& fieldOffsetY_, int const& fieldCellWidth_, int const& minesTotal_, std::string const& difficultyString_)
+Field::Field(Common::GameModeReturnStruct& gameMode)
 :
-    cols(cols_),
-    rows(rows_),
-    fieldOffsetX(fieldOffsetX_),
-    fieldOffsetY(fieldOffsetY_),
-    fieldCellWidth(fieldCellWidth_),
-    minesTotal(minesTotal_),
-    minesLeft(minesTotal_),
-    coveredLeft(cols_ * rows_),
+    cols(gameMode.cols),
+    rows(gameMode.rows),
+    fieldOffsetX(gameMode.offsetX),
+    fieldOffsetY(gameMode.offsetY),
+    fieldCellWidth(gameMode.cellWidth),
+    minesTotal(gameMode.mines),
+    minesLeft(gameMode.mines),
+    coveredLeft(cols * rows),
     flagsCount(0),
-    difficultyString(difficultyString_),
+    difficultyString(gameMode.difficultyString),
     urng(rng()),
     colors(std::make_unique<Colors>()),
     common(std::make_unique<Common>()),

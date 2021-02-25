@@ -49,7 +49,7 @@ Game::~Game() { }
 Common::GameModeReturnStruct Game::chooseGamemode()
 {
     Common::CoordsStruct dimensions;
-    Common::GameModeReturnStruct returnStruct;
+    Common::GameModeReturnStruct gameMode;
 
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         common->setWindowProperties();
@@ -74,27 +74,27 @@ Common::GameModeReturnStruct Game::chooseGamemode()
 
     if (difficulty == 1)
     {
-        difficultyString = print->setDifficultyTexts(1);
-        returnStruct.cols = smallCols;
-        returnStruct.rows = smallRows;
-        returnStruct.mines = smallMines;
-        returnStruct.cellWidth = 3;
+        gameMode.difficultyString = print->setDifficultyTexts(1);
+        gameMode.cols = smallCols;
+        gameMode.rows = smallRows;
+        gameMode.mines = smallMines;
+        gameMode.cellWidth = 3;
     }
     else if (difficulty == 2)
     {
         difficultyString = print->setDifficultyTexts(2);
-        returnStruct.cols = mediumCols;
-        returnStruct.rows = mediumRows;
-        returnStruct.mines = mediumMines;
-        returnStruct.cellWidth = 3;
+        gameMode.cols = mediumCols;
+        gameMode.rows = mediumRows;
+        gameMode.mines = mediumMines;
+        gameMode.cellWidth = 3;
     }
     else if (difficulty == 3)
     {
         difficultyString = print->setDifficultyTexts(3);
-        returnStruct.cols = largeCols;
-        returnStruct.rows = largeRows;
-        returnStruct.mines = largeMines;
-        returnStruct.cellWidth = 3;
+        gameMode.cols = largeCols;
+        gameMode.rows = largeRows;
+        gameMode.mines = largeMines;
+        gameMode.cellWidth = 3;
     }
     else
     {
@@ -109,7 +109,7 @@ Common::GameModeReturnStruct Game::chooseGamemode()
             disableNonCanonicalMode();
         #endif
 
-        returnStruct.cellWidth = input->getInputCustomCellWidth();
+        gameMode.cellWidth = input->getInputCustomCellWidth();
 
         common->resizeConsole(42, 7);
         common->clearScreen();
@@ -118,9 +118,9 @@ Common::GameModeReturnStruct Game::chooseGamemode()
             common->centerWindow();
         #endif
 
-        dimensions = input->getInputCustomDimensions(returnStruct.cellWidth);
-        returnStruct.cols = dimensions.col;
-        returnStruct.rows = dimensions.row;
+        dimensions = input->getInputCustomDimensions(gameMode.cellWidth);
+        gameMode.cols = dimensions.col;
+        gameMode.rows = dimensions.row;
 
         common->resizeConsole(41, 6);
         common->clearScreen();
@@ -129,12 +129,14 @@ Common::GameModeReturnStruct Game::chooseGamemode()
             common->centerWindow();
         #endif
 
-        returnStruct.mines = input->getInputCustomMinesCount(returnStruct.cols * returnStruct.rows);
+        gameMode.mines = input->getInputCustomMinesCount(gameMode.cols * gameMode.rows);
 
         print->showBlinkingCursor(false);
     }
 
-    return returnStruct;
+    gameMode.offsetX = fieldOffsetX;
+    gameMode.offsetY = fieldOffsetY;
+    return gameMode;
 }
 
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
@@ -250,9 +252,8 @@ Common::GameModeReturnStruct Game::chooseGamemode()
 
 void Game::startGame()
 {
-    Common common;
     Common::GameModeReturnStruct gameMode = chooseGamemode();
-    Field field(gameMode.cols, gameMode.rows, fieldOffsetX, fieldOffsetY, gameMode.cellWidth, gameMode.mines, difficultyString);
+    Field field(gameMode);
     Field* fieldP = &field;
 
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)

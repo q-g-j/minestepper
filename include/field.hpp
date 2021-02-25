@@ -50,7 +50,7 @@ private:
     void gameLost();
 
 public:
-    Field(int const& cols_, int const& rows_, int const& fieldOffsetX_, int const& fieldOffsetY_, int const& fieldCellWidth_, int const& minesTotal_, std::string const& difficultyString_);
+    Field(Common::GameModeReturnStruct&);
     ~Field();
 
     std::vector<std::vector<stringconv>> field2DVector;
