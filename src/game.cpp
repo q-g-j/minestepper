@@ -82,7 +82,7 @@ Common::GameModeReturnStruct Game::chooseGamemode()
     }
     else if (difficulty == 2)
     {
-        difficultyString = print->setDifficultyTexts(2);
+        gameMode.difficultyString = print->setDifficultyTexts(2);
         gameMode.cols = mediumCols;
         gameMode.rows = mediumRows;
         gameMode.mines = mediumMines;
@@ -90,7 +90,7 @@ Common::GameModeReturnStruct Game::chooseGamemode()
     }
     else if (difficulty == 3)
     {
-        difficultyString = print->setDifficultyTexts(3);
+        gameMode.difficultyString = print->setDifficultyTexts(3);
         gameMode.cols = largeCols;
         gameMode.rows = largeRows;
         gameMode.mines = largeMines;
@@ -98,7 +98,7 @@ Common::GameModeReturnStruct Game::chooseGamemode()
     }
     else
     {
-        difficultyString = print->setDifficultyTexts(4);
+        gameMode.difficultyString = print->setDifficultyTexts(4);
         common->resizeConsole(38, 7);
         common->clearScreen();
         print->showBlinkingCursor(true);

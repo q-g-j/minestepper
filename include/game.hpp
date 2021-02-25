@@ -46,9 +46,6 @@ private:
     const int fieldOffsetX    = 5;
     const int fieldOffsetY    = 6;
 
-    // set width of each cell (must be an odd number!):
-    const int fieldCellWidth  = 3;
-
     int difficulty = 1;
     std::string difficultyString;
 
