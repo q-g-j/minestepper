@@ -77,17 +77,27 @@ void Input::getInputEnterKey(std::string const& text)
         while (true)
         {
             int inputKey;
-            if ((inputKey = _getch()) == KEY_ENTER) break;
+            if ((inputKey = _getch()) == 'q' || inputKey == 'Q')
+            {
+                exit(0);
+            }
+            else if (inputKey == KEY_ENTER) break;
             else continue;
         }
     #else
-        char inputKeyA;
+        enableNonCanonicalMode();
+        char inputKey;
         while (true)
         {
-            inputKeyA = getchar();
-            if (inputKeyA == KEY_ENTER) break;
+            inputKey = getchar();
+            if (inputKey == 'q' || inputKey == 'Q')
+            {
+                exit(0);
+            }
+            if (inputKey == KEY_ENTER) break;
             else continue;
         }
+        disableNonCanonicalMode();
     #endif
     std::cout << newline;
 }
@@ -134,9 +144,10 @@ int Input::getInputDifficulty()
         }
     #else
         enableNonCanonicalMode();
-        char inputKey = ' ';
-        while (read(STDIN_FILENO, &inputKey, 1) == 1)
+        char inputKey;
+        while (true)
         {
+            inputKey = getchar();
             if (inputKey == 'q' || inputKey == 'Q')
             {
                 exit(0);
@@ -173,54 +184,66 @@ int Input::getInputDifficulty()
 
 int Input::getInputCustomCellWidth()
 {
-    std::string line = "";
-    int cellWidth = 3;
+    int cellWidth;
     bool isValidInput = false;
 
     common->clearScreen();
     print->printCustomGetCellWidth();
 
-    while (true)
-    {
-        std::cout << colors->setTextColor(colors->fg_white);
-        std::cout << print->inputText;
-        std::cout << colors->setTextColor(colors->color_default);
-        getline(std::cin, line);
-        if (line == "q" || line == "Q")
+    std::cout << colors->setTextColor(colors->fg_white);
+    std::cout << print->inputText;
+    std::cout << colors->setTextColor(colors->color_default);
+    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+        int inputKey;
+        while (true)
         {
-            exit(0);
-        }
-        else if (line == "")
-        {
-            isValidInput = false;
-        }
-        else
-        {
-            isValidInput = true;
-            try
+            if ((inputKey = _getch()) == 'q' || inputKey == 'Q')
             {
-                cellWidth = stoi(line);
+                exit(0);
             }
-            catch (...)
+            if (inputKey == '1')
             {
-                isValidInput = false;
+                cellWidth = 1;
+                break;
             }
-            if  (cellWidth <= 0 || cellWidth > 3 || cellWidth % 2 == 0)
+            else if (inputKey == '3')
             {
-                isValidInput = false;
+                cellWidth = 3;
+                break;
+            }
+            else
+            {
+                continue;
             }
         }
-        if (isValidInput == true)
+    #else
+        enableNonCanonicalMode();
+        char inputKey;
+        while (true)
         {
-            return cellWidth;
+            inputKey = getchar();
+            if (inputKey == 'q' || inputKey == 'Q')
+            {
+                exit(0);
+            }
+            if (inputKey == '1')
+            {
+                cellWidth = 1;
+                break;
+            }
+            else if (inputKey == '3')
+            {
+                cellWidth = 3;
+                break;
+            }
+            else
+            {
+                continue;
+            }
         }
-        else
-        {
-            getInputEnterKey(print->wrongInputText);
-            print->deleteLastLine(print->wrongInputText.length());
-            print->deleteLastLine(print->inputText.length() + line.length());
-        }
-    }    
+        disableNonCanonicalMode();
+    #endif
+    return cellWidth;
 }
 
 // custom mode: ask user for the size of the field:
@@ -316,7 +339,7 @@ Common::CoordsStruct Input::getInputCustomDimensions(int const& fieldCellWidth)
 // custom mode: ask user for the number of mines:
 int Input::getInputCustomMinesCount(int const& fieldSize)
 {
-    std::string line = "";
+    std::string line;
     int minesTotal = 0;
     bool isValidInput = false;
 
