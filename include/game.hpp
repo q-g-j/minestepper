@@ -11,7 +11,6 @@
 #endif
 
 // project headers:
-#include <common.hpp>
 #include <debug.hpp>
 
 class Colors;
