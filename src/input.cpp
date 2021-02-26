@@ -67,6 +67,31 @@ Input::Input()
 
 Input::~Input() = default;
 
+// disable the input cursor during game play:
+void Input::showBlinkingCursor(bool show)
+{
+#if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+    HANDLE out = GetStdHandle(STD_OUTPUT_HANDLE);
+
+    CONSOLE_CURSOR_INFO cursorInfo;
+    cursorInfo.dwSize = 1;
+
+    GetConsoleCursorInfo(out, &cursorInfo);
+    cursorInfo.bVisible = show; // set the cursor visibility
+    SetConsoleCursorInfo(out, &cursorInfo);
+#else
+    if (show == true)
+    {
+        coutconv << "\e[?25h";
+    }
+    else
+    {
+        coutconv << "\e[?25l";
+    }
+#endif
+    std::cout << std::flush;
+}
+
 void Input::getInputEnterKey(std::string const& text)
 {
     std::cout << colors->setTextColor(colors->fg_white);
@@ -108,6 +133,8 @@ int Input::getInputDifficulty()
     int difficulty = 0;
 
     print->printMenu();
+
+    this->showBlinkingCursor(false);
 
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         while (true)
@@ -179,6 +206,8 @@ int Input::getInputDifficulty()
         }
         disableNonCanonicalMode();
     #endif
+
+    this->showBlinkingCursor(true);
     return difficulty;
 }
 
@@ -193,6 +222,9 @@ int Input::getInputCustomCellWidth()
     std::cout << colors->setTextColor(colors->fg_white);
     std::cout << print->inputText;
     std::cout << colors->setTextColor(colors->color_default);
+
+    this->showBlinkingCursor(false);
+
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         int inputKey;
         while (true)
@@ -243,6 +275,8 @@ int Input::getInputCustomCellWidth()
         }
         disableNonCanonicalMode();
     #endif
+
+    this->showBlinkingCursor(true);
     return cellWidth;
 }
 
@@ -399,7 +433,6 @@ void Input::toggleHelp(Field &field, Common::CoordsStruct const& currentArrayPos
 
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         common->centerWindow();
-        print->showBlinkingCursor(false);
     #endif
 
     Common::CoordsStruct currentCursorPosition;

@@ -32,31 +32,6 @@ Print::Print()
 
 Print::~Print() = default;
 
-// disable the input cursor during game play:
-void Print::showBlinkingCursor(bool show)
-{
-#if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-    HANDLE out = GetStdHandle(STD_OUTPUT_HANDLE);
-
-    CONSOLE_CURSOR_INFO cursorInfo;
-    cursorInfo.dwSize = 1;
-
-    GetConsoleCursorInfo(out, &cursorInfo);
-    cursorInfo.bVisible = show; // set the cursor visibility
-    SetConsoleCursorInfo(out, &cursorInfo);
-#else
-    if (show == true)
-    {
-        coutconv << "\e[?25h";
-    }
-    else
-    {
-        coutconv << "\e[?25l";
-    }
-#endif
-    std::cout << std::flush;
-}
-
 // erase particular lines instead of clearing the whole screen:
 void Print::deleteLastLine(size_t const& stringLength)
 {

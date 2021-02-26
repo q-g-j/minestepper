@@ -70,7 +70,7 @@ void cleanUp()
 {
     Common common;
     Colors colors;
-    Print print;
+    Input input;
 
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         extern CONSOLE_SCREEN_BUFFER_INFO origScreenSize;
@@ -89,7 +89,7 @@ void cleanUp()
         disableNonCanonicalMode();
     #endif
 
-    print.showBlinkingCursor(true);
+    input.showBlinkingCursor(true);
     colors.setTextColor(colors.color_default);
 
     common.clearScreen();

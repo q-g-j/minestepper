@@ -62,6 +62,7 @@ public:
     ~Input();
 
     // public methods:
+    void showBlinkingCursor(bool);
     int getInputDifficulty();
     int getInputCustomCellWidth();
     Common::CoordsStruct getInputCustomDimensions(int const&);

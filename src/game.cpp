@@ -68,12 +68,10 @@ Common::GameModeReturnStruct Game::chooseGamemode()
     common->resizeConsole(33, 13);
     std::cout << colors->setTextColor(colors->color_default);
     common->setWindowTitle("Minesweeper");
-    print->showBlinkingCursor(false);
     common->clearScreen();
 
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         common->centerWindow();
-        print->showBlinkingCursor(false);
     #endif
 
     #if MEM_LEAK_TEST_LOOP == 1
@@ -111,12 +109,9 @@ Common::GameModeReturnStruct Game::chooseGamemode()
         gameMode.difficultyString = print->setDifficultyTexts(4);
         common->resizeConsole(38, 7);
         common->clearScreen();
-        print->showBlinkingCursor(true);
 
         #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
             common->centerWindow();
-        #else
-            disableNonCanonicalMode();
         #endif
 
         gameMode.cellWidth = input->getInputCustomCellWidth();
@@ -140,8 +135,6 @@ Common::GameModeReturnStruct Game::chooseGamemode()
         #endif
 
         gameMode.mines = input->getInputCustomMinesCount(gameMode.cols * gameMode.rows);
-
-        print->showBlinkingCursor(false);
     }
 
     gameMode.offsetX = fieldOffsetX;
@@ -167,6 +160,8 @@ Common::GameModeReturnStruct Game::chooseGamemode()
         int turn = 1;
         int firstrun = 1;
 
+        input.showBlinkingCursor(false);
+        
         field->printAll();
 
         while (true)
@@ -178,7 +173,6 @@ Common::GameModeReturnStruct Game::chooseGamemode()
             #endif
 
             common.gotoXY(1, field->getOffsetX() + field->getRows() * 2 + 4);
-            print.showBlinkingCursor(false);
 
             #if MEM_LEAK_TEST_LOOP == 1
                 userInput.Coords.col = 6;
@@ -196,6 +190,9 @@ Common::GameModeReturnStruct Game::chooseGamemode()
             else if (placeUserInputReturn.hasWon) { break; }
             else if (placeUserInputReturn.isTurn) { ++turn; }
         }
+
+        input.showBlinkingCursor(true);
+        
         #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
             return 0;
         #else

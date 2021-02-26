@@ -269,7 +269,6 @@ void Field::printAll()
 
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         common->centerWindow();
-        print->showBlinkingCursor(false);
     #endif
 
     common->gotoXY(this->fieldOffsetX - 1, 1);

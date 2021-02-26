@@ -30,7 +30,6 @@ public:
 
     // public methods:
     void deleteLastLine(size_t const&);
-    void showBlinkingCursor(bool);
     void printTitle(std::string const&, int const&, int const&, int const&);
     void printMinesLeft(Field&);
 
