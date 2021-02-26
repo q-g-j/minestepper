@@ -214,7 +214,7 @@ Common::GameModeReturnStruct Game::chooseGamemode()
 
         Field* field = reinterpret_cast<Field*>(field_);
 
-        int timer = 0;
+        unsigned int timer = 0;
 
         while (isGameRunning)
         {

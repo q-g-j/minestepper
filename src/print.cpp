@@ -226,7 +226,7 @@ void Print::printExplanation()
     coutconv << "  You can reselect a numbered cell with ENTER to automatically uncover all remaining neighbors," << newline;
     coutconv << "  as long as you put all flags right! Otherwise you might lose..." << newline << newline;
     std::cout << colors->setTextColor(colors->fg_white);
-    coutconv << "  Explanations:" << newline << newline;
+    coutconv << "  Controls:" << newline << newline;
     std::cout << colors->setTextColor(colors->color_default);
     coutconv << "    Arrow Keys:    navigate" << newline;
     coutconv << "    ENTER:         uncover" << newline;
