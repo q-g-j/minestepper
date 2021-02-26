@@ -181,8 +181,8 @@ Common::GameModeReturnStruct Game::chooseGamemode()
             print.showBlinkingCursor(false);
 
             #if MEM_LEAK_TEST_LOOP == 1
-                userInput.Coords.col = 3;
-                userInput.Coords.row = 3;
+                userInput.Coords.col = 6;
+                userInput.Coords.row = 6;
             #else
                 isGameRunning = true;
                 userInput = input.getInputGameplay(*field, firstrun);
