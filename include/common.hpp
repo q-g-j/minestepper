@@ -67,9 +67,6 @@ public:
     };
 
     // public methods:
-    Common();
-    ~Common();
-
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         std::wstring intToStringConv(int const&);
         std::wstring stringConvert(std::string const&);

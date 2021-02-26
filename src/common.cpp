@@ -95,10 +95,6 @@ void cleanUp()
     common.clearScreen();
 }
 
-Common::Common() { }
-
-Common::~Common() { }
-
 void Common::setWindowTitle(std::string const& titleText)
 {
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)

@@ -65,7 +65,7 @@ Input::Input()
     symbols(std::make_unique<Symbols>())
 { }
 
-Input::~Input() { }
+Input::~Input() = default;
 
 void Input::getInputEnterKey(std::string const& text)
 {

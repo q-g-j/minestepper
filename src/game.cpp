@@ -54,7 +54,7 @@ Game::Game()
     isCheatedPrinted = false;
 }
 
-Game::~Game() { }
+Game::~Game() = default;
 
 Common::GameModeReturnStruct Game::chooseGamemode()
 {

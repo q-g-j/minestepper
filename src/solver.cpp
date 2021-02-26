@@ -33,7 +33,7 @@ Solver::Solver()
     symbols(std::make_unique<Symbols>())
 { }
 
-Solver::~Solver() { }
+Solver::~Solver() = default;
 
 void Solver::autoSolve(Field& field, bool doPlaceFlags, bool doFlagAutoUncover, bool doSolve)
 {

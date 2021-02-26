@@ -30,7 +30,7 @@ Print::Print()
     common(std::make_unique<Common>())
 { }
 
-Print::~Print() { }
+Print::~Print() = default;
 
 // disable the input cursor during game play:
 void Print::showBlinkingCursor(bool show)

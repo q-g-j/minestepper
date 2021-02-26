@@ -54,8 +54,8 @@ Field::Field(Common::GameModeReturnStruct& gameMode)
     mines2DVector(create2DVector("mines"))
 { }
 
-// deconstructor:
-Field::~Field() { }
+// destructor:
+Field::~Field() = default;
 
 // some getters:
 int Field::getCols() { return this->cols; }

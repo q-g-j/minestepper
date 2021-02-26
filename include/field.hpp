@@ -74,24 +74,30 @@ public:
     // (just for learning purposes):
     struct setFlagsCount
     {
-        Field &field_;
-        setFlagsCount(Field &field) : field_(field) { }
-        void operator--();
-        void operator++();
+        private:
+            Field &field_;
+        public:
+            setFlagsCount(Field& field) : field_(field) { }
+            void operator--();
+            void operator++();
     };
     struct setMinesLeft
     {
-        Field &field_;
-        setMinesLeft(Field &field) : field_(field) { }
-        void operator--();
-        void operator++();
+        private:
+            Field& field_;
+        public:
+            setMinesLeft(Field& field) : field_(field) { }
+            void operator--();
+            void operator++();
     };
     struct setCoveredLeft
     {
-        Field &field_;
-        setCoveredLeft(Field &field) : field_(field) { }
-        void operator--();
-        void operator++();
+        private:
+            Field& field_;
+        public:
+            setCoveredLeft(Field& field) : field_(field) { }
+            void operator--();
+            void operator++();
     };
 
     // public methods:
