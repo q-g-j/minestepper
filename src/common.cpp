@@ -12,6 +12,7 @@
 // system headers:
 #include <chrono>
 #include <codecvt>
+#include <iostream>
 #include <locale>
 #include <math.h>
 #include <string>
@@ -35,6 +36,7 @@
 // project headers:
 #include <colors.hpp>
 #include <common.hpp>
+#include <debug.hpp>
 #include <game.hpp>
 #include <input.hpp>
 #include <print.hpp>

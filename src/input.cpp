@@ -15,7 +15,6 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string>
 
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
     #include <conio.h>
@@ -28,6 +27,7 @@
 // project headers:
 #include <colors.hpp>
 #include <common.hpp>
+#include <debug.hpp>
 #include <field.hpp>
 #include <input.hpp>
 #include <print.hpp>

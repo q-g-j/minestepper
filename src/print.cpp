@@ -19,6 +19,7 @@
 // project headers:
 #include <colors.hpp>
 #include <common.hpp>
+#include <debug.hpp>
 #include <field.hpp>
 #include <input.hpp>
 #include <print.hpp>

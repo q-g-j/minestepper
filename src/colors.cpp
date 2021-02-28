@@ -18,6 +18,7 @@
 
 // project headers:
 #include <colors.hpp>
+#include <debug.hpp>
 
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
     std::string Colors::setTextColor(int const& colorCodeWindows)

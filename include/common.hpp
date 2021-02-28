@@ -1,11 +1,7 @@
 #pragma once
 
 // system headers:
-#include <iostream>
-#include <memory>
-
-// project headers:
-#include <debug.hpp>
+#include <string>
 
 // Windows and Linux seem to handle unicode strings differently (use wide strings for Windows):
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)

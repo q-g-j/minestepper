@@ -13,7 +13,6 @@
 #include <algorithm>
 #include <atomic>
 #include <iostream>
-#include <random>
 #include <vector>
 
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
@@ -25,6 +24,7 @@
 // project headers:
 #include <colors.hpp>
 #include <common.hpp>
+#include <debug.hpp>
 #include <field.hpp>
 #include <game.hpp>
 #include <input.hpp>

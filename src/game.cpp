@@ -21,6 +21,7 @@
 // project headers:
 #include <colors.hpp>
 #include <common.hpp>
+#include <debug.hpp>
 #include <field.hpp>
 #include <game.hpp>
 #include <input.hpp>
@@ -75,7 +76,7 @@ Common::GameModeReturnStruct Game::chooseGamemode()
     #endif
 
     #if MEM_LEAK_TEST_LOOP == 1
-        difficulty = 1;
+        difficulty = 3;
     #else
         difficulty = input->getInputDifficulty();
     #endif

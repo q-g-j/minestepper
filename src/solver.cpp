@@ -14,6 +14,7 @@
 #include <atomic>
 #include <iostream>
 #include <vector>
+
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
     #include <windows.h>
 #else
@@ -22,6 +23,7 @@
 
 // project headers:
 #include <common.hpp>
+#include <debug.hpp>
 #include <field.hpp>
 #include <print.hpp>
 #include <solver.hpp>

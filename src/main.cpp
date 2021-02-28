@@ -11,6 +11,7 @@
 
 // project headers:
 #include <common.hpp>
+#include <debug.hpp>
 #include <game.hpp>
 
 int main()
