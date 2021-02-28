@@ -7,7 +7,6 @@
 #include <vector>
 
 // project headers:
-#include <common.hpp>
 #include <debug.hpp>
 
 // forward declarations of classes:

@@ -21,6 +21,7 @@
 #endif
 
 // project headers:
+#include <common.hpp>
 #include <field.hpp>
 #include <print.hpp>
 #include <solver.hpp>
