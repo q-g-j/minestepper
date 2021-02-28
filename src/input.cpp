@@ -138,7 +138,6 @@ void Input::getInputEnterKey(std::string const& text)
         }
         disableNonCanonicalMode();
     #endif
-    std::cin.clear();
     std::cout << newline;
 }
 
@@ -489,6 +488,8 @@ void Input::toggleHelp(Field &field, Common::CoordsStruct const& currentArrayPos
 
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         common->centerWindow();
+    #else
+        disableNonCanonicalMode();
     #endif
 
     Common::CoordsStruct currentCursorPosition;
@@ -506,6 +507,10 @@ void Input::toggleHelp(Field &field, Common::CoordsStruct const& currentArrayPos
 
     doPauseTimer = false;
     doPrintTimer = true;
+
+    #if !defined(_WIN32) && !defined(WIN32) && !defined(_WIN64) && !defined(WIN64)
+        enableNonCanonicalMode();
+    #endif
 }
 
 // move the players cursor in 4 directions with the arrow keys:
@@ -817,7 +822,6 @@ Common::UserInputReturnStruct Input::getInputGameplay(Field &field, int firstrun
                 continue;
             }
         }
-
         disableNonCanonicalMode();
     #endif
 
