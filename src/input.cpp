@@ -101,70 +101,17 @@ void Input::getInputEnterKey(std::string const& text)
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         while (true)
         {
-            int inputKey;
-            if ((inputKey = _getch()) == 'q' || inputKey == 'Q')
+            try
             {
-                exit(0);
+                int inputKey;
+                if ((inputKey = _getch()) == 'q' || inputKey == 'Q')
+                {
+                    exit(0);
+                }
+                else if (inputKey == KEY_ENTER) break;
+                else continue;
             }
-            else if (inputKey == KEY_ENTER) break;
-            else continue;
-        }
-    #else
-        enableNonCanonicalMode();
-        char inputKey;
-        while (true)
-        {
-            inputKey = getchar();
-            if (inputKey == 'q' || inputKey == 'Q')
-            {
-                exit(0);
-            }
-            if (inputKey == KEY_ENTER) break;
-            else continue;
-        }
-        disableNonCanonicalMode();
-    #endif
-    std::cout << newline;
-}
-
-// custom mode: ask user for the game mode (difficulty):
-int Input::getInputDifficulty()
-{
-    int difficulty = 0;
-
-    print->printMenu();
-
-    this->showBlinkingCursor(false);
-
-    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-        while (true)
-        {
-            int inputKey = 0;
-            if ((inputKey = _getch()) == 'q' || inputKey == 'Q')
-            {
-                exit(0);
-            }
-            else if (inputKey == '1')
-            {
-                difficulty = 1;
-                break;
-            }
-            else if (inputKey == '2')
-            {
-                difficulty = 2;
-                break;
-            }
-            else if (inputKey == '3')
-            {
-                difficulty = 3;
-                break;
-            }
-            else if (inputKey == '4')
-            {
-                difficulty = 4;
-                break;
-            }
-            else
+            catch (...)
             {
                 continue;
             }
@@ -174,32 +121,113 @@ int Input::getInputDifficulty()
         char inputKey;
         while (true)
         {
-            inputKey = getchar();
-            if (inputKey == 'q' || inputKey == 'Q')
+            try
             {
-                exit(0);
+                inputKey = getchar();
+                if (inputKey == 'q' || inputKey == 'Q')
+                {
+                    exit(0);
+                }
+                if (inputKey == KEY_ENTER) break;
+                else continue;
             }
-            if (inputKey == '1')
+            catch (...)
             {
-                difficulty = 1;
-                break;
+                continue;
             }
-            else if (inputKey == '2')
+        }
+        disableNonCanonicalMode();
+    #endif
+    std::cin.clear();
+    std::cout << newline;
+}
+
+// custom mode: ask user for the game mode (difficulty):
+int Input::getInputDifficulty()
+{
+    int difficulty = 0;
+
+    print->printMenu();
+    this->showBlinkingCursor(false);
+
+    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+        int inputKey = 0;
+        while (true)
+        {
+            try
             {
-                difficulty = 2;
-                break;
+                if ((inputKey = _getch()) == 'q' || inputKey == 'Q')
+                {
+                    exit(0);
+                }
+                else if (inputKey == '1')
+                {
+                    difficulty = 1;
+                    break;
+                }
+                else if (inputKey == '2')
+                {
+                    difficulty = 2;
+                    break;
+                }
+                else if (inputKey == '3')
+                {
+                    difficulty = 3;
+                    break;
+                }
+                else if (inputKey == '4')
+                {
+                    difficulty = 4;
+                    break;
+                }
+                else
+                {
+                    continue;
+                }
             }
-            else if (inputKey == '3')
+            catch (...)
             {
-                difficulty = 3;
-                break;
+                continue;
             }
-            else if (inputKey == '4')
-            {
-                difficulty = 4;
-                break;
+        }
+    #else
+        enableNonCanonicalMode();
+        char inputKey;
+        while (true)
+        {
+            try
+            {            
+                inputKey = getchar();
+                if (inputKey == 'q' || inputKey == 'Q')
+                {
+                    exit(0);
+                }
+                if (inputKey == '1')
+                {
+                    difficulty = 1;
+                    break;
+                }
+                else if (inputKey == '2')
+                {
+                    difficulty = 2;
+                    break;
+                }
+                else if (inputKey == '3')
+                {
+                    difficulty = 3;
+                    break;
+                }
+                else if (inputKey == '4')
+                {
+                    difficulty = 4;
+                    break;
+                }
+                else
+                {
+                    continue;
+                }
             }
-            else
+            catch (...)
             {
                 continue;
             }
@@ -229,21 +257,28 @@ int Input::getInputCustomCellWidth()
         int inputKey;
         while (true)
         {
-            if ((inputKey = _getch()) == 'q' || inputKey == 'Q')
+            try
             {
-                exit(0);
+                if ((inputKey = _getch()) == 'q' || inputKey == 'Q')
+                {
+                    exit(0);
+                }
+                if (inputKey == '1')
+                {
+                    cellWidth = 1;
+                    break;
+                }
+                else if (inputKey == '3')
+                {
+                    cellWidth = 3;
+                    break;
+                }
+                else
+                {
+                    continue;
+                }
             }
-            if (inputKey == '1')
-            {
-                cellWidth = 1;
-                break;
-            }
-            else if (inputKey == '3')
-            {
-                cellWidth = 3;
-                break;
-            }
-            else
+            catch (...)
             {
                 continue;
             }
@@ -253,22 +288,29 @@ int Input::getInputCustomCellWidth()
         char inputKey;
         while (true)
         {
-            inputKey = getchar();
-            if (inputKey == 'q' || inputKey == 'Q')
-            {
-                exit(0);
+            try
+            {            
+                inputKey = getchar();
+                if (inputKey == 'q' || inputKey == 'Q')
+                {
+                    exit(0);
+                }
+                if (inputKey == '1')
+                {
+                    cellWidth = 1;
+                    break;
+                }
+                else if (inputKey == '3')
+                {
+                    cellWidth = 3;
+                    break;
+                }
+                else
+                {
+                    continue;
+                }
             }
-            if (inputKey == '1')
-            {
-                cellWidth = 1;
-                break;
-            }
-            else if (inputKey == '3')
-            {
-                cellWidth = 3;
-                break;
-            }
-            else
+            catch (...)
             {
                 continue;
             }
@@ -294,66 +336,73 @@ Common::CoordsStruct Input::getInputCustomDimensions(int const& fieldCellWidth)
 
     while (true)
     {
-        std::cout << colors->setTextColor(colors->fg_white);
-        std::cout << print->inputText;
-        std::cout << colors->setTextColor(colors->color_default);
-        getline(std::cin, line);
-        if (line == "q" || line == "Q")
+        try
         {
-            exit(0);
-        }
-        else if (line == "")
-        {
-            isValidInput = false;
-        }
-        else
-        {
-            if(line.find("x") != std::string::npos)
+            std::cout << colors->setTextColor(colors->fg_white);
+            std::cout << print->inputText;
+            std::cout << colors->setTextColor(colors->color_default);
+            getline(std::cin, line);
+            if (line == "q" || line == "Q")
             {
-                isValidInput = true;
-                try
+                exit(0);
+            }
+            else if (line == "")
+            {
+                isValidInput = false;
+            }
+            else
+            {
+                if(line.find("x") != std::string::npos)
                 {
-                    beforeX = stoi(line.substr(0, line.find("x")));
-                }
-                catch (...)
-                {
-                    isValidInput = false;
-                }
-                try
-                {
-                    afterX = stoi(line.substr(line.find("x") + 1));
-                }
-                catch (...)
-                {
-                    isValidInput = false;
+                    isValidInput = true;
                     try
                     {
-                        afterX = stoi(line.substr(line.find("x")));
+                        beforeX = stoi(line.substr(0, line.find("x")));
                     }
                     catch (...)
                     {
                         isValidInput = false;
                     }
+                    try
+                    {
+                        afterX = stoi(line.substr(line.find("x") + 1));
+                    }
+                    catch (...)
+                    {
+                        isValidInput = false;
+                        try
+                        {
+                            afterX = stoi(line.substr(line.find("x")));
+                        }
+                        catch (...)
+                        {
+                            isValidInput = false;
+                        }
+                    }
                 }
-            }
-            else
-            {
-                isValidInput = false;
-            }
-            if (fieldCellWidth == 1)
-            {
-                if (beforeX < 20 || afterX < 8 || beforeX > 80 || afterX > 20)
+                else
                 {
                     isValidInput = false;
                 }
-            }
-            else
-            {
-                if (beforeX < 8 || afterX < 8 || beforeX > 40 || afterX > 20)
+                if (fieldCellWidth == 1)
                 {
-                    isValidInput = false;
+                    if (beforeX < 20 || afterX < 8 || beforeX > 80 || afterX > 20)
+                    {
+                        isValidInput = false;
+                    }
+                }
+                else
+                {
+                    if (beforeX < 8 || afterX < 8 || beforeX > 40 || afterX > 20)
+                    {
+                        isValidInput = false;
+                    }
                 }
             }
+        }
+        catch (...)
+        {
+            continue;
         }
         if (isValidInput == true)
         {
@@ -382,33 +431,40 @@ int Input::getInputCustomMinesCount(int const& fieldSize)
 
     while (true)
     {
-        std::cout << colors->setTextColor(colors->fg_white);
-        std::cout << print->inputText;
-        std::cout << colors->setTextColor(colors->color_default);
-        getline(std::cin, line);
-        if (line == "q" || line == "Q")
+        try
         {
-            exit(0);
-        }
-        else if (line == "")
-        {
-            isValidInput = false;
-        }
-        else
-        {
-            isValidInput = true;
-            try
+            std::cout << colors->setTextColor(colors->fg_white);
+            std::cout << print->inputText;
+            std::cout << colors->setTextColor(colors->color_default);
+            getline(std::cin, line);
+            if (line == "q" || line == "Q")
             {
-                minesTotal = stoi(line);
+                exit(0);
             }
-            catch (...)
+            else if (line == "")
             {
                 isValidInput = false;
             }
-            if  (minesTotal <= 0 || minesTotal >= fieldSize)
+            else
             {
-                isValidInput = false;
+                isValidInput = true;
+                try
+                {
+                    minesTotal = stoi(line);
+                }
+                catch (...)
+                {
+                    isValidInput = false;
+                }
+                if  (minesTotal <= 0 || minesTotal >= fieldSize)
+                {
+                    isValidInput = false;
+                }
             }
+        }
+        catch (...)
+        {
+            continue;
         }
         if (isValidInput == true)
         {
@@ -455,13 +511,6 @@ void Input::toggleHelp(Field &field, Common::CoordsStruct const& currentArrayPos
 // move the players cursor in 4 directions with the arrow keys:
 void Input::moveCursor(Field &field, Common::CoordsStruct& currentArrayPosition, Direction &direction, bool *toggleEdgeJump)
 {
-    extern std::atomic<bool> isTimerPrinting;
-    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-        while (isTimerPrinting) Sleep(5);
-    #else
-        while (isTimerPrinting) usleep(5 * 1000);
-    #endif
-
     Common::CoordsStruct currentCursorPosition;
     std::wcout << L"\b";
     if (direction == Direction::UP)
@@ -568,90 +617,96 @@ Common::UserInputReturnStruct Input::getInputGameplay(Field &field, int firstrun
 
         int inputKeyA;
         char inputKeyB;
-
-        while(1)
+        while (1)
         {
-            if ((inputKeyA = _getch()) == 224)
+            try
             {
-                inputKeyB = _getch();
-                if (inputKeyB == KEY_UP)
+                if ((inputKeyA = _getch()) == 224)
                 {
-                    Direction direction = Direction::UP;
-                    moveCursor(field, currentArrayPosition, direction, toogleEdgeJumpP);
+                    inputKeyB = _getch();
+                    if (inputKeyB == KEY_UP)
+                    {
+                        Direction direction = Direction::UP;
+                        moveCursor(field, currentArrayPosition, direction, toogleEdgeJumpP);
+                    }
+                    else if (inputKeyB == KEY_DOWN)
+                    {
+                        Direction direction = Direction::DOWN;
+                        moveCursor(field, currentArrayPosition, direction, toogleEdgeJumpP);
+                    }
+                    else if (inputKeyB == KEY_LEFT)
+                    {
+                        Direction direction = Direction::LEFT;
+                        moveCursor(field, currentArrayPosition, direction, toogleEdgeJumpP);
+                    }
+                    else if (inputKeyB == KEY_RIGHT)
+                    {
+                        Direction direction = Direction::RIGHT;
+                        moveCursor(field, currentArrayPosition, direction, toogleEdgeJumpP);
+                    }
                 }
-                else if (inputKeyB == KEY_DOWN)
+                else if (inputKeyA == 'q' || inputKeyA == 'Q')
                 {
-                    Direction direction = Direction::DOWN;
-                    moveCursor(field, currentArrayPosition, direction, toogleEdgeJumpP);
+                    exit(0);
                 }
-                else if (inputKeyB == KEY_LEFT)
+                else if (inputKeyA == 'h' || inputKeyA == 'H')
                 {
-                    Direction direction = Direction::LEFT;
-                    moveCursor(field, currentArrayPosition, direction, toogleEdgeJumpP);
-                }
-                else if (inputKeyB == KEY_RIGHT)
-                {
-                    Direction direction = Direction::RIGHT;
-                    moveCursor(field, currentArrayPosition, direction, toogleEdgeJumpP);
-                }
-            }
-            else if (inputKeyA == 'q' || inputKeyA == 'Q')
-            {
-                exit(0);
-            }
-            else if (inputKeyA == 'h' || inputKeyA == 'H')
-            {
-                toggleHelp(field, currentArrayPosition);
-                continue;
-            }
-            else if (inputKeyA == 'f' || inputKeyA == 'F')
-            {
-                solver->autoSolve(field, true, false, false);
-                returnStruct.isAutoFlag = true;
-                break;
-            }
-            else if (inputKeyA == 'r' || inputKeyA == 'R')
-            {
-                solver->autoSolve(field, false, true, false);
-                returnStruct.isAutoFlag = true;
-                break;
-            }
-            else if (inputKeyA == 's' || inputKeyA == 'S')
-            {
-                solver->autoSolve(field, true, true, true);
-                returnStruct.isAutoFlag = true;
-                break;
-            }
-            else if (inputKeyA == 'c' || inputKeyA == 'C')
-            {                
-                toggleEdgeJump == true ? toggleEdgeJump = false : toggleEdgeJump = true;
-            }
-            else if (inputKeyA == KEY_ENTER)
-            {
-                coutconv << L"\b" << std::flush;
-                if (field.getCoordsContent(currentArrayPosition) == symbols->symbolFlag || field.getCoordsContent(currentArrayPosition) == symbols->symbolZero)
-                {
+                    toggleHelp(field, currentArrayPosition);
                     continue;
                 }
-                else
+                else if (inputKeyA == 'f' || inputKeyA == 'F')
                 {
+                    solver->autoSolve(field, true, false, false);
+                    returnStruct.isAutoFlag = true;
                     break;
                 }
-            }
-            else if  (inputKeyA == KEY_SPACE)
-            {
-                coutconv << L"\b" << std::flush;
-                if (field.isNumber(currentArrayPosition) || field.getCoordsContent(currentArrayPosition) == L" ")
+                else if (inputKeyA == 'r' || inputKeyA == 'R')
                 {
-                    continue;
+                    solver->autoSolve(field, false, true, false);
+                    returnStruct.isAutoFlag = true;
+                    break;
+                }
+                else if (inputKeyA == 's' || inputKeyA == 'S')
+                {
+                    solver->autoSolve(field, true, true, true);
+                    returnStruct.isAutoFlag = true;
+                    break;
+                }
+                else if (inputKeyA == 'c' || inputKeyA == 'C')
+                {
+                    toggleEdgeJump == true ? toggleEdgeJump = false : toggleEdgeJump = true;
+                }
+                else if (inputKeyA == KEY_ENTER)
+                {
+                    coutconv << L"\b" << std::flush;
+                    if (field.getCoordsContent(currentArrayPosition) == symbols->symbolFlag || field.getCoordsContent(currentArrayPosition) == symbols->symbolZero)
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+                else if (inputKeyA == KEY_SPACE)
+                {
+                    coutconv << L"\b" << std::flush;
+                    if (field.isNumber(currentArrayPosition) || field.getCoordsContent(currentArrayPosition) == L" ")
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        returnStruct.isFlag = true;
+                    }
+                    break;
                 }
                 else
                 {
-                    returnStruct.isFlag = true;
+                    continue;
                 }
-                break;
             }
-            else
+            catch (...)
             {
                 continue;
             }
@@ -665,92 +720,99 @@ Common::UserInputReturnStruct Input::getInputGameplay(Field &field, int firstrun
 
         while (true)
         {
-            inputKeyA = getchar();
-            if (inputKeyA == 27)
-            {
-                inputKeyB = getchar();
-                inputKeyC = getchar();
-                if (inputKeyB == 91)
+            try
+            {            
+                inputKeyA = getchar();
+                if (inputKeyA == 27)
                 {
-                    if (inputKeyC == KEY_UP)
+                    inputKeyB = getchar();
+                    inputKeyC = getchar();
+                    if (inputKeyB == 91)
                     {
-                        Direction direction = Direction::UP;
-                        moveCursor(field, currentArrayPosition, direction, toogleEdgeJumpP);
-                    }
-                    else if (inputKeyC == KEY_DOWN)
-                    {
-                        Direction direction = Direction::DOWN;
-                        moveCursor(field, currentArrayPosition, direction, toogleEdgeJumpP);
-                    }
-                    else if (inputKeyC == KEY_LEFT)
-                    {
-                        Direction direction = Direction::LEFT;
-                        moveCursor(field, currentArrayPosition, direction, toogleEdgeJumpP);
-                    }
-                    else if (inputKeyC == KEY_RIGHT)
-                    {
-                        Direction direction = Direction::RIGHT;
-                        moveCursor(field, currentArrayPosition, direction, toogleEdgeJumpP);
+                        if (inputKeyC == KEY_UP)
+                        {
+                            Direction direction = Direction::UP;
+                            moveCursor(field, currentArrayPosition, direction, toogleEdgeJumpP);
+                        }
+                        else if (inputKeyC == KEY_DOWN)
+                        {
+                            Direction direction = Direction::DOWN;
+                            moveCursor(field, currentArrayPosition, direction, toogleEdgeJumpP);
+                        }
+                        else if (inputKeyC == KEY_LEFT)
+                        {
+                            Direction direction = Direction::LEFT;
+                            moveCursor(field, currentArrayPosition, direction, toogleEdgeJumpP);
+                        }
+                        else if (inputKeyC == KEY_RIGHT)
+                        {
+                            Direction direction = Direction::RIGHT;
+                            moveCursor(field, currentArrayPosition, direction, toogleEdgeJumpP);
+                        }
                     }
                 }
-            }
-            else if (inputKeyA == 'q' || inputKeyA == 'Q')
-            {
-                exit(0);
-            }
-            else if (inputKeyA == 'h' || inputKeyA == 'H')
-            {
-                toggleHelp(field, currentArrayPosition);
-                continue;
-            }
-            else if (inputKeyA == 'f' || inputKeyA == 'F')
-            {
-                solver->autoSolve(field, true, false, false);
-                returnStruct.isAutoFlag = true;
-                break;
-            }
-            else if (inputKeyA == 'r' || inputKeyA == 'R')
-            {
-                solver->autoSolve(field, false, true, false);
-                returnStruct.isAutoFlag = true;
-                break;
-            }
-            else if (inputKeyA == 's' || inputKeyA == 'S')
-            {
-                solver->autoSolve(field, true, true, true);
-                returnStruct.isAutoFlag = true;
-                break;
-            }
-            else if (inputKeyA == 'c' || inputKeyA == 'C')
-            {
-                toggleEdgeJump == true ? toggleEdgeJump = false : toggleEdgeJump = true;
-            }
-            else if (inputKeyA == KEY_ENTER)
-            {
-                std::cout << "\b" << std::flush;
-                if (field.getCoordsContent(currentArrayPosition) == symbols->symbolFlag || field.getCoordsContent(currentArrayPosition) == symbols->symbolZero)
+                else if (inputKeyA == 'q' || inputKeyA == 'Q')
                 {
+                    exit(0);
+                }
+                else if (inputKeyA == 'h' || inputKeyA == 'H')
+                {
+                    toggleHelp(field, currentArrayPosition);
                     continue;
+                }
+                else if (inputKeyA == 'f' || inputKeyA == 'F')
+                {
+                    solver->autoSolve(field, true, false, false);
+                    returnStruct.isAutoFlag = true;
+                    break;
+                }
+                else if (inputKeyA == 'r' || inputKeyA == 'R')
+                {
+                    solver->autoSolve(field, false, true, false);
+                    returnStruct.isAutoFlag = true;
+                    break;
+                }
+                else if (inputKeyA == 's' || inputKeyA == 'S')
+                {
+                    solver->autoSolve(field, true, true, true);
+                    returnStruct.isAutoFlag = true;
+                    break;
+                }
+                else if (inputKeyA == 'c' || inputKeyA == 'C')
+                {
+                    toggleEdgeJump == true ? toggleEdgeJump = false : toggleEdgeJump = true;
+                }
+                else if (inputKeyA == KEY_ENTER)
+                {
+                    std::cout << "\b" << std::flush;
+                    if (field.getCoordsContent(currentArrayPosition) == symbols->symbolFlag || field.getCoordsContent(currentArrayPosition) == symbols->symbolZero)
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+                else if (inputKeyA == KEY_SPACE)
+                {
+                    std::cout << "\b" << std::flush;
+                    if (field.isNumber(currentArrayPosition) || field.getCoordsContent(currentArrayPosition) == " ")
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        returnStruct.isFlag = true;
+                        break;
+                    }
                 }
                 else
                 {
-                    break;
-                }
-            }
-            else if (inputKeyA == KEY_SPACE)
-            {
-                std::cout << "\b" << std::flush;
-                if (field.isNumber(currentArrayPosition) || field.getCoordsContent(currentArrayPosition) == " ")
-                {
                     continue;
                 }
-                else
-                {
-                    returnStruct.isFlag = true;
-                    break;
-                }
             }
-            else
+            catch (...)
             {
                 continue;
             }

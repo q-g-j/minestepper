@@ -293,6 +293,17 @@ void Field::printCoords(Common::CoordsStruct const& coords, bool isCursor)
 {
     Common::CoordsStruct tempCoords;
 
+    extern std::atomic<bool> isTimerPrinting;
+
+    while (isTimerPrinting)
+    {
+        #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+                Sleep(1);
+        #else
+                usleep(1 * 1000);
+        #endif
+    }
+
     tempCoords = common->coordsToCursorPosition(coords, this->fieldOffsetX, this->fieldOffsetY, this->fieldCellWidth);
     common->gotoXY(tempCoords.col, tempCoords.row);
 

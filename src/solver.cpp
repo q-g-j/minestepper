@@ -94,6 +94,7 @@ void Solver::autoSolve(Field& field, bool doPlaceFlags, bool doFlagAutoUncover, 
                 --coveredLeft;
                 --minesLeft;
                 ++flagsCount;
+
                 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
                     Sleep(50);
                 #else
