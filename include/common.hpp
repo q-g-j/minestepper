@@ -45,7 +45,7 @@ public:
     };
     struct UserInputReturnStruct
     {
-        CoordsStruct Coords;
+        CoordsStruct coords;
         bool isFlag = false;
         bool isAutoFlag = false;
     };

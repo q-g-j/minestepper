@@ -585,8 +585,8 @@ void Input::moveCursor(Field &field, Common::CoordsStruct& currentArrayPosition,
 // the main function to get the users input during a game:
 const Common::UserInputReturnStruct &Input::getInputGameplay(Field &field, bool firstrun)
 {
-    this->getInputGameplayReturn.Coords.col = 0;
-    this->getInputGameplayReturn.Coords.row = 0;
+    this->getInputGameplayReturn.coords.col = 0;
+    this->getInputGameplayReturn.coords.row = 0;
     this->getInputGameplayReturn.isAutoFlag = false;
     this->getInputGameplayReturn.isFlag = false;
 
@@ -824,8 +824,8 @@ const Common::UserInputReturnStruct &Input::getInputGameplay(Field &field, bool 
         disableNonCanonicalMode();
     #endif
 
-    this->getInputGameplayReturn.Coords.col = currentArrayPosition.col;
-    this->getInputGameplayReturn.Coords.row = currentArrayPosition.row;
+    this->getInputGameplayReturn.coords.col = currentArrayPosition.col;
+    this->getInputGameplayReturn.coords.row = currentArrayPosition.row;
 
     return this->getInputGameplayReturn;
 }
