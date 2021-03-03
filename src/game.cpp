@@ -176,8 +176,8 @@ const Common::GameModeReturnStruct &Game::chooseGamemode()
             common.gotoXY(1, field->getOffsetX() + field->getRows() * 2 + 4);
 
             #if MEM_LEAK_TEST_LOOP == 1
-                userInput.Coords.col = 6;
-                userInput.Coords.row = 6;
+                userInput.coords.col = 6;
+                userInput.coords.row = 6;
             #else
                 isGameRunning = true;
                 userInput = input.getInputGameplay(*field, firstrun);

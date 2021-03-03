@@ -107,7 +107,7 @@ void Field::fillMines(Common::CoordsStruct const& userFirstInput)
     #if STATIC_FIELD == 1
         this->mines2DVector[3][3] = symbols->symbolMine;
         this->mines2DVector[4][3] = symbols->symbolMine;
-        this->minesTotal = 1;
+        this->minesTotal = 2;
     #else
         Common::CoordsStruct coords;
         size_t sizeofField2DVector = this->cols * this->rows;
