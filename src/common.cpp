@@ -167,48 +167,42 @@ void Common::resizeConsole(int const& cols, int const& rows)
 #endif
 
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-    const int &Common::stringToInt(std::wstring wstr)
+    const int Common::stringToInt(std::wstring wstr)
     {
-        this->stringToIntReturn = stoi(wstr);
-        return this->stringToIntReturn;
+        return stoi(wstr);
     }
 #else
-    const int &Common::stringToInt(std::string str)
+    const int Common::stringToInt(std::string str)
     {
-        this->stringToIntReturn = stoi(str);
-        return this->stringToIntReturn;
+        return stoi(str);
     }
 #endif
 
 // convert a string to wide string and vice versa:
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-const std::wstring & Common::stringConvert(std::string const& str)
+const std::wstring Common::stringConvert(std::string const& str)
     {
         std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> stringConvertTemp;
-        this->stringConvertReturn = stringConvertTemp.from_bytes(str);
-        return this->stringConvertReturn;
+        return stringConvertTemp.from_bytes(str);
     }
 #else
-const std::string &Common::stringConvert(std::wstring const& wstr)
+const std::string Common::stringConvert(std::wstring const& wstr)
     {
         std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> stringConvertTemp;
-        this->stringConvertReturn = stringConvertTemp.to_bytes(wstr);
-        return this->stringConvertReturn;
+        return stringConvertTemp.to_bytes(wstr);
     }
 #endif
 
 // convert an integer to string or wide string:
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-    const std::wstring &Common::intToStringConv(int const& num)
+    const std::wstring Common::intToStringConv(int const& num)
     {
-        this->intToStringConvReturn = std::to_wstring(num);
-        return this->intToStringConvReturn;
+        return std::to_wstring(num);
     }
 #else
-    const std::string &Common::intToStringConv(int const& num)
+    const std::string Common::intToStringConv(int const& num)
     {
-        this->intToStringConvReturn = std::to_string(num);
-        return this->intToStringConvReturn;
+        return std::to_string(num);
     }
 #endif
 
@@ -269,17 +263,16 @@ const Common::CoordsStruct &Common::intToCoords(int const& position, int const& 
 }
 
 // the above function the other way around
-const int &Common::coordsToInt(CoordsStruct const& coords, int const& cols)
+const int Common::coordsToInt(CoordsStruct const& coords, int const& cols)
 {
     if (coords.row == 1)
     {
-        this->coordsToIntReturn = coords.col;
+        return coords.col;
     }
     else
     {
-        this->coordsToIntReturn = (cols) * (coords.row-1) + coords.col;
+        return (cols) * (coords.row-1) + coords.col;
     }
-    return this->coordsToIntReturn;
 }
 
 // convert field coordinates to cursor coordinates:

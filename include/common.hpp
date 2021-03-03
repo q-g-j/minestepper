@@ -41,11 +41,7 @@ public:
 
 private:
     // return variables for class methods:
-    stringconv stringConvertReturn;
-    stringconv intToStringConvReturn;
-    int stringToIntReturn;
     CoordsStruct intToCoordsReturn;
-    int coordsToIntReturn;
     CoordsStruct coordsToCursorPositionReturn;
     TimeStruct secondsToTimeStructReturn;
 
@@ -78,17 +74,17 @@ public:
 
     // public methods:
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-        const std::wstring &intToStringConv(int const&);
-        const std::wstring &stringConvert(std::string const&);
-        const int &stringToInt(std::wstring);
+        const std::wstring intToStringConv(int const&);
+        const std::wstring stringConvert(std::string const&);
+        const int stringToInt(std::wstring);
 
         void setWindowProperties();
         void centerWindow();
         void setUnicode(bool);
     #else
-        const std::string &intToStringConv(int const&);
-        const std::string &stringConvert(std::wstring const&);
-        const int &stringToInt(std::string);
+        const std::string intToStringConv(int const&);
+        const std::string stringConvert(std::wstring const&);
+        const int stringToInt(std::string);
     #endif
 
     void resizeConsole(int const&, int const&);
@@ -96,7 +92,7 @@ public:
     void clearScreen();
     void gotoXY(int const&, int const&);
     const CoordsStruct &intToCoords(int const&, int const&);
-    const int &coordsToInt(CoordsStruct const&, int const&);
+    const int coordsToInt(CoordsStruct const&, int const&);
     const CoordsStruct &coordsToCursorPosition(CoordsStruct const&, int const&, int const&, int const&);
     void preciseSleep(double);
     const TimeStruct &secondsToTimeStruct(int);
