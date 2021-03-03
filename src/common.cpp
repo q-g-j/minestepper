@@ -271,7 +271,6 @@ const Common::CoordsStruct &Common::intToCoords(int const& position, int const& 
 // the above function the other way around
 const int &Common::coordsToInt(CoordsStruct const& coords, int const& cols)
 {
-    this->coordsToIntReturn = 1;
     if (coords.row == 1)
     {
         this->coordsToIntReturn = coords.col;
@@ -287,12 +286,9 @@ const int &Common::coordsToInt(CoordsStruct const& coords, int const& cols)
 const Common::CoordsStruct &Common::coordsToCursorPosition(CoordsStruct const& coords, int const& offsetX, int const& offsetY, int const& cellWidth)
 {
     this->coordsToCursorPositionReturn.col = offsetX + (cellWidth-1)/2 - 1;
-    if (this->coordsToCursorPositionReturn.col > 1)
-    {
     for (int i = 1; i < coords.col; ++i)
-        {
-            this->coordsToCursorPositionReturn.col = this->coordsToCursorPositionReturn.col + (cellWidth-1)/2 + 1 + (cellWidth-1)/2 + 1;
-        }
+    {
+        this->coordsToCursorPositionReturn.col = this->coordsToCursorPositionReturn.col + (cellWidth-1)/2 + 1 + (cellWidth-1)/2 + 1;
     }
 
     this->coordsToCursorPositionReturn.row = offsetY;
@@ -307,10 +303,10 @@ const Common::CoordsStruct &Common::coordsToCursorPosition(CoordsStruct const& c
 // (code snippet from https://blat-blatnik.github.io/computerBear/making-accurate-sleep-function/)
 void Common::preciseSleep(double seconds)
 {
-    static double estimate = 5e-3;
-    static double mean = 5e-3;
-    static double m2 = 0;
-    static int64_t count = 1;
+   double estimate = 5e-3;
+   double mean = 5e-3;
+   double m2 = 0;
+   int64_t count = 1;
 
     while (seconds > estimate) {
         auto start = std::chrono::high_resolution_clock::now();

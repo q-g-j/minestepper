@@ -33,6 +33,23 @@ public:
         int col;
         int row;
     };
+    struct TimeStruct
+    {
+        std::string minutes;
+        std::string seconds;
+    };
+
+private:
+    // return variables for class methods:
+    stringconv stringConvertReturn;
+    stringconv intToStringConvReturn;
+    int stringToIntReturn;
+    CoordsStruct intToCoordsReturn;
+    int coordsToIntReturn;
+    CoordsStruct coordsToCursorPositionReturn;
+    TimeStruct secondsToTimeStructReturn;
+
+public:
     struct GameModeReturnStruct
     {
         std::string difficultyString;
@@ -55,23 +72,7 @@ public:
         bool hasWon = false;
         bool isTurn = false;
     };
-    struct TimeStruct
-    {
-        std::string minutes;
-        std::string seconds;
-    };
-
-private:
-    // return variables for class methods:
-    stringconv stringConvertReturn;
-    stringconv intToStringConvReturn;
-    int stringToIntReturn;
-    CoordsStruct intToCoordsReturn;
-    int coordsToIntReturn;
-    CoordsStruct coordsToCursorPositionReturn;
-    TimeStruct secondsToTimeStructReturn;
-
-public:
+    
     Common() = default;
     ~Common() = default;
 

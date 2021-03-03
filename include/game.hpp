@@ -10,8 +10,7 @@
     #include <unistd.h>
 #endif
 
-// project headers:
-
+// forward declarations of classes:
 class Colors;
 class Common;
 class Field;
