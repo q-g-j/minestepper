@@ -58,17 +58,17 @@ Field::Field(Common::GameModeReturnStruct& gameMode)
 Field::~Field() = default;
 
 // some getters:
-int Field::getCols() { return this->cols; }
-int Field::getRows() { return this->rows; }
-int Field::getOffsetX() { return this->fieldOffsetX; }
-int Field::getOffsetY() { return this->fieldOffsetY; }
-int Field::getCellWidth() { return this->fieldCellWidth; }
-int Field::getCoveredLeft() { return this->coveredLeft; }
-int Field::getMinesTotal() { return this->minesTotal; }
-int Field::getMinesLeft() { return this->minesLeft; }
-int Field::getFlagsCount() { return this->flagsCount; }
-std::string Field::getDifficultyString() { return this->difficultyString; }
-stringconv Field::getCoordsContent(Common::CoordsStruct const& coords) { return this->field2DVector[coords.col][coords.row]; }
+const int &Field::getCols() const { return this->cols; }
+const int &Field::getRows() const { return this->rows; }
+const int &Field::getOffsetX() const { return this->fieldOffsetX; }
+const int &Field::getOffsetY() const { return this->fieldOffsetY; }
+const int &Field::getCellWidth() const { return this->fieldCellWidth; }
+const int &Field::getCoveredLeft() const { return this->coveredLeft; }
+const int &Field::getMinesTotal() const { return this->minesTotal; }
+const int &Field::getMinesLeft() const { return this->minesLeft; }
+const int &Field::getFlagsCount() const { return this->flagsCount; }
+const std::string &Field::getDifficultyString() const { return this->difficultyString; }
+const stringconv &Field::getCoordsContent(Common::CoordsStruct const& coords) const { return this->field2DVector[coords.col][coords.row]; }
 
 // setters:
 void Field::setCoveredLeft::operator--() { --field_.coveredLeft; }
@@ -704,10 +704,8 @@ void Field::flagAutoUncover(Common::CoordsStruct const& coords, Common::PlaceUse
 
 // the main method of class Field which will alter this->field2DVector.
 // Takes single coords from Input::UserInput method.
-Common::PlaceUserInputReturnStruct Field::placeUserInput(Common::UserInputReturnStruct& userInput, int& turn)
+const Common::PlaceUserInputReturnStruct &Field::placeUserInput(Common::UserInputReturnStruct& userInput, int& turn)
 {
-    Common::PlaceUserInputReturnStruct returnStruct;
-
     // set or remove flag if requested
     if (userInput.isFlag == true)
     {
@@ -741,19 +739,19 @@ Common::PlaceUserInputReturnStruct Field::placeUserInput(Common::UserInputReturn
         {
             this->mines2DVector[userInput.Coords.col][userInput.Coords.row] = symbols->symbolMineHit;
             gameLost();
-            returnStruct.hasLost = true;
-            return returnStruct;
+            this->placeUserInputReturn.hasLost = true;
+            return this->placeUserInputReturn;
         }
 
         // if the player has pressed ENTER on a number and has placed all flags right,
         // uncover all surrounding safe positions:
         if (isNumber(userInput.Coords))
         {
-            flagAutoUncover(userInput.Coords, returnStruct, false);
-            if (returnStruct.hasLost == true)
+            flagAutoUncover(userInput.Coords, this->placeUserInputReturn, false);
+            if (this->placeUserInputReturn.hasLost == true)
             {
                 gameLost();
-                return returnStruct;
+                return this->placeUserInputReturn;
             }
         }
         else
@@ -769,7 +767,7 @@ Common::PlaceUserInputReturnStruct Field::placeUserInput(Common::UserInputReturn
                 this->field2DVector[userInput.Coords.col][userInput.Coords.row] = common->intToStringConv(static_cast<int>(neighborsMinesVector.size()));
             }
             printCoords(userInput.Coords, false);
-            returnStruct.isTurn = true;
+            this->placeUserInputReturn.isTurn = true;
             --this->coveredLeft;
 
             // Call recursive method autoUncoverRecursive() to automatically uncover all connected cells, as long as
@@ -787,13 +785,13 @@ Common::PlaceUserInputReturnStruct Field::placeUserInput(Common::UserInputReturn
     // check if player has won:
     if (this->flagsCount + this->coveredLeft == this->minesTotal)
     {
-        returnStruct.hasWon = true;
+        this->placeUserInputReturn.hasWon = true;
         gameWon();
     }
     
     #if MEM_LEAK_TEST_LOOP == 1
-        returnStruct.hasLost = true;
+        this->placeUserInputReturn.hasLost = true;
     #endif
 
-    return returnStruct;
+    return this->placeUserInputReturn;
 }

@@ -12,8 +12,8 @@
 // system headers:
 #include <chrono>
 #include <codecvt>
-#include <iostream>
 #include <locale>
+#include <iostream>
 #include <math.h>
 #include <string>
 #include <time.h>
@@ -167,46 +167,48 @@ void Common::resizeConsole(int const& cols, int const& rows)
 #endif
 
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-    int Common::stringToInt(std::wstring wstr)
+    const int &Common::stringToInt(std::wstring wstr)
     {
-        int num = stoi(wstr);
-        return num;
+        this->stringToIntReturn = stoi(wstr);
+        return this->stringToIntReturn;
     }
 #else
-    int Common::stringToInt(std::string str)
+    const int &Common::stringToInt(std::string str)
     {
-        int num = stoi(str);
-        return num;
+        this->stringToIntReturn = stoi(str);
+        return this->stringToIntReturn;
     }
 #endif
 
 // convert a string to wide string and vice versa:
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-std::wstring Common::stringConvert(std::string const& str)
+const std::wstring & Common::stringConvert(std::string const& str)
     {
-        using convert_t = std::codecvt_utf8<wchar_t>;
-        std::wstring_convert<convert_t, wchar_t> strconverter;
-        return strconverter.from_bytes(str);
+        std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> stringConvertTemp;
+        this->stringConvertReturn = stringConvertTemp.from_bytes(str);
+        return this->stringConvertReturn;
     }
 #else
-std::string Common::stringConvert(std::wstring const& wstr)
+const std::string &Common::stringConvert(std::wstring const& wstr)
     {
-        using convert_t = std::codecvt_utf8<wchar_t>;
-        std::wstring_convert<convert_t, wchar_t> strconverter;
-        return strconverter.to_bytes(wstr);
+        std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> stringConvertTemp;
+        this->stringConvertReturn = stringConvertTemp.to_bytes(wstr);
+        return this->stringConvertReturn;
     }
 #endif
 
 // convert an integer to string or wide string:
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-    std::wstring Common::intToStringConv(int const& num)
+    const std::wstring &Common::intToStringConv(int const& num)
     {
-        return std::to_wstring(num);
+        this->intToStringConvReturn = std::to_wstring(num);
+        return this->intToStringConvReturn;
     }
 #else
-    std::string Common::intToStringConv(int const& num)
+    const std::string &Common::intToStringConv(int const& num)
     {
-        return std::to_string(num);
+        this->intToStringConvReturn = std::to_string(num);
+        return this->intToStringConvReturn;
     }
 #endif
 
@@ -246,61 +248,59 @@ void Common::clearScreen()
 
 // convert coords of type integer to coords of type struct
 // (e.g. "position = 4" will return "coords.col = 4, coords.row = 1"):
-Common::CoordsStruct Common::intToCoords(int const& position, int const& cols)
+const Common::CoordsStruct &Common::intToCoords(int const& position, int const& cols)
 {
-    CoordsStruct coords;
-
     if (position <= cols)
     {
-        coords.col = position;
-        coords.row = 1;
+        this->intToCoordsReturn.col = position;
+        this->intToCoordsReturn.row = 1;
     }
     else if (position % cols == 0)
     {
-        coords.col = cols;
-        coords.row = position / cols;
+        this->intToCoordsReturn.col = cols;
+        this->intToCoordsReturn.row = position / cols;
     }
     else
     {
-        coords.col = position % cols;
-        coords.row = position / cols + 1;
+        this->intToCoordsReturn.col = position % cols;
+        this->intToCoordsReturn.row = position / cols + 1;
     }
-    return coords;
+    return this->intToCoordsReturn;
 }
 
 // the above function the other way around
-unsigned int Common::coordsToInt(CoordsStruct const& coords, int const& cols)
+const int &Common::coordsToInt(CoordsStruct const& coords, int const& cols)
 {
-    int position = 0;
+    this->coordsToIntReturn = 1;
     if (coords.row == 1)
     {
-        return position = coords.col;
+        this->coordsToIntReturn = coords.col;
     }
     else
     {
-        return position = (cols) * (coords.row-1) + coords.col;
+        this->coordsToIntReturn = (cols) * (coords.row-1) + coords.col;
     }
+    return this->coordsToIntReturn;
 }
 
 // convert field coordinates to cursor coordinates:
-Common::CoordsStruct Common::coordsToCursorPosition(CoordsStruct const& coords, int const& offsetX, int const& offsetY, int const& cellWidth)
+const Common::CoordsStruct &Common::coordsToCursorPosition(CoordsStruct const& coords, int const& offsetX, int const& offsetY, int const& cellWidth)
 {
-    CoordsStruct cursorPosition;
-    cursorPosition.col = offsetX + (cellWidth-1)/2 - 1;
-    if (cursorPosition.col > 1)
+    this->coordsToCursorPositionReturn.col = offsetX + (cellWidth-1)/2 - 1;
+    if (this->coordsToCursorPositionReturn.col > 1)
     {
     for (int i = 1; i < coords.col; ++i)
         {
-            cursorPosition.col = cursorPosition.col + (cellWidth-1)/2 + 1 + (cellWidth-1)/2 + 1;
+            this->coordsToCursorPositionReturn.col = this->coordsToCursorPositionReturn.col + (cellWidth-1)/2 + 1 + (cellWidth-1)/2 + 1;
         }
     }
 
-    cursorPosition.row = offsetY;
+    this->coordsToCursorPositionReturn.row = offsetY;
     for (int i = 1; i < coords.row; ++i)
     {
-        cursorPosition.row = cursorPosition.row + 2;
+        this->coordsToCursorPositionReturn.row = this->coordsToCursorPositionReturn.row + 2;
     }
-    return cursorPosition;
+    return this->coordsToCursorPositionReturn;
 }
 
 // replacement for Sleep() and usleep() for a more precise sleep:
@@ -333,44 +333,43 @@ void Common::preciseSleep(double seconds)
     while ((std::chrono::high_resolution_clock::now() - start).count() / 1e9 < seconds);
 }
 
-Common::TimeStruct Common::secondsToTimeStruct(int seconds)
+const Common::TimeStruct &Common::secondsToTimeStruct(int seconds)
 {
-    TimeStruct time;
     if (seconds < 60)
     {
-        time.minutes = "00";
+        this->secondsToTimeStructReturn.minutes = "00";
         if (seconds < 10)
         {
-            time.seconds = "0" + std::to_string(seconds);
+            this->secondsToTimeStructReturn.seconds = "0" + std::to_string(seconds);
         }
         else
         {
-            time.seconds = std::to_string(seconds);
+            this->secondsToTimeStructReturn.seconds = std::to_string(seconds);
         }
-        return time;
+        return this->secondsToTimeStructReturn;
     }
     else
     {
         if (seconds < 600)
         {
-            time.minutes = "0" + std::to_string(seconds / 60);
+            this->secondsToTimeStructReturn.minutes = "0" + std::to_string(seconds / 60);
         }
         else
         {
-            time.minutes = std::to_string(seconds / 60);
+            this->secondsToTimeStructReturn.minutes = std::to_string(seconds / 60);
         }
         if (seconds % 60 == 0)
         {
-            time.seconds = "00";
+            this->secondsToTimeStructReturn.seconds = "00";
         }
         else if (seconds % 60 < 10)
         {
-            time.seconds = "0" + std::to_string(seconds % 60);
+            this->secondsToTimeStructReturn.seconds = "0" + std::to_string(seconds % 60);
         }
         else
         {
-            time.seconds = std::to_string(seconds % 60);
+            this->secondsToTimeStructReturn.seconds = std::to_string(seconds % 60);
         }
-        return time;
+        return this->secondsToTimeStructReturn;
     }
 }

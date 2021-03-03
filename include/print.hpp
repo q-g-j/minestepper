@@ -9,11 +9,12 @@ class Common;
 class Field;
 
 class Print
-{
+{    
 private:
     // declare class objects as unique pointers:
     std::unique_ptr<Colors> colors;
     std::unique_ptr<Common> common;
+    
 public:
     Print();
     ~Print();
@@ -34,7 +35,7 @@ public:
         void printDebugCoveredLeft(Field&);
     #endif
 
-    std::string setDifficultyTexts(int const&);
+    std::string setDifficultyTexts(int const&) const;
     void printMenu();
     void printCustomGetCellWidth();
     void printCustomGetDimensions(int const&);

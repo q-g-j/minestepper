@@ -15,6 +15,7 @@ private:
     std::unique_ptr<Common> common;
     std::unique_ptr<Print> print;
     std::unique_ptr<Symbols> symbols;
+    
 public:
     Solver();
     ~Solver();

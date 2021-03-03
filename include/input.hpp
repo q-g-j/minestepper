@@ -17,7 +17,7 @@ class Solver;
 class Symbols;
 
 class Input
-{
+{    
 private:
     // declare class objects as unique pointers:
     std::unique_ptr<Colors> colors;
@@ -50,22 +50,29 @@ private:
     bool toggleEdgeJump;
     bool* toogleEdgeJumpP;
 
+    // return variables for class methods:
+    int getInputDifficultyReturn;
+    int getInputCustomCellWidthReturn;
+    Common::CoordsStruct getInputCustomDimensionsReturn;
+    int getInputCustomMinesCountReturn;
+    Common::UserInputReturnStruct getInputGameplayReturn;
+    
     // private methods:
     void moveCursor(Field&, Common::CoordsStruct&, Direction&, bool*);
     void toggleHelp(Field&, Common::CoordsStruct const&);
-
+    
 public:
     Input();
     ~Input();
 
     // public methods:
     void showBlinkingCursor(bool);
-    int getInputDifficulty();
-    int getInputCustomCellWidth();
-    Common::CoordsStruct getInputCustomDimensions(int const&);
-    int getInputCustomMinesCount(int const&);
+    const int &getInputDifficulty();
+    const int &getInputCustomCellWidth();
+    const Common::CoordsStruct &getInputCustomDimensions(int const&);
+    const int &getInputCustomMinesCount(int const&);
+    const Common::UserInputReturnStruct &getInputGameplay(Field&, bool);
     void getInputEnterKey(std::string const&);
-    Common::UserInputReturnStruct getInputGameplay(Field&, int);
 };
 
 

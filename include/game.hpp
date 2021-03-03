@@ -44,10 +44,7 @@ private:
     const int fieldOffsetX    = 5;
     const int fieldOffsetY    = 6;
 
-    int difficulty = 1;
     std::string difficultyString;
-
-    Common::GameModeReturnStruct chooseGamemode();
     
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         static unsigned __stdcall gameThread(void*);
@@ -56,6 +53,12 @@ private:
         static void* gameThread(void*);
         static void* timerThread(void*);
     #endif
+
+    // return variables for class methods:
+    Common::GameModeReturnStruct chooseGamemodeReturn;
+
+    // private methods:
+    const Common::GameModeReturnStruct &chooseGamemode();
     
 public:
     Game();

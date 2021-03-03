@@ -1,6 +1,7 @@
 #pragma once
 
 // system headers:
+#include <memory>
 #include <string>
 
 // Windows and Linux seem to handle unicode strings differently (use wide strings for Windows):
@@ -26,13 +27,11 @@ void cleanUp();
 
 class Common
 {
-private:
-
 public:
     struct CoordsStruct
     {
-        int col = 0;
-        int row = 0;
+        int col;
+        int row;
     };
     struct GameModeReturnStruct
     {
@@ -62,27 +61,42 @@ public:
         std::string seconds;
     };
 
+private:
+    // return variables for class methods:
+    stringconv stringConvertReturn;
+    stringconv intToStringConvReturn;
+    int stringToIntReturn;
+    CoordsStruct intToCoordsReturn;
+    int coordsToIntReturn;
+    CoordsStruct coordsToCursorPositionReturn;
+    TimeStruct secondsToTimeStructReturn;
+
+public:
+    Common() = default;
+    ~Common() = default;
+
     // public methods:
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-        std::wstring intToStringConv(int const&);
-        std::wstring stringConvert(std::string const&);
-        int stringToInt(std::wstring);
+        const std::wstring &intToStringConv(int const&);
+        const std::wstring &stringConvert(std::string const&);
+        const int &stringToInt(std::wstring);
+
         void setWindowProperties();
         void centerWindow();
         void setUnicode(bool);
     #else
-        std::string intToStringConv(int const&);
-        std::string stringConvert(std::wstring const&);
-        int stringToInt(std::string);
+        const std::string &intToStringConv(int const&);
+        const std::string &stringConvert(std::wstring const&);
+        const int &stringToInt(std::string);
     #endif
 
     void resizeConsole(int const&, int const&);
     void setWindowTitle(std::string const&);
     void clearScreen();
     void gotoXY(int const&, int const&);
-    CoordsStruct intToCoords(int const&, int const&);
-    unsigned int coordsToInt(CoordsStruct const&, int const&);
-    CoordsStruct coordsToCursorPosition(CoordsStruct const&, int const&, int const&, int const&);
+    const CoordsStruct &intToCoords(int const&, int const&);
+    const int &coordsToInt(CoordsStruct const&, int const&);
+    const CoordsStruct &coordsToCursorPosition(CoordsStruct const&, int const&, int const&, int const&);
     void preciseSleep(double);
-    TimeStruct secondsToTimeStruct(int);
+    const TimeStruct &secondsToTimeStruct(int);
 };

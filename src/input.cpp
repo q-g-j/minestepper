@@ -141,11 +141,9 @@ void Input::getInputEnterKey(std::string const& text)
     std::cout << newline;
 }
 
-// custom mode: ask user for the game mode (difficulty):
-int Input::getInputDifficulty()
+// custom mode: ask user for the game mode (this->getInputDifficultyReturn):
+const int &Input::getInputDifficulty()
 {
-    int difficulty = 0;
-
     print->printMenu();
     this->showBlinkingCursor(false);
 
@@ -161,22 +159,22 @@ int Input::getInputDifficulty()
                 }
                 else if (inputKey == '1')
                 {
-                    difficulty = 1;
+                    this->getInputDifficultyReturn = 1;
                     break;
                 }
                 else if (inputKey == '2')
                 {
-                    difficulty = 2;
+                    this->getInputDifficultyReturn = 2;
                     break;
                 }
                 else if (inputKey == '3')
                 {
-                    difficulty = 3;
+                    this->getInputDifficultyReturn = 3;
                     break;
                 }
                 else if (inputKey == '4')
                 {
-                    difficulty = 4;
+                    this->getInputDifficultyReturn = 4;
                     break;
                 }
                 else
@@ -203,22 +201,22 @@ int Input::getInputDifficulty()
                 }
                 if (inputKey == '1')
                 {
-                    difficulty = 1;
+                    this->getInputDifficultyReturn = 1;
                     break;
                 }
                 else if (inputKey == '2')
                 {
-                    difficulty = 2;
+                    this->getInputDifficultyReturn = 2;
                     break;
                 }
                 else if (inputKey == '3')
                 {
-                    difficulty = 3;
+                    this->getInputDifficultyReturn = 3;
                     break;
                 }
                 else if (inputKey == '4')
                 {
-                    difficulty = 4;
+                    this->getInputDifficultyReturn = 4;
                     break;
                 }
                 else
@@ -235,12 +233,11 @@ int Input::getInputDifficulty()
     #endif
 
     this->showBlinkingCursor(true);
-    return difficulty;
+    return this->getInputDifficultyReturn;
 }
 
-int Input::getInputCustomCellWidth()
+const int &Input::getInputCustomCellWidth()
 {
-    int cellWidth;
     bool isValidInput = false;
 
     common->clearScreen();
@@ -264,12 +261,12 @@ int Input::getInputCustomCellWidth()
                 }
                 if (inputKey == '1')
                 {
-                    cellWidth = 1;
+                    this->getInputCustomCellWidthReturn = 1;
                     break;
                 }
                 else if (inputKey == '3')
                 {
-                    cellWidth = 3;
+                    this->getInputCustomCellWidthReturn = 3;
                     break;
                 }
                 else
@@ -296,12 +293,12 @@ int Input::getInputCustomCellWidth()
                 }
                 if (inputKey == '1')
                 {
-                    cellWidth = 1;
+                    this->getInputCustomCellWidthReturn = 1;
                     break;
                 }
                 else if (inputKey == '3')
                 {
-                    cellWidth = 3;
+                    this->getInputCustomCellWidthReturn = 3;
                     break;
                 }
                 else
@@ -318,13 +315,12 @@ int Input::getInputCustomCellWidth()
     #endif
 
     this->showBlinkingCursor(true);
-    return cellWidth;
+    return this->getInputCustomCellWidthReturn;
 }
 
 // custom mode: ask user for the size of the field:
-Common::CoordsStruct Input::getInputCustomDimensions(int const& fieldCellWidth)
+const Common::CoordsStruct &Input::getInputCustomDimensions(int const& fieldCellWidth)
 {
-    Common::CoordsStruct dimensions;
     std::string line = "";
     int beforeX = 0;
     int afterX = 0;
@@ -405,9 +401,9 @@ Common::CoordsStruct Input::getInputCustomDimensions(int const& fieldCellWidth)
         }
         if (isValidInput == true)
         {
-            dimensions.col = beforeX;
-            dimensions.row = afterX;
-            return dimensions;
+            this->getInputCustomDimensionsReturn.col = beforeX;
+            this->getInputCustomDimensionsReturn.row = afterX;
+            return this->getInputCustomDimensionsReturn;
         }
         else
         {
@@ -418,11 +414,10 @@ Common::CoordsStruct Input::getInputCustomDimensions(int const& fieldCellWidth)
     }
 }
 
-// custom mode: ask user for the number of mines:
-int Input::getInputCustomMinesCount(int const& fieldSize)
+// custom mode: ask user for the number of this->getInputCustomMinesCountReturn:
+const int &Input::getInputCustomMinesCount(int const& fieldSize)
 {
     std::string line;
-    int minesTotal = 0;
     bool isValidInput = false;
 
     common->clearScreen();
@@ -449,13 +444,13 @@ int Input::getInputCustomMinesCount(int const& fieldSize)
                 isValidInput = true;
                 try
                 {
-                    minesTotal = stoi(line);
+                    this->getInputCustomMinesCountReturn = stoi(line);
                 }
                 catch (...)
                 {
                     isValidInput = false;
                 }
-                if  (minesTotal <= 0 || minesTotal >= fieldSize)
+                if  (this->getInputCustomMinesCountReturn <= 0 || this->getInputCustomMinesCountReturn >= fieldSize)
                 {
                     isValidInput = false;
                 }
@@ -467,7 +462,7 @@ int Input::getInputCustomMinesCount(int const& fieldSize)
         }
         if (isValidInput == true)
         {
-            return minesTotal;
+            return this->getInputCustomMinesCountReturn;
         }
         else
         {
@@ -588,13 +583,17 @@ void Input::moveCursor(Field &field, Common::CoordsStruct& currentArrayPosition,
 }
 
 // the main function to get the users input during a game:
-Common::UserInputReturnStruct Input::getInputGameplay(Field &field, int firstrun)
+const Common::UserInputReturnStruct &Input::getInputGameplay(Field &field, bool firstrun)
 {
+    this->getInputGameplayReturn.Coords.col = 0;
+    this->getInputGameplayReturn.Coords.row = 0;
+    this->getInputGameplayReturn.isAutoFlag = false;
+    this->getInputGameplayReturn.isFlag = false;
+
     static Common::CoordsStruct currentArrayPosition;
     Common::CoordsStruct currentCursorPosition;
-    Common::UserInputReturnStruct returnStruct;
 
-    if (firstrun == 1)
+    if (firstrun == true)
     {
         if (field.getCols() % 2 == 0)
         {
@@ -662,24 +661,24 @@ Common::UserInputReturnStruct Input::getInputGameplay(Field &field, int firstrun
                 else if (inputKeyA == 'f' || inputKeyA == 'F')
                 {
                     solver->autoSolve(field, true, false, false);
-                    returnStruct.isAutoFlag = true;
+                    this->getInputGameplayReturn.isAutoFlag = true;
                     break;
                 }
                 else if (inputKeyA == 'r' || inputKeyA == 'R')
                 {
                     solver->autoSolve(field, false, true, false);
-                    returnStruct.isAutoFlag = true;
+                    this->getInputGameplayReturn.isAutoFlag = true;
                     break;
                 }
                 else if (inputKeyA == 's' || inputKeyA == 'S')
                 {
                     solver->autoSolve(field, true, true, true);
-                    returnStruct.isAutoFlag = true;
+                    this->getInputGameplayReturn.isAutoFlag = true;
                     break;
                 }
                 else if (inputKeyA == 'c' || inputKeyA == 'C')
                 {
-                    toggleEdgeJump == true ? toggleEdgeJump = false : toggleEdgeJump = true;
+                    this->toggleEdgeJump == true ? this->toggleEdgeJump = false : this->toggleEdgeJump = true;
                 }
                 else if (inputKeyA == KEY_ENTER)
                 {
@@ -702,7 +701,7 @@ Common::UserInputReturnStruct Input::getInputGameplay(Field &field, int firstrun
                     }
                     else
                     {
-                        returnStruct.isFlag = true;
+                        this->getInputGameplayReturn.isFlag = true;
                     }
                     break;
                 }
@@ -768,24 +767,24 @@ Common::UserInputReturnStruct Input::getInputGameplay(Field &field, int firstrun
                 else if (inputKeyA == 'f' || inputKeyA == 'F')
                 {
                     solver->autoSolve(field, true, false, false);
-                    returnStruct.isAutoFlag = true;
+                    this->getInputGameplayReturn.isAutoFlag = true;
                     break;
                 }
                 else if (inputKeyA == 'r' || inputKeyA == 'R')
                 {
                     solver->autoSolve(field, false, true, false);
-                    returnStruct.isAutoFlag = true;
+                    this->getInputGameplayReturn.isAutoFlag = true;
                     break;
                 }
                 else if (inputKeyA == 's' || inputKeyA == 'S')
                 {
                     solver->autoSolve(field, true, true, true);
-                    returnStruct.isAutoFlag = true;
+                    this->getInputGameplayReturn.isAutoFlag = true;
                     break;
                 }
                 else if (inputKeyA == 'c' || inputKeyA == 'C')
                 {
-                    toggleEdgeJump == true ? toggleEdgeJump = false : toggleEdgeJump = true;
+                    this->toggleEdgeJump == true ? this->toggleEdgeJump = false : this->toggleEdgeJump = true;
                 }
                 else if (inputKeyA == KEY_ENTER)
                 {
@@ -808,7 +807,7 @@ Common::UserInputReturnStruct Input::getInputGameplay(Field &field, int firstrun
                     }
                     else
                     {
-                        returnStruct.isFlag = true;
+                        this->getInputGameplayReturn.isFlag = true;
                         break;
                     }
                 }
@@ -825,8 +824,8 @@ Common::UserInputReturnStruct Input::getInputGameplay(Field &field, int firstrun
         disableNonCanonicalMode();
     #endif
 
-    returnStruct.Coords.col = currentArrayPosition.col;
-    returnStruct.Coords.row = currentArrayPosition.row;
+    this->getInputGameplayReturn.Coords.col = currentArrayPosition.col;
+    this->getInputGameplayReturn.Coords.row = currentArrayPosition.row;
 
-    return returnStruct;
+    return this->getInputGameplayReturn;
 }

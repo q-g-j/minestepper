@@ -1,5 +1,7 @@
 .vs
 .vscode
 build
+build_kdev
 CMakeSettings.json
 CMakeLists.txt.user
+minesweeper.kdev4

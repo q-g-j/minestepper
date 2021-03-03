@@ -57,10 +57,10 @@ Game::Game()
 
 Game::~Game() = default;
 
-Common::GameModeReturnStruct Game::chooseGamemode()
+const Common::GameModeReturnStruct &Game::chooseGamemode()
 {
+    int difficulty;
     Common::CoordsStruct dimensions;
-    Common::GameModeReturnStruct gameMode;
 
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         common->setWindowProperties();
@@ -83,31 +83,31 @@ Common::GameModeReturnStruct Game::chooseGamemode()
 
     if (difficulty == 1)
     {
-        gameMode.difficultyString = print->setDifficultyTexts(1);
-        gameMode.cols = smallCols;
-        gameMode.rows = smallRows;
-        gameMode.mines = smallMines;
-        gameMode.cellWidth = 3;
+        this->chooseGamemodeReturn.difficultyString = print->setDifficultyTexts(1);
+        this->chooseGamemodeReturn.cols = smallCols;
+        this->chooseGamemodeReturn.rows = smallRows;
+        this->chooseGamemodeReturn.mines = smallMines;
+        this->chooseGamemodeReturn.cellWidth = 3;
     }
     else if (difficulty == 2)
     {
-        gameMode.difficultyString = print->setDifficultyTexts(2);
-        gameMode.cols = mediumCols;
-        gameMode.rows = mediumRows;
-        gameMode.mines = mediumMines;
-        gameMode.cellWidth = 3;
+        this->chooseGamemodeReturn.difficultyString = print->setDifficultyTexts(2);
+        this->chooseGamemodeReturn.cols = mediumCols;
+        this->chooseGamemodeReturn.rows = mediumRows;
+        this->chooseGamemodeReturn.mines = mediumMines;
+        this->chooseGamemodeReturn.cellWidth = 3;
     }
     else if (difficulty == 3)
     {
-        gameMode.difficultyString = print->setDifficultyTexts(3);
-        gameMode.cols = largeCols;
-        gameMode.rows = largeRows;
-        gameMode.mines = largeMines;
-        gameMode.cellWidth = 3;
+        this->chooseGamemodeReturn.difficultyString = print->setDifficultyTexts(3);
+        this->chooseGamemodeReturn.cols = largeCols;
+        this->chooseGamemodeReturn.rows = largeRows;
+        this->chooseGamemodeReturn.mines = largeMines;
+        this->chooseGamemodeReturn.cellWidth = 3;
     }
     else
     {
-        gameMode.difficultyString = print->setDifficultyTexts(4);
+        this->chooseGamemodeReturn.difficultyString = print->setDifficultyTexts(4);
         common->resizeConsole(38, 7);
         common->clearScreen();
 
@@ -115,7 +115,7 @@ Common::GameModeReturnStruct Game::chooseGamemode()
             common->centerWindow();
         #endif
 
-        gameMode.cellWidth = input->getInputCustomCellWidth();
+        this->chooseGamemodeReturn.cellWidth = input->getInputCustomCellWidth();
 
         common->resizeConsole(42, 7);
         common->clearScreen();
@@ -124,9 +124,9 @@ Common::GameModeReturnStruct Game::chooseGamemode()
             common->centerWindow();
         #endif
 
-        dimensions = input->getInputCustomDimensions(gameMode.cellWidth);
-        gameMode.cols = dimensions.col;
-        gameMode.rows = dimensions.row;
+        dimensions = input->getInputCustomDimensions(this->chooseGamemodeReturn.cellWidth);
+        this->chooseGamemodeReturn.cols = dimensions.col;
+        this->chooseGamemodeReturn.rows = dimensions.row;
 
         common->resizeConsole(41, 6);
         common->clearScreen();
@@ -135,12 +135,12 @@ Common::GameModeReturnStruct Game::chooseGamemode()
             common->centerWindow();
         #endif
 
-        gameMode.mines = input->getInputCustomMinesCount(gameMode.cols * gameMode.rows);
+        this->chooseGamemodeReturn.mines = input->getInputCustomMinesCount(this->chooseGamemodeReturn.cols * this->chooseGamemodeReturn.rows);
     }
 
-    gameMode.offsetX = fieldOffsetX;
-    gameMode.offsetY = fieldOffsetY;
-    return gameMode;
+    this->chooseGamemodeReturn.offsetX = fieldOffsetX;
+    this->chooseGamemodeReturn.offsetY = fieldOffsetY;
+    return this->chooseGamemodeReturn;
 }
 
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
@@ -159,7 +159,7 @@ Common::GameModeReturnStruct Game::chooseGamemode()
         Common::PlaceUserInputReturnStruct placeUserInputReturn;
 
         int turn = 1;
-        int firstrun = 1;
+        bool firstrun = true;
 
         input.showBlinkingCursor(false);
         
@@ -189,7 +189,7 @@ Common::GameModeReturnStruct Game::chooseGamemode()
 
             if (placeUserInputReturn.hasLost) { break; }
             else if (placeUserInputReturn.hasWon) { break; }
-            else if (placeUserInputReturn.isTurn) { ++turn; }
+            else if (placeUserInputReturn.isTurn) { turn = 2; }
         }
 
         input.showBlinkingCursor(true);

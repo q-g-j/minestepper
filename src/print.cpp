@@ -69,7 +69,7 @@ void Print::deleteLastLine(size_t const& stringLength)
 #endif
 }
 
-std::string Print::setDifficultyTexts(int const& mode)
+std::string Print::setDifficultyTexts(int const& mode) const
 {
     if (mode == 1) return "Small";
     else if (mode == 2) return "Medium";

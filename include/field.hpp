@@ -37,6 +37,9 @@ private:
     std::unique_ptr<Print> print;
     std::unique_ptr<Symbols> symbols;
 
+    // return variables for class methods:
+    Common::PlaceUserInputReturnStruct placeUserInputReturn;
+
     // private methods:
     std::vector<std::vector<stringconv>> create2DVector(std::string const&);
     void fillMines(Common::CoordsStruct const&);
@@ -52,17 +55,17 @@ public:
     std::vector<std::vector<stringconv>> cursor2DVector;
 
     // getter methods:
-    int getCols();
-    int getRows();
-    int getOffsetX();
-    int getOffsetY();
-    int getCoveredLeft();
-    int getMinesTotal();
-    int getMinesLeft();
-    int getFlagsCount();
-    int getCellWidth();
-    std::string getDifficultyString();
-    stringconv getCoordsContent(Common::CoordsStruct const&);
+    const int &getCols() const;
+    const int &getRows() const;
+    const int &getOffsetX() const;
+    const int &getOffsetY() const;
+    const int &getCoveredLeft() const;
+    const int &getMinesTotal() const;
+    const int &getMinesLeft() const;
+    const int &getFlagsCount() const;
+    const int &getCellWidth() const;
+    const std::string &getDifficultyString() const;
+    const stringconv &getCoordsContent(Common::CoordsStruct const&) const;
 
     // setter methods to increment / decrement using operator overloading
     // (just for learning purposes):
@@ -103,5 +106,5 @@ public:
     std::vector<Common::CoordsStruct> findNeighbors(std::vector<std::vector<stringconv>> const&, Common::CoordsStruct const&, stringconv const&);
     void autoUncoverRecursive(Common::CoordsStruct const&, std::vector<unsigned int>&);
     void flagAutoUncover(Common::CoordsStruct const&, Common::PlaceUserInputReturnStruct&, bool);
-    Common::PlaceUserInputReturnStruct placeUserInput(Common::UserInputReturnStruct&, int&);
+    const Common::PlaceUserInputReturnStruct &placeUserInput(Common::UserInputReturnStruct&, int&);
 };
