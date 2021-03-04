@@ -257,16 +257,15 @@ void Game::startGame()
 {
     Common::GameModeReturnStruct gameMode = chooseGamemode();
     Field field(gameMode);
-    Field* fieldP = &field;
 
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         HANDLE hThreads[2];
 
-        hThreads[0] = reinterpret_cast<HANDLE>(_beginthreadex(NULL, 0, &gameThread, fieldP, 0, 0));
+        hThreads[0] = reinterpret_cast<HANDLE>(_beginthreadex(NULL, 0, &gameThread, &field, 0, 0));
         #if MEM_LEAK_TEST_LOOP == 0
             while (isGameRunning == false) Sleep(1);
         #endif
-        hThreads[1] = reinterpret_cast<HANDLE>(_beginthreadex(NULL, 0, &timerThread, fieldP, 0, 0));
+        hThreads[1] = reinterpret_cast<HANDLE>(_beginthreadex(NULL, 0, &timerThread, &field, 0, 0));
 
         WaitForMultipleObjects(2, hThreads, TRUE, INFINITE);
 
@@ -275,11 +274,11 @@ void Game::startGame()
     #else
         pthread_t threads[2];
 
-        pthread_create(&threads[0], NULL, &gameThread, fieldP);
+        pthread_create(&threads[0], NULL, &gameThread, &field);
         #if MEM_LEAK_TEST_LOOP == 0
             while (isGameRunning == false) usleep(1000);
         #endif
-        pthread_create(&threads[1], NULL, &timerThread, fieldP);
+        pthread_create(&threads[1], NULL, &timerThread, &field);
 
         pthread_join(threads[0], NULL);
         pthread_join(threads[1], NULL);
