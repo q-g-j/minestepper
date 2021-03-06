@@ -293,11 +293,20 @@ void Field::printAll()
 // This method is used both to reveal a cell and to display the cursor.
 void Field::printCoords(Common::CoordsStruct const& coords, bool isCursor)
 {
-    extern std::atomic<bool> isTimerPrinting;
     Common::CoordsStruct tempCoords;
+    extern std::atomic<bool> isTimerPrinting;
 
-    // need to convert the coordinates to accommodate the cell width:
+    while (isTimerPrinting)
+    {
+        #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+                Sleep(1);
+        #else
+                usleep(1 * 1000);
+        #endif
+    }
+
     tempCoords = common->coordsToCursorPosition(coords, this->fieldOffsetX, this->fieldOffsetY, this->fieldCellWidth);
+    common->gotoXY(tempCoords.col, tempCoords.row);
 
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         common->setUnicode(true);
@@ -397,17 +406,6 @@ void Field::printCoords(Common::CoordsStruct const& coords, bool isCursor)
         }
         else content = colors->color_default + (this->field2DVector[coords.col][coords.row]);
 
-        // wait for the timer to finish printing, otherwise the timer will be printed at tempCoords!
-        while (isTimerPrinting)
-        {
-            #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-                    Sleep(1);
-            #else
-                    usleep(1 * 500);
-            #endif
-        }
-
-        common->gotoXY(tempCoords.col, tempCoords.row);
         coutconv << content;
         coutconv << colors->color_default << std::flush;
     #endif
