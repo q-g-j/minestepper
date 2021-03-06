@@ -43,5 +43,5 @@ public:
     void printHasWon(Field&);
     void printHasLost(Field&);
     void printExplanation();
-    void printTimer(Field&,Common::TimeStruct& ,bool);
+    void printTimer(Field&, Common::TimeStruct& ,bool);
 };
