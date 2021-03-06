@@ -101,8 +101,16 @@ void Print::printMinesLeft(Field &field)
     void Print::printDebugCoveredLeft(Field &field)
     {
         #if DEBUG == 1
-            common->gotoXY(field.getOffsetX() - 1 + 16, field.getOffsetY() - 2);
-            std::cout << field.getCoveredLeft() << " covered   " << std::flush;
+            common->gotoXY(field.getOffsetX() + (field.getCols() * (((field.getCellWidth() - 1) / 2) * 2 + 2)) - 15, field.getOffsetY() + (field.getRows() * 2));
+            std::cout << "Covered: ";
+            if (field.getCoveredLeft() >= 1000)
+                std::cout << field.getCoveredLeft() << std::flush;
+            else if (field.getCoveredLeft() >= 100)
+                std::cout << " " << field.getCoveredLeft() << std::flush;
+            else if (field.getCoveredLeft() >= 10)
+                std::cout << "  " << field.getCoveredLeft() << std::flush;
+            else
+                std::cout << "   " << field.getCoveredLeft() << std::flush;
         #endif
     }
 #endif
@@ -152,7 +160,7 @@ void Print::printCustomGetDimensions(int const& cellWidth)
     std::cout << "  How large do you want the field to be?" << newline;
     if (cellWidth == 1)
     {
-        std::cout << "  (min. 20x8 / max. 80x20)" << newline << newline;
+        std::cout << "  (min. 16x8 / max. 80x20)" << newline << newline;
     }
     else
     {
@@ -214,5 +222,21 @@ void Print::printExplanation()
     coutconv << "    q or Q:        quit" << newline << newline;
     std::cout << colors->setTextColor(colors->fg_white);
     coutconv << "  Press ENTER to go back...";
+    std::cout << colors->setTextColor(colors->color_default);
+}
+
+void Print::printTimer(Field &field,Common::TimeStruct &time ,bool hasCheated)
+{
+    std::cout << colors->setTextColor(colors->fg_light_red);
+    if (hasCheated == false)
+    {
+        common->gotoXY(field.getOffsetX() + (field.getCols() * (((field.getCellWidth() - 1) / 2) * 2 + 2)) - 7, field.getOffsetY() - 2);
+        std::cout << time.minutes + ":" + time.seconds << std::flush;
+    }
+    else
+    {
+        common->gotoXY(field.getOffsetX() + (field.getCols() * (((field.getCellWidth() - 1) / 2) * 2 + 2)) - 10, field.getOffsetY() - 2);
+        std::cout << "cheated!" << std::flush;
+    }
     std::cout << colors->setTextColor(colors->color_default);
 }

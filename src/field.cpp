@@ -441,49 +441,49 @@ bool Field::isNumber(Common::CoordsStruct const& coords)
 // find neighbors of a cell at "coords" that hold a given content (passed by variable symbol)
 std::vector<Common::CoordsStruct> Field::findNeighbors(std::vector<std::vector<stringconv>> const& temp2DVector, Common::CoordsStruct const& coords, stringconv const& symbol)
 {
-    std::vector<Common::CoordsStruct> returnVector;
-    std::array<std::array<int, 2>, 8> positionsArray;
-    positionsArray.at(0) = { -1, -1 };
-    positionsArray.at(1) = {  0, -1 };
-    positionsArray.at(2) = {  1, -1 };
-    positionsArray.at(3) = {  1,  0 };
-    positionsArray.at(4) = {  1,  1 };
-    positionsArray.at(5) = {  0,  1 };
-    positionsArray.at(6) = { -1,  1 };
-    positionsArray.at(7) = { -1,  0 };
+    std::vector<Common::CoordsStruct> findNeighborsReturn;
+    std::array<std::array<int, 2>, 8> neighborsArray;
+    neighborsArray.at(0) = { -1, -1 };
+    neighborsArray.at(1) = {  0, -1 };
+    neighborsArray.at(2) = {  1, -1 };
+    neighborsArray.at(3) = {  1,  0 };
+    neighborsArray.at(4) = {  1,  1 };
+    neighborsArray.at(5) = {  0,  1 };
+    neighborsArray.at(6) = { -1,  1 };
+    neighborsArray.at(7) = { -1,  0 };
 
-    for (size_t x = 0; x < sizeof(positionsArray) / sizeof(positionsArray[0]); ++x)
+    for (size_t x = 0; x < sizeof(neighborsArray) / sizeof(neighborsArray[0]); ++x)
     {
         if (
-            !(coords.col == 1 && positionsArray[x][0] == -1) &&
-            !(coords.row == 1 && positionsArray[x][1] == -1) &&
-            !(coords.col == this->cols && positionsArray[x][0] == 1) &&
-            !(coords.row == this->rows && positionsArray[x][1] == 1)
+            !(coords.col == 1 && neighborsArray[x][0] == -1) &&
+            !(coords.row == 1 && neighborsArray[x][1] == -1) &&
+            !(coords.col == this->cols && neighborsArray[x][0] == 1) &&
+            !(coords.row == this->rows && neighborsArray[x][1] == 1)
             )
         {
             if (symbol == symbols->symbolNumber)
             {
                 for (int i = 1; i < 8; ++i)
                 {
-                    if (temp2DVector[coords.col + positionsArray[x][0]][coords.row + positionsArray[x][1]] == symbols->symbolNumbersArray[i])
+                    if (temp2DVector[coords.col + neighborsArray[x][0]][coords.row + neighborsArray[x][1]] == symbols->symbolNumbersArray[i])
                     {
                         Common::CoordsStruct tempCoords;
-                        tempCoords.col = coords.col + positionsArray[x][0];
-                        tempCoords.row = coords.row + positionsArray[x][1];
-                        returnVector.push_back(tempCoords);
+                        tempCoords.col = coords.col + neighborsArray[x][0];
+                        tempCoords.row = coords.row + neighborsArray[x][1];
+                        findNeighborsReturn.push_back(tempCoords);
                     }
                 }
             }
-            else if (temp2DVector[coords.col + positionsArray[x][0]][coords.row + positionsArray[x][1]] == symbol)
+            else if (temp2DVector[coords.col + neighborsArray[x][0]][coords.row + neighborsArray[x][1]] == symbol)
             {
                 Common::CoordsStruct tempCoords;
-                tempCoords.col = coords.col + positionsArray[x][0];
-                tempCoords.row = coords.row + positionsArray[x][1];
-                returnVector.push_back(tempCoords);
+                tempCoords.col = coords.col + neighborsArray[x][0];
+                tempCoords.row = coords.row + neighborsArray[x][1];
+                findNeighborsReturn.push_back(tempCoords);
             }
         }
     }
-    return returnVector;
+    return findNeighborsReturn;
 }
 
 void Field::gameWon()

@@ -381,7 +381,7 @@ const Common::CoordsStruct &Input::getInputCustomDimensions(int const& fieldCell
                 }
                 if (fieldCellWidth == 1)
                 {
-                    if (beforeX < 20 || afterX < 8 || beforeX > 80 || afterX > 20)
+                    if (beforeX < 16 || afterX < 8 || beforeX > 80 || afterX > 20)
                     {
                         isValidInput = false;
                     }

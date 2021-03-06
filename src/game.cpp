@@ -209,6 +209,7 @@ const Common::GameModeReturnStruct &Game::chooseGamemode()
     {
         Colors colors;
         Common common;
+        Print print;
 
         Field* field = reinterpret_cast<Field*>(field_);
 
@@ -216,17 +217,14 @@ const Common::GameModeReturnStruct &Game::chooseGamemode()
 
         while (isGameRunning)
         {
+            Common::TimeStruct time;
             if (hasCheated == false && doPauseTimer == false)
             {
-                Common::TimeStruct time;
                 time = common.secondsToTimeStruct(timer / 10);
                 if (timer % 10 == 0 || timer == 0 || doPrintTimer == true)
                 {
                     isTimerPrinting = true;
-                    common.gotoXY(field->getOffsetX() + (field->getCols() * (((field->getCellWidth() - 1) / 2) * 2 + 2)) - 7, field->getOffsetY() - 2);
-                    std::cout << colors.setTextColor(colors.fg_light_red);
-                    std::cout << time.minutes + ":" + time.seconds << std::flush;
-                    std::cout << colors.setTextColor(colors.color_default);
+                    print.printTimer(*field, time, false);
                     isTimerPrinting = false;
                     doPrintTimer = false;
                 }
@@ -235,10 +233,7 @@ const Common::GameModeReturnStruct &Game::chooseGamemode()
             else if (hasCheated == true && doPauseTimer == false && (isCheatedPrinted == false || doPrintTimer == true))
             {
                 isTimerPrinting = true;
-                common.gotoXY(field->getOffsetX() + (field->getCols() * (((field->getCellWidth() - 1) / 2) * 2 + 2)) - 10, field->getOffsetY() - 2);
-                std::cout << colors.setTextColor(colors.fg_light_red);
-                std::cout << "cheated!" << std::flush;
-                std::cout << colors.setTextColor(colors.color_default);
+                print.printTimer(*field, time, true);
                 isTimerPrinting = false;
                 doPrintTimer = false;
                 isCheatedPrinted = true;
