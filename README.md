@@ -5,7 +5,7 @@ A console based version of Minesweeper to teach myself C++.
 ![](https://github.com/q-g-j/minesweeper/blob/master/images/game_small.jpg?raw=true)
 
 ## Controls:
-- Arrow keys:    navigate
+- Arrow keys:    move cursor
 - ENTER:         uncover
 - SPACE:         place or remove a flag
 - 'f' or 'F':    let the computer place the flags for you
