@@ -22,18 +22,16 @@
 #endif
 
 // project headers:
-#include <common.hpp>
-#include <debug.hpp>
-#include <field.hpp>
-#include <print.hpp>
-#include <solver.hpp>
-#include <symbols.hpp>
+#include <common.h>
+#include <debug.h>
+#include <field.h>
+#include <print.h>
+#include <solver.h>
+#include <symbols.h>
 
 Solver::Solver()
 :
-    common(std::make_unique<Common>()),
-    print(std::make_unique<Print>()),
-    symbols(std::make_unique<Symbols>())
+    print(std::make_unique<Print>())
 { }
 
 Solver::~Solver() = default;
@@ -62,19 +60,19 @@ void Solver::autoSolve(Field& field, bool doPlaceFlags, bool doFlagAutoUncover, 
                     // one for covered neighbors, 
                     // one for neighbor flags
                     std::vector<Common::CoordsStruct> coveredVector;
-                    coveredVector = field.findNeighbors(field.field2DVector, tempCoords, symbols->symbolCovered);
+                    coveredVector = field.findNeighbors(field.field2DVector, tempCoords, Symbols::getSymbol("symbolCovered"));
                     std::vector<Common::CoordsStruct> flagsVector;
-                    flagsVector = field.findNeighbors(field.field2DVector, tempCoords, symbols->symbolFlag);
+                    flagsVector = field.findNeighbors(field.field2DVector, tempCoords, Symbols::getSymbol("symbolFlag"));
 
                     // if the number of covered neighbors plus the number of neighbor flags matches the current cells number,
                     // add the covered cells to poolCoveredVector:
-                    if ((flagsVector.size() + coveredVector.size()) == static_cast<size_t>(common->stringToInt(field.getCoordsContent(tempCoords))))
+                    if ((flagsVector.size() + coveredVector.size()) == static_cast<size_t>(Common::stringToInt(field.getCoordsContent(tempCoords))))
                     {
                         for (size_t k = 0; k < coveredVector.size(); ++k)
                         {
-                            if (std::find(poolCoveredVector.begin(), poolCoveredVector.end(), common->coordsToInt(coveredVector.at(k), field.getCols())) == poolCoveredVector.end())
+                            if (std::find(poolCoveredVector.begin(), poolCoveredVector.end(), Common::coordsToInt(coveredVector.at(k), field.getCols())) == poolCoveredVector.end())
                             {
-                                poolCoveredVector.push_back(common->coordsToInt(coveredVector.at(k), field.getCols()));
+                                poolCoveredVector.push_back(Common::coordsToInt(coveredVector.at(k), field.getCols()));
                             }
                         }
                     }
@@ -92,8 +90,8 @@ void Solver::autoSolve(Field& field, bool doPlaceFlags, bool doFlagAutoUncover, 
                 Field::setCoveredLeft coveredLeft(field);
                 Field::setMinesLeft minesLeft(field);
                 Field::setFlagsCount flagsCount(field);
-                tempCoords = common->intToCoords(poolCoveredVector.at(i), field.getCols());
-                field.field2DVector[tempCoords.col][tempCoords.row] = symbols->symbolFlag;
+                tempCoords = Common::intToCoords(poolCoveredVector.at(i), field.getCols());
+                field.field2DVector[tempCoords.col][tempCoords.row] = Symbols::getSymbol("symbolFlag");
                 --coveredLeft;
                 --minesLeft;
                 ++flagsCount;

@@ -19,13 +19,13 @@
 #endif
 
 // project headers:
-#include <colors.hpp>
-#include <common.hpp>
-#include <debug.hpp>
-#include <field.hpp>
-#include <game.hpp>
-#include <input.hpp>
-#include <print.hpp>
+#include <colors.h>
+#include <common.h>
+#include <debug.h>
+#include <field.h>
+#include <game.h>
+#include <input.h>
+#include <print.h>
 
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
     CONSOLE_SCREEN_BUFFER_INFO origScreenSize;
@@ -42,8 +42,6 @@ std::atomic<bool> isCheatedPrinted;
 
 Game::Game()
 :
-    colors(std::make_unique<Colors>()),
-    common(std::make_unique<Common>()),
     input(std::make_unique<Input>()),
     print(std::make_unique<Print>())
 {
@@ -63,16 +61,16 @@ const Common::GameModeReturnStruct &Game::chooseGamemode()
     Common::CoordsStruct dimensions;
 
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-        common->setWindowProperties();
+        Common::setWindowProperties();
     #endif
 
-    common->resizeConsole(33, 13);
-    std::cout << colors->setTextColor(colors->color_default);
-    common->setWindowTitle("Minesweeper");
-    common->clearScreen();
+    Common::resizeConsole(33, 13);
+    std::cout << Colors::setTextColor("color_default");
+    Common::setWindowTitle("Minesweeper");
+    Common::clearScreen();
 
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-        common->centerWindow();
+        Common::centerWindow();
     #endif
 
     #if MEM_LEAK_TEST_LOOP == 1
@@ -108,31 +106,31 @@ const Common::GameModeReturnStruct &Game::chooseGamemode()
     else
     {
         this->chooseGamemodeReturn.difficultyString = print->setDifficultyTexts(4);
-        common->resizeConsole(38, 7);
-        common->clearScreen();
+        Common::resizeConsole(38, 7);
+        Common::clearScreen();
 
         #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-            common->centerWindow();
+            Common::centerWindow();
         #endif
 
         this->chooseGamemodeReturn.cellWidth = input->getInputCustomCellWidth();
 
-        common->resizeConsole(42, 7);
-        common->clearScreen();
+        Common::resizeConsole(42, 7);
+        Common::clearScreen();
 
         #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-            common->centerWindow();
+            Common::centerWindow();
         #endif
 
         dimensions = input->getInputCustomDimensions(this->chooseGamemodeReturn.cellWidth);
         this->chooseGamemodeReturn.cols = dimensions.col;
         this->chooseGamemodeReturn.rows = dimensions.row;
 
-        common->resizeConsole(41, 6);
-        common->clearScreen();
+        Common::resizeConsole(41, 6);
+        Common::clearScreen();
 
         #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-            common->centerWindow();
+            Common::centerWindow();
         #endif
 
         this->chooseGamemodeReturn.mines = input->getInputCustomMinesCount(this->chooseGamemodeReturn.cols * this->chooseGamemodeReturn.rows);
@@ -149,8 +147,6 @@ const Common::GameModeReturnStruct &Game::chooseGamemode()
     void *Game::gameThread(void* field_)
 #endif
     {
-        Colors colors;
-        Common common;
         Input input;
         Print print;
         Field* field = reinterpret_cast<Field*>(field_);
@@ -173,7 +169,7 @@ const Common::GameModeReturnStruct &Game::chooseGamemode()
                 print.printDebugCoveredLeft(*field);
             #endif
 
-            common.gotoXY(1, field->getOffsetX() + field->getRows() * 2 + 4);
+            Common::gotoXY(1, field->getOffsetX() + field->getRows() * 2 + 4);
 
             #if MEM_LEAK_TEST_LOOP == 1
                 userInput.coords.col = 6;
@@ -207,8 +203,6 @@ const Common::GameModeReturnStruct &Game::chooseGamemode()
     void *Game::timerThread(void* field_)
 #endif
     {
-        Colors colors;
-        Common common;
         Print print;
 
         Field* field = reinterpret_cast<Field*>(field_);
@@ -220,7 +214,7 @@ const Common::GameModeReturnStruct &Game::chooseGamemode()
             Common::TimeStruct time;
             if (hasCheated == false && doPauseTimer == false)
             {
-                time = common.secondsToTimeStruct(timer / 10);
+                time = Common::secondsToTimeStruct(timer / 10);
                 if (timer % 10 == 0 || timer == 0 || doPrintTimer == true)
                 {
                     isTimerPrinting = true;
@@ -238,7 +232,7 @@ const Common::GameModeReturnStruct &Game::chooseGamemode()
                 doPrintTimer = false;
                 isCheatedPrinted = true;
             }
-            common.preciseSleep(0.1);
+            Common::preciseSleep(0.1);
         }
 
         #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)

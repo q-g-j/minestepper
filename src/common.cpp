@@ -34,12 +34,12 @@
 #endif
 
 // project headers:
-#include <colors.hpp>
-#include <common.hpp>
-#include <debug.hpp>
-#include <game.hpp>
-#include <input.hpp>
-#include <print.hpp>
+#include <colors.h>
+#include <common.h>
+#include <debug.h>
+#include <game.h>
+#include <input.h>
+#include <print.h>
 
 // save original console screen size in a global variable:
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
@@ -70,8 +70,6 @@
 // restore screen size, font color and cursor visibility at program exit:
 void cleanUp()
 {
-    Common common;
-    Colors colors;
     Input input;
 
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
@@ -83,18 +81,18 @@ void cleanUp()
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         int columns = origScreenSize.srWindow.Right - origScreenSize.srWindow.Left + 1;
         int rows = origScreenSize.srWindow.Bottom - origScreenSize.srWindow.Top + 1;
-        common.resizeConsole(columns, rows);
-        common.centerWindow();
-        common.setUnicode(false);
+        Common::resizeConsole(columns, rows);
+        Common::centerWindow();
+        Common::setUnicode(false);
     #else
-        common.resizeConsole(origScreenSize.ws_col, origScreenSize.ws_row);
+        Common::resizeConsole(origScreenSize.ws_col, origScreenSize.ws_row);
         disableNonCanonicalMode();
     #endif
 
     input.showBlinkingCursor(true);
-    colors.setTextColor(colors.color_default);
+    Colors::setTextColor("color_default");
 
-    common.clearScreen();
+    Common::clearScreen();
 }
 
 void Common::setWindowTitle(std::string const& titleText)
@@ -242,24 +240,25 @@ void Common::clearScreen()
 
 // convert coords of type integer to coords of type struct
 // (e.g. "position = 4" will return "coords.col = 4, coords.row = 1"):
-const Common::CoordsStruct &Common::intToCoords(int const& position, int const& cols)
+const Common::CoordsStruct Common::intToCoords(int const& position, int const& cols)
 {
+    Common::CoordsStruct intToCoordsReturn;
     if (position <= cols)
     {
-        this->intToCoordsReturn.col = position;
-        this->intToCoordsReturn.row = 1;
+        intToCoordsReturn.col = position;
+        intToCoordsReturn.row = 1;
     }
     else if (position % cols == 0)
     {
-        this->intToCoordsReturn.col = cols;
-        this->intToCoordsReturn.row = position / cols;
+        intToCoordsReturn.col = cols;
+        intToCoordsReturn.row = position / cols;
     }
     else
     {
-        this->intToCoordsReturn.col = position % cols;
-        this->intToCoordsReturn.row = position / cols + 1;
+        intToCoordsReturn.col = position % cols;
+        intToCoordsReturn.row = position / cols + 1;
     }
-    return this->intToCoordsReturn;
+    return intToCoordsReturn;
 }
 
 // the above function the other way around
@@ -276,20 +275,21 @@ const int Common::coordsToInt(CoordsStruct const& coords, int const& cols)
 }
 
 // convert field coordinates to cursor coordinates:
-const Common::CoordsStruct &Common::coordsToCursorPosition(CoordsStruct const& coords, int const& offsetX, int const& offsetY, int const& cellWidth)
+const Common::CoordsStruct Common::coordsToCursorPosition(CoordsStruct const& coords, int const& offsetX, int const& offsetY, int const& cellWidth)
 {
-    this->coordsToCursorPositionReturn.col = offsetX + (cellWidth-1)/2 - 1;
+    Common::CoordsStruct coordsToCursorPositionReturn;
+    coordsToCursorPositionReturn.col = offsetX + (cellWidth-1)/2 - 1;
     for (int i = 1; i < coords.col; ++i)
     {
-        this->coordsToCursorPositionReturn.col = this->coordsToCursorPositionReturn.col + (cellWidth-1)/2 + 1 + (cellWidth-1)/2 + 1;
+        coordsToCursorPositionReturn.col = coordsToCursorPositionReturn.col + (cellWidth-1)/2 + 1 + (cellWidth-1)/2 + 1;
     }
 
-    this->coordsToCursorPositionReturn.row = offsetY;
+    coordsToCursorPositionReturn.row = offsetY;
     for (int i = 1; i < coords.row; ++i)
     {
-        this->coordsToCursorPositionReturn.row = this->coordsToCursorPositionReturn.row + 2;
+        coordsToCursorPositionReturn.row = coordsToCursorPositionReturn.row + 2;
     }
-    return this->coordsToCursorPositionReturn;
+    return coordsToCursorPositionReturn;
 }
 
 // replacement for Sleep() and usleep() for a more precise sleep:
@@ -322,43 +322,44 @@ void Common::preciseSleep(double seconds)
     while ((std::chrono::high_resolution_clock::now() - start).count() / 1e9 < seconds);
 }
 
-const Common::TimeStruct &Common::secondsToTimeStruct(int seconds)
+const Common::TimeStruct Common::secondsToTimeStruct(int seconds)
 {
+    Common:TimeStruct secondsToTimeStructReturn;
     if (seconds < 60)
     {
-        this->secondsToTimeStructReturn.minutes = "00";
+        secondsToTimeStructReturn.minutes = "00";
         if (seconds < 10)
         {
-            this->secondsToTimeStructReturn.seconds = "0" + std::to_string(seconds);
+            secondsToTimeStructReturn.seconds = "0" + std::to_string(seconds);
         }
         else
         {
-            this->secondsToTimeStructReturn.seconds = std::to_string(seconds);
+            secondsToTimeStructReturn.seconds = std::to_string(seconds);
         }
-        return this->secondsToTimeStructReturn;
+        return secondsToTimeStructReturn;
     }
     else
     {
         if (seconds < 600)
         {
-            this->secondsToTimeStructReturn.minutes = "0" + std::to_string(seconds / 60);
+            secondsToTimeStructReturn.minutes = "0" + std::to_string(seconds / 60);
         }
         else
         {
-            this->secondsToTimeStructReturn.minutes = std::to_string(seconds / 60);
+            secondsToTimeStructReturn.minutes = std::to_string(seconds / 60);
         }
         if (seconds % 60 == 0)
         {
-            this->secondsToTimeStructReturn.seconds = "00";
+            secondsToTimeStructReturn.seconds = "00";
         }
         else if (seconds % 60 < 10)
         {
-            this->secondsToTimeStructReturn.seconds = "0" + std::to_string(seconds % 60);
+            secondsToTimeStructReturn.seconds = "0" + std::to_string(seconds % 60);
         }
         else
         {
-            this->secondsToTimeStructReturn.seconds = std::to_string(seconds % 60);
+            secondsToTimeStructReturn.seconds = std::to_string(seconds % 60);
         }
-        return this->secondsToTimeStructReturn;
+        return secondsToTimeStructReturn;
     }
 }
