@@ -27,6 +27,6 @@ endif()
 
 include_directories(include)
 
-add_executable(minesweeper src/main.cpp src/colors.cpp src/common.cpp src/field.cpp src/game.cpp src/input.cpp src/print.cpp src/solver.cpp)
+add_executable(minesweeper src/main.cpp src/colors.cpp src/common.cpp src/field.cpp src/game.cpp src/input.cpp src/print.cpp src/solver.cpp src/symbols.cpp)
 
 install(TARGETS minesweeper RUNTIME DESTINATION bin)

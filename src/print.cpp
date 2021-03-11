@@ -17,21 +17,22 @@
 #endif
 
 // project headers:
-#include <colors.hpp>
-#include <common.hpp>
-#include <debug.hpp>
-#include <field.hpp>
-#include <input.hpp>
-#include <print.hpp>
-#include <symbols.hpp>
+#include <colors.h>
+#include <common.h>
+#include <debug.h>
+#include <field.h>
+#include <input.h>
+#include <print.h>
+#include <symbols.h>
 
-Print::Print()
-:    
-    colors(std::make_unique<Colors>()),
-    common(std::make_unique<Common>())
-{ }
-
+Print::Print() = default;
 Print::~Print() = default;
+
+const std::string Print::inputText = "  Input: ";
+const std::string Print::wrongInputText = "  Wrong input, Press ENTER...";
+const std::string Print::getHelpText = "'h' or 'H': Help";
+const std::string Print::minesLeftText = " mines left  ";
+const std::string Print::debugTurnCountText = " DEBUG: Turn: ";
 
 // erase particular lines instead of clearing the whole screen:
 void Print::deleteLastLine(size_t const& stringLength)
@@ -69,7 +70,7 @@ void Print::deleteLastLine(size_t const& stringLength)
 #endif
 }
 
-std::string Print::setDifficultyTexts(int const& mode) const
+std::string Print::setDifficultyTexts(int const& mode)
 {
     if (mode == 1) return "Small";
     else if (mode == 2) return "Medium";
@@ -79,29 +80,29 @@ std::string Print::setDifficultyTexts(int const& mode) const
 
 void Print::printTitle(std::string const& difficultyString, int const& cols, int const& rows, int const& minesTotal)
 {
-    std::cout << colors->setTextColor(colors->fg_light_blue);
+    Colors::setTextColor("fg_light_blue");
     std::cout << "MINESWEEPER";
-    std::cout << colors->setTextColor(colors->fg_white);
+    Colors::setTextColor("fg_white");
     std::cout << " - " << difficultyString << ": " << cols << "x" << rows << ", " << minesTotal << " mines";
-    std::cout << colors->setTextColor(colors->color_default);
+    Colors::setTextColor("color_default");
     std::cout << newline << newline << newline;
 }
 
 void Print::printMinesLeft(Field &field)
 {
-    common->gotoXY(field.getOffsetX() - 1, field.getOffsetY() - 2);
+    Common::gotoXY(field.getOffsetX() - 1, field.getOffsetY() - 2);
     deleteLastLine(20);
-    common->gotoXY(field.getOffsetX() - 1, field.getOffsetY() - 2);
-    std::cout << colors->setTextColor(colors->fg_light_red);
+    Common::gotoXY(field.getOffsetX() - 1, field.getOffsetY() - 2);
+    Colors::setTextColor("fg_light_red");
     std::cout << field.getMinesLeft() << minesLeftText << std::flush;
-    std::cout << colors->setTextColor(colors->color_default);
+    Colors::setTextColor("color_default");
 }
 
 #if DEBUG == 1
     void Print::printDebugCoveredLeft(Field &field)
     {
         #if DEBUG == 1
-            common->gotoXY(field.getOffsetX() + (field.getCols() * (((field.getCellWidth() - 1) / 2) * 2 + 2)) - 15, field.getOffsetY() + (field.getRows() * 2));
+            Common::gotoXY(field.getOffsetX() + (field.getCols() * (((field.getCellWidth() - 1) / 2) * 2 + 2)) - 15, field.getOffsetY() + (field.getRows() * 2));
             std::cout << "Covered: ";
             if (field.getCoveredLeft() >= 1000)
                 std::cout << field.getCoveredLeft() << std::flush;
@@ -118,32 +119,32 @@ void Print::printMinesLeft(Field &field)
 void Print::printMenu()
 {
     std::cout << newline;
-    std::cout << colors->setTextColor(colors->fg_white);
+    Colors::setTextColor("fg_white");
     std::cout << "  Welcome to ";
-    std::cout << colors->setTextColor(colors->fg_light_blue);
+    Colors::setTextColor("fg_light_blue");
     std::cout << "MINESWEEPER!";
-    std::cout << colors->setTextColor(colors->color_default);
+    Colors::setTextColor("color_default");
     std::cout << newline << newline << newline;
     std::cout << "  Choose the size of the field:" << newline << newline;
-    std::cout << colors->setTextColor(colors->fg_light_green);
+    Colors::setTextColor("fg_light_green");
     std::cout << "   1:  ";
-    std::cout << colors->setTextColor(colors->color_default);
+    Colors::setTextColor("color_default");
     std::cout << "small" << newline;
-    std::cout << colors->setTextColor(colors->fg_light_blue);
+    Colors::setTextColor("fg_light_blue");
     std::cout << "   2:  ";
-    std::cout << colors->setTextColor(colors->color_default);
+    Colors::setTextColor("color_default");
     std::cout << "medium" << newline;
-    std::cout << colors->setTextColor(colors->fg_yellow);
+    Colors::setTextColor("fg_yellow");
     std::cout << "   3:  ";
-    std::cout << colors->setTextColor(colors->color_default);
+    Colors::setTextColor("color_default");
     std::cout << "large" << newline;
-    std::cout << colors->setTextColor(colors->fg_magenta);
+    Colors::setTextColor("fg_magenta");
     std::cout << "   4:  ";
-    std::cout << colors->setTextColor(colors->color_default);
+    Colors::setTextColor("color_default");
     std::cout << "custom" << newline << newline;
-    std::cout << colors->setTextColor(colors->fg_light_red);
+    Colors::setTextColor("fg_light_red");
     std::cout << "   q:  ";
-    std::cout << colors->setTextColor(colors->color_default);
+    Colors::setTextColor("color_default");
     std::cout << "quit at any time" << std::flush;
 }
 
@@ -176,32 +177,32 @@ void Print::printCustomGetMinesCount()
 
 void Print::printHasWon(Field &field)
 {
-    common->gotoXY(1, 4);
+    Common::gotoXY(1, 4);
     deleteLastLine(20);
-    common->gotoXY(field.getOffsetX() - 1, field.getOffsetY() - 2);
-    std::cout << colors->setTextColor(colors->fg_light_red);
+    Common::gotoXY(field.getOffsetX() - 1, field.getOffsetY() - 2);
+    Colors::setTextColor("fg_light_red");
     std::cout << field.getMinesLeft() << minesLeftText << std::flush;
 
-    common->gotoXY(field.getOffsetX() - 1, field.getOffsetY() + field.getRows()*2 + 2);
-    std::cout << colors->setTextColor(colors->fg_white);
+    Common::gotoXY(field.getOffsetX() - 1, field.getOffsetY() + field.getRows()*2 + 2);
+    Colors::setTextColor("fg_white");
     std::cout << "Congratulation, you have won!" << newline;
-    std::cout << colors->setTextColor(colors->color_default);
+    Colors::setTextColor("color_default");
 }
 
 void Print::printHasLost(Field &field)
 {
-    common->gotoXY(field.getOffsetX() - 1, field.getOffsetY() + field.getRows()*2 + 2);
-    std::cout << colors->setTextColor(colors->fg_white);
+    Common::gotoXY(field.getOffsetX() - 1, field.getOffsetY() + field.getRows()*2 + 2);
+    Colors::setTextColor("fg_white");
     std::cout << "Sorry, you have lost!" << newline;
-    std::cout << colors->setTextColor(colors->color_default);
+    Colors::setTextColor("color_default");
 }
 
 void Print::printExplanation()
 {
     coutconv << newline;
-    std::cout << colors->setTextColor(colors->fg_light_blue);
+    Colors::setTextColor("fg_light_blue");
     coutconv << "  MINESWEEPER" << newline << newline;
-    std::cout << colors->setTextColor(colors->color_default);
+    Colors::setTextColor("color_default");
     coutconv << "  In this game your task is to find all hidden mines by uncovering all safe positions." << newline << newline;
     coutconv << "  You can guess and sometimes combine where the next mine is." << newline;
     coutconv << "  The number on each uncovered square shows how many neighbors contain a mine." << newline;
@@ -209,9 +210,9 @@ void Print::printExplanation()
     coutconv << "  To remove the flag, just repeat your input. You may place or remove as many flags in a row as you wish." << newline << newline;
     coutconv << "  You can reselect a numbered cell with ENTER to automatically uncover all remaining neighbors," << newline;
     coutconv << "  as long as you put all flags right! Otherwise you might lose..." << newline << newline;
-    std::cout << colors->setTextColor(colors->fg_white);
+    Colors::setTextColor("fg_white");
     coutconv << "  Controls:" << newline << newline;
-    std::cout << colors->setTextColor(colors->color_default);
+    Colors::setTextColor("color_default");
     coutconv << "    Arrow Keys:    navigate" << newline;
     coutconv << "    ENTER:         uncover" << newline;
     coutconv << "    SPACE:         place or remove a flag" << newline;
@@ -220,23 +221,23 @@ void Print::printExplanation()
     coutconv << "    s or S:        automatically place flags, auto-reveal and repeat recursively" << newline;
     coutconv << "    c or C:        toggle cursor jump to opposite edge on or off" << newline << newline;
     coutconv << "    q or Q:        quit" << newline << newline;
-    std::cout << colors->setTextColor(colors->fg_white);
+    Colors::setTextColor("fg_white");
     coutconv << "  Press ENTER to go back...";
-    std::cout << colors->setTextColor(colors->color_default);
+    Colors::setTextColor("color_default");
 }
 
-void Print::printTimer(Field &field,Common::TimeStruct &time ,bool hasCheated)
+void Print::printTimer(Field &field, Common::TimeStruct &time, bool hasCheated)
 {
-    std::cout << colors->setTextColor(colors->fg_light_red);
+    Colors::setTextColor("fg_light_red");
     if (hasCheated == false)
     {
-        common->gotoXY(field.getOffsetX() + (field.getCols() * (((field.getCellWidth() - 1) / 2) * 2 + 2)) - 7, field.getOffsetY() - 2);
+        Common::gotoXY(field.getOffsetX() + (field.getCols() * (((field.getCellWidth() - 1) / 2) * 2 + 2)) - 7, field.getOffsetY() - 2);
         std::cout << time.minutes + ":" + time.seconds << std::flush;
     }
     else
     {
-        common->gotoXY(field.getOffsetX() + (field.getCols() * (((field.getCellWidth() - 1) / 2) * 2 + 2)) - 10, field.getOffsetY() - 2);
+        Common::gotoXY(field.getOffsetX() + (field.getCols() * (((field.getCellWidth() - 1) / 2) * 2 + 2)) - 10, field.getOffsetY() - 2);
         std::cout << "cheated!" << std::flush;
     }
-    std::cout << colors->setTextColor(colors->color_default);
+    Colors::setTextColor("color_default");
 }

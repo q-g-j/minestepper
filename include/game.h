@@ -11,20 +11,14 @@
 #endif
 
 // forward declarations of classes:
-class Colors;
-class Common;
 class Field;
 class Input;
-class Print;
 
 class Game
 {
 private:    
     // declare class objects as unique pointers:
-    std::unique_ptr<Colors> colors;
-    std::unique_ptr<Common> common;
     std::unique_ptr<Input> input;
-    std::unique_ptr<Print> print;
 
     // define the 3 main game modes:
     const int smallCols       = 9;

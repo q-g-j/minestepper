@@ -10,9 +10,11 @@
 #endif
 
 // project headers:
-#include <common.hpp>
-#include <debug.hpp>
-#include <game.hpp>
+#include <colors.h>
+#include <common.h>
+#include <debug.h>
+#include <game.h>
+#include <symbols.h>
 
 int main()
 {
@@ -24,6 +26,8 @@ int main()
     
     saveScreenSize();
     atexit(cleanUp);
+    Colors::initColors();
+    Symbols::initSymbols();
 
     while (true)
     {

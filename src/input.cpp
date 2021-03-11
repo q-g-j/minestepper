@@ -25,14 +25,14 @@
 #endif
 
 // project headers:
-#include <colors.hpp>
-#include <common.hpp>
-#include <debug.hpp>
-#include <field.hpp>
-#include <input.hpp>
-#include <print.hpp>
-#include <solver.hpp>
-#include <symbols.hpp>
+#include <colors.h>
+#include <common.h>
+#include <debug.h>
+#include <field.h>
+#include <input.h>
+#include <print.h>
+#include <solver.h>
+#include <symbols.h>
 
 // Linux: need to enable "non canonical mode" to make arrow keys and SPACE work (no need to press ENTER):
 #if !defined(_WIN32) && !defined(WIN32) && !defined(_WIN64) && !defined(WIN64)
@@ -58,11 +58,7 @@ Input::Input()
 :
     toggleEdgeJump(false),
     toogleEdgeJumpP(&toggleEdgeJump),
-    colors(std::make_unique<Colors>()),
-    common(std::make_unique<Common>()),
-    print(std::make_unique<Print>()),
-    solver(std::make_unique<Solver>()),
-    symbols(std::make_unique<Symbols>())
+    solver(std::make_unique<Solver>())
 { }
 
 Input::~Input() = default;
@@ -94,9 +90,9 @@ void Input::showBlinkingCursor(bool show)
 
 void Input::getInputEnterKey(std::string const& text)
 {
-    std::cout << colors->setTextColor(colors->fg_white);
+    Colors::setTextColor("fg_white");
     std::cout << text << std::flush;
-    std::cout << colors->setTextColor(colors->color_default);
+    Colors::setTextColor("color_default");
 
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         while (true)
@@ -144,8 +140,8 @@ void Input::getInputEnterKey(std::string const& text)
 // custom mode: ask user for the game mode (this->getInputDifficultyReturn):
 const int &Input::getInputDifficulty()
 {
-    print->printMenu();
-    this->showBlinkingCursor(false);
+    Print::printMenu();
+    showBlinkingCursor(false);
 
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         int inputKey = 0;
@@ -232,7 +228,7 @@ const int &Input::getInputDifficulty()
         disableNonCanonicalMode();
     #endif
 
-    this->showBlinkingCursor(true);
+    showBlinkingCursor(true);
     return this->getInputDifficultyReturn;
 }
 
@@ -240,14 +236,14 @@ const int &Input::getInputCustomCellWidth()
 {
     bool isValidInput = false;
 
-    common->clearScreen();
-    print->printCustomGetCellWidth();
+    Common::clearScreen();
+    Print::printCustomGetCellWidth();
 
-    std::cout << colors->setTextColor(colors->fg_white);
-    std::cout << print->inputText;
-    std::cout << colors->setTextColor(colors->color_default);
+    Colors::setTextColor("fg_white");
+    std::cout << Print::inputText;
+    Colors::setTextColor("color_default");
 
-    this->showBlinkingCursor(false);
+    showBlinkingCursor(false);
 
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         int inputKey;
@@ -314,7 +310,7 @@ const int &Input::getInputCustomCellWidth()
         disableNonCanonicalMode();
     #endif
 
-    this->showBlinkingCursor(true);
+    showBlinkingCursor(true);
     return this->getInputCustomCellWidthReturn;
 }
 
@@ -326,16 +322,16 @@ const Common::CoordsStruct &Input::getInputCustomDimensions(int const& fieldCell
     int afterX = 0;
     bool isValidInput = false;
 
-    common->clearScreen();
-    print->printCustomGetDimensions(fieldCellWidth);
+    Common::clearScreen();
+    Print::printCustomGetDimensions(fieldCellWidth);
 
     while (true)
     {
         try
         {
-            std::cout << colors->setTextColor(colors->fg_white);
-            std::cout << print->inputText;
-            std::cout << colors->setTextColor(colors->color_default);
+            Colors::setTextColor("fg_white");
+            std::cout << Print::inputText;
+            Colors::setTextColor("color_default");
             getline(std::cin, line);
             if (line == "q" || line == "Q")
             {
@@ -407,9 +403,9 @@ const Common::CoordsStruct &Input::getInputCustomDimensions(int const& fieldCell
         }
         else
         {
-            getInputEnterKey(print->wrongInputText);
-            print->deleteLastLine(print->wrongInputText.length());
-            print->deleteLastLine(print->inputText.length() + line.length());
+            getInputEnterKey(Print::wrongInputText);
+            Print::deleteLastLine(Print::wrongInputText.length());
+            Print::deleteLastLine(Print::inputText.length() + line.length());
         }
     }
 }
@@ -420,16 +416,16 @@ const int &Input::getInputCustomMinesCount(int const& fieldSize)
     std::string line;
     bool isValidInput = false;
 
-    common->clearScreen();
-    print->printCustomGetMinesCount();
+    Common::clearScreen();
+    Print::printCustomGetMinesCount();
 
     while (true)
     {
         try
         {
-            std::cout << colors->setTextColor(colors->fg_white);
-            std::cout << print->inputText;
-            std::cout << colors->setTextColor(colors->color_default);
+            Colors::setTextColor("fg_white");
+            std::cout << Print::inputText;
+            Colors::setTextColor("color_default");
             getline(std::cin, line);
             if (line == "q" || line == "Q")
             {
@@ -466,9 +462,9 @@ const int &Input::getInputCustomMinesCount(int const& fieldSize)
         }
         else
         {
-            getInputEnterKey(print->wrongInputText);
-            print->deleteLastLine(print->wrongInputText.length());
-            print->deleteLastLine(print->inputText.length() + line.length());
+            getInputEnterKey(Print::wrongInputText);
+            Print::deleteLastLine(Print::wrongInputText.length());
+            Print::deleteLastLine(Print::inputText.length() + line.length());
         }
     }
 }
@@ -479,24 +475,24 @@ void Input::toggleHelp(Field &field, Common::CoordsStruct const& currentArrayPos
     extern std::atomic<bool> doPrintTimer;
     doPauseTimer = true;
 
-    common->resizeConsole(107, 27);
+    Common::resizeConsole(107, 27);
 
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-        common->centerWindow();
+        Common::centerWindow();
     #else
         disableNonCanonicalMode();
     #endif
 
     Common::CoordsStruct currentCursorPosition;
 
-    common->clearScreen();
-    print->printExplanation();
+    Common::clearScreen();
+    Print::printExplanation();
     getInputEnterKey("");
 
     field.printAll();
 
-    currentCursorPosition = common->coordsToCursorPosition(currentArrayPosition, field.getOffsetX(), field.getOffsetY(), field.getCellWidth());
-    common->gotoXY(currentCursorPosition.col, currentCursorPosition.row);
+    currentCursorPosition = Common::coordsToCursorPosition(currentArrayPosition, field.getOffsetX(), field.getOffsetY(), field.getCellWidth());
+    Common::gotoXY(currentCursorPosition.col, currentCursorPosition.row);
 
     field.printCoords(currentArrayPosition, true);
 
@@ -577,8 +573,8 @@ void Input::moveCursor(Field &field, Common::CoordsStruct& currentArrayPosition,
             ++currentArrayPosition.col;
         }
     }
-    currentCursorPosition = common->coordsToCursorPosition(currentArrayPosition, field.getOffsetX(), field.getOffsetY(), field.getCellWidth());
-    common->gotoXY(currentCursorPosition.col, currentCursorPosition.row);
+    currentCursorPosition = Common::coordsToCursorPosition(currentArrayPosition, field.getOffsetX(), field.getOffsetY(), field.getCellWidth());
+    Common::gotoXY(currentCursorPosition.col, currentCursorPosition.row);
     field.printCoords(currentArrayPosition, true);
 }
 
@@ -613,8 +609,8 @@ const Common::UserInputReturnStruct &Input::getInputGameplay(Field &field, bool 
         }
     }
 
-    currentCursorPosition = common->coordsToCursorPosition(currentArrayPosition, field.getOffsetX(), field.getOffsetY(), field.getCellWidth());
-    common->gotoXY(currentCursorPosition.col, currentCursorPosition.row);
+    currentCursorPosition = Common::coordsToCursorPosition(currentArrayPosition, field.getOffsetX(), field.getOffsetY(), field.getCellWidth());
+    Common::gotoXY(currentCursorPosition.col, currentCursorPosition.row);
 
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         field.printCoords(currentArrayPosition, true);
@@ -683,7 +679,7 @@ const Common::UserInputReturnStruct &Input::getInputGameplay(Field &field, bool 
                 else if (inputKeyA == KEY_ENTER)
                 {
                     coutconv << L"\b" << std::flush;
-                    if (field.getCoordsContent(currentArrayPosition) == symbols->symbolFlag || field.getCoordsContent(currentArrayPosition) == symbols->symbolZero)
+                    if (field.getCoordsContent(currentArrayPosition) == Symbols::getSymbol("symbolFlag") || field.getCoordsContent(currentArrayPosition) == Symbols::getSymbol("symbolZero"))
                     {
                         continue;
                     }
@@ -789,7 +785,7 @@ const Common::UserInputReturnStruct &Input::getInputGameplay(Field &field, bool 
                 else if (inputKeyA == KEY_ENTER)
                 {
                     std::cout << "\b" << std::flush;
-                    if (field.getCoordsContent(currentArrayPosition) == symbols->symbolFlag || field.getCoordsContent(currentArrayPosition) == symbols->symbolZero)
+                    if (field.getCoordsContent(currentArrayPosition) == Symbols::getSymbol("symbolFlag") || field.getCoordsContent(currentArrayPosition) == Symbols::getSymbol("symbolZero"))
                     {
                         continue;
                     }

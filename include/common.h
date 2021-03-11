@@ -1,7 +1,6 @@
 #pragma once
 
 // system headers:
-#include <memory>
 #include <string>
 
 // Windows and Linux seem to handle unicode strings differently (use wide strings for Windows):
@@ -40,11 +39,6 @@ public:
     };
 
 private:
-    // return variables for class methods:
-    CoordsStruct intToCoordsReturn;
-    CoordsStruct coordsToCursorPositionReturn;
-    TimeStruct secondsToTimeStructReturn;
-
 public:
     struct GameModeReturnStruct
     {
@@ -74,26 +68,26 @@ public:
 
     // public methods:
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-        const std::wstring intToStringConv(int const&);
-        const std::wstring stringConvert(std::string const&);
-        const int stringToInt(std::wstring);
+        static const std::wstring intToStringConv(int const&);
+        static const std::wstring stringConvert(std::string const&);
+        static const int stringToInt(std::wstring);
 
-        void setWindowProperties();
-        void centerWindow();
-        void setUnicode(bool);
+        static void setWindowProperties();
+        static void centerWindow();
+        static void setUnicode(bool);
     #else
-        const std::string intToStringConv(int const&);
-        const std::string stringConvert(std::wstring const&);
-        const int stringToInt(std::string);
+        static const std::string intToStringConv(int const&);
+        static const std::string stringConvert(std::wstring const&);
+        static const int stringToInt(std::string);
     #endif
 
-    void resizeConsole(int const&, int const&);
-    void setWindowTitle(std::string const&);
-    void clearScreen();
-    void gotoXY(int const&, int const&);
-    const CoordsStruct &intToCoords(int const&, int const&);
-    const int coordsToInt(CoordsStruct const&, int const&);
-    const CoordsStruct &coordsToCursorPosition(CoordsStruct const&, int const&, int const&, int const&);
-    void preciseSleep(double);
-    const TimeStruct &secondsToTimeStruct(int);
+    static void resizeConsole(int const&, int const&);
+    static void setWindowTitle(std::string const&);
+    static void clearScreen();
+    static void gotoXY(int const&, int const&);
+    static const CoordsStruct intToCoords(int const&, int const&);
+    static const int coordsToInt(CoordsStruct const&, int const&);
+    static const CoordsStruct coordsToCursorPosition(CoordsStruct const&, int const&, int const&, int const&);
+    static void preciseSleep(double);
+    static const TimeStruct secondsToTimeStruct(int);
 };
