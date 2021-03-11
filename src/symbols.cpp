@@ -1,6 +1,5 @@
 // system headers:
 #include <map>
-#include <string>
 
 // project headers:
 #include <symbols.h>
@@ -11,7 +10,7 @@
     std::map<std::string, std::string> symbolsMap;
 #endif
 
-void Symbols::initSymbolsMap()
+void Symbols::initSymbols()
 {
     // define frame and cell symbol constants:
     symbolsMap =

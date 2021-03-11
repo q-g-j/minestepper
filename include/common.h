@@ -1,7 +1,6 @@
 #pragma once
 
 // system headers:
-#include <memory>
 #include <string>
 
 // Windows and Linux seem to handle unicode strings differently (use wide strings for Windows):
@@ -40,11 +39,6 @@ public:
     };
 
 private:
-    // return variables for class methods:
-    CoordsStruct intToCoordsReturn;
-    CoordsStruct coordsToCursorPositionReturn;
-    TimeStruct secondsToTimeStructReturn;
-
 public:
     struct GameModeReturnStruct
     {

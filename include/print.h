@@ -1,13 +1,5 @@
 #pragma once
 
-// system headers:
-#include <memory>
-
-// forward declarations of classes:
-class Colors;
-class Common;
-class Field;
-
 class Print
 {    
 private:
@@ -16,29 +8,28 @@ public:
     Print();
     ~Print();
 
-    // public constants:
-    const std::string inputText = "  Input: ";
-    const std::string wrongInputText = "  Wrong input, Press ENTER...";
-    const std::string getHelpText = "'h' or 'H': Help";
-    const std::string minesLeftText = " mines left  ";
-    const std::string debugTurnCountText = " DEBUG: Turn: ";
+    static const std::string inputText;
+    static const std::string wrongInputText;
+    static const std::string getHelpText;
+    static const std::string minesLeftText;
+    static const std::string debugTurnCountText;
 
     // public methods:
-    void deleteLastLine(size_t const&);
-    void printTitle(std::string const&, int const&, int const&, int const&);
-    void printMinesLeft(Field&);
+    static void deleteLastLine(size_t const&);
+    static void printTitle(std::string const&, int const&, int const&, int const&);
+    static void printMinesLeft(Field&);
 
     #if DEBUG == 1
-        void printDebugCoveredLeft(Field&);
+        static void printDebugCoveredLeft(Field&);
     #endif
 
-    std::string setDifficultyTexts(int const&) const;
-    void printMenu();
-    void printCustomGetCellWidth();
-    void printCustomGetDimensions(int const&);
-    void printCustomGetMinesCount();
-    void printHasWon(Field&);
-    void printHasLost(Field&);
-    void printExplanation();
-    void printTimer(Field&, Common::TimeStruct& ,bool);
+    static std::string setDifficultyTexts(int const&);
+    static void printMenu();
+    static void printCustomGetCellWidth();
+    static void printCustomGetDimensions(int const&);
+    static void printCustomGetMinesCount();
+    static void printHasWon(Field&);
+    static void printHasLost(Field&);
+    static void printExplanation();
+    static void printTimer(Field&, Common::TimeStruct& ,bool);
 };

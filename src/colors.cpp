@@ -10,6 +10,7 @@
 #endif
 
 // system headers:
+#include <iostream>
 #include <map>
 
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
@@ -26,7 +27,7 @@
     std::map<std::string, std::string> colorMap;
 #endif
 
-void Colors::initColorMap()
+void Colors::initColors()
 {
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         colorMap =
@@ -117,15 +118,14 @@ void Colors::initColorMap()
 }
 
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-    const std::string Colors::setTextColor(std::string const& color)
+    void Colors::setTextColor(std::string const& color)
     {
         HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
         SetConsoleTextAttribute(hConsole, colorMap[color]);
-        return "";
     }
 #else
-    const std::string Colors::setTextColor(std::string const& color)
+    void Colors::setTextColor(std::string const& color)
     {
-        return colorMap[color];
+        std::cout << colorMap[color];
     }
 #endif

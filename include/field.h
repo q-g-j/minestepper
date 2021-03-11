@@ -5,10 +5,7 @@
 #include <random>
 
 // forward declarations of classes:
-class Colors;
 class Input;
-class Print;
-class Symbols;
 
 class Field
 {
@@ -31,7 +28,6 @@ private:
 
     // declare class objects as unique pointers:
     std::unique_ptr<Input> input;
-    std::unique_ptr<Print> print;
 
     // return variables for class methods:
     Common::PlaceUserInputReturnStruct placeUserInputReturn;

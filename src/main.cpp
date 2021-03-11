@@ -26,8 +26,8 @@ int main()
     
     saveScreenSize();
     atexit(cleanUp);
-    Colors::initColorMap();
-    Symbols::initSymbolsMap();
+    Colors::initColors();
+    Symbols::initSymbols();
 
     while (true)
     {

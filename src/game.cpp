@@ -42,8 +42,7 @@ std::atomic<bool> isCheatedPrinted;
 
 Game::Game()
 :
-    input(std::make_unique<Input>()),
-    print(std::make_unique<Print>())
+    input(std::make_unique<Input>())
 {
     isGameRunning = false;
     isTimerPrinting = false;
@@ -65,7 +64,7 @@ const Common::GameModeReturnStruct &Game::chooseGamemode()
     #endif
 
     Common::resizeConsole(33, 13);
-    std::cout << Colors::setTextColor("color_default");
+    Colors::setTextColor("color_default");
     Common::setWindowTitle("Minesweeper");
     Common::clearScreen();
 
@@ -81,7 +80,7 @@ const Common::GameModeReturnStruct &Game::chooseGamemode()
 
     if (difficulty == 1)
     {
-        this->chooseGamemodeReturn.difficultyString = print->setDifficultyTexts(1);
+        this->chooseGamemodeReturn.difficultyString = Print::setDifficultyTexts(1);
         this->chooseGamemodeReturn.cols = smallCols;
         this->chooseGamemodeReturn.rows = smallRows;
         this->chooseGamemodeReturn.mines = smallMines;
@@ -89,7 +88,7 @@ const Common::GameModeReturnStruct &Game::chooseGamemode()
     }
     else if (difficulty == 2)
     {
-        this->chooseGamemodeReturn.difficultyString = print->setDifficultyTexts(2);
+        this->chooseGamemodeReturn.difficultyString = Print::setDifficultyTexts(2);
         this->chooseGamemodeReturn.cols = mediumCols;
         this->chooseGamemodeReturn.rows = mediumRows;
         this->chooseGamemodeReturn.mines = mediumMines;
@@ -97,7 +96,7 @@ const Common::GameModeReturnStruct &Game::chooseGamemode()
     }
     else if (difficulty == 3)
     {
-        this->chooseGamemodeReturn.difficultyString = print->setDifficultyTexts(3);
+        this->chooseGamemodeReturn.difficultyString = Print::setDifficultyTexts(3);
         this->chooseGamemodeReturn.cols = largeCols;
         this->chooseGamemodeReturn.rows = largeRows;
         this->chooseGamemodeReturn.mines = largeMines;
@@ -105,7 +104,7 @@ const Common::GameModeReturnStruct &Game::chooseGamemode()
     }
     else
     {
-        this->chooseGamemodeReturn.difficultyString = print->setDifficultyTexts(4);
+        this->chooseGamemodeReturn.difficultyString = Print::setDifficultyTexts(4);
         Common::resizeConsole(38, 7);
         Common::clearScreen();
 
@@ -157,16 +156,16 @@ const Common::GameModeReturnStruct &Game::chooseGamemode()
         int turn = 1;
         bool firstrun = true;
 
-        input.showBlinkingCursor(false);
+        Input::showBlinkingCursor(false);
         
         field->printAll();
 
         while (true)
         {
-            print.printMinesLeft(*field);
+            Print::printMinesLeft(*field);
 
             #if DEBUG == 1
-                print.printDebugCoveredLeft(*field);
+                Print::printDebugCoveredLeft(*field);
             #endif
 
             Common::gotoXY(1, field->getOffsetX() + field->getRows() * 2 + 4);
@@ -188,7 +187,7 @@ const Common::GameModeReturnStruct &Game::chooseGamemode()
             else if (placeUserInputReturn.isTurn) { turn = 2; }
         }
 
-        input.showBlinkingCursor(true);
+        Input::showBlinkingCursor(true);
         
         #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
             return 0;
@@ -218,7 +217,7 @@ const Common::GameModeReturnStruct &Game::chooseGamemode()
                 if (timer % 10 == 0 || timer == 0 || doPrintTimer == true)
                 {
                     isTimerPrinting = true;
-                    print.printTimer(*field, time, false);
+                    Print::printTimer(*field, time, false);
                     isTimerPrinting = false;
                     doPrintTimer = false;
                 }
@@ -227,7 +226,7 @@ const Common::GameModeReturnStruct &Game::chooseGamemode()
             else if (hasCheated == true && doPauseTimer == false && (isCheatedPrinted == false || doPrintTimer == true))
             {
                 isTimerPrinting = true;
-                print.printTimer(*field, time, true);
+                Print::printTimer(*field, time, true);
                 isTimerPrinting = false;
                 doPrintTimer = false;
                 isCheatedPrinted = true;

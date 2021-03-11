@@ -89,7 +89,7 @@ void cleanUp()
         disableNonCanonicalMode();
     #endif
 
-    input.showBlinkingCursor(true);
+    Input::showBlinkingCursor(true);
     Colors::setTextColor("color_default");
 
     Common::clearScreen();

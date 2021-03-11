@@ -47,7 +47,6 @@ Field::Field(Common::GameModeReturnStruct& gameMode)
     difficultyString(gameMode.difficultyString),
     urng(rng()),
     input(std::make_unique<Input>()),
-    print(std::make_unique<Print>()),
     field2DVector(create2DVector("field")),
     mines2DVector(create2DVector("mines"))
 { }
@@ -269,19 +268,19 @@ void Field::printAll()
     #endif
 
     Common::gotoXY(this->fieldOffsetX - 1, 1);
-    print->printTitle(this->difficultyString, this->cols, this->rows, this->minesTotal);
+    Print::printTitle(this->difficultyString, this->cols, this->rows, this->minesTotal);
     Common::gotoXY(1, 3);
     this->drawField();
 
     Common::gotoXY(this->fieldOffsetX - 1, this->fieldOffsetY + this->rows * 2);
-    std::cout << Colors::setTextColor("fg_white");
-    std::cout << print->getHelpText << newline << newline;
-    std::cout << Colors::setTextColor("color_default");
+    Colors::setTextColor("fg_white");
+    std::cout << Print::getHelpText << newline << newline;
+    Colors::setTextColor("color_default");
     
-    print->printMinesLeft(*this);
+    Print::printMinesLeft(*this);
 
     #if DEBUG == 1
-        print->printDebugCoveredLeft(*this);
+        Print::printDebugCoveredLeft(*this);
     #endif
 }
 
@@ -360,50 +359,158 @@ void Field::printCoords(Common::CoordsStruct const& coords, bool isCursor)
         {
             if (isCursor == false)
             {
-                if      (getCoordsContent(coords) == "1") content = Colors::setTextColor("fg_number_1") + "1";
-                else if (getCoordsContent(coords) == "2") content = Colors::setTextColor("fg_number_2") + "2";
-                else if (getCoordsContent(coords) == "3") content = Colors::setTextColor("fg_number_3") + "3";
-                else if (getCoordsContent(coords) == "4") content = Colors::setTextColor("fg_number_4") + "4";
-                else if (getCoordsContent(coords) == "5") content = Colors::setTextColor("fg_number_5") + "5";
-                else if (getCoordsContent(coords) == "6") content = Colors::setTextColor("fg_number_6") + "6";
-                else if (getCoordsContent(coords) == "7") content = Colors::setTextColor("fg_number_7") + "7";
-                else if (getCoordsContent(coords) == "8") content = Colors::setTextColor("fg_number_8") + "8";
-                else content = Colors::setTextColor("color_default") + (this->field2DVector[coords.col][coords.row]);
+                if      (getCoordsContent(coords) == "1")
+                {
+                    Colors::setTextColor("fg_number_1");
+                    content = "1";
+                }
+                else if (getCoordsContent(coords) == "2")
+                {
+                    Colors::setTextColor("fg_number_2");
+                    content = "2";
+                }
+                else if (getCoordsContent(coords) == "3")
+                {
+                    Colors::setTextColor("fg_number_3");
+                    content = "3";
+                }
+                else if (getCoordsContent(coords) == "4")
+                {
+                    Colors::setTextColor("fg_number_4");
+                    content = "4";
+                }
+                else if (getCoordsContent(coords) == "5")
+                {
+                    Colors::setTextColor("fg_number_5");
+                    content = "5";
+                }
+                else if (getCoordsContent(coords) == "6")
+                {
+                    Colors::setTextColor("fg_number_6");
+                    content = "6";
+                }
+                else if (getCoordsContent(coords) == "7")
+                {
+                    Colors::setTextColor("fg_number_7");
+                    content = "7";
+                }
+                else if (getCoordsContent(coords) == "8")
+                {
+                    Colors::setTextColor("fg_number_8");
+                    content = "8";
+                }
+                else
+                {
+                    Colors::setTextColor("color_default");
+                    content = (this->field2DVector[coords.col][coords.row]);
+                }
             }
             else
             {
-                if      (getCoordsContent(coords) == "1") content = Colors::setTextColor("bg_number_1") + "1";
-                else if (getCoordsContent(coords) == "2") content = Colors::setTextColor("bg_number_2") + "2";
-                else if (getCoordsContent(coords) == "3") content = Colors::setTextColor("bg_number_3") + "3";
-                else if (getCoordsContent(coords) == "4") content = Colors::setTextColor("bg_number_4") + "4";
-                else if (getCoordsContent(coords) == "5") content = Colors::setTextColor("bg_number_5") + "5";
-                else if (getCoordsContent(coords) == "6") content = Colors::setTextColor("bg_number_6") + "6";
-                else if (getCoordsContent(coords) == "7") content = Colors::setTextColor("bg_number_7") + "7";
-                else if (getCoordsContent(coords) == "8") content = Colors::setTextColor("bg_number_8") + "8";
-                else content = Colors::setTextColor("bg_default") + (this->field2DVector[coords.col][coords.row]);
+                if      (getCoordsContent(coords) == "1")
+                {
+                    Colors::setTextColor("bg_number_1");
+                    content = "1";
+                }
+                else if (getCoordsContent(coords) == "2")
+                {
+                    Colors::setTextColor("bg_number_2");
+                    content = "2";
+                }
+                else if (getCoordsContent(coords) == "3")
+                {
+                    Colors::setTextColor("bg_number_3");
+                    content = "3";
+                }
+                else if (getCoordsContent(coords) == "4")
+                {
+                    Colors::setTextColor("bg_number_4");
+                    content = "4";
+                }
+                else if (getCoordsContent(coords) == "5")
+                {
+                    Colors::setTextColor("bg_number_5");
+                    content = "5";
+                }
+                else if (getCoordsContent(coords) == "6")
+                {
+                    Colors::setTextColor("bg_number_6");
+                    content = "6";
+                }
+                else if (getCoordsContent(coords) == "7")
+                {
+                    Colors::setTextColor("bg_number_7");
+                    content = "7";
+                }
+                else if (getCoordsContent(coords) == "8")
+                {
+                    Colors::setTextColor("bg_number_8");
+                    content = "8";
+                }
+                else
+                {
+                    Colors::setTextColor("bg_default");
+                    content = (this->field2DVector[coords.col][coords.row]);
+                }
             }
         }
         else if (getCoordsContent(coords) == Symbols::getSymbol("symbolFlag"))
         {
-            if (isCursor) content = Colors::setTextColor("bg_flag") + Symbols::getSymbol("symbolFlag");
-            else content = Colors::setTextColor("fg_flag") + Symbols::getSymbol("symbolFlag");
+            if (isCursor)
+            {
+                Colors::setTextColor("bg_flag");
+                content = Symbols::getSymbol("symbolFlag");
+            }
+            else
+            {
+                Colors::setTextColor("fg_flag");
+                content = Symbols::getSymbol("symbolFlag");
+            }
         }
-        else if (getCoordsContent(coords) == Symbols::getSymbol("symbolMine")) content = Colors::setTextColor("mine") + Symbols::getSymbol("symbolMine");
-        else if (getCoordsContent(coords) == Symbols::getSymbol("symbolMineHit")) content = Colors::setTextColor("minehit") + Symbols::getSymbol("symbolMineHit");
+        else if (getCoordsContent(coords) == Symbols::getSymbol("symbolMine"))
+        {
+            Colors::setTextColor("mine");
+            content = Symbols::getSymbol("symbolMine");
+        }
+        else if (getCoordsContent(coords) == Symbols::getSymbol("symbolMineHit"))
+        {
+            Colors::setTextColor("minehit");
+            content = Symbols::getSymbol("symbolMineHit");
+        }
         else if (getCoordsContent(coords) == Symbols::getSymbol("symbolCovered"))
         {
-            if (isCursor) content = Colors::setTextColor("bg_covered") + Symbols::getSymbol("symbolCovered");
-            else content = Colors::setTextColor("fg_covered") + Symbols::getSymbol("symbolCovered");
+            if (isCursor)
+            {
+                Colors::setTextColor("bg_covered");
+                content = Symbols::getSymbol("symbolCovered");
+            }
+            else
+            {
+                Colors::setTextColor("fg_covered");
+                content = Symbols::getSymbol("symbolCovered");
+            }
         }
         else if (getCoordsContent(coords) == Symbols::getSymbol("symbolZero"))
         {
-            if (isCursor) content = Colors::setTextColor("bg_covered") + Symbols::getSymbol("symbolCovered");
-            else content = Colors::setTextColor("bg_covered") + Symbols::getSymbol("symbolZero");
+            if (isCursor)
+            {
+                Colors::setTextColor("bg_covered");
+                content = Symbols::getSymbol("symbolCovered");
+            }
+            else
+            {
+                Colors::setTextColor("bg_covered");
+                content = Symbols::getSymbol("symbolZero");
+            }
         }
-        else content = Colors::setTextColor("color_default") + (this->field2DVector[coords.col][coords.row]);
+        else
+        {
+            Colors::setTextColor("color_default");
+            content = (this->field2DVector[coords.col][coords.row]);
+        }
 
-        coutconv << content;
-        coutconv << Colors::setTextColor("color_default") << std::flush;
+        coutconv << content << std::flush;
+        Colors::setTextColor("color_default");
     #endif
 }
 
@@ -505,10 +612,10 @@ void Field::gameWon()
     this->minesLeft = 0;
 
     #if DEBUG == 1
-        print->printDebugCoveredLeft(*this);
+        Print::printDebugCoveredLeft(*this);
     #endif
 
-    print->printHasWon(*this);
+    Print::printHasWon(*this);
     Common::gotoXY(this->fieldOffsetX - 1, this->fieldOffsetY + this->rows*2 + 3);
     input->getInputEnterKey("Press ENTER to get back...");
 }
@@ -544,10 +651,10 @@ void Field::gameLost()
     this->coveredLeft = 0;
 
     #if DEBUG == 1
-        print->printDebugCoveredLeft(*this);
+        Print::printDebugCoveredLeft(*this);
     #endif
 
-    print->printHasLost(*this);
+    Print::printHasLost(*this);
     Common::gotoXY(this->fieldOffsetX - 1, this->fieldOffsetY + this->rows*2 + 3);
     input->getInputEnterKey("Press ENTER to get back...");
 }
@@ -593,7 +700,7 @@ void Field::autoUncoverRecursive(Common::CoordsStruct const& coords, std::vector
                 #else
                     usleep(20*1000);
                 #endif
-                print->printDebugCoveredLeft(*this);
+                Print::printDebugCoveredLeft(*this);
             #endif
         }
 

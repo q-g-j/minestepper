@@ -9,18 +9,12 @@
 #endif
 
 // forward declarations of classes:
-class Colors;
-class Common;
-class Field;
-class Print;
 class Solver;
-class Symbols;
 
 class Input
 {    
 private:
     // declare class objects as unique pointers:
-    std::unique_ptr<Print> print;
     std::unique_ptr<Solver> solver;
 
     enum class Direction : int
@@ -63,7 +57,7 @@ public:
     ~Input();
 
     // public methods:
-    void showBlinkingCursor(bool);
+    static void showBlinkingCursor(bool);
     const int &getInputDifficulty();
     const int &getInputCustomCellWidth();
     const Common::CoordsStruct &getInputCustomDimensions(int const&);

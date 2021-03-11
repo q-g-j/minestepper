@@ -58,7 +58,6 @@ Input::Input()
 :
     toggleEdgeJump(false),
     toogleEdgeJumpP(&toggleEdgeJump),
-    print(std::make_unique<Print>()),
     solver(std::make_unique<Solver>())
 { }
 
@@ -91,9 +90,9 @@ void Input::showBlinkingCursor(bool show)
 
 void Input::getInputEnterKey(std::string const& text)
 {
-    std::cout << Colors::setTextColor("fg_white");
+    Colors::setTextColor("fg_white");
     std::cout << text << std::flush;
-    std::cout << Colors::setTextColor("color_default");
+    Colors::setTextColor("color_default");
 
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         while (true)
@@ -141,8 +140,8 @@ void Input::getInputEnterKey(std::string const& text)
 // custom mode: ask user for the game mode (this->getInputDifficultyReturn):
 const int &Input::getInputDifficulty()
 {
-    print->printMenu();
-    this->showBlinkingCursor(false);
+    Print::printMenu();
+    showBlinkingCursor(false);
 
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         int inputKey = 0;
@@ -229,7 +228,7 @@ const int &Input::getInputDifficulty()
         disableNonCanonicalMode();
     #endif
 
-    this->showBlinkingCursor(true);
+    showBlinkingCursor(true);
     return this->getInputDifficultyReturn;
 }
 
@@ -238,13 +237,13 @@ const int &Input::getInputCustomCellWidth()
     bool isValidInput = false;
 
     Common::clearScreen();
-    print->printCustomGetCellWidth();
+    Print::printCustomGetCellWidth();
 
-    std::cout << Colors::setTextColor("fg_white");
-    std::cout << print->inputText;
-    std::cout << Colors::setTextColor("color_default");
+    Colors::setTextColor("fg_white");
+    std::cout << Print::inputText;
+    Colors::setTextColor("color_default");
 
-    this->showBlinkingCursor(false);
+    showBlinkingCursor(false);
 
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         int inputKey;
@@ -311,7 +310,7 @@ const int &Input::getInputCustomCellWidth()
         disableNonCanonicalMode();
     #endif
 
-    this->showBlinkingCursor(true);
+    showBlinkingCursor(true);
     return this->getInputCustomCellWidthReturn;
 }
 
@@ -324,15 +323,15 @@ const Common::CoordsStruct &Input::getInputCustomDimensions(int const& fieldCell
     bool isValidInput = false;
 
     Common::clearScreen();
-    print->printCustomGetDimensions(fieldCellWidth);
+    Print::printCustomGetDimensions(fieldCellWidth);
 
     while (true)
     {
         try
         {
-            std::cout << Colors::setTextColor("fg_white");
-            std::cout << print->inputText;
-            std::cout << Colors::setTextColor("color_default");
+            Colors::setTextColor("fg_white");
+            std::cout << Print::inputText;
+            Colors::setTextColor("color_default");
             getline(std::cin, line);
             if (line == "q" || line == "Q")
             {
@@ -404,9 +403,9 @@ const Common::CoordsStruct &Input::getInputCustomDimensions(int const& fieldCell
         }
         else
         {
-            getInputEnterKey(print->wrongInputText);
-            print->deleteLastLine(print->wrongInputText.length());
-            print->deleteLastLine(print->inputText.length() + line.length());
+            getInputEnterKey(Print::wrongInputText);
+            Print::deleteLastLine(Print::wrongInputText.length());
+            Print::deleteLastLine(Print::inputText.length() + line.length());
         }
     }
 }
@@ -418,15 +417,15 @@ const int &Input::getInputCustomMinesCount(int const& fieldSize)
     bool isValidInput = false;
 
     Common::clearScreen();
-    print->printCustomGetMinesCount();
+    Print::printCustomGetMinesCount();
 
     while (true)
     {
         try
         {
-            std::cout << Colors::setTextColor("fg_white");
-            std::cout << print->inputText;
-            std::cout << Colors::setTextColor("color_default");
+            Colors::setTextColor("fg_white");
+            std::cout << Print::inputText;
+            Colors::setTextColor("color_default");
             getline(std::cin, line);
             if (line == "q" || line == "Q")
             {
@@ -463,9 +462,9 @@ const int &Input::getInputCustomMinesCount(int const& fieldSize)
         }
         else
         {
-            getInputEnterKey(print->wrongInputText);
-            print->deleteLastLine(print->wrongInputText.length());
-            print->deleteLastLine(print->inputText.length() + line.length());
+            getInputEnterKey(Print::wrongInputText);
+            Print::deleteLastLine(Print::wrongInputText.length());
+            Print::deleteLastLine(Print::inputText.length() + line.length());
         }
     }
 }
@@ -487,7 +486,7 @@ void Input::toggleHelp(Field &field, Common::CoordsStruct const& currentArrayPos
     Common::CoordsStruct currentCursorPosition;
 
     Common::clearScreen();
-    print->printExplanation();
+    Print::printExplanation();
     getInputEnterKey("");
 
     field.printAll();

@@ -29,10 +29,7 @@
 #include <solver.h>
 #include <symbols.h>
 
-Solver::Solver()
-:
-    print(std::make_unique<Print>())
-{ }
+Solver::Solver() = default;
 
 Solver::~Solver() = default;
 
@@ -102,10 +99,10 @@ void Solver::autoSolve(Field& field, bool doPlaceFlags, bool doFlagAutoUncover, 
                     usleep(50*1000);
                 #endif
                 
-                print->printMinesLeft(field);
+                Print::printMinesLeft(field);
 
                 #if DEBUG == 1
-                    print->printDebugCoveredLeft(field);
+                    Print::printDebugCoveredLeft(field);
                 #endif
 
                 field.printCoords(tempCoords, false);

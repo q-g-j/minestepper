@@ -63,11 +63,12 @@
 class Colors
 {
 public:
-    static void initColorMap();
+
+    static void initColors();
 
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-        static const std::string setTextColor(std::string const&);
+        static void setTextColor(std::string const&);
     #else
-        static const std::string setTextColor(std::string const&);
+        static void setTextColor(std::string const&);
     #endif
 };
