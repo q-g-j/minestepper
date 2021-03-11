@@ -324,7 +324,7 @@ void Common::preciseSleep(double seconds)
 
 const Common::TimeStruct Common::secondsToTimeStruct(int seconds)
 {
-    Common:TimeStruct secondsToTimeStructReturn;
+    Common::TimeStruct secondsToTimeStructReturn;
     if (seconds < 60)
     {
         secondsToTimeStructReturn.minutes = "00";
