@@ -16,14 +16,6 @@
 
 const char newline = '\n';
 
-#if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-    void saveScreenSize();
-#else
-    void saveScreenSize();
-#endif
-
-void cleanUp();
-
 class Common
 {
 public:
@@ -37,6 +29,9 @@ public:
         std::string minutes;
         std::string seconds;
     };
+
+private:
+public:
     struct GameModeReturnStruct
     {
         std::string difficultyString;
@@ -64,6 +59,14 @@ public:
     ~Common() = default;
 
     // public methods:
+    #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+        static void saveScreenSize();
+    #else
+        static void saveScreenSize();
+    #endif
+
+    static void cleanUp();
+
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         static const std::wstring intToStringConv(int const&);
         static const std::wstring stringConvert(std::string const&);

@@ -24,10 +24,8 @@ int main()
         #endif
     #endif
     
-    saveScreenSize();
-    atexit(cleanUp);
-    Colors::initColors();
-    Symbols::initSymbols();
+    Common::saveScreenSize();
+    atexit(Common::cleanUp);
 
     while (true)
     {

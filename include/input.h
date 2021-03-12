@@ -1,22 +1,8 @@
 #pragma once
 
-// system headers:
-#include <memory>
-
-#if !defined(_WIN32) && !defined(WIN32) && !defined(_WIN64) && !defined(WIN64)
-    void enableNonCanonicalMode();
-    void disableNonCanonicalMode();
-#endif
-
-// forward declarations of classes:
-class Solver;
-
 class Input
 {    
 private:
-    // declare class objects as unique pointers:
-    std::unique_ptr<Solver> solver;
-
     enum class Direction : int
     {
         UP, DOWN, LEFT, RIGHT
@@ -57,6 +43,11 @@ public:
     ~Input();
 
     // public methods:
+    #if !defined(_WIN32) && !defined(WIN32) && !defined(_WIN64) && !defined(WIN64)
+        static void enableNonCanonicalMode();
+        static void disableNonCanonicalMode();
+    #endif
+
     static void showBlinkingCursor(bool);
     const int &getInputDifficulty();
     const int &getInputCustomCellWidth();

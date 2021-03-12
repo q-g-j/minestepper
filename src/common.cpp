@@ -45,7 +45,7 @@
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
     extern CONSOLE_SCREEN_BUFFER_INFO origScreenSize;
 
-    void saveScreenSize()
+    void Common::saveScreenSize()
     {
         CONSOLE_SCREEN_BUFFER_INFO csbi;
         int columns, rows;
@@ -59,7 +59,7 @@
 #else
     extern struct winsize origScreenSize;
 
-    void saveScreenSize()
+    void Common::saveScreenSize()
     {
         struct winsize osize;
         ioctl(STDOUT_FILENO, TIOCGWINSZ, &osize);
@@ -68,7 +68,7 @@
 #endif
 
 // restore screen size, font color and cursor visibility at program exit:
-void cleanUp()
+void Common::cleanUp()
 {
     Input input;
 
@@ -86,7 +86,7 @@ void cleanUp()
         Common::setUnicode(false);
     #else
         Common::resizeConsole(origScreenSize.ws_col, origScreenSize.ws_row);
-        disableNonCanonicalMode();
+        Input::disableNonCanonicalMode();
     #endif
 
     Input::showBlinkingCursor(true);
@@ -324,7 +324,8 @@ void Common::preciseSleep(double seconds)
 
 const Common::TimeStruct Common::secondsToTimeStruct(int seconds)
 {
-    Common::TimeStruct secondsToTimeStructReturn;
+    Common:TimeStruct secondsToTimeStructReturn;
+
     if (seconds < 60)
     {
         secondsToTimeStructReturn.minutes = "00";

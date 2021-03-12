@@ -63,9 +63,6 @@
 class Colors
 {
 public:
-
-    static void initColors();
-
     #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         static void setTextColor(std::string const&);
     #else

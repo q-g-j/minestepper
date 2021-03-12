@@ -1,11 +1,7 @@
 #pragma once
 
 // system headers:
-#include <memory>
 #include <random>
-
-// forward declarations of classes:
-class Input;
 
 class Field
 {
@@ -25,9 +21,6 @@ private:
     // random number generator:
     std::random_device rng;
     std::mt19937 urng;
-
-    // declare class objects as unique pointers:
-    std::unique_ptr<Input> input;
 
     // return variables for class methods:
     Common::PlaceUserInputReturnStruct placeUserInputReturn;

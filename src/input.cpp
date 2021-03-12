@@ -38,7 +38,7 @@
 #if !defined(_WIN32) && !defined(WIN32) && !defined(_WIN64) && !defined(WIN64)
     struct termios orig_termios;
 
-    void enableNonCanonicalMode()
+    void Input::enableNonCanonicalMode()
     {
         tcgetattr(STDIN_FILENO, &orig_termios);
 
@@ -48,7 +48,7 @@
         tcsetattr(STDIN_FILENO, TCSAFLUSH, &raw);
     }
 
-    void disableNonCanonicalMode()
+    void Input::disableNonCanonicalMode()
     {
         tcsetattr(STDIN_FILENO, TCSAFLUSH, &orig_termios);
     }
@@ -57,8 +57,7 @@
 Input::Input()
 :
     toggleEdgeJump(false),
-    toogleEdgeJumpP(&toggleEdgeJump),
-    solver(std::make_unique<Solver>())
+    toogleEdgeJumpP(&toggleEdgeJump)
 { }
 
 Input::~Input() = default;
@@ -656,19 +655,19 @@ const Common::UserInputReturnStruct &Input::getInputGameplay(Field &field, bool 
                 }
                 else if (inputKeyA == 'f' || inputKeyA == 'F')
                 {
-                    solver->autoSolve(field, true, false, false);
+                    Solver::autoSolve(field, true, false, false);
                     this->getInputGameplayReturn.isAutoFlag = true;
                     break;
                 }
                 else if (inputKeyA == 'r' || inputKeyA == 'R')
                 {
-                    solver->autoSolve(field, false, true, false);
+                    Solver::autoSolve(field, false, true, false);
                     this->getInputGameplayReturn.isAutoFlag = true;
                     break;
                 }
                 else if (inputKeyA == 's' || inputKeyA == 'S')
                 {
-                    solver->autoSolve(field, true, true, true);
+                    Solver::autoSolve(field, true, true, true);
                     this->getInputGameplayReturn.isAutoFlag = true;
                     break;
                 }
@@ -762,19 +761,19 @@ const Common::UserInputReturnStruct &Input::getInputGameplay(Field &field, bool 
                 }
                 else if (inputKeyA == 'f' || inputKeyA == 'F')
                 {
-                    solver->autoSolve(field, true, false, false);
+                    Solver::autoSolve(field, true, false, false);
                     this->getInputGameplayReturn.isAutoFlag = true;
                     break;
                 }
                 else if (inputKeyA == 'r' || inputKeyA == 'R')
                 {
-                    solver->autoSolve(field, false, true, false);
+                    Solver::autoSolve(field, false, true, false);
                     this->getInputGameplayReturn.isAutoFlag = true;
                     break;
                 }
                 else if (inputKeyA == 's' || inputKeyA == 'S')
                 {
-                    solver->autoSolve(field, true, true, true);
+                    Solver::autoSolve(field, true, true, true);
                     this->getInputGameplayReturn.isAutoFlag = true;
                     break;
                 }

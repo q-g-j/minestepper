@@ -1,8 +1,6 @@
 #pragma once
 
 // system headers:
-#include <memory>
-
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
     #include <windows.h>
 #else
@@ -12,14 +10,10 @@
 
 // forward declarations of classes:
 class Field;
-class Input;
 
 class Game
 {
-private:    
-    // declare class objects as unique pointers:
-    std::unique_ptr<Input> input;
-
+private:
     // define the 3 main game modes:
     const int smallCols       = 9;
     const int smallRows       = 9;

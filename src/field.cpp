@@ -46,7 +46,6 @@ Field::Field(Common::GameModeReturnStruct& gameMode)
     flagsCount(0),
     difficultyString(gameMode.difficultyString),
     urng(rng()),
-    input(std::make_unique<Input>()),
     field2DVector(create2DVector("field")),
     mines2DVector(create2DVector("mines"))
 { }
@@ -590,6 +589,8 @@ std::vector<Common::CoordsStruct> Field::findNeighbors(std::vector<std::vector<s
 
 void Field::gameWon()
 {
+    Input input;
+
     extern std::atomic<bool> isGameRunning;
     isGameRunning = false;
 
@@ -617,11 +618,13 @@ void Field::gameWon()
 
     Print::printHasWon(*this);
     Common::gotoXY(this->fieldOffsetX - 1, this->fieldOffsetY + this->rows*2 + 3);
-    input->getInputEnterKey("Press ENTER to get back...");
+    input.getInputEnterKey("Press ENTER to get back...");
 }
 
 void Field::gameLost()
 {
+    Input input;
+
     extern std::atomic<bool> isGameRunning;
     isGameRunning = false;
 
@@ -656,7 +659,7 @@ void Field::gameLost()
 
     Print::printHasLost(*this);
     Common::gotoXY(this->fieldOffsetX - 1, this->fieldOffsetY + this->rows*2 + 3);
-    input->getInputEnterKey("Press ENTER to get back...");
+    input.getInputEnterKey("Press ENTER to get back...");
 }
 
 // automatically uncover all connected cells, as long as they have no neighbor mines:

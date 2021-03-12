@@ -41,8 +41,6 @@ std::atomic<bool> hasCheated;
 std::atomic<bool> isCheatedPrinted;
 
 Game::Game()
-:
-    input(std::make_unique<Input>())
 {
     isGameRunning = false;
     isTimerPrinting = false;
@@ -56,6 +54,8 @@ Game::~Game() = default;
 
 const Common::GameModeReturnStruct &Game::chooseGamemode()
 {
+    Input input;
+
     int difficulty;
     Common::CoordsStruct dimensions;
 
@@ -75,7 +75,7 @@ const Common::GameModeReturnStruct &Game::chooseGamemode()
     #if MEM_LEAK_TEST_LOOP == 1
         difficulty = 3;
     #else
-        difficulty = input->getInputDifficulty();
+        difficulty = input.getInputDifficulty();
     #endif
 
     if (difficulty == 1)
@@ -112,7 +112,7 @@ const Common::GameModeReturnStruct &Game::chooseGamemode()
             Common::centerWindow();
         #endif
 
-        this->chooseGamemodeReturn.cellWidth = input->getInputCustomCellWidth();
+        this->chooseGamemodeReturn.cellWidth = input.getInputCustomCellWidth();
 
         Common::resizeConsole(42, 7);
         Common::clearScreen();
@@ -121,7 +121,7 @@ const Common::GameModeReturnStruct &Game::chooseGamemode()
             Common::centerWindow();
         #endif
 
-        dimensions = input->getInputCustomDimensions(this->chooseGamemodeReturn.cellWidth);
+        dimensions = input.getInputCustomDimensions(this->chooseGamemodeReturn.cellWidth);
         this->chooseGamemodeReturn.cols = dimensions.col;
         this->chooseGamemodeReturn.rows = dimensions.row;
 
@@ -132,7 +132,7 @@ const Common::GameModeReturnStruct &Game::chooseGamemode()
             Common::centerWindow();
         #endif
 
-        this->chooseGamemodeReturn.mines = input->getInputCustomMinesCount(this->chooseGamemodeReturn.cols * this->chooseGamemodeReturn.rows);
+        this->chooseGamemodeReturn.mines = input.getInputCustomMinesCount(this->chooseGamemodeReturn.cols * this->chooseGamemodeReturn.rows);
     }
 
     this->chooseGamemodeReturn.offsetX = fieldOffsetX;
@@ -147,7 +147,6 @@ const Common::GameModeReturnStruct &Game::chooseGamemode()
 #endif
     {
         Input input;
-        Print print;
         Field* field = reinterpret_cast<Field*>(field_);
 
         Common::UserInputReturnStruct userInput;
@@ -202,8 +201,6 @@ const Common::GameModeReturnStruct &Game::chooseGamemode()
     void *Game::timerThread(void* field_)
 #endif
     {
-        Print print;
-
         Field* field = reinterpret_cast<Field*>(field_);
 
         unsigned int timer = 0;
