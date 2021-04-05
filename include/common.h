@@ -29,9 +29,6 @@ public:
         std::string minutes;
         std::string seconds;
     };
-
-private:
-public:
     struct GameModeReturnStruct
     {
         std::string difficultyString;
