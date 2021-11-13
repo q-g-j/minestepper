@@ -206,7 +206,7 @@ void Print::printExplanation()
     coutconv << "  In this game your task is to find all hidden mines by uncovering all safe positions." << newline << newline;
     coutconv << "  You can guess and sometimes combine where the next mine is." << newline;
     coutconv << "  The number on each uncovered square shows how many neighbors contain a mine." << newline;
-    coutconv << "  If you're sure that you have found a mine, place a flag on it's position by pressing SPACE." << newline;
+    coutconv << "  If you're sure that you have found a mine, place a flag on its position by pressing SPACE." << newline;
     coutconv << "  To remove the flag, just repeat your input. You may place or remove as many flags in a row as you wish." << newline << newline;
     coutconv << "  You can reselect a numbered cell with ENTER to automatically uncover all remaining neighbors," << newline;
     coutconv << "  as long as you put all flags right! Otherwise you might lose..." << newline << newline;
