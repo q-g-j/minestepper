@@ -679,6 +679,33 @@ void Field::autoUncoverRecursive(Common::CoordsStruct const& coords, std::vector
         neighborsMinesVector = findNeighbors(this->mines2DVector, neighborsCoveredVector.at(i), Symbols::getSymbol("symbolMine"));
         if (std::find(poolVector.begin(), poolVector.end(), Common::coordsToInt(neighborsCoveredVector.at(i), this->cols)) == poolVector.end())
         {
+            std::vector<Common::CoordsStruct> neighborsUncoveredVector;
+            neighborsUncoveredVector = findNeighbors(this->field2DVector, neighborsCoveredVector.at(i), Symbols::getSymbol("symbolZero"));
+            if (neighborsUncoveredVector.size() == 0)
+            {
+                continue;
+            }
+            else
+            {
+                if (neighborsMinesVector.size() == 0)
+                {
+                    if (this->mines2DVector[neighborsCoveredVector.at(i).col][neighborsCoveredVector.at(i).row] != Symbols::getSymbol("symbolMine"))
+                    {
+                        this->field2DVector[neighborsCoveredVector.at(i).col][neighborsCoveredVector.at(i).row] = Symbols::getSymbol("symbolZero");
+                    }
+                }
+                else
+                {
+                    if (this->mines2DVector[neighborsCoveredVector.at(i).col][neighborsCoveredVector.at(i).row] != Symbols::getSymbol("symbolMine"))
+                    {
+                        this->field2DVector[neighborsCoveredVector.at(i).col][neighborsCoveredVector.at(i).row] = Common::intToStringConv(static_cast<int>(neighborsMinesVector.size()));
+                    }
+                }
+                poolVector.push_back(Common::coordsToInt(neighborsCoveredVector.at(i), this->cols));
+                printCoords(neighborsCoveredVector.at(i), false);
+                --this->coveredLeft;
+            }
+            /*
             if (neighborsMinesVector.size() == 0)
             {
                 if (this->mines2DVector[neighborsCoveredVector.at(i).col][neighborsCoveredVector.at(i).row] != Symbols::getSymbol("symbolMine"))
@@ -693,9 +720,7 @@ void Field::autoUncoverRecursive(Common::CoordsStruct const& coords, std::vector
                     this->field2DVector[neighborsCoveredVector.at(i).col][neighborsCoveredVector.at(i).row] = Common::intToStringConv(static_cast<int>(neighborsMinesVector.size()));
                 }
             }
-            poolVector.push_back(Common::coordsToInt(neighborsCoveredVector.at(i), this->cols));
-            printCoords(neighborsCoveredVector.at(i), false);
-            --this->coveredLeft;
+            */
 
             #if DEBUG == 1
                 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)

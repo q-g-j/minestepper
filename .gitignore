@@ -1,6 +1,7 @@
 .vs
 .vscode
 build
+out
 build_kdev
 CMakeSettings.json
 CMakeLists.txt.user
