@@ -28,7 +28,7 @@
 #endif
 
 #if defined(__MINGW32__)
-    #include <mingw.thread.h> // needed for std::this_thread (https://github.com/meganz/mingw-std-threads)
+    #include "../include/mingw-std-threads/mingw.thread.h" // needed for std::this_thread (https://github.com/meganz/mingw-std-threads)
 #else
     #include <thread>
 #endif
@@ -270,7 +270,7 @@ const int Common::coordsToInt(CoordsStruct const& coords, int const& cols)
     }
     else
     {
-        return (cols) * (coords.row-1) + coords.col;
+        return cols * (coords.row-1) + coords.col;
     }
 }
 

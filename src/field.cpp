@@ -679,9 +679,9 @@ void Field::autoUncoverRecursive(Common::CoordsStruct const& coords, std::vector
         neighborsMinesVector = findNeighbors(this->mines2DVector, neighborsCoveredVector.at(i), Symbols::getSymbol("symbolMine"));
         if (std::find(poolVector.begin(), poolVector.end(), Common::coordsToInt(neighborsCoveredVector.at(i), this->cols)) == poolVector.end())
         {
-            std::vector<Common::CoordsStruct> neighborsUncoveredVector;
-            neighborsUncoveredVector = findNeighbors(this->field2DVector, neighborsCoveredVector.at(i), Symbols::getSymbol("symbolZero"));
-            if (neighborsUncoveredVector.size() == 0)
+            std::vector<Common::CoordsStruct> neighborsZerosVector;
+            neighborsZerosVector = findNeighbors(this->field2DVector, neighborsCoveredVector.at(i), Symbols::getSymbol("symbolZero"));
+            if (neighborsZerosVector.size() == 0)
             {
                 continue;
             }
