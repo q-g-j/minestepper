@@ -89,7 +89,7 @@ public:
     void printAll();
     void printCoords(Common::CoordsStruct const&, bool);
     std::vector<Common::CoordsStruct> findNeighbors(std::vector<std::vector<stringconv>> const&, Common::CoordsStruct const&, stringconv const&);
-    void autoUncoverRecursive(Common::CoordsStruct const&, std::vector<unsigned int>&);
-    void flagAutoUncover(Common::CoordsStruct const&, Common::PlaceUserInputReturnStruct&, bool);
+    void autoRevealRecursive(Common::CoordsStruct const&, std::vector<unsigned int>&);
+    void flagAutoReveal(Common::CoordsStruct const&, Common::PlaceUserInputReturnStruct&, bool);
     const Common::PlaceUserInputReturnStruct &placeUserInput(Common::UserInputReturnStruct&, int&);
 };

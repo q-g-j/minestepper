@@ -6,19 +6,19 @@ A console based version of Minesweeper to teach myself C++.
 
 ## Controls:
 - Arrow keys:    move cursor
-- ENTER:         uncover
+- ENTER:         reveal
 - SPACE:         place or remove a flag
 - 'f' or 'F':    let the computer place the flags for you
 - 'r' or 'R':    trigger auto revealing (after placing flags)
-- 's' or 'S':    automatically place flags, auto-reveal and repeat recursively
+- 's' or 'S':    automatically place flags, auto reveal and repeat recursively
 - 'c' or 'C':    toggle cursor jump to opposite edge on or off
 - 'q' or 'Q':    quit
 
 ## Features:
 - small, medium, large and custom size
 - colored numbers, flags and mines.
-- auto-revealing of connected safe cells when a "zero" (no neighbor mines) is hit
-- press ENTER on a number to auto-reveal connected safe cells similar to the Windows-version (if flags are placed right)
+- auto revealing of connected safe cells when a "zero" (no neighbor mines) is hit
+- press ENTER on a number to auto reveal connected safe cells similar to the Windows-version (if flags are placed right)
 - show a timer while playing (using threads)
 - automatically resize the console window (Linux: see notes below)
 - Windows version only: automatically center the console window

@@ -33,7 +33,7 @@ Solver::Solver() = default;
 
 Solver::~Solver() = default;
 
-void Solver::autoSolve(Field& field, bool doPlaceFlags, bool doFlagAutoUncover, bool doSolve)
+void Solver::autoSolve(Field& field, bool doPlaceFlags, bool doFlagAutoReveal, bool doSolve)
 {
     extern std::atomic<bool> hasCheated;
     
@@ -109,8 +109,8 @@ void Solver::autoSolve(Field& field, bool doPlaceFlags, bool doFlagAutoUncover, 
             }
         }
     }
-    // run field.flagAutoUncover() on all cells:
-    if (doFlagAutoUncover)
+    // run field.flagAutoReveal() on all cells:
+    if (doFlagAutoReveal)
     {
         for (int i = 1; i <= field.getRows(); ++i)
         {
@@ -120,7 +120,7 @@ void Solver::autoSolve(Field& field, bool doPlaceFlags, bool doFlagAutoUncover, 
                 Common::PlaceUserInputReturnStruct tempPlaceUserInputStruct;
                 tempCoords.row = i;
                 tempCoords.col = j;
-                field.flagAutoUncover(tempCoords, tempPlaceUserInputStruct, true);
+                field.flagAutoReveal(tempCoords, tempPlaceUserInputStruct, true);
             }
         }
     }
@@ -129,6 +129,6 @@ void Solver::autoSolve(Field& field, bool doPlaceFlags, bool doFlagAutoUncover, 
     // if it's the first run of this function when "s" or "S" (= "solve") was hit:
     if (poolCoveredVector.size() != 0 || doSolve == true)
     {
-        autoSolve(field, doPlaceFlags, doFlagAutoUncover, false);
+        autoSolve(field, doPlaceFlags, doFlagAutoReveal, false);
     }
 }
